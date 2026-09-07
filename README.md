@@ -179,4 +179,4 @@ cpe342-machine-learning-2026/
 * **Team Members:**
   * [Student Name 2] ([Student ID 2])
   * [Student Name 3] ([Student ID 3])
-* **Instructor:** Dr. Boonyarit Changaival
+* **Instructor:** ดร. บุญฤทธิ์ จันทร์ไกรวัล (Dr. Boonyarit Changaival)

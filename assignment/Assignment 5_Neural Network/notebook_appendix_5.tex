@@ -35,7 +35,6 @@ from keras import models, layers, optimizers
 \textbf{1. Learn About the Data}\par\smallskip
 \smallskip
 Understand your data, such as its shape, format, datatype, structure, distribution, data classes, and so on.\par
-\smallskip
 \end{tcolorbox}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 3]:}
@@ -82,7 +81,6 @@ Build a two-layer neural network (except for the input and output layers) using 
 with the hidden layer of size 512.\par
 \smallskip
 See Keras Model: https://keras.io/models/about-keras-models/\par
-\smallskip
 \end{tcolorbox}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 4]:}
@@ -103,7 +101,6 @@ optimizer='sgd',\par
 loss='categorical\_crossentropy',\par
 metrics=['accuracy']\par
 \texttt{}`\par
-\smallskip
 \end{tcolorbox}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 5]:}
@@ -122,7 +119,6 @@ WARNING:tensorflow:TensorFlow GPU support is not available on native Windows for
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 Let's see how our model looks using \texttt{.summary()}\par
-\smallskip
 \end{tcolorbox}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 6]:}
@@ -141,7 +137,6 @@ model.summary()
 \smallskip
 \textbullet\ Reshape (flatten) the features data and normalize the value to be between 0 and 1\par
 \textbullet\ One-hot the target data\par
-\smallskip
 \end{tcolorbox}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 7]:}
@@ -182,7 +177,6 @@ We will train using the mini-batch method, with each batch containing 128 data p
 To avoid overfitting with the test set, we will split the current training data into 90\% for training and 10\% for validating the model.\par
 \smallskip
 This will take approximately one minute.\par
-\smallskip
 \end{tcolorbox}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 8]:}
@@ -263,7 +257,6 @@ Epoch 10/10
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 We will plot the loss and accuracy of both the train and validate sets over iterations.\par
-\smallskip
 \end{tcolorbox}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 9]:}
@@ -340,9 +333,6 @@ Epoch 10: Train Loss=0.2861, Val Loss=0.2310 (Gap=-0.0551) | Train Acc=0.9212, V
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 Q: At which iteration does your model start to overfit? Give your rational.\par
-\smallskip
-\textbf{ANSWER}\par
-\smallskip
 \end{tcolorbox}
 \needspace{4\baselineskip}
 \vspace{0.8em}
@@ -357,7 +347,6 @@ Based on the empirical training history and learning curves across the 10 epochs
 1. \textbf{Validation Loss Behavior (Non-Divergence)}: Overfitting is defined theoretically as the point where the model begins memorizing the training noise rather than general patterns, which manifests as \textbf{validation loss beginning to increase (diverge) while training loss continues to decrease}. In our plot above, the validation loss decreases monotonically and steadily from ~1.40 down to ~0.30 across all 10 epochs without any upward rebound.\par
 2. \textbf{Generalization Gap Stability}: The difference between validation accuracy and training accuracy ($\Delta = 	ext{val\_accuracy} - 	ext{train\_accuracy}$) remains narrow and positive throughout training. Validation accuracy is slightly higher than training accuracy (~92.5\% vs ~91.8\%), which is a standard phenomenon in Keras because training metrics are averaged across batches during the epoch while validation is computed strictly on the whole validation set after the weights have been updated.\par
 3. \textbf{Model Learning Regime}: With a conservative learning rate of $\alpha = 0.01$ and standard SGD optimizer, 10 epochs (corresponding to 4,220 weight updates with batch size 128) are insufficient to drive a 407,050-parameter network to overfit the 54,000 training images. The model is still in an \textbf{active convergence / slight underfitting regime} and could continue improving if trained for more epochs.\par
-\smallskip
 \end{tcolorbox}
 \clearpage
 \needspace{4\baselineskip}
@@ -366,7 +355,6 @@ Based on the empirical training history and learning curves across the 10 epochs
 \textbf{5. Model Evaluation}\par\smallskip
 \smallskip
 Evaluate your model with test set using \texttt{.evaluate()} and compare the results to those from the training and validate sets. Does your model overfit or underfit? How about the bias and variance?\par
-\smallskip
 \end{tcolorbox}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 12]:}
@@ -402,7 +390,6 @@ Conclusion: Extremely low variance (test matches train/val), with moderate bias 
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 Q: Analyze the performance of your model using a confusion matrix. Which class does your model frequently misclassify? What is the precision and recall of your model?\par
-\smallskip
 \end{tcolorbox}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 13]:}
@@ -484,7 +471,6 @@ From the classification report:\par
 \textbullet\ \textbf{Overall Test Accuracy}: \textbf{92.58\%}\par
 \textbullet\ \textbf{Highest Performing Class}: Digit \textbf{1} (Precision = 0.9856, Recall = 0.9841, F1 = 0.9849)\par
 \textbullet\ \textbf{Lowest Recall Class}: Digit \textbf{5} (Recall = 0.8722) and Digit \textbf{8} (Recall = 0.8860)\par
-\smallskip
 \end{tcolorbox}
 \clearpage
 \needspace{4\baselineskip}
@@ -496,7 +482,6 @@ Try tuning your model by:\par
 1. Adjust the learning rate of your optimizer by increasing and decreasing the learning rate to see how it affects your model.\par
 2. Experiment with different optimizers ('sgd', 'rmspop', 'adagrad', 'adam', See https://keras.io/optimizers ) to see which one converges faster.\par
 3. Change the structure of your model by adding more hidden layers with any number of nodes, and then observe how this affects your model.\par
-\smallskip
 \end{tcolorbox}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 14]:}
@@ -618,9 +603,6 @@ Deeper Model (512-256-128 + Dropout 0.2 + Adam) -> Test Accuracy: 98.24% | Test 
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 \textbf{7. Discussion and Result}\par\smallskip
 Q: Write down your findings from the previous step.\par
-\smallskip
-\textbf{ANSWER}\par
-\smallskip
 \end{tcolorbox}
 \needspace{4\baselineskip}
 \vspace{0.8em}
@@ -656,5 +638,4 @@ Based on the empirical experiments in Step 6, our key scientific findings are as
 | Deeper Regularized (512-256-128 + Dropout) | Adam | 0.001 | \textbf{98.14\%} | \textbf{0.0789} |\par
 \smallskip
 \textbf{Conclusion}: Choosing an advanced adaptive optimizer (RMSprop or Adam) provides the single largest improvement in training speed and final performance, while architectural depth reinforced by Dropout ensures superior generalization without overfitting.\par
-\smallskip
 \end{tcolorbox}
