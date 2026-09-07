@@ -47,7 +47,7 @@ cpe342-machine-learning-2026/
 │       ├── bank-data.csv                      # Introductory tutorial dataset (N = 45,211)
 │       ├── 1_Intro_to_NN.ipynb                # Introductory Lab: Scikit-learn & Keras MLP on Bank Data
 │       ├── 2_Keras_Tutorial.ipynb             # Tutorial: Introduction to Keras & MNIST
-│       ├── 1009_1034_1055.ipynb               # Senior reference submission notebook
+│       ├── Keras_Tutorial.ipynb               # Quickstart: TensorFlow Keras Sequential Pipeline
 │       ├── CPE342_Assignment 5_main.tex      # Academic LaTeX source report
 │       ├── CPE342_Assignment 5_main.pdf      # Publication-grade academic report (33 pages)
 │       ├── notebook_appendix_5.tex           # Auto-generated LaTeX appendix with executed cells
