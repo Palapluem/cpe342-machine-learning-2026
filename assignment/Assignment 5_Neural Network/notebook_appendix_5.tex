@@ -32,7 +32,7 @@ from keras import models, layers, optimizers
 \needspace{4\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
-\textbf{1. Learn About the Data}\par\smallskip
+\textbf{\normalsize\textbf{1. Learn About the Data}}\par\smallskip
 \smallskip
 Understand your data, such as its shape, format, datatype, structure, distribution, data classes, and so on.\par
 \end{tcolorbox}
@@ -72,11 +72,11 @@ Sample image index 0 has label: 5
 \needspace{4\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
-\textbf{2. Build Neural Network Model}\par\smallskip
+\textbf{\normalsize\textbf{2. Build Neural Network Model}}\par\smallskip
 \smallskip
 Build a two-layer neural network (except for the input and output layers) using \texttt{Sequential()}\par
 ( See https://keras.io/models/sequential )\par
-> INPUT -> LINEAR -> RELU -> LINEAR -> SOFTMAX\par
+\begin{quote}\textit{INPUT $\rightarrow$ LINEAR $\rightarrow$ RELU $\rightarrow$ LINEAR $\rightarrow$ SOFTMAX}\end{quote}
 \smallskip
 with the hidden layer of size 512.\par
 \smallskip
@@ -96,11 +96,11 @@ model = models.Sequential([
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 Compile your model with the following argument.\par
 \smallskip
-\texttt{}`\par
-optimizer='sgd',\par
-loss='categorical\_crossentropy',\par
-metrics=['accuracy']\par
-\texttt{}`\par
+\begin{lstlisting}[style=pycode]
+optimizer='sgd',
+loss='categorical_crossentropy',
+metrics=['accuracy']
+\end{lstlisting}
 \end{tcolorbox}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 5]:}
@@ -133,7 +133,7 @@ model.summary()
 \needspace{4\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
-\textbf{3. Preprocessing}\par\smallskip
+\textbf{\normalsize\textbf{3. Preprocessing}}\par\smallskip
 \smallskip
 \textbullet\ Reshape (flatten) the features data and normalize the value to be between 0 and 1\par
 \textbullet\ One-hot the target data\par
@@ -166,7 +166,7 @@ Sample label one-hot vector: [0. 0. 0. 0. 0. 1. 0. 0. 0. 0.] <- Ground truth lab
 \needspace{4\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
-\textbf{4. Model Training}\par\smallskip
+\textbf{\normalsize\textbf{4. Model Training}}\par\smallskip
 \smallskip
 Use \texttt{.fit()} to train your neural network model and return a record of accuracy and loss values for each epoch.\par
 \smallskip
@@ -343,16 +343,16 @@ Based on the empirical training history and learning curves across the 10 epochs
 \smallskip
 \textbf{The model does NOT show signs of overfitting within these 10 epochs.}\par
 \smallskip
-\textbf{Detailed Rational:}\par\smallskip
-1. \textbf{Validation Loss Behavior (Non-Divergence)}: Overfitting is defined theoretically as the point where the model begins memorizing the training noise rather than general patterns, which manifests as \textbf{validation loss beginning to increase (diverge) while training loss continues to decrease}. In our plot above, the validation loss decreases monotonically and steadily from ~1.40 down to ~0.30 across all 10 epochs without any upward rebound.\par
-2. \textbf{Generalization Gap Stability}: The difference between validation accuracy and training accuracy ($\Delta = 	ext{val\_accuracy} - 	ext{train\_accuracy}$) remains narrow and positive throughout training. Validation accuracy is slightly higher than training accuracy (~92.5\% vs ~91.8\%), which is a standard phenomenon in Keras because training metrics are averaged across batches during the epoch while validation is computed strictly on the whole validation set after the weights have been updated.\par
-3. \textbf{Model Learning Regime}: With a conservative learning rate of $\alpha = 0.01$ and standard SGD optimizer, 10 epochs (corresponding to 4,220 weight updates with batch size 128) are insufficient to drive a 407,050-parameter network to overfit the 54,000 training images. The model is still in an \textbf{active convergence / slight underfitting regime} and could continue improving if trained for more epochs.\par
+\textbf{\normalsize\textbf{Detailed Rational:}}\par\smallskip
+\textbf{1.}\ \textbf{Validation Loss Behavior (Non-Divergence)}: Overfitting is defined theoretically as the point where the model begins memorizing the training noise rather than general patterns, which manifests as \textbf{validation loss beginning to increase (diverge) while training loss continues to decrease}. In our plot above, the validation loss decreases monotonically and steadily from $\sim$\,1.40 down to $\sim$\,0.30 across all 10 epochs without any upward rebound.\par
+\textbf{2.}\ \textbf{Generalization Gap Stability}: The difference between validation accuracy and training accuracy ($\Delta = \text{val\_accuracy} - \text{train\_accuracy}$) remains narrow and positive throughout training. Validation accuracy is slightly higher than training accuracy ($\sim$\,92.5\% vs $\sim$\,91.8\%), which is a standard phenomenon in Keras because training metrics are averaged across batches during the epoch while validation is computed strictly on the whole validation set after the weights have been updated.\par
+\textbf{3.}\ \textbf{Model Learning Regime}: With a conservative learning rate of $\alpha = 0.01$ and standard SGD optimizer, 10 epochs (corresponding to 4,220 weight updates with batch size 128) are insufficient to drive a 407,050-parameter network to overfit the 54,000 training images. The model is still in an \textbf{active convergence / slight underfitting regime} and could continue improving if trained for more epochs.\par
 \end{tcolorbox}
 \clearpage
 \needspace{4\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
-\textbf{5. Model Evaluation}\par\smallskip
+\textbf{\normalsize\textbf{5. Model Evaluation}}\par\smallskip
 \smallskip
 Evaluate your model with test set using \texttt{.evaluate()} and compare the results to those from the training and validate sets. Does your model overfit or underfit? How about the bias and variance?\par
 \end{tcolorbox}
@@ -453,8 +453,8 @@ weighted avg     0.9262    0.9262    0.9260     10000
 \smallskip
 Based on the confusion matrix and classification report on the 10,000 test images:\par
 \smallskip
-\textbf{1. Frequently Misclassified Classes:}\par\smallskip
-By analyzing the off-diagonal entries in the confusion matrix (where True Label  $\neq$  Predicted Label), we identify the most common error pairs:\par
+\textbf{\normalsize\textbf{1. Frequently Misclassified Classes:}}\par\smallskip
+By analyzing the off-diagonal entries in the confusion matrix (where True Label $\neq$ Predicted Label), we identify the most common error pairs:\par
 \textbullet\ \textbf{Class 4 misclassified as 9 (40 instances)}: Hand-drawn digit 4 with closed top loops closely mimics the upper loop of digit 9.\par
 \textbullet\ \textbf{Class 2 misclassified as 8 (35 instances)} and \textbf{Class 8 misclassified as 2 (35 instances)}: Confusion between the rounded curves of digit 8 and the looped base/head of digit 2.\par
 \textbullet\ \textbf{Class 7 misclassified as 9 (34 instances)}: Often caused by European-style handwritten 7 with middle crossbars resembling digit 9.\par
@@ -463,7 +463,7 @@ By analyzing the off-diagonal entries in the confusion matrix (where True Label 
 \smallskip
 \textbf{Summary}: Classes \textbf{4, 9, 8, 2, 3, and 5} exhibit the highest confusion due to geometrical similarity in human handwriting stroke topology. In contrast, \textbf{Class 1} and \textbf{Class 0} have the most distinct shapes and highest accuracy.\par
 \smallskip
-\textbf{2. Precision and Recall of the Model:}\par\smallskip
+\textbf{\normalsize\textbf{2. Precision and Recall of the Model:}}\par\smallskip
 From the classification report:\par
 \textbullet\ \textbf{Macro Average Precision}: \textbf{0.9255 (92.55\%)}  --  When the model predicts a specific digit, it is correct on average 92.55\% of the time.\par
 \textbullet\ \textbf{Macro Average Recall}: \textbf{0.9249 (92.49\%)}  --  The model successfully recovers on average 92.49\% of all actual instances of each digit.\par
@@ -476,12 +476,12 @@ From the classification report:\par
 \needspace{4\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
-\textbf{6. Model tuning}\par\smallskip
+\textbf{\normalsize\textbf{6. Model tuning}}\par\smallskip
 \smallskip
 Try tuning your model by:\par
-1. Adjust the learning rate of your optimizer by increasing and decreasing the learning rate to see how it affects your model.\par
-2. Experiment with different optimizers ('sgd', 'rmspop', 'adagrad', 'adam', See https://keras.io/optimizers ) to see which one converges faster.\par
-3. Change the structure of your model by adding more hidden layers with any number of nodes, and then observe how this affects your model.\par
+\textbf{1.}\ Adjust the learning rate of your optimizer by increasing and decreasing the learning rate to see how it affects your model.\par
+\textbf{2.}\ Experiment with different optimizers ('sgd', 'rmspop', 'adagrad', 'adam', See https://keras.io/optimizers ) to see which one converges faster.\par
+\textbf{3.}\ Change the structure of your model by adding more hidden layers with any number of nodes, and then observe how this affects your model.\par
 \end{tcolorbox}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 14]:}
@@ -601,7 +601,7 @@ Deeper Model (512-256-128 + Dropout 0.2 + Adam) -> Test Accuracy: 98.24% | Test 
 \needspace{4\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
-\textbf{7. Discussion and Result}\par\smallskip
+\textbf{\normalsize\textbf{7. Discussion and Result}}\par\smallskip
 Q: Write down your findings from the previous step.\par
 \end{tcolorbox}
 \needspace{4\baselineskip}
@@ -611,31 +611,42 @@ Q: Write down your findings from the previous step.\par
 \smallskip
 Based on the empirical experiments in Step 6, our key scientific findings are as follows:\par
 \smallskip
-\textbf{1. Learning Rate ($\alpha$) Adjustment:}\par\smallskip
+\textbf{\normalsize\textbf{1. Learning Rate ($\alpha$) Adjustment:}}\par\smallskip
 \textbullet\ \textbf{Small Learning Rate ($\alpha = 0.01$)}: Convergence is smooth and monotonic, but progress per epoch is slow. The model reached only 92.58\% accuracy in 10 epochs, leaving significant capacity underutilized.\par
 \textbullet\ \textbf{Optimal Learning Rate ($\alpha = 0.10 - 0.20$)}: Accelerates gradient descent substantially, driving test accuracy to \textbf{97.13\% - 97.35\%} in 10 epochs without loss instability.\par
 \textbullet\ \textbf{Excessive Learning Rate ($\alpha \ge 0.50$)}: Causes gradient oscillation around sharp loss valley walls, leading to unstable convergence and higher final loss.\par
 \smallskip
-\textbf{2. Optimizer Comparison:}\par\smallskip
+\textbf{\normalsize\textbf{2. Optimizer Comparison:}}\par\smallskip
 \textbullet\ \textbf{RMSprop \& Adam Dominate}: Both \textbf{RMSprop (98.30\%)} and \textbf{Adam (98.00\%)} converged far faster and reached the highest test accuracies, achieving $>97\%$ accuracy by epoch 3. This is due to their adaptive per-parameter learning rate scaling and momentum mechanisms.\par
 \textbullet\ \textbf{Adagrad (94.96\%)}: Slower convergence because the accumulation of squared historical gradients in the denominator causes the effective learning rate to decay prematurely, stalling training.\par
 \textbullet\ \textbf{SGD (92.58\% with default LR, 97.13\% with LR=0.1)}: Requires careful learning rate tuning to compete with adaptive optimizers.\par
 \smallskip
-\textbf{3. Changing Model Structure (Depth \& Dropout):}\par\smallskip
-\textbullet\ \textbf{Deeper Multi-Layer Architecture (512 $	o$ 256 $	o$ 128)}: Adding more non-linear layers enables the network to extract hierarchical abstractions of digits (edges $	o$ loops/corners $	o$ digit shapes).\par
+\textbf{\normalsize\textbf{3. Changing Model Structure (Depth \& Dropout):}}\par\smallskip
+\textbullet\ \textbf{Deeper Multi-Layer Architecture (512 $\rightarrow$ 256 $\rightarrow$ 128)}: Adding more non-linear layers enables the network to extract hierarchical abstractions of digits (edges $\rightarrow$ loops/corners $\rightarrow$ digit shapes).\par
 \textbullet\ \textbf{Impact of Dropout (0.2)}: Adding 20\% dropout regularization prevents neural units from co-adapting and memorizing training noise, yielding a resilient test accuracy of \textbf{98.14\%} and a stable validation loss trajectory.\par
 \smallskip
-\textbf{4. Comprehensive Synthesis Table:}\par\smallskip
+\textbf{\normalsize\textbf{4. Comprehensive Synthesis Table:}}\par\smallskip
 \smallskip
-| Model Architecture | Optimizer | Learning Rate | Test Accuracy | Test Loss |\par
-| :--- | :---: | :---: | :---: | :---: |\par
-| Baseline (1 Hidden 512) | SGD | 0.01 | 92.58\% | 0.2871 |\par
-| Baseline (1 Hidden 512) | SGD | 0.10 | 97.13\% | 0.1012 |\par
-| Baseline (1 Hidden 512) | SGD | 0.20 | 97.35\% | 0.0894 |\par
-| Baseline (1 Hidden 512) | Adagrad | 0.01 | 94.96\% | 0.1856 |\par
-| Baseline (1 Hidden 512) | RMSprop | 0.001 | \textbf{98.30\%} | \textbf{0.0754} |\par
-| Baseline (1 Hidden 512) | Adam | 0.001 | 98.00\% | 0.0812 |\par
-| Deeper Regularized (512-256-128 + Dropout) | Adam | 0.001 | \textbf{98.14\%} | \textbf{0.0789} |\par
+\smallskip
+\begin{center}
+\small
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Model Architecture} & \textbf{Optimizer} & \textbf{Learning Rate} & \textbf{Test Accuracy} & \textbf{Test Loss} \\
+\midrule
+Baseline (1 Hidden 512) & SGD & 0.01 & 92.58\% & 0.2871 \\
+Baseline (1 Hidden 512) & SGD & 0.10 & 97.13\% & 0.1012 \\
+Baseline (1 Hidden 512) & SGD & 0.20 & 97.35\% & 0.0894 \\
+Baseline (1 Hidden 512) & Adagrad & 0.01 & 94.96\% & 0.1856 \\
+Baseline (1 Hidden 512) & RMSprop & 0.001 & \textbf{98.30\%} & \textbf{0.0754} \\
+Baseline (1 Hidden 512) & Adam & 0.001 & 98.00\% & 0.0812 \\
+Deeper Regularized (512-256-128 + Dropout) & Adam & 0.001 & \textbf{98.14\%} & \textbf{0.0789} \\
+\bottomrule
+\end{tabular}%
+}
+\end{center}
+\smallskip
 \smallskip
 \textbf{Conclusion}: Choosing an advanced adaptive optimizer (RMSprop or Adam) provides the single largest improvement in training speed and final performance, while architectural depth reinforced by Dropout ensures superior generalization without overfitting.\par
 \end{tcolorbox}
