@@ -1,0 +1,519 @@
+% Compile: xelatex "CPE342_Assignment 5_main.tex" (รัน 2 รอบ)
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{thai}
+\setotherlanguage{english}
+
+\setmainfont{Sarabun}[
+    BoldFont       = Sarabun-Bold,
+    ItalicFont     = Sarabun-Italic,
+    BoldItalicFont = Sarabun-BoldItalic,
+]
+\newfontfamily\thaifonttt{Sarabun}[
+    BoldFont       = Sarabun-Bold,
+    ItalicFont     = Sarabun-Italic,
+]
+
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\usepackage{needspace}
+\usepackage{caption}
+\usepackage{listings}
+\usepackage{upquote}
+\usepackage{hyperref}
+\tcbuselibrary{skins, breakable}
+
+\XeTeXlinebreaklocale "th"
+\XeTeXlinebreakskip = 0pt plus 1pt
+\sloppy
+
+\definecolor{captioncol}{RGB}{80, 80, 80}
+\definecolor{accentblue}{RGB}{37, 99, 235}
+\definecolor{codebg}{RGB}{248, 250, 252}
+\definecolor{codeframe}{RGB}{203, 213, 225}
+\definecolor{keyword}{RGB}{124, 58, 237}
+\definecolor{string}{RGB}{22, 163, 74}
+\definecolor{comment}{RGB}{100, 116, 139}
+\definecolor{output}{RGB}{30, 58, 138}
+\captionsetup{font={small, color=captioncol}, justification=centering}
+
+\lstdefinestyle{pycode}{
+    language=Python,
+    backgroundcolor=\color{codebg},
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{keyword}\bfseries,
+    stringstyle=\color{string},
+    commentstyle=\color{comment}\itshape,
+    numberstyle=\tiny\color{comment},
+    numbers=left,
+    numbersep=8pt,
+    frame=single,
+    rulecolor=\color{codeframe},
+    breaklines=true,
+    breakatwhitespace=false,
+    showstringspaces=false,
+    tabsize=4,
+    xleftmargin=16pt,
+    xrightmargin=4pt,
+    literate={≈}{{$\approx$}}1 {α}{{$\alpha$}}1 {β}{{$\beta$}}1 {λ}{{$\lambda$}}1 {Λ}{{$\Lambda$}}1 {χ}{{$\chi$}}1 {η}{{$\eta$}}1 {ρ}{{$\rho$}}1 {σ}{{$\sigma$}}1
+}
+
+\lstdefinestyle{output}{
+    basicstyle=\ttfamily\scriptsize\color{output},
+    backgroundcolor=\color{codebg},
+    frame=single,
+    rulecolor=\color{codeframe},
+    numbers=none,
+    xleftmargin=8pt,
+    xrightmargin=4pt,
+    breaklines=true,
+    breakatwhitespace=false,
+    literate={≈}{{$\approx$}}1 {α}{{$\alpha$}}1 {β}{{$\beta$}}1 {λ}{{$\lambda$}}1 {Λ}{{$\Lambda$}}1 {χ}{{$\chi$}}1 {η}{{$\eta$}}1 {ρ}{{$\rho$}}1 {σ}{{$\sigma$}}1
+}
+
+\widowpenalty=10000
+\clubpenalty=10000
+
+\geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm, headheight=14pt}
+
+\newtcolorbox{ansbox}[1][]{
+    colback=green!5!white, colframe=green!50!black,
+    boxrule=0.5pt, arc=4pt, left=8pt, right=8pt, top=5pt, bottom=5pt, #1
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=accentblue,
+    urlcolor=accentblue,
+    citecolor=accentblue
+}
+
+% =================================================================
+\begin{document}
+
+\begin{center}
+    {\Large\textbf{CPE 342 Machine Learning}}\\[2pt]
+    {\Large\textbf{Assignment 5: Deep Neural Networks (DNN)}}\\[4pt]
+    {\large การจำแนกตัวเลขลายมือเขียน MNIST ด้วย Deep Neural Network, การปรับแต่งไฮเปอร์พารามิเตอร์ และการวินิจฉัยข้อผิดพลาดเชิงโครงสร้าง}\\[2pt]
+    {\normalsize (Handwritten Digit Recognition via Multi-Layer Perceptrons, Hyperparameter Optimization, and Error Topology Analysis)}\\[6pt]
+    \textbf{คณะผู้จัดทำ:}\\[2pt]
+    \textcolor{accentblue}{\textbf{67070501042 วิศิษฐ์ สุวรรณเนาว์ (Wisit Suwannao)}}\\[2pt]
+    {[รหัสนักศึกษา 2] [ชื่อ-นามสกุล 2]}\\[2pt]
+    {[รหัสนักศึกษา 3] [ชื่อ-นามสกุล 3]}\\[6pt]
+    \textbf{อาจารย์ผู้สอน:} ดร. บุญญฤทธิ์ ฉันไกวัล (Dr. Boonyarit Changaival)\\[2pt]
+    ภาควิชาวิศวกรรมคอมพิวเตอร์ คณะวิศวกรรมศาสตร์\\
+    มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี (KMUTT)
+\end{center}
+
+\vspace{0.5em}
+\hrule
+\vspace{1em}
+
+\section*{1. บทนำและกรอบแนวคิดเชิงทฤษฎี\\ \large(Theoretical Foundations \& Mathematical Framework)}
+
+โครงข่ายประสาทเทียมเชิงลึก (Deep Neural Networks: DNN) เป็นหนึ่งในกระบวนทัศน์พื้นฐานที่ทรงพลังที่สุดของการเรียนรู้ของเครื่องยุคใหม่ โดยต่อยอดจากแนวคิดของเซลล์ประสาททางชีววิทยา (Biological Neurons) สู่แบบจำลองคณิตศาสตร์ที่สามารถประมาณการฟังก์ชันไม่เชิงเส้นที่ซับซ้อน (Universal Approximation) ในการทดลองนี้ เรามุ่งเน้นการศึกษา Multi-Layer Perceptron (MLP) บนชุดข้อมูลตัวเลขลายมือเขียนมาตรฐานระดับโลก (MNIST) พร้อมการวิเคราะห์การหาค่าเหมาะที่สุดและการควบคุม Regularization
+
+\subsection*{1.1 เซลล์ประสาทประดิษฐ์และเพอร์เซปตรอน\\ \normalsize(Artificial Neuron \& The Perceptron Model)}
+แบบจำลองพื้นฐานที่สุดของเซลล์ประสาทประดิษฐ์ถูกคิดค้นโดย Warren McCulloch และ Walter Pitts (1943) ก่อนจะถูกพัฒนาต่อโดย Frank Rosenblatt (1958) ในชื่อ \textbf{Perceptron} กลไกการทำงานประกอบด้วยการรับสัญญาณนำเข้าเวกเตอร์ $\mathbf{x} = [x_1, x_2, \dots, x_d]^T \in \mathbb{R}^d$ ผ่านค่าน้ำหนัก (Weights) $\mathbf{w} = [w_1, w_2, \dots, w_d]^T$ และค่าเอนเอียง (Bias) $b$ เกิดเป็นผลรวมเชิงเส้น (Linear Combination):
+\begin{equation}
+z = \sum_{i=1}^d w_i x_i + b = \mathbf{w}^T \mathbf{x} + b
+\end{equation}
+จากนั้น สัญญาณ $z$ จะถูกส่งผ่านฟังก์ชันกระตุ้น (Activation Function) $g(z)$ เพื่อสร้างสัญญาณส่งออก $a = g(z)$ โดย Perceptron ดั้งเดิมใช้ฟังก์ชันขั้นบันได (Heaviside Step Function) ซึ่งมีข้อจำกัดทางคณิตศาสตร์ที่ไม่สามารถหาอนุพันธ์ได้และจำแนกได้เฉพาะปัญหาที่แยกออกจากกันได้เชิงเส้น (Linearly Separable) เท่านั้น ดั่งที่ชี้ให้เห็นในปัญหา XOR โดย Minsky และ Papert (1969)
+
+\subsection*{1.2 สถาปัตยกรรมโครงข่ายประสาทหลายชั้นและการส่งต่อทางหน้า\\ \normalsize(Multi-Layer Perceptron \& Forward Propagation)}
+เพื่อก้าวข้ามข้อจำกัดของ Perceptron เดี่ยว จึงเกิดการซ้อนชั้นของโหนดประสาทเป็นโครงข่ายหลายชั้น (Multi-Layer Perceptron: MLP) ประกอบด้วย Input Layer, หนึ่งหรือหลาย Hidden Layers, และ Output Layer
+\begin{itemize}[leftmargin=18pt, itemsep=2pt]
+    \item \textbf{ทฤษฎี Universal Approximation Theorem}: Hornik et al. (1989) และ Cybenko (1989) ได้พิสูจน์ทางคณิตศาสตร์ว่า โครงข่ายประสาทแบบ Feedforward ที่มี Hidden Layer เพียง 1 ชั้นซึ่งมีจำนวนโหนดจำกัดและใช้ฟังก์ชันกระตุ้นแบบไม่เชิงเส้น สามารถประมาณการฟังก์ชันต่อเนื่องใด ๆ บนปริภูมิขนาดกะทัดรัด (Compact Subset of $\mathbb{R}^n$) ได้อย่างแม่นยำตามต้องการ
+    \item \textbf{สมการ Forward Propagation ในรูปเมทริกซ์}: สำหรับชั้นที่ $l$ โดยที่ $l \in \{1, 2, \dots, L\}$:
+    \begin{align}
+    \mathbf{z}^{[l]} &= \mathbf{W}^{[l]} \mathbf{a}^{[l-1]} + \mathbf{b}^{[l]} \\
+    \mathbf{a}^{[l]} &= g^{[l]}(\mathbf{z}^{[l]})
+    \end{align}
+    โดย $\mathbf{a}^{[0]} = \mathbf{x}$ คือเวกเตอร์คุณลักษณะนำเข้า, $\mathbf{W}^{[l]} \in \mathbb{R}^{n_l \times n_{l-1}}$ คือเมทริกซ์ค่าน้ำหนัก, และ $\mathbf{b}^{[l]} \in \mathbb{R}^{n_l}$ คือเวกเตอร์ Bias
+\end{itemize}
+
+\subsection*{1.3 ฟังก์ชันกระตุ้นไม่เชิงเส้น\\ \normalsize(Non-Linear Activation Functions)}
+ฟังก์ชันกระตุ้นเป็นหัวใจสำคัญที่ทำให้โครงข่ายมีความสามารถในการเรียนรู้คุณลักษณะไม่เชิงเส้น หากปราศจากฟังก์ชันกระตุ้น โครงข่ายหลายชั้นจะยุบรวมเป็นเพียงการแปลงเชิงเส้นชั้นเดียว ($\mathbf{W}_2 \mathbf{W}_1 \mathbf{x} = \mathbf{W}' \mathbf{x}$) ฟังก์ชันกระตุ้นที่สำคัญมีดังนี้:
+\begin{enumerate}[leftmargin=18pt, itemsep=3pt]
+    \item \textbf{Sigmoid Function}: $\sigma(z) = \frac{1}{1 + e^{-z}}$ มีช่วงค่า $(0, 1)$ เหมาะสำหรับการประมาณความน่าจะเป็นแบบทวิภาค (Binary) แต่มีปัญหาสำคัญคือ \textit{Vanishing Gradient} เมื่อ $|z|$ มีค่าสูง ความชัน $\sigma'(z) = \sigma(z)(1 - \sigma(z))$ จะเข้าใกล้ 0 ทำให้การอัปเดตน้ำหนักในชั้นลึกหยุดชะงัก
+    \item \textbf{Rectified Linear Unit (ReLU)}: $g(z) = \max(0, z)$ เป็นฟังก์ชันมาตรฐานสำหรับ Hidden Layer ในงาน Deep Learning สมัยใหม่ เนื่องจากความชันเป็น 1 เสมอสำหรับ $z > 0$ ช่วยกำจัดปัญหา Vanishing Gradient ในฝั่งบวก และทำให้เกิด Sparse Activation ซึ่งส่งผลดีต่อประสิทธิภาพในการคำนวณ
+    \item \textbf{Softmax Function}: ใช้ใน Output Layer สำหรับปัญหาการจำแนกหลายคลาส (Multiclass Classification, $K$ classes):
+    \begin{equation}
+    \hat{y}_k = \text{Softmax}(z_k) = \frac{e^{z_k}}{\sum_{j=1}^K e^{z_j}} \quad \text{โดยที่} \quad \sum_{k=1}^K \hat{y}_k = 1, \; \hat{y}_k \in (0, 1)
+    \end{equation}
+    ทำหน้าที่แปลงค่า Logits ของแต่ละคลาสให้กลายเป็นการแจกแจงความน่าจะเป็นที่สมบูรณ์
+\end{enumerate}
+
+\subsection*{1.4 ฟังก์ชันการสูญเสียและการแพร่ย้อนกลับ\\ \normalsize(Categorical Cross-Entropy Loss \& Backpropagation)}
+สำหรับการจำแนกหลายคลาสแบบ One-Hot Encoded Target $\mathbf{y} \in \{0, 1\}^K$ ฟังก์ชันการสูญเสียมาตรฐานคือ \textbf{Categorical Cross-Entropy}:
+\begin{equation}
+\mathcal{L}(\mathbf{y}, \mathbf{\hat{y}}) = -\sum_{k=1}^K y_k \ln(\hat{y}_k)
+\end{equation}
+เมื่อพิจารณาทั้งชุดข้อมูลขนาด $N$ ตัวอย่าง ฟังก์ชันเป้าหมายรวม (Total Cost Function) คือ:
+\begin{equation}
+\mathcal{J}(\mathbf{W}, \mathbf{b}) = \frac{1}{N} \sum_{i=1}^N \mathcal{L}(\mathbf{y}^{(i)}, \mathbf{\hat{y}}^{(i)})
+\end{equation}
+
+\noindent
+\textbf{การหาอนุพันธ์ย้อนกลับ (Backpropagation via Chain Rule)}:
+การปรับค่าน้ำหนักใช้กฎลูกโซ่ (Chain Rule) เพื่อคำนวณเกรเดียนต์ของ Cost เทียบกับค่าน้ำหนักแต่ละชั้น:
+\begin{itemize}[leftmargin=18pt, itemsep=2pt]
+    \item สำหรับ Output Layer (Softmax ร่วมกับ Cross-Entropy):
+    \begin{equation}
+    \delta^{[L]} = \frac{\partial \mathcal{L}}{\partial \mathbf{z}^{[L]}} = \mathbf{\hat{y}} - \mathbf{y}
+    \end{equation}
+    \item การคำนวณเกรเดียนต์ของน้ำหนักและ Bias ชั้นที่ $l$:
+    \begin{equation}
+    \frac{\partial \mathcal{J}}{\partial \mathbf{W}^{[l]}} = \frac{1}{N} \delta^{[l]} (\mathbf{a}^{[l-1]})^T, \qquad \frac{\partial \mathcal{J}}{\partial \mathbf{b}^{[l]}} = \frac{1}{N} \sum \delta^{[l]}
+    \end{equation}
+    \item การส่งผ่าน Error ย้อนกลับไปยังชั้นก่อนหน้า:
+    \begin{equation}
+    \delta^{[l-1]} = \left( (\mathbf{W}^{[l]})^T \delta^{[l]} \right) \odot g'^{[l-1]}(\mathbf{z}^{[l-1]})
+    \end{equation}
+    โดย $\odot$ คือ Hadamard Product (การคูณแบบสมาชิกต่อสมาชิก)
+\end{itemize}
+
+\subsection*{1.5 พลวัตของอัลกอริทึมการหาค่าเหมาะที่สุด\\ \normalsize(Optimization Dynamics: SGD, Adagrad, RMSprop, Adam)}
+การอัปเดตพารามิเตอร์ $\mathbf{\theta} = \{\mathbf{W}, \mathbf{b}\}$ ขึ้นอยู่กับ Optimizer:
+\begin{enumerate}[leftmargin=18pt, itemsep=3pt]
+    \item \textbf{Stochastic Gradient Descent (SGD)}:
+    $\mathbf{\theta}_{t+1} = \mathbf{\theta}_t - \alpha \nabla_{\mathbf{\theta}} \mathcal{J}(\mathbf{\theta}_t)$
+    เป็นการอัปเดตด้วยอัตราการเรียนรู้คงที่ $\alpha$ มักมีปัญหาการส่ายตัว (Oscillation) ในหุบผาที่มีความชันไม่เท่ากัน (Ravines) และลู่เข้าช้า
+    \item \textbf{Adagrad}: ปรับอัตราการเรียนรู้ตามผลรวมกำลังสองของเกรเดียนต์ในอดีต $G_t = G_{t-1} + g_t^2$, $\mathbf{\theta}_{t+1} = \mathbf{\theta}_t - \frac{\alpha}{\sqrt{G_t + \epsilon}} g_t$ ทำให้ค่าน้ำหนักที่ถูกอัปเดตบ่อยมีก้าวที่เล็กลง แต่มีข้อจำกัดคือ $G_t$ สะสมต่อเนื่องจนก้าวเล็กลงเรื่อย ๆ จนหยุดเรียนรู้ก่อนเวลา
+    \item \textbf{RMSprop}: แก้ไขปัญหาของ Adagrad โดยใช้น้ำหนักถ่วงแบบลดหลั่นทวีคูณ (Exponential Moving Average):
+    $s_t = \beta s_{t-1} + (1-\beta) g_t^2$, $\mathbf{\theta}_{t+1} = \mathbf{\theta}_t - \frac{\alpha}{\sqrt{s_t + \epsilon}} g_t$
+    \item \textbf{Adam (Adaptive Moment Estimation)}: ผสมผสาน Momentum (First Moment, $m_t$) เข้ากับ RMSprop (Second Moment, $v_t$) พร้อมการแก้ไขความเอนเอียง (Bias Correction):
+    \begin{align}
+    m_t &= \beta_1 m_{t-1} + (1-\beta_1) g_t, \qquad \hat{m}_t = \frac{m_t}{1 - \beta_1^t} \\
+    v_t &= \beta_2 v_{t-1} + (1-\beta_2) g_t^2, \qquad \hat{v}_t = \frac{v_t}{1 - \beta_2^t} \\
+    \mathbf{\theta}_{t+1} &= \mathbf{\theta}_t - \frac{\alpha}{\sqrt{\hat{v}_t} + \epsilon} \hat{m}_t
+    \end{align}
+    ทำให้ Adam เป็น Optimizer ที่ได้รับความนิยมสูงสุดเนื่องจากการลู่เข้าที่รวดเร็วและทนทานต่อพื้นผิว Loss ที่ซับซ้อน
+\end{enumerate}
+
+\subsection*{1.6 เทคนิคการควบคุมการรู้จำเกิน\\ \normalsize(Regularization via Dropout)}
+\textbf{Dropout} (Srivastava et al., 2014) เป็นเทคนิค Regularization ที่ทรงประสิทธิภาพ โดยในระหว่างการฝึกสอน จะสุ่มปิดการทำงานของโหนดประสาทด้วยความน่าจะเป็น $p$ (เช่น $p=0.2$):
+\begin{equation}
+\mathbf{r} \sim \text{Bernoulli}(1-p), \qquad \mathbf{\tilde{a}}^{[l]} = \mathbf{r} \odot \mathbf{a}^{[l]}
+\end{equation}
+กลไกนี้บังคับไม่ให้โหนดประสาทพึ่งพาซึ่งกันและกัน (Co-adaptation) เปรียบเสมือนการสุ่มสร้างสถาปัตยกรรมย่อยจำนวนมหาศาลและรวมผลการทำนายแบบ Ensemble ช่วยลด Variance และป้องกันภาวะ Overfitting อย่างมีนัยสำคัญ
+
+\section*{2. คุณลักษณะและโครงสร้างของชุดข้อมูล\\ \large(Dataset Architecture \& Exploratory Analysis)}
+
+ชุดข้อมูลที่ใช้ในการทดลองหลักคือ \textbf{MNIST (Modified National Institute of Standards and Technology)} ซึ่งเป็น Benchmark มาตรฐานสำหรับงานจำแนกภาพ มีรายละเอียดทางเทคนิคดังนี้:
+\begin{itemize}[leftmargin=18pt, itemsep=2pt]
+    \item \textbf{จำนวนตัวอย่างทั้งหมด}: 70,000 ภาพ ประกอบด้วย Training Set 60,000 ภาพ และ Test Set 10,000 ภาพ
+    \item \textbf{มิติของข้อมูล}: ภาพแต่ละภาพมีขนาด $28 \times 28$ พิกเซล ช่องสีเดียว (Grayscale) รวมเป็น 784 มิติต่อภาพ
+    \item \textbf{ชนิดและช่วงค่าของข้อมูล}: อยู่ในรูปแบบจำนวนเต็มไร้เครื่องหมาย 8 บิต (\texttt{uint8}) มีค่าความสว่างระหว่าง $0$ (พื้นหลังสีดำ) ถึง $255$ (เส้นลายมือเขียนสีขาว)
+    \item \textbf{คลาสเป้าหมาย}: ตัวเลขโดด 10 คลาส ได้แก่ $\{0, 1, 2, 3, 4, 5, 6, 7, 8, 9\}$ โดยมีการกระจายตัวของคลาสที่สมดุลอย่างยิ่ง ($\approx 6,000$ ภาพต่อคลาสในชุดฝึกสอน)
+\end{itemize}
+
+\section*{3. ระเบียบวิธีวิจัยและกระบวนการเตรียมข้อมูล\\ \large(Methodology \& Preprocessing Pipeline)}
+
+ก่อนป้อนข้อมูลเข้าสู่โครงข่ายประสาทแบบ Fully-Connected จำเป็นต้องดำเนินกระบวนการจัดเตรียมข้อมูล (Data Preprocessing Pipeline) ตามลำดับดังนี้:
+\begin{enumerate}[leftmargin=18pt, itemsep=3pt]
+    \item \textbf{การคลี่มิติข้อมูล (Dimensional Flattening)}:
+    แปลงเทนเซอร์ภาพ 2 มิติขนาด $(N, 28, 28)$ ให้อยู่ในรูปเวกเตอร์ 1 มิติขนาด $(N, 784)$ เพื่อให้สอดคล้องกับ Input Dimension ของ Dense Layer
+    \item \textbf{การปรับสเกลข้อมูลแบบ Min-Max (Pixel Normalization)}:
+    แปลงชนิดข้อมูลจาก \texttt{uint8} เป็น \texttt{float32} พร้อมหารด้วย $255.0$ ทำให้ค่าความสว่างอยู่ในช่วง $[0.0, 1.0]$:
+    \begin{equation}
+    x_{norm} = \frac{x}{255.0} \in [0.0, 1.0]
+    \end{equation}
+    การทำให้ข้อมูลมีสเกลที่สม่ำเสมอช่วยป้องกันปัญหาเกรเดียนต์เบี่ยงเบนและช่วยให้ฟังก์ชัน Loss ลู่เข้าสู่จุดต่ำสุดได้อย่างราบรื่น
+    \item \textbf{การแปลงรหัสคลาสแบบ One-Hot Encoding}:
+    แปลงเวกเตอร์ป้ายกำกับจำนวนเต็ม $y \in \{0, 1, \dots, 9\}$ เป็นเวกเตอร์ฐานสองขนาด 10 มิติ $\mathbf{y} \in \{0, 1\}^{10}$ เช่น ตัวเลข $3 \rightarrow [0, 0, 0, 1, 0, 0, 0, 0, 0, 0]$ ผ่านฟังก์ชัน \texttt{keras.utils.to\_categorical}
+    \item \textbf{การแบ่งชุดข้อมูลฝึกสอนและตรวจสอบ (Train/Validation Split)}:
+    แบ่งชุดข้อมูลฝึกสอน $60,000$ ตัวอย่าง ออกเป็น Training Set สัดส่วน $90\%$ ($N_{train} = 54,000$) สำหรับการปรับค่าน้ำหนัก และ Validation Set สัดส่วน $10\%$ ($N_{val} = 6,000$) สำหรับการติดตามประเมินผลการเรียนรู้และภาวะ Overfitting ในแต่ละรอบการฝึกสอน
+\end{enumerate}
+
+\section*{4. ผลการทดลองและการวินิจฉัยโมเดล\\ \large(Experimental Results \& Diagnostic Plots)}
+
+\subsection*{4.1 การวิเคราะห์ภาพตัวอย่างและการแจกแจงพิกเซล\\ \normalsize(Exploratory Data Analysis \& Pixel Distributions)}
+ภาพตัวอย่างของตัวเลขลายมือเขียนทั้ง 10 คลาส แสดงใน Figure 1
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{plot_1_mnist_eda.pdf}
+    \caption{\textbf{Representative MNIST Handwritten Digits (Classes 0–9)}: ภาพตัวอย่างขนาด $28 \times 28$ พิกเซล ของแต่ละคลาสตัวเลขที่ผ่านการประมวลผลพร้อมป้อนเข้าสู่โครงข่ายประสาท}
+\end{figure}
+
+\noindent
+\textbf{การแปลผล Figure 1}: ภาพตัวเลขลายมือเขียนแต่ละคลาสมีความผันแปรทางเรขาคณิตของเส้นหมึกอย่างชัดเจน ตัวอย่างเช่น ลายมือเขียนตัวเลข 4 และ 9 มีโครงสร้างเส้นแนวตั้งและมุมด้านบนที่ใกล้เคียงกัน เช่นเดียวกับตัวเลข 7 และ 2 ที่มีเส้นทแยงมุมคล้ายคลึงกัน ความผันแปรเหล่านี้เป็นปัจจัยหลักที่ทำให้โมเดลเกิดความสับสนในการจำแนกประเภท
+
+\clearpage
+\subsection*{4.2 แผนผังสถาปัตยกรรมโครงข่ายและจำนวนพารามิเตอร์\\ \normalsize(Computational Graph \& Parameter Counting)}
+สถาปัตยกรรมโครงข่ายประสาท 2 ชั้น (Baseline Sequential DNN) แสดงใน Figure 2
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.98\textwidth]{plot_2_dnn_architecture.pdf}
+    \caption{\textbf{Baseline 2-Layer Fully-Connected Deep Neural Network Architecture}: แผนภาพการไหลของเทนเซอร์ ขนาดมิติในแต่ละชั้น ชนิดของฟังก์ชันกระตุ้น และจำนวนพารามิเตอร์ที่ต้องปรับปรุง}
+\end{figure}
+
+\noindent
+\textbf{การแปลผล Figure 2}: โครงข่ายโมเดลพื้นฐานประกอบด้วยพารามิเตอร์ที่ต้องเรียนรู้รวมทั้งสิ้น \textbf{407,050 พารามิเตอร์} โดยแบ่งการคำนวณออกเป็น 2 ชั้น ดังนี้:
+\begin{itemize}[leftmargin=18pt, itemsep=2pt]
+    \item \textbf{Dense Hidden Layer (512 Units, ReLU)}:
+    รับอินพุต 784 มิติ มีเมทริกซ์น้ำหนักขนาด $784 \times 512 = 401,408$ และเวกเตอร์ Bias ขนาด $512$ รวมเป็น $401,408 + 512 = \mathbf{401,920}$ พารามิเตอร์
+    \item \textbf{Dense Output Layer (10 Units, Softmax)}:
+    รับอินพุต 512 มิติ มีเมทริกซ์น้ำหนักขนาด $512 \times 10 = 5,120$ และเวกเตอร์ Bias ขนาด $10$ รวมเป็น $5,120 + 10 = \mathbf{5,130}$ พารามิเตอร์
+\end{itemize}
+
+\clearpage
+\subsection*{4.3 เส้นทางการเรียนรู้และการวิเคราะห์ภาวะ Overfitting\\ \normalsize(Learning Curves \& Overfitting Diagnostics)}
+เส้นทางการเรียนรู้ (Training vs. Validation Loss และ Accuracy) ตลอด 10 Epochs ด้วย Mini-batch SGD แสดงใน Figure 3
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.98\textwidth]{plot_3_training_history.pdf}
+    \caption{\textbf{Learning Curves for Baseline DNN (Mini-batch SGD, lr=0.01, Batch=128)}: ซ้าย: ค่า Categorical Cross-Entropy Loss บนชุด Train และ Validation ขวา: ค่า Accuracy ตลอด 10 Epochs}
+\end{figure}
+
+\noindent
+\textbf{การแปลผล Figure 3}: 
+\begin{itemize}[leftmargin=18pt, itemsep=2pt]
+    \item ตลอด 10 Epochs ค่า Training Loss ปรับตัวลดลงอย่างต่อเนื่องจาก $1.875$ สู่ $0.285$ และ Validation Loss ลดลงตามจาก $1.398$ สู่ $0.232$
+    \item ค่า Validation Accuracy มีค่าสูงกว่า Training Accuracy เล็กน้อยในทุก Epoch ($93.63\%$ เทียบกับ $92.11\%$) ซึ่งเป็นพฤติกรรมปกติเนื่องจากการคำนวณ Training Loss/Accuracy เป็นค่าเฉลี่ยตลอดทั้ง Batch ในขณะที่ Validation ถูกวัดผลหลังจบ Epoch เมื่อพารามิเตอร์ได้รับการอัปเดตสมบูรณ์แล้ว
+    \item \textbf{ข้อสรุปสำคัญ}: โมเดลพื้นฐาน\textbf{ยังไม่เกิดสภาวะ Overfitting} ภายใน 10 Epochs เนื่องจากเส้น Validation Loss ไม่มีการวกกลับขึ้น และช่องว่างระหว่าง Train/Validation ยังคงแคบและลู่เข้าขนานกันอย่างมีเสถียรภาพ โมเดลยังอยู่ในช่วงการเรียนรู้แบบ Underfitting เล็กน้อยที่ยังสามารถปรับปรุงต่อได้
+\end{itemize}
+
+\clearpage
+\subsection*{4.4 การวินิจฉัยข้อผิดพลาดผ่าน Confusion Matrix\\ \normalsize(Confusion Matrix \& Per-Class Diagnostic)}
+เมทริกซ์ความสับสนและระดับ Precision/Recall บนชุดข้อมูลทดสอบ ($n=10,000$) แสดงใน Figure 4
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.98\textwidth]{plot_4_confusion_matrix.pdf}
+    \caption{\textbf{Diagnostic Performance \& Error Distribution (Baseline Model)}: ซ้าย: Heatmap เมทริกซ์ความสับสน ขวา: แผนภูมิแท่งเปรียบเทียบ Precision และ Recall รายคลาส}
+\end{figure}
+
+\noindent
+\textbf{การแปลผล Figure 4}:
+\begin{itemize}[leftmargin=18pt, itemsep=2pt]
+    \item โมเดลบรรลุความแม่นยำรวม (Overall Test Accuracy) อยู่ที่ \textbf{92.41\%} (Test Loss = \textbf{0.2657}) โดยสมาชิกส่วนใหญ่เกาะกลุ่มหนาแน่นบนแนวทแยงหลัก (True Positives)
+    \item \textbf{คู่คลาสที่เกิดการจำแนกผิดพลาดสูงสุด (Top Misclassification Pairs)}:
+    \begin{enumerate}
+        \item \textbf{คลาส 4 ทำนายผิดเป็น 9 (42 ตัวอย่าง)}: เนื่องจากโครงสร้างของเลข 4 ลายมือเขียนที่มีการลากเส้นบนบรรจบกันทำให้มีสัณฐานคล้ายวงกลมบนของเลข 9
+        \item \textbf{คลาส 5 ทำนายผิดเป็น 3 (42 ตัวอย่าง)} และ \textbf{คลาส 3 ทำนายผิดเป็น 5 (21 ตัวอย่าง)}: เกิดจากความคล้ายคลึงของส่วนโค้งครึ่งล่าง
+        \item \textbf{คลาส 2 ทำนายผิดเป็น 8 (32 ตัวอย่าง)}: เกิดจากความสับสนระหว่างส่วนโค้งด้านบนและล่างของเลข 8 กับฐานโค้งของเลข 2
+        \item \textbf{คลาส 7 ทำนายผิดเป็น 9 (28 ตัวอย่าง)} และ \textbf{คลาส 7 ทำนายผิดเป็น 2 (27 ตัวอย่าง)}: เกิดจากการเขียนเลข 7 ที่มีเส้นขีดตัดขวางกึ่งกลางหรือเส้นทแยงมุม
+    \end{enumerate}
+    \item คลาสที่มีประสิทธิภาพสูงสุดคือเลข 1 (Recall = 97.7\%, Precision = 96.5\%) และเลข 0 (Recall = 97.9\%, Precision = 94.5\%) เนื่องจากมีอัตลักษณ์ทางเรขาคณิตที่โดดเด่นและแยกออกจากตัวเลขอื่นได้ง่าย
+\end{itemize}
+
+\clearpage
+\subsection*{4.5 ผลกระทบของอัตราการเรียนรู้ต่อการลู่เข้า\\ \normalsize(Learning Rate Sensitivity Analysis)}
+ผลการทดลองเปรียบเทียบอัตราการเรียนรู้ $\alpha \in \{0.005, 0.01, 0.05, 0.1, 0.2, 0.5\}$ ของ SGD แสดงใน Figure 5
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.98\textwidth]{plot_5_learning_rate_comparison.pdf}
+    \caption{\textbf{Learning Rate Sensitivity Analysis on Model Convergence (SGD, 10 Epochs)}: เปรียบเทียบ Validation Loss และ Validation Accuracy ภายใต้อัตราการเรียนรู้ที่แตกต่างกัน}
+\end{figure}
+
+\noindent
+\textbf{การแปลผล Figure 5}:
+\begin{itemize}[leftmargin=18pt, itemsep=2pt]
+    \item เมื่อใช้ $\alpha = 0.005$ (Test Acc = $91.23\%$) และ $0.01$ (Test Acc = $92.61\%$): การลู่เข้าเป็นไปอย่างช้า ๆ แม้จะมีเสถียรภาพสูง แต่ค่า Accuracy ยังต่ำกว่าระดับศักยภาพของโมเดล
+    \item เมื่อเพิ่มเป็น $\alpha = 0.05$ ($96.01\%$), $\alpha = 0.1$ ($97.11\%$), และ $\alpha = 0.2$ (\textbf{97.73\%}): โมเดลลู่เข้าเร็วขึ้นอย่างก้าวกระโดด บรรลุความแม่นยำสูงถึง $97.73\%$ ภายในเพียง 10 Epochs
+    \item เมื่อใช้ $\alpha = 0.5$ (Test Acc = \textbf{98.10\%}, Test Loss = \textbf{0.0620}): การก้าวเดินมีขนาดใหญ่ขึ้นทำให้ลู่เข้าสู่จุดต่ำสุดได้อย่างรวดเร็วมาก แต่ในเชิงปฏิบัติหากนำไปใช้กับชุดข้อมูลที่มีสัญญาณรบกวนสูง อัตราการเรียนรู้ระดับนี้อาจเสี่ยงต่อการเกิด Oscillation ได้
+\end{itemize}
+
+\clearpage
+\subsection*{4.6 การเปรียบเทียบพลวัตการลู่เข้าของ Optimizer\\ \normalsize(Optimization Algorithms Convergence Benchmark)}
+การเปรียบเทียบอัลกอริทึมการหาค่าเหมาะที่สุดระหว่าง SGD ($\alpha=0.1$), Adagrad ($\alpha=0.01$), RMSprop ($\alpha=0.001$), และ Adam ($\alpha=0.001$) แสดงใน Figure 6
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.98\textwidth]{plot_6_optimizer_comparison.pdf}
+    \caption{\textbf{Convergence Rate \& Accuracy Across Optimization Algorithms}: ซ้าย: อัตราการลดลงของ Training Loss ขวา: ความแม่นยำบนชุด Validation ในแต่ละ Epoch}
+\end{figure}
+
+\noindent
+\textbf{การแปลผล Figure 6}:
+\begin{itemize}[leftmargin=18pt, itemsep=2pt]
+    \item \textbf{RMSprop และ Adam} (Test Acc = \textbf{97.90\%} และ \textbf{97.91\%}, Test Loss = \textbf{0.0701} และ \textbf{0.0725}) แสดงความเหนือกว่าอย่างเด่นชัด โดยสามารถบีบค่า Training Loss ลงต่ำกว่า $0.1$ ได้อย่างรวดเร็วตั้งแต่ Epoch ที่ 3-4
+    \item \textbf{SGD (lr=0.1)} บรรลุความแม่นยำที่ยอดเยี่ยมเช่นกันที่ \textbf{97.24\%} (Loss = $0.0973$) เมื่อได้รับการปรับอัตราการเรียนรู้ให้เหมาะสม
+    \item \textbf{Adagrad (lr=0.01)} ได้รับผลกระทบจากปัญหาผลรวมเกรเดียนต์กำลังสองสะสมในตัวหาร ($G_t$) ทำให้ก้าวการเดินลดลงเร็วเกินไป ส่งผลให้ความแม่นยำหยุดชะงักอยู่ที่ \textbf{94.83\%} (Loss = $0.1846$)
+\end{itemize}
+
+\clearpage
+\subsection*{4.7 การทดสอบความลึกของโครงข่ายและผลของ Dropout\\ \normalsize(Architectural Depth \& Dropout Regularization)}
+การเปรียบเทียบระหว่าง Baseline (1 Hidden 512), Deeper Network (512-256-128, No Dropout), และ Deeper Regularized Network (512-256-128, Dropout 0.2) แสดงใน Figure 7
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.98\textwidth]{plot_7_architecture_ablation.pdf}
+    \caption{\textbf{Impact of Architectural Depth \& Dropout Regularization on Generalization}: เปรียบเทียบ Validation Loss และ Validation Accuracy ระหว่างโครงข่ายระดับตื้น, ระดับลึก, และระดับลึกที่เสริม Dropout}
+\end{figure}
+
+\noindent
+\textbf{การแปลผล Figure 7}:
+\begin{itemize}[leftmargin=18pt, itemsep=2pt]
+    \item \textbf{Deeper Network แบบไม่มี Dropout (567,434 Params)}: บรรลุ Test Accuracy \textbf{97.89\%} (Test Loss = $0.0930$) แต่เส้น Validation Loss เริ่มมีความผันผวนและส่ายตัวเล็กน้อยในรอบท้าย ๆ บ่งชี้ถึงแนวโน้มของการเริ่มท่องจำข้อมูล
+    \item \textbf{Deeper Network เสริม Dropout 0.2 (567,434 Params)}: บรรลุประสิทธิภาพสูงสุดของการทดลองทั้งหมด โดยได้ Test Accuracy สูงถึง \textbf{98.35\%} และมีค่า Test Loss ต่ำที่สุดที่ \textbf{0.0662}
+    \item \textbf{บทบาทของ Dropout}: การสุ่มตัดการเชื่อมต่อ $20\%$ ของโหนดในแต่ละ Hidden Layer ทำหน้าที่เสมือน Ensemble Regularizer ที่บังคับให้โครงข่ายเรียนรู้ฟีเจอร์ที่มีความทนทาน ไม่พึ่งพาเส้นทางเดินสัญญาณใดเส้นทางหนึ่งโดยเฉพาะ
+\end{itemize}
+
+\clearpage
+\section*{5. การตอบคำถามประจำการทดลอง\\ \large(Experiment Question Solutions \& Rationale)}
+
+\subsection*{คำถามที่ 1: การวิเคราะห์สภาวะ Overfitting ในโมเดลพื้นฐาน\\ \normalsize(Question 1: Overfitting Iteration Analysis)}
+
+\begin{ansbox}
+\textbf{โจทย์}: \textit{At which iteration does your model start to overfit? Give your rational.}
+
+\vspace{0.4em}
+\textbf{คำตอบและเหตุผลเชิงวิชาการ}:
+โมเดลพื้นฐาน (Baseline DNN: 1 Hidden Layer 512 Units, SGD $\alpha=0.01$, Batch Size 128) \textbf{ยังไม่เกิดสภาวะ Overfitting ภายใน 10 Epochs ที่ทำการฝึกสอน} โดยมีเหตุผลสนับสนุนดังนี้:
+
+\begin{enumerate}[leftmargin=18pt, itemsep=3pt]
+    \item \textbf{พฤติกรรมของ Validation Loss}: สัญญาณทางทฤษฎีที่บ่งชี้ว่าโมเดลเริ่ม Overfit คือจุดที่ \textit{Validation Loss เริ่มวกกลับสูงขึ้น (Divergence)} ในขณะที่ Training Loss ยังคงลดลงอย่างต่อเนื่อง แต่จาก Figure 3 พบว่าทั้ง Training Loss (ลดจาก $1.875 \rightarrow 0.285$) และ Validation Loss (ลดจาก $1.398 \rightarrow 0.232$) มีทิศทางลดลงอย่างต่อเนื่องและขนานกันไปตลอดทั้ง 10 Epochs
+    \item \textbf{ช่องว่างของความแม่นยำ (Generalization Gap)}: ผลต่างระหว่างความแม่นยำบนชุดฝึกสอนและชุดตรวจสอบ ($\Delta = \text{val\_accuracy} - \text{train\_accuracy}$) ไม่มีการขยายตัวกว้างขึ้นผิดปกติ โดย Validation Accuracy ปรับตัวขึ้นอย่างมั่นคงจาก $\approx 64\%$ สู่ $\approx 93.6\%$
+    \item \textbf{ภาวะของโมเดล}: ภายใต้อัตราการเรียนรู้ต่ำ ($\alpha=0.01$) ร่วมกับ Optimizer แบบ SGD ปกติ จำนวน 10 Epochs ยังไม่เพียงพอที่จะผลักดันให้พารามิเตอร์ 407,050 ตัวเข้าสู่จุดต่ำสุดของ Loss Landscape โมเดลจึงยังคงอยู่ในระยะ \textbf{Active Convergence / Slight Underfitting} และยังสามารถเรียนรู้เพิ่มเติมได้หากเพิ่มจำนวน Epochs
+\end{enumerate}
+\end{ansbox}
+
+\vspace{1em}
+\subsection*{คำถามที่ 2: การวิเคราะห์ข้อผิดพลาดผ่าน Confusion Matrix\\ \normalsize(Question 2: Confusion Matrix, Misclassification, Precision \& Recall)}
+
+\begin{ansbox}
+\textbf{โจทย์}: \textit{Analyze the performance of your model using a confusion matrix. Which class does your model frequently misclassify? What is the precision and recall of your model?}
+
+\vspace{0.4em}
+\textbf{คำตอบและเหตุผลเชิงวิชาการ}:
+จากการทดสอบโมเดลบนชุดข้อมูลทดสอบจำนวน 10,000 ตัวอย่าง ได้ผลลัพธ์เชิงปริมาณและการวิเคราะห์โครงสร้างความผิดพลาดดังนี้:
+
+\begin{enumerate}[leftmargin=18pt, itemsep=3pt]
+    \item \textbf{ตัวเลขที่โมเดลมักจำแนกผิดพลาดบ่อยที่สุด (Frequently Misclassified Classes)}:
+    เมื่อตรวจสอบสมาชิกนอกแนวทแยง (Off-Diagonal Entries) ใน Confusion Matrix (Figure 4) พบกลุ่มที่มีการทำนายผิดพลาดสูงสุด 4 คู่ ได้แก่:
+    \begin{itemize}
+        \item \textbf{คลาส 4 ถูกทำนายผิดเป็น 9 สูงสุด (42 ครั้ง)}: สัณฐานของเลข 4 ลายมือเขียนที่มีการลากเส้นยอดปิดบน ทำให้ฟีเจอร์เชิงพื้นที่ (Spatial Topology) คล้ายคลึงกับหัวกลมของเลข 9
+        \item \textbf{คลาส 5 ถูกทำนายผิดเป็น 3 (42 ครั้ง)} และ \textbf{คลาส 3 ถูกทำนายผิดเป็น 5 (21 ครั้ง)}: เกิดจากส่วนโค้งครึ่งล่างที่เหมือนกันเกือบสมบูรณ์
+        \item \textbf{คลาส 2 ถูกทำนายผิดเป็น 8 (32 ครั้ง)}: เกิดจากความสับสนของเส้นโค้งเว้าคู่ในเลข 8 กับเส้นโค้งหัวและหางฐานของเลข 2
+        \item \textbf{คลาส 7 ถูกทำนายผิดเป็น 9 (28 ครั้ง)} และ \textbf{คลาส 7 ถูกทำนายผิดเป็น 2 (27 ครั้ง)}: มักเกิดกับลายมือเขียนเลข 7 ที่มีขีดกึ่งกลางลำตัวหรือเส้นทแยงมุม
+    \end{itemize}
+    \item \textbf{ค่า Precision และ Recall ของแบบจำลอง}:
+    จาก Classification Report ประจำชุดข้อมูลทดสอบ:
+    \begin{itemize}
+        \item \textbf{Macro Average Precision}: \textbf{0.9236 (92.36\%)} — เมื่อโมเดลทำนายว่าเป็นตัวเลขใด มีความน่าเชื่อถือเฉลี่ย 92.36\%
+        \item \textbf{Macro Average Recall}: \textbf{0.9231 (92.31\%)} — โมเดลสามารถดึงตัวอย่างที่ถูกต้องของแต่ละตัวเลขกลับมาได้เฉลี่ย 92.31\%
+        \item \textbf{Weighted Average F1-Score}: \textbf{0.9239 (92.39\%)}
+        \item \textbf{Overall Test Accuracy}: \textbf{92.41\%} (Test Loss = 0.2657)
+        \item คลาสที่มี Recall สูงสุดคือเลข \textbf{0 (97.86\%)} และเลข \textbf{1 (97.71\%)}
+        \item คลาสที่มี Recall ต่ำสุดคือเลข \textbf{5 (86.88\%)} และเลข \textbf{2 (89.73\%)}
+    \end{itemize}
+\end{enumerate}
+\end{ansbox}
+
+\clearpage
+\subsection*{คำถามที่ 3: สรุปผลการปรับแต่งไฮเปอร์พารามิเตอร์\\ \normalsize(Question 3: Model Tuning Discussion \& Findings)}
+
+\begin{ansbox}
+\textbf{โจทย์}: \textit{Write down your findings from the previous step.}
+
+\vspace{0.4em}
+\textbf{คำตอบและเหตุผลเชิงวิชาการ}:
+จากการทดลองปรับแต่งโมเดลอย่างเป็นระบบทั้ง 3 ด้าน สามารถสังเคราะห์องค์ความรู้และข้อค้นพบได้ดังนี้:
+
+\begin{enumerate}[leftmargin=18pt, itemsep=3pt]
+    \item \textbf{ผลของการปรับอัตราการเรียนรู้ (Learning Rate Adjustment)}:
+    \begin{itemize}
+        \item การใช้อัตราการเรียนรู้ต่ำ ($\alpha = 0.005$ และ $0.01$) แม้การเคลื่อนตัวของเกรเดียนต์จะมีเสถียรภาพ แต่การลู่เข้าเป็นไปอย่างเชื่องช้า ไม่สามารถก้าวไปสู่จุดต่ำสุดที่มีประสิทธิภาพได้ใน 10 รอบ ($Acc = 91.23\% - 92.61\%$)
+        \item การเพิ่ม $\alpha$ ขึ้นเป็น $0.1$ ถึง $0.2$ ช่วยให้โมเดลก้าวลงตามความชันได้รวดเร็วขึ้น ส่งผลให้ความแม่นยำเพิ่มขึ้นอย่างมีนัยสำคัญสู่ \textbf{97.11\%} และ \textbf{97.73\%}
+        \item เมื่อใช้ $\alpha = 0.5$ ได้ Accuracy สูงถึง \textbf{98.10\%} (Loss = 0.0620) เนื่องจากขนาดก้าวที่ใหญ่ช่วยให้โมเดลกระโดดข้ามแอ่งตื้น ๆ ไปสู่บริเวณที่มีค่า Loss ต่ำได้อย่างรวดเร็ว
+    \end{itemize}
+    \item \textbf{การเปรียบเทียบประสิทธิภาพระหว่าง Optimizers}:
+    \begin{itemize}
+        \item อัลกอริทึมตระกูล Adaptive Learning Rate แสดงประสิทธิภาพที่ยอดเยี่ยม: \textbf{Adam (97.91\%)} และ \textbf{RMSprop (97.90\%)} สามารถกดค่า Loss ลงต่ำกว่า $0.08$ ได้อย่างรวดเร็ว
+        \item \textbf{SGD (lr=0.1)} เมื่อได้รับการจูน LR ที่ดี สามารถทำผลงานได้ใกล้เคียงกันที่ \textbf{97.24\%}
+        \item \textbf{Adagrad (lr=0.01)} มีข้อจำกัดเรื่องผลรวมเกรเดียนต์ในตัวหารที่สะสมเพิ่มขึ้นตลอดเวลา ทำให้การอัปเดตแทบจะหยุดชะงัก (Learning Rate Decay เร็วเกินไป) ได้ผลลัพธ์ต่ำกว่า Adam ที่ \textbf{94.83\%}
+    \end{itemize}
+    \item \textbf{การปรับสถาปัตยกรรมโครงข่ายและ Regularization}:
+    \begin{itemize}
+        \item การเพิ่ม Hidden Layers ให้ลึกขึ้น (512 $\rightarrow$ 256 $\rightarrow$ 128) ช่วยเพิ่มความจุและขีดความสามารถในการแยกแยะฟีเจอร์ระดับสูง บรรลุความแม่นยำ \textbf{97.89\%}
+        \item การเสริม \textbf{Dropout (0.2)} ร่วมกับการใช้ Adam Optimizer ช่วยกำจัด Co-adaptation และสร้างความทนทานต่อสัญญาณรบกวน ส่งผลให้บรรลุความแม่นยำสูงสุดในรายงานนี้ที่ \textbf{98.35\%} และมี Test Loss ต่ำที่สุดที่ \textbf{0.0662}
+    \end{itemize}
+    \item \textbf{ข้อสรุปเชิงวิศวกรรม (Engineering Takeaway)}:
+    สำหรับการจัดหมวดหมู่ภาพ MNIST การเลือก Optimizer ที่มีประสิทธิภาพ (เช่น Adam หรือ RMSprop) ร่วมกับการควบคุมความจุด้วย Dropout Regularization นำมาซึ่งความแม่นยำสูงสุดและการสรุปนัยทั่วไปที่มีเสถียรภาพสูงสุด
+\end{enumerate}
+\end{ansbox}
+
+\clearpage
+\section*{6. การอภิปรายผลเชิงวิชาการและการเปรียบเทียบ\\ \large(Academic Discussion \& Comparative Synthesis)}
+
+\subsection*{6.1 ตารางสังเคราะห์ผลลัพธ์การทดลองแบบครอบคลุม\\ \normalsize(Comprehensive Experimental Evaluation Table)}
+ตารางที่ 1 สรุปผลการทดลองเปรียบเทียบแบบจำลองทั้ง 11 รูปแบบอย่างละเอียด ครอบคลุมทั้งสถาปัตยกรรม, ไฮเปอร์พารามิเตอร์, ตัวชี้วัดประสิทธิภาพ และจำนวนพารามิเตอร์
+
+\begin{table}[H]
+    \centering
+    \small
+    \caption{\textbf{Comprehensive Model Performance Comparison Across All Experimental Configurations}}
+    \vspace{0.4em}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{lcccccc}
+        \toprule
+        \textbf{Model Configuration} & \textbf{Optimizer} & \textbf{LR ($\alpha$)} & \textbf{Test Loss} & \textbf{Test Acc (\%)} & \textbf{Macro F1} & \textbf{Total Params} \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Baseline Model Architecture (Input 784 $\rightarrow$ Dense 512 ReLU $\rightarrow$ Dense 10 Softmax)}} \\
+        Baseline Default (Actual Run) & SGD & 0.01 & 0.2657 & 92.41 & 0.9232 & 407,050 \\
+        LR Tuning - Very Small & SGD & 0.005 & 0.3253 & 91.23 & 0.9118 & 407,050 \\
+        LR Tuning - Small & SGD & 0.01 & 0.2678 & 92.61 & 0.9255 & 407,050 \\
+        LR Tuning - Medium & SGD & 0.05 & 0.1421 & 96.01 & 0.9598 & 407,050 \\
+        LR Tuning - Recommended & SGD & 0.10 & 0.0976 & 97.11 & 0.9709 & 407,050 \\
+        LR Tuning - Aggressive & SGD & 0.20 & 0.0742 & 97.73 & 0.9771 & 407,050 \\
+        LR Tuning - High & SGD & 0.50 & 0.0620 & 98.10 & 0.9808 & 407,050 \\
+        Optimizer - SGD (Tuned) & SGD & 0.10 & 0.0973 & 97.24 & 0.9721 & 407,050 \\
+        Optimizer - Adagrad & Adagrad & 0.01 & 0.1846 & 94.83 & 0.9479 & 407,050 \\
+        Optimizer - RMSprop & RMSprop & 0.001 & 0.0701 & 97.90 & 0.9788 & 407,050 \\
+        Optimizer - Adam & Adam & 0.001 & 0.0725 & 97.91 & 0.9789 & 407,050 \\
+        \midrule
+        \multicolumn{7}{l}{\textit{Architectural Modifications \& Regularization Techniques}} \\
+        Baseline (1 Hidden 512 + Adam) & Adam & 0.001 & 0.0841 & 97.50 & 0.9748 & 407,050 \\
+        Deeper MLP (No Dropout) & Adam & 0.001 & 0.0930 & 97.89 & 0.9786 & 567,434 \\
+        Deeper Regularized (Dropout 0.2) & Adam & 0.001 & \textbf{0.0662} & \textbf{98.35} & \textbf{0.9833} & 567,434 \\
+        \bottomrule
+    \end{tabular}%
+    }
+\end{table}
+
+\subsection*{6.2 การวิเคราะห์ความสัมพันธ์ Bias-Variance Tradeoff\\ \normalsize(Bias-Variance Tradeoff Analysis)}
+\begin{itemize}[leftmargin=18pt, itemsep=2pt]
+    \item \textbf{โมเดลพื้นฐาน (SGD, lr=0.01)}: มีสภาวะ \textbf{High Bias (Underfitting)} สัมพัทธ์ เนื่องจากเกรเดียนต์เคลื่อนที่ช้าเกินไป ทำให้ค่า Training Loss (0.285) และ Test Loss (0.266) ยังคงสูง ความแม่นยำยังไม่ถึงศักยภาพสูงสุดของโมเดล
+    \item \textbf{โมเดลที่ปรับ LR / Optimizer (Adam, RMSprop)}: สามารถลดทั้ง Bias และ Variance ลงพร้อมกัน โดยดึง Test Accuracy ขึ้นสู่ระดับ $> 97.9\%$ และบีบค่า Loss ให้ต่ำกว่า $0.08$
+    \item \textbf{โมเดลระดับลึกร่วมกับ Dropout}: การเพิ่มชั้นช่วยลด Bias ให้ต่ำลงไปอีก ขณะที่การสุ่มปิดโหนดประสาท $20\%$ ด้วย Dropout ช่วยควบคุม Variance ไม่ให้สูงเกินไป ทำให้โมเดลรักษาระดับการทำนายบน Unseen Test Data ได้อย่างยอดเยี่ยมที่ $98.35\%$
+\end{itemize}
+
+\subsection*{6.3 การเปรียบเทียบเชิงวิเคราะห์กับชุดข้อมูล Bank Marketing (Lab 1)\\ \normalsize(Comparative Analysis with Tabular MLP on Bank Marketing Data)}
+ในบทเรียนเบื้องต้น (Lab 1) ได้มีการทดลองใช้ MLP กับชุดข้อมูลตาราง \texttt{bank-data.csv} เพื่อทำนายการสมัครเงินฝากประจำ ($y \in \{0, 1\}$) เมื่อเปรียบเทียบกับงาน MNIST ในการทดลองนี้ พบความแตกต่างเชิงระเบียบวิธีที่สำคัญ:
+\begin{itemize}[leftmargin=18pt, itemsep=2pt]
+    \item \textbf{ธรรมชาติของข้อมูล}: Bank Marketing เป็นข้อมูลแบบ Tabular ที่มีความไม่สมดุลของคลาสสูง (Class Imbalance: อัตราตอบรับ $\approx 11\%$) ขณะที่ MNIST เป็นข้อมูลภาพที่มีความสมดุลของคลาสสมบูรณ์แบบ
+    \item \textbf{การเตรียมข้อมูล}: ข้อมูล Bank Marketing จำเป็นต้องใช้การเข้ารหัส One-Hot สำหรับตัวแปรหมวดหมู่ร่วมกับการทำ Standard Scaling ของตัวเลขเชิงปริมาณ ขณะที่ MNIST ใช้เพียงการหารค่าพิกเซลด้วย 255.0
+    \item \textbf{ฟังก์ชันเป้าหมาย}: Bank Marketing ใช้ \texttt{binary\_crossentropy} ร่วมกับ Output Node เดียว (Sigmoid) ขณะที่ MNIST ใช้ \texttt{categorical\_crossentropy} ร่วมกับ 10 Output Nodes (Softmax)
+\end{itemize}
+
+\section*{7. สรุปผลการทดลองและข้อเสนอแนะเชิงประยุกต์\\ \large(Conclusions \& Practical Recommendations)}
+
+การทดลองนี้บรรลุวัตถุประสงค์ในการทำความเข้าใจกลไกเชิงลึกของโครงข่ายประสาทเทียมแบบ Multi-Layer Perceptron อย่างรอบด้าน:
+\begin{enumerate}[leftmargin=18pt, itemsep=3pt]
+    \item \textbf{ความสำคัญของการเลือก Optimizer}: การก้าวข้ามจาก SGD ดั้งเดิมสู่ Adaptive Optimizers เช่น Adam และ RMSprop ช่วยเพิ่มความเร็วในการลู่เข้าและเพิ่มความแม่นยำบนชุดทดสอบจาก $92.41\%$ สู่มากกว่า $97.9\%$ โดยใช้จำนวนรอบการฝึกสอนเท่ากัน
+    \item \textbf{การควบคุมการเรียนรู้เกิน}: แม้โมเดลพื้นฐานจะไม่ Overfit ใน 10 Epochs แต่เมื่อขยายขนาดโครงข่ายให้ลึกขึ้น การประยุกต์ใช้เทคนิค Regularization เช่น Dropout (0.2) เป็นสิ่งจำเป็นในการรักษาเสถียรภาพและเพิ่มความสามารถในการสรุปนัยทั่วไป (Generalization) ส่งผลให้ได้ผลลัพธ์สูงสุดที่ $98.35\%$
+    \item \textbf{ข้อเสนอแนะในการต่อยอด}: สำหรับงานประมวลผลภาพขั้นสูงในอนาคต โครงสร้าง Fully-Connected ยังมีข้อจำกัดในการดักจับความสัมพันธ์เชิงพื้นที่เฉพาะที่ (Local Spatial Invariance) และการเพิ่มพารามิเตอร์ตามขนาดภาพ การเปลี่ยนผ่านสู่ Convolutional Neural Networks (CNN) จึงเป็นแนวทางสำคัญในการยกระดับประสิทธิภาพต่อไป
+\end{enumerate}
+
+\clearpage
+\section*{ภาคผนวก: โค้ดและบันทึกการทำงานของ Jupyter Notebook\\ \large(Appendix: Source Code \& Execution Log)}
+\noindent
+ส่วนนี้แสดงเนื้อหา รหัสโปรแกรม ผลการทำงาน และการพล็อตภาพทั้งหมดที่รันจริงจากสมุดงาน \texttt{Assignment\_5\_Deep\_Neural\_Network.ipynb} โดยสมบูรณ์
+
+\input{notebook_appendix_5.tex}
+
+\end{document}

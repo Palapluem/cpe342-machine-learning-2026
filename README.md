@@ -32,13 +32,27 @@ cpe342-machine-learning-2026/
 │   │   ├── notebook_appendix_3.tex           # LaTeX appendix with executed notebook cells
 │   │   └── plot_1_*.pdf to plot_5_*.pdf       # High-resolution vector figures
 │   │
-│   └── Assignment 4_Tree-based and Ensemble Models/
-│       ├── Assignment_4_Tree-Based_and_Ensemble_Models.ipynb # Jupyter Notebook implementation
-│       ├── MBA.csv                            # Dataset (N = 6,194, Labeled = 1,000)
-│       ├── CPE342_Assignment 4_main.tex      # LaTeX source report
-│       ├── CPE342_Assignment 4_main.pdf      # Compiled report (31 pages)
-│       ├── notebook_appendix_4.tex           # LaTeX appendix with executed notebook cells
-│       └── plot_1_*.pdf to plot_6_*.pdf       # High-resolution vector figures
+│   ├── Assignment 4_Tree-based and Ensemble Models/
+│   │   ├── Assignment_4_Tree-Based_and_Ensemble_Models.ipynb # Jupyter Notebook implementation
+│   │   ├── MBA.csv                            # Dataset (N = 6,194, Labeled = 1,000)
+│   │   ├── CPE342_Assignment 4_main.tex      # LaTeX source report
+│   │   ├── CPE342_Assignment 4_main.pdf      # Compiled report (31 pages)
+│   │   ├── notebook_appendix_4.tex           # LaTeX appendix with executed notebook cells
+│   │   └── plot_1_*.pdf to plot_6_*.pdf       # High-resolution vector figures
+│   │
+│   └── Assignment 5_Neural Network/
+│       ├── Assignment_5_Deep_Neural_Network.ipynb # Fully executed reference notebook
+│       ├── 3_DNN_Homework.ipynb               # Course template homework notebook
+│       ├── 1042_xxxx_xxxx.ipynb               # Course student ID submission notebook
+│       ├── bank-data.csv                      # Introductory tutorial dataset (N = 45,211)
+│       ├── 1_Intro_to_NN.ipynb                # Introductory Lab: Scikit-learn & Keras MLP on Bank Data
+│       ├── 2_Keras_Tutorial.ipynb             # Tutorial: Introduction to Keras & MNIST
+│       ├── 1009_1034_1055.ipynb               # Senior reference submission notebook
+│       ├── CPE342_Assignment 5_main.tex      # Academic LaTeX source report
+│       ├── CPE342_Assignment 5_main.pdf      # Publication-grade academic report (33 pages)
+│       ├── notebook_appendix_5.tex           # Auto-generated LaTeX appendix with executed cells
+│       ├── benchmark_results.json             # Complete empirical benchmark metrics (11 models)
+│       └── plot_1_*.pdf to plot_7_*.pdf       # High-resolution publication-grade vector figures
 │
 ├── lecture/                                   # Lecture slides and demo notebooks
 │   ├── Lecture 1–12 PDFs                      # Course slide decks
@@ -119,18 +133,50 @@ cpe342-machine-learning-2026/
 
 ---
 
+### [Assignment 5: Deep Neural Networks (DNN) — MNIST Handwritten Digit Recognition](./assignment/Assignment%205_Neural%20Network/)
+* **Topic:** Fully-Connected Multi-Layer Perceptrons (MLP), Forward Propagation, Backpropagation, Categorical Cross-Entropy, Optimizer Dynamics, and Regularization on the MNIST Dataset ($N = 70,000$).
+* **Key Tasks:**
+  * Mathematical formulation of Artificial Neurons, Perceptrons, Universal Approximation Theorem, and Multi-Layer Feedforward Networks.
+  * Non-linear Activation Functions (Sigmoid, Tanh, ReLU, Softmax) and gradient preservation mechanics.
+  * Rigorous derivation of Backpropagation via the Multivariable Chain Rule for Softmax with Categorical Cross-Entropy Loss.
+  * Mathematical mechanics of Optimization Algorithms: First-order SGD, Momentum, Adagrad ($G_t$ accumulation), RMSprop ($s_t$ decaying average), and Adam ($m_t, v_t$ bias-corrected moments).
+  * Data preprocessing pipeline: $28 \times 28 \to 784$ flattening, $[0, 255] \to [0.0, 1.0]$ normalization, one-hot categorical encoding, and 90/10 train-validation splitting.
+  * Baseline 2-layer DNN architecture ($784 \to 512 \text{ ReLU} \to 10 \text{ Softmax}$) with 407,050 trainable parameters.
+  * **Question 1 (Overfitting Diagnostics)**: Analysis of training vs. validation loss/accuracy across 10 epochs, explaining why baseline SGD does not overfit (active convergence regime).
+  * **Question 2 (Confusion Matrix & Error Topology)**: Identification of top misclassified pairs (4 vs 9, 5 vs 3, 2 vs 8, 7 vs 9/2) based on stroke geometry; calculation of Macro Precision (92.36%), Macro Recall (92.31%), and Accuracy (92.41%).
+  * **Question 3 (Model Tuning Suite)**:
+    * Learning Rate Sensitivity ($\alpha \in \{0.005, 0.01, 0.05, 0.1, 0.2, 0.5\}$).
+    * Optimizer Benchmark (SGD $\alpha=0.1$, Adagrad $\alpha=0.01$, RMSprop $\alpha=0.001$, Adam $\alpha=0.001$).
+    * Architectural Depth & Dropout Ablation (Shallow vs. Deeper 512-256-128 vs. Deeper + Dropout 0.2, achieving **98.35% Test Accuracy** and **0.0662 Test Loss**).
+  * Comparative methodological discussion with tabular MLP on Bank Marketing data (`bank-data.csv`).
+* **Deliverables:**
+  * [`Assignment_5_Deep_Neural_Network.ipynb`](./assignment/Assignment%205_Neural%20Network/Assignment_5_Deep_Neural_Network.ipynb)
+  * [`3_DNN_Homework.ipynb`](./assignment/Assignment%205_Neural%20Network/3_DNN_Homework.ipynb)
+  * [`1042_xxxx_xxxx.ipynb`](./assignment/Assignment%205_Neural%20Network/1042_xxxx_xxxx.ipynb)
+  * [`CPE342_Assignment 5_main.tex`](./assignment/Assignment%205_Neural%20Network/CPE342_Assignment%205_main.tex)
+  * [`CPE342_Assignment 5_main.pdf`](./assignment/Assignment%205_Neural%20Network/CPE342_Assignment%205_main.pdf) (33 pages)
+  * [`benchmark_results.json`](./assignment/Assignment%205_Neural%20Network/benchmark_results.json)
+  * Diagnostic Plots: [`plot_1_mnist_eda.pdf`](./assignment/Assignment%205_Neural%20Network/plot_1_mnist_eda.pdf), [`plot_2_dnn_architecture.pdf`](./assignment/Assignment%205_Neural%20Network/plot_2_dnn_architecture.pdf), [`plot_3_training_history.pdf`](./assignment/Assignment%205_Neural%20Network/plot_3_training_history.pdf), [`plot_4_confusion_matrix.pdf`](./assignment/Assignment%205_Neural%20Network/plot_4_confusion_matrix.pdf), [`plot_5_learning_rate_comparison.pdf`](./assignment/Assignment%205_Neural%20Network/plot_5_learning_rate_comparison.pdf), [`plot_6_optimizer_comparison.pdf`](./assignment/Assignment%205_Neural%20Network/plot_6_optimizer_comparison.pdf), [`plot_7_architecture_ablation.pdf`](./assignment/Assignment%205_Neural%20Network/plot_7_architecture_ablation.pdf)
+
+---
+
 ## 🛠️ Environment & Prerequisites
 
 * **Python:** 3.10+
-* **Core Libraries:** `numpy`, `pandas`, `scikit-learn`, `xgboost`, `matplotlib`, `scipy`, `lifelines`, `statsmodels`, `seaborn`, `jupyter`, `pydotplus`
+* **Deep Learning Frameworks:** `tensorflow` (2.21+), `keras` (3.15+)
+* **Core Machine Learning Libraries:** `numpy`, `pandas`, `scikit-learn`, `xgboost`, `matplotlib`, `scipy`, `lifelines`, `statsmodels`, `seaborn`, `jupyter`, `nbclient`, `nbformat`
 * **Typography:** TH Sarabun New / Sarabun font support for Matplotlib charts
 * **Report Compilation:** XeLaTeX / TeX Live / MiKTeX (Polyglossia + Sarabun font)
 
 ---
 
-## 👤 Author
+## 👤 Author & Team
 
-* **Wisit Suwannao (วิศิษฐ์ สุวรรณเนาว์)**
-* **Student ID:** 67070501042
-* **Department:** Computer Engineering, Faculty of Engineering
-* **Institution:** King Mongkut's University of Technology Thonburi (KMUTT)
+* **Wisit Suwannao (วิศิษฐ์ สุวรรณเนาว์)** — *Lead Author*
+  * **Student ID:** 67070501042
+  * **Department:** Computer Engineering, Faculty of Engineering
+  * **Institution:** King Mongkut's University of Technology Thonburi (KMUTT)
+* **Team Members:**
+  * [Student Name 2] ([Student ID 2])
+  * [Student Name 3] ([Student ID 3])
+* **Instructor:** Dr. Boonyarit Changaival
