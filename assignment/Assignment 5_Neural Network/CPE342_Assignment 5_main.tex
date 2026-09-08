@@ -151,11 +151,11 @@ z = \sum_{i=1}^d w_i x_i + b = \mathbf{w}^T \mathbf{x} + b
 \subsection*{1.4 ฟังก์ชันการสูญเสียและการแพร่ย้อนกลับ\\ \normalsize(Categorical Cross-Entropy Loss \& Backpropagation)}
 สำหรับการจำแนกหลายคลาสแบบ One-Hot Encoded Target $\mathbf{y} \in \{0, 1\}^K$ ฟังก์ชันการสูญเสียมาตรฐานคือ \textbf{Categorical Cross-Entropy}:
 \begin{equation}
-\mathcal{L}(\mathbf{y}, \mathbf{\hat{y}}) = -\sum_{k=1}^K y_k \ln(\hat{y}_k)
+\mathcal{L}(\mathbf{y}, \hat{\mathbf{y}}) = -\sum_{k=1}^K y_k \ln(\hat{y}_k)
 \end{equation}
 เมื่อพิจารณาทั้งชุดข้อมูลขนาด $N$ ตัวอย่าง ฟังก์ชันเป้าหมายรวม (Total Cost Function) คือ:
 \begin{equation}
-\mathcal{J}(\mathbf{W}, \mathbf{b}) = \frac{1}{N} \sum_{i=1}^N \mathcal{L}(\mathbf{y}^{(i)}, \mathbf{\hat{y}}^{(i)})
+\mathcal{J}(\mathbf{W}, \mathbf{b}) = \frac{1}{N} \sum_{i=1}^N \mathcal{L}(\mathbf{y}^{(i)}, \hat{\mathbf{y}}^{(i)})
 \end{equation}
 
 \noindent
@@ -164,7 +164,7 @@ z = \sum_{i=1}^d w_i x_i + b = \mathbf{w}^T \mathbf{x} + b
 \begin{itemize}[leftmargin=18pt, itemsep=2pt]
     \item สำหรับ Output Layer (Softmax ร่วมกับ Cross-Entropy):
     \begin{equation}
-    \delta^{[L]} = \frac{\partial \mathcal{L}}{\partial \mathbf{z}^{[L]}} = \mathbf{\hat{y}} - \mathbf{y}
+    \delta^{[L]} = \frac{\partial \mathcal{L}}{\partial \mathbf{z}^{[L]}} = \hat{\mathbf{y}} - \mathbf{y}
     \end{equation}
     \item การคำนวณเกรเดียนต์ของน้ำหนักและ Bias ชั้นที่ $l$:
     \begin{equation}
@@ -178,19 +178,19 @@ z = \sum_{i=1}^d w_i x_i + b = \mathbf{w}^T \mathbf{x} + b
 \end{itemize}
 
 \subsection*{1.5 พลวัตของอัลกอริทึมการหาค่าเหมาะที่สุด\\ \normalsize(Optimization Dynamics: SGD, Adagrad, RMSprop, Adam)}
-การอัปเดตพารามิเตอร์ $\mathbf{\theta} = \{\mathbf{W}, \mathbf{b}\}$ ขึ้นอยู่กับ Optimizer:
+การอัปเดตพารามิเตอร์ $\boldsymbol{\theta} = \{\mathbf{W}, \mathbf{b}\}$ ขึ้นอยู่กับ Optimizer:
 \begin{enumerate}[leftmargin=18pt, itemsep=3pt]
     \item \textbf{Stochastic Gradient Descent (SGD)}:
-    $\mathbf{\theta}_{t+1} = \mathbf{\theta}_t - \alpha \nabla_{\mathbf{\theta}} \mathcal{J}(\mathbf{\theta}_t)$
+    $\boldsymbol{\theta}_{t+1} = \boldsymbol{\theta}_t - \alpha \nabla_{\boldsymbol{\theta}} \mathcal{J}(\boldsymbol{\theta}_t)$
     เป็นการอัปเดตด้วยอัตราการเรียนรู้คงที่ $\alpha$ มักมีปัญหาการส่ายตัว (Oscillation) ในหุบผาที่มีความชันไม่เท่ากัน (Ravines) และลู่เข้าช้า
-    \item \textbf{Adagrad}: ปรับอัตราการเรียนรู้ตามผลรวมกำลังสองของเกรเดียนต์ในอดีต $G_t = G_{t-1} + g_t^2$, $\mathbf{\theta}_{t+1} = \mathbf{\theta}_t - \frac{\alpha}{\sqrt{G_t + \epsilon}} g_t$ ทำให้ค่าน้ำหนักที่ถูกอัปเดตบ่อยมีก้าวที่เล็กลง แต่มีข้อจำกัดคือ $G_t$ สะสมต่อเนื่องจนก้าวเล็กลงเรื่อย ๆ จนหยุดเรียนรู้ก่อนเวลา
+    \item \textbf{Adagrad}: ปรับอัตราการเรียนรู้ตามผลรวมกำลังสองของเกรเดียนต์ในอดีต $G_t = G_{t-1} + g_t^2$, $\boldsymbol{\theta}_{t+1} = \boldsymbol{\theta}_t - \frac{\alpha}{\sqrt{G_t + \epsilon}} g_t$ ทำให้ค่าน้ำหนักที่ถูกอัปเดตบ่อยมีก้าวที่เล็กลง แต่มีข้อจำกัดคือ $G_t$ สะสมต่อเนื่องจนก้าวเล็กลงเรื่อย ๆ จนหยุดเรียนรู้ก่อนเวลา
     \item \textbf{RMSprop}: แก้ไขปัญหาของ Adagrad โดยใช้น้ำหนักถ่วงแบบลดหลั่นทวีคูณ (Exponential Moving Average):
-    $s_t = \beta s_{t-1} + (1-\beta) g_t^2$, $\mathbf{\theta}_{t+1} = \mathbf{\theta}_t - \frac{\alpha}{\sqrt{s_t + \epsilon}} g_t$
+    $s_t = \beta s_{t-1} + (1-\beta) g_t^2$, $\boldsymbol{\theta}_{t+1} = \boldsymbol{\theta}_t - \frac{\alpha}{\sqrt{s_t + \epsilon}} g_t$
     \item \textbf{Adam (Adaptive Moment Estimation)}: ผสมผสาน Momentum (First Moment, $m_t$) เข้ากับ RMSprop (Second Moment, $v_t$) พร้อมการแก้ไขความเอนเอียง (Bias Correction):
     \begin{align}
     m_t &= \beta_1 m_{t-1} + (1-\beta_1) g_t, \qquad \hat{m}_t = \frac{m_t}{1 - \beta_1^t} \\
     v_t &= \beta_2 v_{t-1} + (1-\beta_2) g_t^2, \qquad \hat{v}_t = \frac{v_t}{1 - \beta_2^t} \\
-    \mathbf{\theta}_{t+1} &= \mathbf{\theta}_t - \frac{\alpha}{\sqrt{\hat{v}_t} + \epsilon} \hat{m}_t
+    \boldsymbol{\theta}_{t+1} &= \boldsymbol{\theta}_t - \frac{\alpha}{\sqrt{\hat{v}_t} + \epsilon} \hat{m}_t
     \end{align}
     ทำให้ Adam เป็น Optimizer ที่ได้รับความนิยมสูงสุดเนื่องจากการลู่เข้าที่รวดเร็วและทนทานต่อพื้นผิว Loss ที่ซับซ้อน
 \end{enumerate}

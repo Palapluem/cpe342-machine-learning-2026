@@ -45,7 +45,7 @@ cpe342-machine-learning-2026/
 │       ├── 3_DNN_Homework.ipynb               # Course template homework notebook (unexecuted blank)
 │       ├── 1027_1042.ipynb               # Course student ID submission notebook
 │       ├── CPE342_Assignment 5_main.tex      # Academic LaTeX source report
-│       ├── CPE342_Assignment 5_main.pdf      # Publication-grade academic report (36 pages)
+│       ├── CPE342_Assignment 5_main.pdf      # Publication-grade academic report (41 pages)
 │       ├── notebook_appendix_5.tex           # Auto-generated LaTeX appendix with executed cells
 │       ├── benchmark_results.json             # Complete empirical benchmark metrics (11 models)
 │       ├── benchmark_results.csv              # Summary benchmark metrics in tabular CSV format

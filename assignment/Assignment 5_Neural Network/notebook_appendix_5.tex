@@ -78,15 +78,28 @@ print(dist_df.to_string())
 sample_idx = 0
 print(f"\nSample image index {sample_idx} has label: {train_labels[sample_idx]}")
 
-# Plot a representative sample for each of the 10 classes
-fig, axes = plt.subplots(2, 5, figsize=(10, 4.5))
+# EDA Visualization: Representative samples for digits 0 to 9 + Pixel Intensity Distribution
+fig = plt.figure(figsize=(12, 5), dpi=150)
+gs = fig.add_gridspec(2, 6, width_ratios=[1, 1, 1, 1, 1, 2.2], wspace=0.35, hspace=0.35)
+
 for digit in range(10):
     idx = np.where(train_labels == digit)[0][0]
-    ax = axes[digit // 5, digit % 5]
+    r, c = digit // 5, digit % 5
+    ax = fig.add_subplot(gs[r, c])
     ax.imshow(train_images[idx], cmap='gray_r')
     ax.set_title(f"Class {digit}", fontsize=10, fontweight='bold')
     ax.axis('off')
-plt.suptitle("Sample Images for MNIST Digits 0 to 9", fontsize=12, fontweight='bold')
+
+# Right subplot: Pixel Intensity Histogram
+ax_hist = fig.add_subplot(gs[:, 5])
+sample_pixels = train_images[:1000].flatten()
+ax_hist.hist(sample_pixels, bins=30, color='#1e3a8a', edgecolor='white', alpha=0.85, log=True)
+ax_hist.set_title("Pixel Intensity Distribution (Log Scale)", fontsize=11, fontweight='bold')
+ax_hist.set_xlabel("Pixel Value (0 - 255)", fontsize=10)
+ax_hist.set_ylabel("Pixel Frequency (Log)", fontsize=10)
+ax_hist.grid(True, linestyle='--', alpha=0.5)
+
+plt.suptitle("MNIST Exploratory Data Analysis (Samples and Intensity Distribution)", fontsize=13, fontweight='bold', y=0.98)
 plt.tight_layout()
 plt.show()
 \end{lstlisting}
@@ -111,6 +124,11 @@ test_labels  shape: (10000,)
 8         5851         974       9.751667
 9         5949        1009       9.915000
 Sample image index 0 has label: 5
+\end{lstlisting}
+
+\begin{lstlisting}[style=output]
+C:\Users\Admin\AppData\Local\Temp\ipykernel_27820\2313461726.py:41: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+  plt.tight_layout()
 \end{lstlisting}
 
 \needspace{3\baselineskip}
@@ -319,7 +337,7 @@ Epoch 1/10
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
-422/422 ---------- 2s 3ms/step - accuracy: 0.7399 - loss: 1.1459 - val_accuracy: 0.8800 - val_loss: 0.5922
+422/422 ---------- 2s 4ms/step - accuracy: 0.7347 - loss: 1.1646 - val_accuracy: 0.8882 - val_loss: 0.5874
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
@@ -327,7 +345,7 @@ Epoch 2/10
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
-422/422 ---------- 1s 3ms/step - accuracy: 0.8659 - loss: 0.5561 - val_accuracy: 0.9052 - val_loss: 0.4071
+422/422 ---------- 1s 3ms/step - accuracy: 0.8671 - loss: 0.5535 - val_accuracy: 0.9072 - val_loss: 0.4024
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
@@ -335,11 +353,7 @@ Epoch 3/10
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
-422/422 ---------- 0s 2ms/step - accuracy: 0.8844 - loss: 0.4439
-\end{lstlisting}
-
-\begin{lstlisting}[style=output]
-422/422 ---------- 1s 3ms/step - accuracy: 0.8844 - loss: 0.4439 - val_accuracy: 0.9153 - val_loss: 0.3430
+422/422 ---------- 1s 3ms/step - accuracy: 0.8856 - loss: 0.4420 - val_accuracy: 0.9173 - val_loss: 0.3394
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
@@ -347,7 +361,7 @@ Epoch 4/10
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
-422/422 ---------- 1s 3ms/step - accuracy: 0.8941 - loss: 0.3930 - val_accuracy: 0.9193 - val_loss: 0.3101
+422/422 ---------- 1s 3ms/step - accuracy: 0.8952 - loss: 0.3918 - val_accuracy: 0.9213 - val_loss: 0.3063
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
@@ -355,7 +369,7 @@ Epoch 5/10
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
-422/422 ---------- 1s 3ms/step - accuracy: 0.9009 - loss: 0.3622 - val_accuracy: 0.9248 - val_loss: 0.2875
+422/422 ---------- 1s 3ms/step - accuracy: 0.9021 - loss: 0.3615 - val_accuracy: 0.9243 - val_loss: 0.2854
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
@@ -363,7 +377,7 @@ Epoch 6/10
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
-422/422 ---------- 1s 3ms/step - accuracy: 0.9064 - loss: 0.3403 - val_accuracy: 0.9268 - val_loss: 0.2720
+422/422 ---------- 1s 3ms/step - accuracy: 0.9066 - loss: 0.3400 - val_accuracy: 0.9277 - val_loss: 0.2710
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
@@ -371,7 +385,7 @@ Epoch 7/10
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
-422/422 ---------- 1s 3ms/step - accuracy: 0.9101 - loss: 0.3236 - val_accuracy: 0.9300 - val_loss: 0.2598
+422/422 ---------- 1s 3ms/step - accuracy: 0.9107 - loss: 0.3236 - val_accuracy: 0.9295 - val_loss: 0.2577
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
@@ -379,7 +393,11 @@ Epoch 8/10
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
-422/422 ---------- 1s 3ms/step - accuracy: 0.9141 - loss: 0.3099 - val_accuracy: 0.9322 - val_loss: 0.2492
+422/422 ---------- 0s 3ms/step - accuracy: 0.9139 - loss: 0.3101
+\end{lstlisting}
+
+\begin{lstlisting}[style=output]
+422/422 ---------- 1s 3ms/step - accuracy: 0.9139 - loss: 0.3101 - val_accuracy: 0.9317 - val_loss: 0.2484
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
@@ -387,7 +405,7 @@ Epoch 9/10
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
-422/422 ---------- 1s 3ms/step - accuracy: 0.9176 - loss: 0.2983 - val_accuracy: 0.9348 - val_loss: 0.2411
+422/422 ---------- 2s 4ms/step - accuracy: 0.9169 - loss: 0.2987 - val_accuracy: 0.9345 - val_loss: 0.2404
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
@@ -395,7 +413,11 @@ Epoch 10/10
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
-422/422 ---------- 1s 3ms/step - accuracy: 0.9202 - loss: 0.2882 - val_accuracy: 0.9377 - val_loss: 0.2336
+422/422 ---------- 0s 3ms/step - accuracy: 0.9198 - loss: 0.2886
+\end{lstlisting}
+
+\begin{lstlisting}[style=output]
+422/422 ---------- 1s 3ms/step - accuracy: 0.9198 - loss: 0.2886 - val_accuracy: 0.9368 - val_loss: 0.2320
 \end{lstlisting}
 
 \needspace{3\baselineskip}
@@ -422,35 +444,43 @@ import matplotlib.pyplot as plt
 \noindent\textbf{\small [In 10]:}
 
 \begin{lstlisting}[style=pycode]
-def plot_loss_fn(history):
+def plot_training_history(history):
     loss = history.history['loss']
     val_loss = history.history['val_loss']
-    epochs = range(1, len(loss) + 1)
-
-    plt.figure(figsize=(7, 4.5))
-    plt.plot(epochs, loss, 'bo-', label='Training loss')
-    plt.plot(epochs, val_loss, 'r--', label='Validation loss')
-    plt.title('Training and Validation Loss over Epochs', fontsize=12, fontweight='bold')
-    plt.xlabel('Epochs')
-    plt.ylabel('Loss (Categorical Cross-Entropy)')
-    plt.grid(True, linestyle='--', alpha=0.6)
-    plt.legend()
-    plt.show()
-
-def plot_acc_fn(history):
     acc = history.history['accuracy']
     val_acc = history.history['val_accuracy']
-    epochs = range(1, len(acc) + 1)
+    epochs = range(1, len(loss) + 1)
 
-    plt.figure(figsize=(7, 4.5))
-    plt.plot(epochs, acc, 'bo-', label='Training acc')
-    plt.plot(epochs, val_acc, 'g--', label='Validation acc')
-    plt.title('Training and Validation Accuracy over Epochs', fontsize=12, fontweight='bold')
-    plt.xlabel('Epochs')
-    plt.ylabel('Accuracy')
-    plt.grid(True, linestyle='--', alpha=0.6)
-    plt.legend()
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 5), dpi=150)
+
+    # Loss subplot
+    ax1.plot(epochs, loss, 'o-', color='#1e3a8a', lw=2, label='Training Loss')
+    ax1.plot(epochs, val_loss, 's--', color='#dc2626', lw=2, label='Validation Loss')
+    ax1.set_title('Training and Validation Loss', fontsize=12, fontweight='bold')
+    ax1.set_xlabel('Epochs', fontsize=10)
+    ax1.set_ylabel('Categorical Cross-Entropy Loss', fontsize=10)
+    ax1.grid(True, linestyle='--', alpha=0.6)
+    ax1.legend(loc='upper right', frameon=True)
+
+    # Accuracy subplot
+    ax2.plot(epochs, acc, 'o-', color='#1e3a8a', lw=2, label='Training Accuracy')
+    ax2.plot(epochs, val_acc, 's--', color='#16a34a', lw=2, label='Validation Accuracy')
+    ax2.set_title('Training and Validation Accuracy', fontsize=12, fontweight='bold')
+    ax2.set_xlabel('Epochs', fontsize=10)
+    ax2.set_ylabel('Accuracy', fontsize=10)
+    ax2.grid(True, linestyle='--', alpha=0.6)
+    ax2.legend(loc='lower right', frameon=True)
+
+    plt.suptitle('Baseline DNN Training History (SGD lr=0.2, Batch=128)', fontsize=13, fontweight='bold', y=0.98)
+    plt.tight_layout()
     plt.show()
+
+# Backward compatible helper functions
+def plot_loss_fn(history):
+    plot_training_history(history)
+
+def plot_acc_fn(history):
+    pass
 \end{lstlisting}
 
 \needspace{3\baselineskip}
@@ -459,8 +489,7 @@ def plot_acc_fn(history):
 
 \begin{lstlisting}[style=pycode]
 # Call plotting functions
-plot_loss_fn(history)
-plot_acc_fn(history)
+plot_training_history(history)
 
 # Display epoch-by-epoch generalization gap
 print("Epoch-by-Epoch Generalization Analysis:")
@@ -478,16 +507,16 @@ for ep in range(10):
 
 \begin{lstlisting}[style=output]
 Epoch-by-Epoch Generalization Analysis:
-Epoch 01: Train Loss=1.1459, Val Loss=0.5922 (Gap=-0.5538) | Train Acc=0.7399, Val Acc=0.8800 (Gap=+0.1401)
-Epoch 02: Train Loss=0.5561, Val Loss=0.4071 (Gap=-0.1490) | Train Acc=0.8659, Val Acc=0.9052 (Gap=+0.0393)
-Epoch 03: Train Loss=0.4439, Val Loss=0.3430 (Gap=-0.1009) | Train Acc=0.8844, Val Acc=0.9153 (Gap=+0.0309)
-Epoch 04: Train Loss=0.3930, Val Loss=0.3101 (Gap=-0.0828) | Train Acc=0.8941, Val Acc=0.9193 (Gap=+0.0253)
-Epoch 05: Train Loss=0.3622, Val Loss=0.2875 (Gap=-0.0747) | Train Acc=0.9009, Val Acc=0.9248 (Gap=+0.0239)
-Epoch 06: Train Loss=0.3403, Val Loss=0.2720 (Gap=-0.0683) | Train Acc=0.9064, Val Acc=0.9268 (Gap=+0.0205)
-Epoch 07: Train Loss=0.3236, Val Loss=0.2598 (Gap=-0.0638) | Train Acc=0.9101, Val Acc=0.9300 (Gap=+0.0199)
-Epoch 08: Train Loss=0.3099, Val Loss=0.2492 (Gap=-0.0606) | Train Acc=0.9141, Val Acc=0.9322 (Gap=+0.0180)
-Epoch 09: Train Loss=0.2983, Val Loss=0.2411 (Gap=-0.0572) | Train Acc=0.9176, Val Acc=0.9348 (Gap=+0.0172)
-Epoch 10: Train Loss=0.2882, Val Loss=0.2336 (Gap=-0.0545) | Train Acc=0.9202, Val Acc=0.9377 (Gap=+0.0175)
+Epoch 01: Train Loss=1.1646, Val Loss=0.5874 (Gap=-0.5771) | Train Acc=0.7347, Val Acc=0.8882 (Gap=+0.1534)
+Epoch 02: Train Loss=0.5535, Val Loss=0.4024 (Gap=-0.1511) | Train Acc=0.8671, Val Acc=0.9072 (Gap=+0.0401)
+Epoch 03: Train Loss=0.4420, Val Loss=0.3394 (Gap=-0.1026) | Train Acc=0.8856, Val Acc=0.9173 (Gap=+0.0317)
+Epoch 04: Train Loss=0.3918, Val Loss=0.3063 (Gap=-0.0855) | Train Acc=0.8952, Val Acc=0.9213 (Gap=+0.0262)
+Epoch 05: Train Loss=0.3615, Val Loss=0.2854 (Gap=-0.0761) | Train Acc=0.9021, Val Acc=0.9243 (Gap=+0.0223)
+Epoch 06: Train Loss=0.3400, Val Loss=0.2710 (Gap=-0.0690) | Train Acc=0.9066, Val Acc=0.9277 (Gap=+0.0210)
+Epoch 07: Train Loss=0.3236, Val Loss=0.2577 (Gap=-0.0658) | Train Acc=0.9107, Val Acc=0.9295 (Gap=+0.0188)
+Epoch 08: Train Loss=0.3101, Val Loss=0.2484 (Gap=-0.0617) | Train Acc=0.9139, Val Acc=0.9317 (Gap=+0.0178)
+Epoch 09: Train Loss=0.2987, Val Loss=0.2404 (Gap=-0.0583) | Train Acc=0.9169, Val Acc=0.9345 (Gap=+0.0176)
+Epoch 10: Train Loss=0.2886, Val Loss=0.2320 (Gap=-0.0567) | Train Acc=0.9198, Val Acc=0.9368 (Gap=+0.0171)
 \end{lstlisting}
 
 \needspace{3\baselineskip}
@@ -558,12 +587,12 @@ print("Conclusion: Extremely low variance (test matches train/val), with moderat
 
 \begin{lstlisting}[style=output]
 === Comprehensive Dataset Evaluation ===
-Training Set:   Loss = 0.2882  |  Accuracy = 0.9202
-Validation Set: Loss = 0.2336  |  Accuracy = 0.9377
-Test Set:       Loss = 0.2700  |  Accuracy = 0.9243
+Training Set:   Loss = 0.2886  |  Accuracy = 0.9198
+Validation Set: Loss = 0.2320  |  Accuracy = 0.9368
+Test Set:       Loss = 0.2687  |  Accuracy = 0.9259
 Bias / Variance Diagnostics:
-- Generalization error (Test Acc - Train Acc): +0.41%
-- Generalization loss gap (Test Loss - Train Loss): -0.0181
+- Generalization error (Test Acc - Train Acc): +0.61%
+- Generalization loss gap (Test Loss - Train Loss): -0.0199
 Conclusion: Extremely low variance (test matches train/val), with moderate bias due to early SGD convergence.
 \end{lstlisting}
 
@@ -608,11 +637,11 @@ for rank, idx in enumerate(top_error_flat, 1):
         print(f"  {rank}. True Digit {t_digit} -> Predicted as {p_digit}: {count} instances")
 
 # Heatmap Visualization
-plt.figure(figsize=(9, 7))
-sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=range(10), yticklabels=range(10))
-plt.xlabel('Predicted Label', fontweight='bold')
-plt.ylabel('True Label', fontweight='bold')
-plt.title('Confusion Matrix on MNIST Test Set (n=10,000)', fontsize=12, fontweight='bold')
+plt.figure(figsize=(8.5, 6.8), dpi=150)
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=range(10), yticklabels=range(10), cbar_kws={'label': 'Sample Count'})
+plt.xlabel('Predicted Digit Label', fontsize=11, fontweight='bold')
+plt.ylabel('True Digit Label', fontsize=11, fontweight='bold')
+plt.title('Confusion Matrix - Baseline MNIST DNN (Test Set: N=10,000)', fontsize=12, fontweight='bold', pad=12)
 plt.tight_layout()
 plt.show()
 \end{lstlisting}
@@ -621,37 +650,37 @@ plt.show()
 
 \begin{lstlisting}[style=output]
 Confusion Matrix:
-[[ 961    0    2    2    0    3    8    1    3    0]
- [   0 1105    2    3    1    0    4    2   18    0]
- [  10    4  915   16   17    0   11   17   37    5]
- [   4    0   16  939    0   17    3    9   14    8]
- [   1    3    6    1  921    1   10    2    7   30]
- [  12    2    4   41   11  771   16    5   23    7]
- [  13    3    3    3   17   10  905    1    3    0]
- [   3   10   25    7    8    0    0  946    3   26]
- [   8    6    6   25    9   15   14   11  872    8]
- [  11    8    1   11   40   10    1   14    5  908]]
+[[ 961    0    3    2    0    4    6    1    3    0]
+ [   0 1108    2    2    0    3    4    1   15    0]
+ [   9    2  924   13   16    0   11   18   34    5]
+ [   3    0   17  931    0   24    2   13   16    4]
+ [   1    1    5    0  920    0   13    2    5   35]
+ [   9    2    5   33    7  789   14    5   22    6]
+ [  12    3    3    2   12   10  912    2    2    0]
+ [   3   11   26    4    8    0    0  949    3   24]
+ [   8    6    7   22   11   19   14   12  865   10]
+ [  10    7    2   13   39   10    1   22    5  900]]
 Classification Report:
               precision    recall  f1-score   support
-           0     0.9394    0.9806    0.9596       980
-           1     0.9684    0.9736    0.9710      1135
-           2     0.9337    0.8866    0.9095      1032
-           3     0.8960    0.9297    0.9125      1010
-           4     0.8994    0.9379    0.9182       982
-           5     0.9323    0.8643    0.8970       892
-           6     0.9311    0.9447    0.9378       958
-           7     0.9385    0.9202    0.9293      1028
-           8     0.8853    0.8953    0.8903       974
-           9     0.9153    0.8999    0.9075      1009
-    accuracy                         0.9243     10000
-   macro avg     0.9239    0.9233    0.9233     10000
-weighted avg     0.9246    0.9243    0.9241     10000
+           0     0.9459    0.9806    0.9629       980
+           1     0.9719    0.9762    0.9741      1135
+           2     0.9296    0.8953    0.9121      1032
+           3     0.9110    0.9218    0.9163      1010
+           4     0.9082    0.9369    0.9223       982
+           5     0.9185    0.8845    0.9012       892
+           6     0.9335    0.9520    0.9426       958
+           7     0.9259    0.9232    0.9245      1028
+           8     0.8918    0.8881    0.8899       974
+           9     0.9146    0.8920    0.9032      1009
+    accuracy                         0.9259     10000
+   macro avg     0.9251    0.9251    0.9249     10000
+weighted avg     0.9258    0.9259    0.9257     10000
 Top-5 Most Frequent Misclassification Pairs (True -> Predicted):
-  1. True Digit 5 -> Predicted as 3: 41 instances
-  2. True Digit 9 -> Predicted as 4: 40 instances
-  3. True Digit 2 -> Predicted as 8: 37 instances
-  4. True Digit 4 -> Predicted as 9: 30 instances
-  5. True Digit 7 -> Predicted as 9: 26 instances
+  1. True Digit 9 -> Predicted as 4: 39 instances
+  2. True Digit 4 -> Predicted as 9: 35 instances
+  3. True Digit 2 -> Predicted as 8: 34 instances
+  4. True Digit 5 -> Predicted as 3: 33 instances
+  5. True Digit 7 -> Predicted as 2: 26 instances
 \end{lstlisting}
 
 \needspace{3\baselineskip}
@@ -714,7 +743,7 @@ def build_base_model():
         layers.Dense(10, activation='softmax')
     ])
 
-# Decreased learning rate (lr=0.005 and lr=0.01)
+# Decreased learning rate (lr=0.01)
 model_lr_small = build_base_model()
 model_lr_small.compile(optimizer=optimizers.SGD(learning_rate=0.01), loss='categorical_crossentropy', metrics=['accuracy'])
 hist_lr_small = model_lr_small.fit(x_train_flat, y_train_oh, epochs=10, batch_size=128, validation_split=0.1, verbose=0)
@@ -735,14 +764,40 @@ loss_lr_big, acc_lr_big = model_lr_big.evaluate(x_test_flat, y_test_oh, verbose=
 print(f"SGD (LR = 0.01) -> Test Loss: {loss_lr_small:.4f} | Test Acc: {acc_lr_small:.4f}")
 print(f"SGD (LR = 0.10) -> Test Loss: {loss_lr_rec:.4f} | Test Acc: {acc_lr_rec:.4f}")
 print(f"SGD (LR = 0.20) -> Test Loss: {loss_lr_big:.4f} | Test Acc: {acc_lr_big:.4f}")
+
+# Plot Learning Rate Comparison Curves
+epochs_lr = range(1, 11)
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 5), dpi=150)
+
+ax1.plot(epochs_lr, hist_lr_small.history['val_loss'], 'o-', color='#3b82f6', lw=2, label='lr = 0.01 (Underdamping)')
+ax1.plot(epochs_lr, hist_lr_rec.history['val_loss'], 's-', color='#10b981', lw=2, label='lr = 0.10 (Balanced)')
+ax1.plot(epochs_lr, hist_lr_big.history['val_loss'], '^-', color='#ef4444', lw=2, label='lr = 0.20 (Fast Convergence)')
+ax1.set_title('Validation Loss Across Learning Rates (SGD)', fontsize=12, fontweight='bold')
+ax1.set_xlabel('Epochs', fontsize=10)
+ax1.set_ylabel('Validation Loss', fontsize=10)
+ax1.grid(True, linestyle='--', alpha=0.6)
+ax1.legend(loc='upper right', frameon=True)
+
+ax2.plot(epochs_lr, hist_lr_small.history['val_accuracy'], 'o-', color='#3b82f6', lw=2, label='lr = 0.01 (Underdamping)')
+ax2.plot(epochs_lr, hist_lr_rec.history['val_accuracy'], 's-', color='#10b981', lw=2, label='lr = 0.10 (Balanced)')
+ax2.plot(epochs_lr, hist_lr_big.history['val_accuracy'], '^-', color='#ef4444', lw=2, label='lr = 0.20 (Fast Convergence)')
+ax2.set_title('Validation Accuracy Across Learning Rates (SGD)', fontsize=12, fontweight='bold')
+ax2.set_xlabel('Epochs', fontsize=10)
+ax2.set_ylabel('Validation Accuracy', fontsize=10)
+ax2.grid(True, linestyle='--', alpha=0.6)
+ax2.legend(loc='lower right', frameon=True)
+
+plt.suptitle('Learning Rate Sensitivity Analysis (SGD Optimizer)', fontsize=13, fontweight='bold', y=0.98)
+plt.tight_layout()
+plt.show()
 \end{lstlisting}
 
 \noindent\textbf{\small [Out 14]:}
 
 \begin{lstlisting}[style=output]
-SGD (LR = 0.01) -> Test Loss: 0.2686 | Test Acc: 0.9262
-SGD (LR = 0.10) -> Test Loss: 0.0971 | Test Acc: 0.9707
-SGD (LR = 0.20) -> Test Loss: 0.0737 | Test Acc: 0.9776
+SGD (LR = 0.01) -> Test Loss: 0.2702 | Test Acc: 0.9251
+SGD (LR = 0.10) -> Test Loss: 0.0957 | Test Acc: 0.9715
+SGD (LR = 0.20) -> Test Loss: 0.0707 | Test Acc: 0.9789
 \end{lstlisting}
 
 \needspace{3\baselineskip}
@@ -759,10 +814,10 @@ def train_with_optimizer(optimizer):
     return h, (tl, ta)
 
 optimizer_dict = {
-    "sgd": optimizers.SGD(learning_rate=0.1),
-    "rmsprop": optimizers.RMSprop(learning_rate=0.001),
-    "adagrad": optimizers.Adagrad(learning_rate=0.01),
-    "adam": optimizers.Adam(learning_rate=0.001)
+    "SGD (lr=0.1)": optimizers.SGD(learning_rate=0.1),
+    "Adagrad (lr=0.01)": optimizers.Adagrad(learning_rate=0.01),
+    "RMSprop (lr=0.001)": optimizers.RMSprop(learning_rate=0.001),
+    "Adam (lr=0.001)": optimizers.Adam(learning_rate=0.001)
 }
 
 opt_benchmarks = {}
@@ -770,7 +825,34 @@ print("=== Optimizer Benchmark Results ===")
 for name, opt in optimizer_dict.items():
     h, (tl, ta) = train_with_optimizer(opt)
     opt_benchmarks[name] = {"history": h.history, "test_loss": tl, "test_acc": ta}
-    print(f"Optimizer: {name:8s} | Test Accuracy: {ta*100:6.2f}% | Test Loss: {tl:.4f}")
+    print(f"Optimizer: {name:20s} | Test Accuracy: {ta*100:6.2f}% | Test Loss: {tl:.4f}")
+
+# Plot Optimizer Comparison Curves
+epochs_opt = range(1, 11)
+colors_opt = {'SGD (lr=0.1)': '#10b981', 'Adagrad (lr=0.01)': '#f59e0b', 'RMSprop (lr=0.001)': '#3b82f6', 'Adam (lr=0.001)': '#8b5cf6'}
+markers_opt = {'SGD (lr=0.1)': 'o', 'Adagrad (lr=0.01)': 's', 'RMSprop (lr=0.001)': '^', 'Adam (lr=0.001)': 'D'}
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 5), dpi=150)
+
+for name, res in opt_benchmarks.items():
+    ax1.plot(epochs_opt, res['history']['val_loss'], marker=markers_opt[name], color=colors_opt[name], lw=2, label=name)
+    ax2.plot(epochs_opt, res['history']['val_accuracy'], marker=markers_opt[name], color=colors_opt[name], lw=2, label=name)
+
+ax1.set_title('Validation Loss Convergence Across Optimizers', fontsize=12, fontweight='bold')
+ax1.set_xlabel('Epochs', fontsize=10)
+ax1.set_ylabel('Validation Loss', fontsize=10)
+ax1.grid(True, linestyle='--', alpha=0.6)
+ax1.legend(loc='upper right', frameon=True)
+
+ax2.set_title('Validation Accuracy Convergence Across Optimizers', fontsize=12, fontweight='bold')
+ax2.set_xlabel('Epochs', fontsize=10)
+ax2.set_ylabel('Validation Accuracy', fontsize=10)
+ax2.grid(True, linestyle='--', alpha=0.6)
+ax2.legend(loc='lower right', frameon=True)
+
+plt.suptitle('Optimizer Benchmark Comparison on MNIST Digit Recognition', fontsize=13, fontweight='bold', y=0.98)
+plt.tight_layout()
+plt.show()
 \end{lstlisting}
 
 \noindent\textbf{\small [Out 15]:}
@@ -780,19 +862,19 @@ for name, opt in optimizer_dict.items():
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
-Optimizer: sgd      | Test Accuracy:  97.24% | Test Loss: 0.0959
+Optimizer: SGD (lr=0.1)         | Test Accuracy:  97.24% | Test Loss: 0.0946
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
-Optimizer: rmsprop  | Test Accuracy:  98.18% | Test Loss: 0.0636
+Optimizer: Adagrad (lr=0.01)    | Test Accuracy:  94.85% | Test Loss: 0.1808
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
-Optimizer: adagrad  | Test Accuracy:  94.89% | Test Loss: 0.1790
+Optimizer: RMSprop (lr=0.001)   | Test Accuracy:  98.32% | Test Loss: 0.0628
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
-Optimizer: adam     | Test Accuracy:  97.94% | Test Loss: 0.0726
+Optimizer: Adam (lr=0.001)      | Test Accuracy:  97.95% | Test Loss: 0.0664
 \end{lstlisting}
 
 \needspace{3\baselineskip}
@@ -827,20 +909,56 @@ hist_deeper = model_deeper.fit(
 loss_deeper, acc_deeper = model_deeper.evaluate(x_test_flat, y_test_oh, verbose=0)
 print(f"Deeper Model (512-256-128 + Dropout 0.2 + Adam) -> Test Accuracy: {acc_deeper*100:.2f}% | Test Loss: {loss_deeper:.4f}")
 
+# Train Baseline with Adam for direct ablation comparison
+model_base_adam = build_base_model()
+model_base_adam.compile(optimizer=optimizers.Adam(learning_rate=0.001), loss='categorical_crossentropy', metrics=['accuracy'])
+hist_base_adam = model_base_adam.fit(x_train_flat, y_train_oh, epochs=10, batch_size=128, validation_split=0.1, verbose=0)
+loss_base_adam, acc_base_adam = model_base_adam.evaluate(x_test_flat, y_test_oh, verbose=0)
+
 # Export synthesized benchmark metrics to CSV
 benchmark_summary = [
-    {"Architecture": "Baseline (1 Hidden 512)", "Optimizer": "SGD", "Learning Rate": 0.01, "Test Accuracy (%)": 92.58, "Test Loss": 0.2871},
-    {"Architecture": "Baseline (1 Hidden 512)", "Optimizer": "SGD", "Learning Rate": 0.10, "Test Accuracy (%)": 97.13, "Test Loss": 0.1012},
-    {"Architecture": "Baseline (1 Hidden 512)", "Optimizer": "SGD", "Learning Rate": 0.20, "Test Accuracy (%)": 97.35, "Test Loss": 0.0894},
-    {"Architecture": "Baseline (1 Hidden 512)", "Optimizer": "Adagrad", "Learning Rate": 0.01, "Test Accuracy (%)": 94.96, "Test Loss": 0.1856},
-    {"Architecture": "Baseline (1 Hidden 512)", "Optimizer": "RMSprop", "Learning Rate": 0.001, "Test Accuracy (%)": 98.30, "Test Loss": 0.0754},
-    {"Architecture": "Baseline (1 Hidden 512)", "Optimizer": "Adam", "Learning Rate": 0.001, "Test Accuracy (%)": 98.00, "Test Loss": 0.0812},
+    {"Architecture": "Baseline (1 Hidden 512)", "Optimizer": "SGD", "Learning Rate": 0.01, "Test Accuracy (%)": round(acc_lr_small*100, 2), "Test Loss": round(loss_lr_small, 4)},
+    {"Architecture": "Baseline (1 Hidden 512)", "Optimizer": "SGD", "Learning Rate": 0.10, "Test Accuracy (%)": round(acc_lr_rec*100, 2), "Test Loss": round(loss_lr_rec, 4)},
+    {"Architecture": "Baseline (1 Hidden 512)", "Optimizer": "SGD", "Learning Rate": 0.20, "Test Accuracy (%)": round(acc_lr_big*100, 2), "Test Loss": round(loss_lr_big, 4)},
+    {"Architecture": "Baseline (1 Hidden 512)", "Optimizer": "Adagrad", "Learning Rate": 0.01, "Test Accuracy (%)": round(opt_benchmarks['Adagrad (lr=0.01)']['test_acc']*100, 2), "Test Loss": round(opt_benchmarks['Adagrad (lr=0.01)']['test_loss'], 4)},
+    {"Architecture": "Baseline (1 Hidden 512)", "Optimizer": "RMSprop", "Learning Rate": 0.001, "Test Accuracy (%)": round(opt_benchmarks['RMSprop (lr=0.001)']['test_acc']*100, 2), "Test Loss": round(opt_benchmarks['RMSprop (lr=0.001)']['test_loss'], 4)},
+    {"Architecture": "Baseline (1 Hidden 512)", "Optimizer": "Adam", "Learning Rate": 0.001, "Test Accuracy (%)": round(opt_benchmarks['Adam (lr=0.001)']['test_acc']*100, 2), "Test Loss": round(opt_benchmarks['Adam (lr=0.001)']['test_loss'], 4)},
     {"Architecture": "Deeper Regularized (512-256-128 + Dropout)", "Optimizer": "Adam", "Learning Rate": 0.001, "Test Accuracy (%)": round(acc_deeper * 100, 2), "Test Loss": round(loss_deeper, 4)}
 ]
 df_bm = pd.DataFrame(benchmark_summary)
-csv_path = r"D:\cpe342-machine-learning-2026\assignment\Assignment 5_Neural Network\benchmark_results.csv"
+csv_path = "assignment/Assignment 5_Neural Network/benchmark_results.csv"
 df_bm.to_csv(csv_path, index=False)
 print(f"Saved benchmark summary table to: {csv_path}")
+
+# Plot Architecture Ablation Comparison Curves
+epochs_abl = range(1, 11)
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 5), dpi=150)
+
+# Loss Comparison
+ax1.plot(epochs_abl, hist_base_adam.history['loss'], 'o--', color='#93c5fd', lw=1.8, label='Baseline (Train Loss)')
+ax1.plot(epochs_abl, hist_base_adam.history['val_loss'], 'o-', color='#1e3a8a', lw=2.2, label='Baseline (Val Loss)')
+ax1.plot(epochs_abl, hist_deeper.history['loss'], 's--', color='#fca5a5', lw=1.8, label='Deeper + Dropout (Train Loss)')
+ax1.plot(epochs_abl, hist_deeper.history['val_loss'], 's-', color='#dc2626', lw=2.2, label='Deeper + Dropout (Val Loss)')
+ax1.set_title('Loss: Baseline vs Deeper Regularized Architecture', fontsize=12, fontweight='bold')
+ax1.set_xlabel('Epochs', fontsize=10)
+ax1.set_ylabel('Loss (Categorical Cross-Entropy)', fontsize=10)
+ax1.grid(True, linestyle='--', alpha=0.6)
+ax1.legend(loc='upper right', frameon=True)
+
+# Accuracy Comparison
+ax2.plot(epochs_abl, hist_base_adam.history['accuracy'], 'o--', color='#93c5fd', lw=1.8, label='Baseline (Train Acc)')
+ax2.plot(epochs_abl, hist_base_adam.history['val_accuracy'], 'o-', color='#1e3a8a', lw=2.2, label='Baseline (Val Acc)')
+ax2.plot(epochs_abl, hist_deeper.history['accuracy'], 's--', color='#86efac', lw=1.8, label='Deeper + Dropout (Train Acc)')
+ax2.plot(epochs_abl, hist_deeper.history['val_accuracy'], 's-', color='#16a34a', lw=2.2, label='Deeper + Dropout (Val Acc)')
+ax2.set_title('Accuracy: Baseline vs Deeper Regularized Architecture', fontsize=12, fontweight='bold')
+ax2.set_xlabel('Epochs', fontsize=10)
+ax2.set_ylabel('Accuracy', fontsize=10)
+ax2.grid(True, linestyle='--', alpha=0.6)
+ax2.legend(loc='lower right', frameon=True)
+
+plt.suptitle('Architecture Ablation and Regularization Impact (Adam lr=0.001)', fontsize=13, fontweight='bold', y=0.98)
+plt.tight_layout()
+plt.show()
 \end{lstlisting}
 
 \noindent\textbf{\small [Out 16]:}
@@ -882,8 +1000,11 @@ Model: "sequential_8"
 \end{lstlisting}
 
 \begin{lstlisting}[style=output]
-Deeper Model (512-256-128 + Dropout 0.2 + Adam) -> Test Accuracy: 98.06% | Test Loss: 0.0726
-Saved benchmark summary table to: D:\cpe342-machine-learning-2026\assignment\Assignment 5_Neural Network\benchmark_results.csv
+Deeper Model (512-256-128 + Dropout 0.2 + Adam) -> Test Accuracy: 97.96% | Test Loss: 0.0749
+\end{lstlisting}
+
+\begin{lstlisting}[style=output]
+Saved benchmark summary table to: assignment/Assignment 5_Neural Network/benchmark_results.csv
 \end{lstlisting}
 
 \clearpage
