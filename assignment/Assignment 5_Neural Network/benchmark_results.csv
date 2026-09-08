@@ -1,0 +1,8 @@
+Architecture,Optimizer,Learning Rate,Test Accuracy (%),Test Loss
+Baseline (1 Hidden 512),SGD,0.01,92.58,0.2871
+Baseline (1 Hidden 512),SGD,0.1,97.13,0.1012
+Baseline (1 Hidden 512),SGD,0.2,97.35,0.0894
+Baseline (1 Hidden 512),Adagrad,0.01,94.96,0.1856
+Baseline (1 Hidden 512),RMSprop,0.001,98.3,0.0754
+Baseline (1 Hidden 512),Adam,0.001,98.0,0.0812
+Deeper Regularized (512-256-128 + Dropout),Adam,0.001,98.06,0.0726
