@@ -42,14 +42,10 @@ cpe342-machine-learning-2026/
 │   │
 │   └── Assignment 5_Neural Network/
 │       ├── Assignment_5_Deep_Neural_Network.ipynb # Fully executed reference notebook
-│       ├── 3_DNN_Homework.ipynb               # Course template homework notebook
+│       ├── 3_DNN_Homework.ipynb               # Course template homework notebook (unexecuted blank)
 │       ├── 1042_xxxx_xxxx.ipynb               # Course student ID submission notebook
-│       ├── bank-data.csv                      # Introductory tutorial dataset (N = 45,211)
-│       ├── 1_Intro_to_NN.ipynb                # Introductory Lab: Scikit-learn & Keras MLP on Bank Data
-│       ├── 2_Keras_Tutorial.ipynb             # Tutorial: Introduction to Keras & MNIST
-│       ├── Keras_Tutorial.ipynb               # Quickstart: TensorFlow Keras Sequential Pipeline
 │       ├── CPE342_Assignment 5_main.tex      # Academic LaTeX source report
-│       ├── CPE342_Assignment 5_main.pdf      # Publication-grade academic report (33 pages)
+│       ├── CPE342_Assignment 5_main.pdf      # Publication-grade academic report (35 pages)
 │       ├── notebook_appendix_5.tex           # Auto-generated LaTeX appendix with executed cells
 │       ├── benchmark_results.json             # Complete empirical benchmark metrics (11 models)
 │       └── plot_1_*.pdf to plot_7_*.pdf       # High-resolution publication-grade vector figures
@@ -62,8 +58,12 @@ cpe342-machine-learning-2026/
 │   ├── ML_5_Classification_Tree_Based.ipynb   # Demo: Tree-based Classification (Decision Trees)
 │   ├── ML_5_Ensemble_Models.ipynb             # Demo: Random Forest, Gradient Boosting & XGBoost
 │   ├── ML_5_hr_attrition.csv                  # Dataset: HR Employee Attrition
-│   ├── ML_5_bank-data.csv                     # Dataset: Banking Marketing Churn
-│   └── ML_5_hr_attrition.data                 # Preprocessed training cohort pickle
+│   ├── ML_5_bank-data.csv                     # Dataset: Banking Marketing Churn (Lecture 5)
+│   ├── ML_5_hr_attrition.data                 # Preprocessed training cohort pickle
+│   ├── ML_6_1_Intro_to_NN.ipynb               # In-Class Lab: Scikit-learn & Keras MLP on Bank Data (Week 6)
+│   ├── ML_6_2_Keras_Tutorial.ipynb            # Tutorial: Comprehensive Keras Sequential & MNIST (Week 6)
+│   ├── ML_6_Keras_Tutorial_Quickstart.ipynb   # Quickstart: TensorFlow Keras Sequential Pipeline (Week 6)
+│   └── ML_6_bank-data.csv                     # Dataset: Banking Marketing Tabular Data (Lecture 6, N = 45,211)
 │
 └── textbook/                                  # Reference textbooks (ISLR / O'Reilly)
 ```
@@ -148,7 +148,7 @@ cpe342-machine-learning-2026/
     * Learning Rate Sensitivity ($\alpha \in \{0.005, 0.01, 0.05, 0.1, 0.2, 0.5\}$).
     * Optimizer Benchmark (SGD $\alpha=0.1$, Adagrad $\alpha=0.01$, RMSprop $\alpha=0.001$, Adam $\alpha=0.001$).
     * Architectural Depth & Dropout Ablation (Shallow vs. Deeper 512-256-128 vs. Deeper + Dropout 0.2, achieving **98.35% Test Accuracy** and **0.0662 Test Loss**).
-  * Comparative methodological discussion with tabular MLP on Bank Marketing data (`bank-data.csv`).
+  * Comparative methodological discussion with tabular MLP on Bank Marketing data (`lecture/ML_6_bank-data.csv`).
 * **Deliverables:**
   * [`Assignment_5_Deep_Neural_Network.ipynb`](./assignment/Assignment%205_Neural%20Network/Assignment_5_Deep_Neural_Network.ipynb)
   * [`3_DNN_Homework.ipynb`](./assignment/Assignment%205_Neural%20Network/3_DNN_Homework.ipynb)
