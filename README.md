@@ -42,15 +42,7 @@ cpe342-machine-learning-2026/
 │   │
 │   └── Assignment 5_Neural Network/
 │       ├── Assignment_5_Deep_Neural_Network.ipynb # Fully executed reference notebook
-│       ├── 3_DNN_Homework.ipynb               # Course template homework notebook (unexecuted blank)
-│       ├── 1027_1042.ipynb               # Course student ID submission notebook
-│       ├── CPE342_Assignment 5_main.tex      # Academic LaTeX source report
-│       ├── CPE342_Assignment 5_main.pdf      # Publication-grade academic report (41 pages)
-│       ├── notebook_appendix_5.tex           # Auto-generated LaTeX appendix with executed cells
-│       ├── benchmark_results.json             # Complete empirical benchmark metrics (11 models)
-│       ├── benchmark_results.csv              # Summary benchmark metrics in tabular CSV format
-│       └── plot_1_*.pdf to plot_7_*.pdf       # High-resolution publication-grade vector figures
-│
+│       └── CPE342_Assignment 5_main.pdf      # Publication-grade academic report (41 pages)
 ├── lecture/                                   # Lecture slides and demo notebooks
 │   ├── Lecture 1–12 PDFs                      # Course slide decks
 │   ├── ML_2_Training_Models.ipynb             # Demo: Gradient Descent & Linear Regression
@@ -152,12 +144,7 @@ cpe342-machine-learning-2026/
   * Comparative methodological discussion with tabular MLP on Bank Marketing data (`lecture/ML_6_bank-data.csv`).
 * **Deliverables:**
   * [`Assignment_5_Deep_Neural_Network.ipynb`](./assignment/Assignment%205_Neural%20Network/Assignment_5_Deep_Neural_Network.ipynb)
-  * [`3_DNN_Homework.ipynb`](./assignment/Assignment%205_Neural%20Network/3_DNN_Homework.ipynb)
-  * [`1027_1042.ipynb`](./assignment/Assignment%205_Neural%20Network/1027_1042.ipynb)
-  * [`CPE342_Assignment 5_main.tex`](./assignment/Assignment%205_Neural%20Network/CPE342_Assignment%205_main.tex)
-  * [`CPE342_Assignment 5_main.pdf`](./assignment/Assignment%205_Neural%20Network/CPE342_Assignment%205_main.pdf) (36 pages)
-  * [`benchmark_results.json`](./assignment/Assignment%205_Neural%20Network/benchmark_results.json)
-  * Diagnostic Plots: [`plot_1_mnist_eda.pdf`](./assignment/Assignment%205_Neural%20Network/plot_1_mnist_eda.pdf), [`plot_2_dnn_architecture.pdf`](./assignment/Assignment%205_Neural%20Network/plot_2_dnn_architecture.pdf), [`plot_3_training_history.pdf`](./assignment/Assignment%205_Neural%20Network/plot_3_training_history.pdf), [`plot_4_confusion_matrix.pdf`](./assignment/Assignment%205_Neural%20Network/plot_4_confusion_matrix.pdf), [`plot_5_learning_rate_comparison.pdf`](./assignment/Assignment%205_Neural%20Network/plot_5_learning_rate_comparison.pdf), [`plot_6_optimizer_comparison.pdf`](./assignment/Assignment%205_Neural%20Network/plot_6_optimizer_comparison.pdf), [`plot_7_architecture_ablation.pdf`](./assignment/Assignment%205_Neural%20Network/plot_7_architecture_ablation.pdf)
+  * [`CPE342_Assignment 5_main.pdf`](./assignment/Assignment%205_Neural%20Network/CPE342_Assignment%205_main.pdf)
 
 ---
 
@@ -171,12 +158,8 @@ cpe342-machine-learning-2026/
 
 ---
 
-## 👤 Author & Team
+## 👤 Author
 
-* **Natthawat Primsirikunawut (นัธทวัฒน์ ปริมสิริคุณาวุฒิ)**
-  * **Student ID:** 67070501027
-  * **Department:** Computer Engineering, Faculty of Engineering
-  * **Institution:** King Mongkut's University of Technology Thonburi (KMUTT)
 * **Wisit Suwannao (วิศิษฐ์ สุวรรณเนาว์)**
   * **Student ID:** 67070501042
   * **Department:** Computer Engineering, Faculty of Engineering
