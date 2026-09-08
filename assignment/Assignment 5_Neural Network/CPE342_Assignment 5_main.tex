@@ -239,7 +239,7 @@ z = \sum_{i=1}^d w_i x_i + b = \mathbf{w}^T \mathbf{x} + b
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{plot_1_mnist_eda.pdf}
-    \caption{\textbf{Representative MNIST Handwritten Digits (Classes 0–9)}: ภาพตัวอย่างขนาด $28 \times 28$ พิกเซล ของแต่ละคลาสตัวเลขที่ผ่านการประมวลผลพร้อมป้อนเข้าสู่โครงข่ายประสาท}
+    \caption{\textbf{MNIST Exploratory Data Analysis \& Pixel Intensity Distribution}: ตัวอย่างภาพตัวเลขลายมือเขียนคลาส 0--9 (ซ้าย) ร่วมกับฮิสโตแกรมการกระจายตัวของค่าความสว่างพิกเซล 0--255 ในสเกลลอการิทึม (ขวา) เพื่อตรวจสอบความสมบูรณ์ของข้อมูลก่อนการจัดรูปทรงเข้าสู่โครงข่ายประสาท}
 \end{figure}
 
 \noindent
@@ -271,7 +271,7 @@ z = \sum_{i=1}^d w_i x_i + b = \mathbf{w}^T \mathbf{x} + b
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.98\textwidth]{plot_3_training_history.pdf}
-    \caption{\textbf{Learning Curves for Baseline DNN (Mini-batch SGD, lr=0.01, Batch=128)}: ซ้าย: ค่า Categorical Cross-Entropy Loss บนชุด Train และ Validation ขวา: ค่า Accuracy ตลอด 10 Epochs}
+    \caption{\textbf{Learning Curves for Baseline DNN (Mini-batch SGD, $\eta=0.01$, Batch=128)}: การเปรียบเทียบค่า Categorical Cross-Entropy Loss (ซ้าย) และค่า Accuracy (ขวา) บนชุดฝึกสอนและชุดตรวจสอบความถูกต้องตลอด 10 Epochs แสดงการลู่เข้าอย่างเสถียรโดยไม่เกิดภาวะ Overfitting}
 \end{figure}
 
 \noindent
@@ -289,7 +289,7 @@ z = \sum_{i=1}^d w_i x_i + b = \mathbf{w}^T \mathbf{x} + b
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.98\textwidth]{plot_4_confusion_matrix.pdf}
-    \caption{\textbf{Diagnostic Performance \& Error Distribution (Baseline Model)}: ซ้าย: Heatmap เมทริกซ์ความสับสน ขวา: แผนภูมิแท่งเปรียบเทียบ Precision และ Recall รายคลาส}
+    \caption{\textbf{Diagnostic Confusion Matrix (Baseline Model Test Set, $N=10,000$)}: เมทริกซ์ความสับสนแสดงความถี่ในการจำแนกตัวเลขทั้ง 10 คลาส พร้อมระบุคู่สับสนที่เกิดขึ้นบ่อยที่สุด เช่น ตัวเลข 7 สับสนเป็น 9 (34 ตัวอย่าง) และตัวเลข 4 สับสนเป็น 9 (22 ตัวอย่าง)}
 \end{figure}
 
 \noindent
@@ -313,7 +313,7 @@ z = \sum_{i=1}^d w_i x_i + b = \mathbf{w}^T \mathbf{x} + b
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.98\textwidth]{plot_5_learning_rate_comparison.pdf}
-    \caption{\textbf{Learning Rate Sensitivity Analysis on Model Convergence (SGD, 10 Epochs)}: เปรียบเทียบ Validation Loss และ Validation Accuracy ภายใต้อัตราการเรียนรู้ที่แตกต่างกัน}
+    \caption{\textbf{Learning Rate Sensitivity Analysis on Model Convergence (SGD, 10 Epochs)}: การเปรียบเทียบวิถีของ Validation Loss (ซ้าย) และ Validation Accuracy (ขวา) ภายใต้อัตราการเรียนรู้ $\alpha \in \{0.01, 0.10, 0.20\}$ แสดงให้เห็นผลของ Underdamping และ Optimal Step Size}
 \end{figure}
 
 \noindent
@@ -331,7 +331,7 @@ z = \sum_{i=1}^d w_i x_i + b = \mathbf{w}^T \mathbf{x} + b
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.98\textwidth]{plot_6_optimizer_comparison.pdf}
-    \caption{\textbf{Convergence Rate \& Accuracy Across Optimization Algorithms}: ซ้าย: อัตราการลดลงของ Training Loss ขวา: ความแม่นยำบนชุด Validation ในแต่ละ Epoch}
+    \caption{\textbf{Optimizer Benchmark Comparison on MNIST Digit Recognition}: การเปรียบเทียบพลวัตการลู่เข้าของค่า Loss (ซ้าย) และ Validation Accuracy (ขวา) ระหว่าง SGD, Adagrad, RMSprop, และ Adam ตลอด 10 Epochs}
 \end{figure}
 
 \noindent
@@ -349,7 +349,7 @@ z = \sum_{i=1}^d w_i x_i + b = \mathbf{w}^T \mathbf{x} + b
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.98\textwidth]{plot_7_architecture_ablation.pdf}
-    \caption{\textbf{Impact of Architectural Depth \& Dropout Regularization on Generalization}: เปรียบเทียบ Validation Loss และ Validation Accuracy ระหว่างโครงข่ายระดับตื้น, ระดับลึก, และระดับลึกที่เสริม Dropout}
+    \caption{\textbf{Architectural Depth \& Dropout Regularization Ablation}: การเปรียบเทียบผลกระทบของโครงสร้างโมเดลระหว่าง Baseline 1-Hidden Layer กับ Deeper Network (512-256-128) ที่เสริม Dropout 20\% เพื่อควบคุม Generalization Gap}
 \end{figure}
 
 \noindent
