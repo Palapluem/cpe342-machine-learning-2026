@@ -43,7 +43,7 @@ cpe342-machine-learning-2026/
 │   └── Assignment 5_Neural Network/
 │       ├── Assignment_5_Deep_Neural_Network.ipynb # Fully executed reference notebook
 │       ├── 3_DNN_Homework.ipynb               # Course template homework notebook (unexecuted blank)
-│       ├── 1042_xxxx_xxxx.ipynb               # Course student ID submission notebook
+│       ├── 1027_1042.ipynb               # Course student ID submission notebook
 │       ├── CPE342_Assignment 5_main.tex      # Academic LaTeX source report
 │       ├── CPE342_Assignment 5_main.pdf      # Publication-grade academic report (35 pages)
 │       ├── notebook_appendix_5.tex           # Auto-generated LaTeX appendix with executed cells
@@ -152,9 +152,9 @@ cpe342-machine-learning-2026/
 * **Deliverables:**
   * [`Assignment_5_Deep_Neural_Network.ipynb`](./assignment/Assignment%205_Neural%20Network/Assignment_5_Deep_Neural_Network.ipynb)
   * [`3_DNN_Homework.ipynb`](./assignment/Assignment%205_Neural%20Network/3_DNN_Homework.ipynb)
-  * [`1042_xxxx_xxxx.ipynb`](./assignment/Assignment%205_Neural%20Network/1042_xxxx_xxxx.ipynb)
+  * [`1027_1042.ipynb`](./assignment/Assignment%205_Neural%20Network/1027_1042.ipynb)
   * [`CPE342_Assignment 5_main.tex`](./assignment/Assignment%205_Neural%20Network/CPE342_Assignment%205_main.tex)
-  * [`CPE342_Assignment 5_main.pdf`](./assignment/Assignment%205_Neural%20Network/CPE342_Assignment%205_main.pdf) (33 pages)
+  * [`CPE342_Assignment 5_main.pdf`](./assignment/Assignment%205_Neural%20Network/CPE342_Assignment%205_main.pdf) (35 pages)
   * [`benchmark_results.json`](./assignment/Assignment%205_Neural%20Network/benchmark_results.json)
   * Diagnostic Plots: [`plot_1_mnist_eda.pdf`](./assignment/Assignment%205_Neural%20Network/plot_1_mnist_eda.pdf), [`plot_2_dnn_architecture.pdf`](./assignment/Assignment%205_Neural%20Network/plot_2_dnn_architecture.pdf), [`plot_3_training_history.pdf`](./assignment/Assignment%205_Neural%20Network/plot_3_training_history.pdf), [`plot_4_confusion_matrix.pdf`](./assignment/Assignment%205_Neural%20Network/plot_4_confusion_matrix.pdf), [`plot_5_learning_rate_comparison.pdf`](./assignment/Assignment%205_Neural%20Network/plot_5_learning_rate_comparison.pdf), [`plot_6_optimizer_comparison.pdf`](./assignment/Assignment%205_Neural%20Network/plot_6_optimizer_comparison.pdf), [`plot_7_architecture_ablation.pdf`](./assignment/Assignment%205_Neural%20Network/plot_7_architecture_ablation.pdf)
 
@@ -172,11 +172,12 @@ cpe342-machine-learning-2026/
 
 ## 👤 Author & Team
 
-* **Wisit Suwannao (วิศิษฐ์ สุวรรณเนาว์)** — *Lead Author*
+* **Natthawat Primsirikunawut (นัธทวัฒน์ ปริมสิริคุณาวุฒิ)**
+  * **Student ID:** 67070501027
+  * **Department:** Computer Engineering, Faculty of Engineering
+  * **Institution:** King Mongkut's University of Technology Thonburi (KMUTT)
+* **Wisit Suwannao (วิศิษฐ์ สุวรรณเนาว์)**
   * **Student ID:** 67070501042
   * **Department:** Computer Engineering, Faculty of Engineering
   * **Institution:** King Mongkut's University of Technology Thonburi (KMUTT)
-* **Team Members:**
-  * [Student Name 2] ([Student ID 2])
-  * [Student Name 3] ([Student ID 3])
 * **Instructor:** ดร. บุญฤทธิ์ จันทร์ไกรวัล (Dr. Boonyarit Changaival)
