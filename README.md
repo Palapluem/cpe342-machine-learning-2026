@@ -161,7 +161,9 @@ cpe342-machine-learning-2026/
 ## 👤 Author
 
 * **Wisit Suwannao (วิศิษฐ์ สุวรรณเนาว์)**
-  * **Student ID:** 67070501042
-  * **Department:** Computer Engineering, Faculty of Engineering
-  * **Institution:** King Mongkut's University of Technology Thonburi (KMUTT)
-* **Instructor:** ดร. บุญฤทธิ์ จันทร์ไกรวัล (Dr. Boonyarit Changaival)
+
+---
+
+## 📄 License
+
+Copyright © 2026 Wisit Suwannao. All rights reserved.
