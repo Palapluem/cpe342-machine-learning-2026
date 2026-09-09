@@ -178,7 +178,7 @@ plt.show()
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.88\textwidth]{plot_1_eda_distributions.pdf}
+\includegraphics[width=0.96\linewidth]{plot_1_eda_distributions.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 1 (Exploratory Data Analysis \& Feature Distributions)}: Bivariate distributions comparing admitted ($n=900$) vs. waitlisted ($n=100$) applicants across academic and professional attributes. Left: Kernel density estimation (KDE) of Undergraduate GPA showing overlapping profiles around mean $\mu \approx 3.25$. Middle: GMAT score distribution highlighting subtle differences in variance. Right: Boxplot of work experience showing comparable median tenure ($\approx 5$ years) with higher outlier dispersion among admitted students.\par
@@ -320,7 +320,7 @@ plt.show()
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.95\textwidth]{plot_2_decision_tree.pdf}
+\includegraphics[width=0.96\linewidth]{plot_2_decision_tree.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 2 (Decision Tree Architecture \& Splitting Flowchart)}: Interpretable tree diagram illustrating hierarchical binary splits based on Information Gain (Entropy). Top nodes identify critical threshold splits across GPA, GMAT, and Work Industry, showing sample counts, class distributions, and impurity reductions at each branch.\par
@@ -495,7 +495,7 @@ gender              0.000000       0.025718           0.019362
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.88\textwidth]{plot_3_feature_importance.pdf}
+\includegraphics[width=0.96\linewidth]{plot_3_feature_importance.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 3 (Feature Importance Comparison)}: Horizontal bar chart comparing relative feature importances derived from Mean Decrease in Impurity. GMAT score, GPA, Work Experience, and Work Industry emerge as the dominant predictors across all three architectures, while demographic indicators (gender, race, international) exhibit lower direct influence.\par
@@ -538,7 +538,7 @@ plt.show()
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.88\textwidth]{plot_4_confusion_matrices.pdf}
+\includegraphics[width=0.96\linewidth]{plot_4_confusion_matrices.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 4 (Comparative Confusion Matrices)}: $1 \times 3$ grid of Confusion Matrices on the testing cohort ($n=200$). Highlights the operational tradeoff: Decision Tree and Random Forest (with class balancing) capture more Waitlist cases ($8$ and $4$ true positives respectively) at the expense of false positives, whereas Gradient Boosting prioritizes majority class accuracy ($89.5\%$).\par
@@ -575,7 +575,7 @@ plt.show()
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.88\textwidth]{plot_5_roc_curves.pdf}
+\includegraphics[width=0.96\linewidth]{plot_5_roc_curves.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 5 (Receiver Operating Characteristic (ROC) Curves)}: Discrimination trajectories across varying classification thresholds. Random Forest achieves the highest test discrimination ($\text{AUC} = 0.5519$, 5-Fold $\text{CV AUC} = 0.6237$), effectively ranking applicant admission probabilities.\par
@@ -654,7 +654,7 @@ plt.show()
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.95\textwidth]{plot_6_hyperparameter_tuning.pdf}
+\includegraphics[width=0.96\linewidth]{plot_6_hyperparameter_tuning.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 6 (Hyperparameter Validation Curves \& Bias-Variance Dynamics)}: Left: Decision tree depth vs. ROC-AUC showing that unpruned trees ($\text{depth} > 4$) quickly overfit training data while test performance degrades. Right: Random Forest ensemble scaling showing asymptotic variance stabilization beyond $B = 100-150$ trees.\par

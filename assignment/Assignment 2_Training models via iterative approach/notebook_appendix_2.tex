@@ -108,7 +108,7 @@ plt.show()
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.88\textwidth]{nb2_out_plot_1.png}
+\includegraphics[width=0.96\linewidth]{plot_1_eda.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 1 (Exploratory Data Analysis)}: Scatter plots of $X$ vs. $Y$ and $X^2$ vs. $Y$ illustrating the non-linear decaying relationship in the dataset, confirming the necessity of fitting an exponential model rather than a simple linear model.
@@ -298,7 +298,7 @@ plt.show()
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.88\textwidth]{nb2_out_plot_2.png}
+\includegraphics[width=0.96\linewidth]{plot_2_loss_curve.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 2 (Learning Curve)}: Plot of MSE Loss over iterations (logarithmic scale) demonstrating rapid, monotonic convergence of the Gradient Descent algorithm from $0.0465 \rightarrow 0.0005$ (a $98.98\%$ reduction).
@@ -326,7 +326,7 @@ plt.show()
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.88\textwidth]{nb2_out_plot_3.png}
+\includegraphics[width=0.96\linewidth]{plot_3_coeff_trajectory.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 3 (Parameter Evolution)}: Trajectories of coefficients $C_0, C_1, C_2$ across iterations, showing smooth and stable convergence from initial guesses $(0.5, 0.5, 0.1)$ toward optimal parameters $(0.9927, 0.9587, -1.3296)$.
@@ -355,7 +355,7 @@ plt.show()
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.88\textwidth]{nb2_out_plot_4.png}
+\includegraphics[width=0.96\linewidth]{plot_4_fitted_curve.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 4 (Fitted Exponential Model)}: Actual data points plotted against the fitted exponential curve $\hat{y} = 0.9927 + 0.9587 e^{-1.3296 x}$, showing an accurate fit that captures the non-linear decay of the dataset.
@@ -383,7 +383,7 @@ plt.show()
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.88\textwidth]{nb2_out_plot_5.png}
+\includegraphics[width=0.96\linewidth]{plot_5_residuals.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 5 (Residual Plot)}: Distribution of residuals ($y_i - \hat{y}_i$) scattered randomly around zero with constant variance, validating the assumption of homoscedasticity and confirming the absence of systematic bias.
@@ -439,7 +439,7 @@ plt.show()
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.88\textwidth]{nb2_out_plot_6.png}
+\includegraphics[width=0.96\linewidth]{plot_6_summary_dashboard.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 6 (Comprehensive Training Diagnostics)}: Multi-panel summary dashboard comparing the learning curve, parameter evolution, non-linear regression curve, and residual distribution in a unified view.

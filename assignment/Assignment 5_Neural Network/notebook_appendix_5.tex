@@ -134,7 +134,7 @@ Sample image index 0 has label: 5
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.88\textwidth]{plot_1_mnist_eda.pdf}
+\includegraphics[width=0.96\linewidth]{plot_1_mnist_eda.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 1 (MNIST Exploratory Data Analysis \& Pixel Intensity Distribution)}: A $2 \times 5$ representative sample grid displaying MNIST digits $0$ through $9$ alongside a log-scale histogram of pixel values ($0$ to $255$). The histogram confirms that the majority of pixels reside at background zero while stroke pixels exhibit a continuous grayscale distribution, verifying dataset balance and data cleanliness prior to model ingestion.\par
@@ -261,7 +261,7 @@ Model: "sequential"
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.90\textwidth]{plot_2_dnn_architecture.pdf}
+\includegraphics[width=0.96\linewidth]{plot_2_dnn_architecture.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 2 (Baseline Deep Neural Network Architecture \& Dataflow)}: The baseline network comprises an Input Layer ($784$ features), a Hidden Layer ($512$ ReLU units with $401,920$ weights), and an Output Layer ($10$ Softmax units with $5,130$ weights), yielding $407,050$ total trainable parameters. The complete system architecture diagram and tensor dataflow schematic is formally illustrated in Figure 2 of the accompanying academic report.\par
@@ -476,7 +476,7 @@ Epoch 10: Train Loss=0.2886, Val Loss=0.2320 (Gap=-0.0567) | Train Acc=0.9198, V
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.88\textwidth]{plot_3_training_history.pdf}
+\includegraphics[width=0.96\linewidth]{plot_3_training_history.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 3 (Baseline Deep Neural Network Training History)}: Dual-panel learning curves depicting Categorical Cross-Entropy Loss (left) and Classification Accuracy (right) across 10 epochs for the baseline model (Single Hidden 512 ReLU, SGD $\eta=0.01$, Batch Size 128). Both training and validation curves descend monotonically without divergence, confirming steady convergence and the absence of pathological overfitting.\par
@@ -661,7 +661,7 @@ Top-5 Most Frequent Misclassification Pairs (True -> Predicted):
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.88\textwidth]{plot_4_confusion_matrix.pdf}
+\includegraphics[width=0.96\linewidth]{plot_4_confusion_matrix.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 4 (Confusion Matrix Heatmap on MNIST Test Set)}: Heatmap visualization of the $10 \times 10$ confusion matrix evaluated on the unseen test set ($N = 10,000$). The prominent diagonal entries confirm strong discriminative capability ($92.59\%$ overall accuracy for the baseline SGD model), while off-diagonal cells reveal morphological ambiguities, primarily between digits $9 \rightarrow 4$ ($39$ instances), $4 \rightarrow 9$ ($35$ instances), and $2 \rightarrow 8$ ($34$ instances).\par
@@ -796,7 +796,7 @@ SGD (LR = 0.20) -> Test Loss: 0.0707 | Test Acc: 0.9789
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.88\textwidth]{plot_5_learning_rate_comparison.pdf}
+\includegraphics[width=0.96\linewidth]{plot_5_learning_rate_comparison.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 5 (Learning Rate Sensitivity Analysis)}: Dual-panel trajectories comparing Validation Loss (left) and Validation Accuracy (right) for SGD under learning rates $\alpha \in \{0.01, 0.10, 0.20\}$. While $\alpha=0.01$ exhibits underdamping and sluggish convergence ($92.58\%$), $\alpha=0.20$ provides the optimal gradient step size, reaching $97.35\%$ test accuracy within 10 epochs.\par
@@ -885,7 +885,7 @@ Optimizer: Adam (lr=0.001)      | Test Accuracy:  97.95% | Test Loss: 0.0664
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.88\textwidth]{plot_6_optimizer_comparison.pdf}
+\includegraphics[width=0.96\linewidth]{plot_6_optimizer_comparison.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 6 (Optimizer Convergence \& Performance Benchmark)}: Comparison of convergence trajectories across four fundamental optimization algorithms (SGD, Adagrad, RMSprop, Adam) over 10 epochs. Adaptive moment estimation (RMSprop at $98.30\%$ and Adam at $98.00\%$) dramatically outperforms cumulative gradient decay (Adagrad at $94.96\%$) by dynamically scaling coordinate-wise learning rates.\par
@@ -1027,7 +1027,7 @@ Saved benchmark summary table to: assignment/Assignment 5_Neural Network/benchma
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.90\textwidth]{plot_7_architecture_ablation.pdf}
+\includegraphics[width=0.96\linewidth]{plot_7_architecture_ablation.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 7 (Architectural Ablation \& Dropout Regularization Impact)}: Dual-panel loss (left) and accuracy (right) curves contrasting the Baseline Single-Hidden MLP against the Deeper Architecture (512-256-128) regularized with $20\%$ Dropout. The regularized deeper network constrains the generalization gap ($\Delta < 0.05\%$), prevents neuron co-adaptation, and maintains robust generalization on complex digit topologies.\par

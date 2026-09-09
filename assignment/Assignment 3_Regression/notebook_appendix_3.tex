@@ -97,7 +97,7 @@ plt.show()
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.88\textwidth]{plot_1_overall_km.pdf}
+\includegraphics[width=0.96\linewidth]{plot_1_overall_km.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 1 (Overall Survival Curve)}: Kaplan-Meier non-parametric survival function $\hat{S}(t)$ for the full customer cohort ($N = 7,043$) with 95\% Greenwood confidence interval. Milestone annotations illustrate that 83.9\% of customers survive past 1 year ($t=12$), 78.4\% survive past 2 years ($t=24$), and 58.7\% remain active at 6 years ($t=72$). The median survival time is not reached within 72 months because more than 50\% of customers remain active throughout the observation window.\par
@@ -148,7 +148,7 @@ plt.show()
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.88\textwidth]{plot_2_km_by_payment.pdf}
+\includegraphics[width=0.96\linewidth]{plot_2_km_by_payment.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 2 (Comparative Survival Curves)}: Kaplan-Meier survival curves comparing the four payment methods. Customers utilizing \textbf{Electronic check} exhibit a steep, continuous drop in survival probability, crossing the 50\% median threshold at $t = 47.0$ months. Conversely, automated payment channels (\textbf{Bank transfer} and \textbf{Credit card}) display nearly identical, superior retention curves maintaining $> 90\%$ survival past 2 years and $> 74\%$ at 6 years. \textbf{Mailed check} shows moderate early drop-off followed by long-term stabilization.\par
@@ -206,7 +206,7 @@ Plot 3 saved to plot_3_km_grid_by_payment.pdf
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.88\textwidth]{plot_3_km_grid_by_payment.pdf}
+\includegraphics[width=0.96\linewidth]{plot_3_km_grid_by_payment.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 3 (Individual Survival Facets with 95\% CI)}: $2 \times 2$ facet grid of Kaplan-Meier survival curves with 95\% confidence bands for each payment method. The tight confidence intervals across all four subplots confirm high statistical precision resulting from large subgroup sample sizes ($n \ge 1,522$ per group).\par
@@ -247,7 +247,7 @@ plt.show()
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.88\textwidth]{plot_4_cumulative_hazard.pdf}
+\includegraphics[width=0.96\linewidth]{plot_4_cumulative_hazard.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 4 (Cumulative Hazard Curves)}: Cumulative hazard function $\Lambda(t) = -\ln S(t)$ across payment methods. Electronic check exhibits a steeply ascending, quasi-linear hazard rate surpassing $\Lambda(72) > 1.2$, indicating severe ongoing churn risk. In contrast, automated methods exhibit flat, gradual hazard accumulation ($\Lambda(72) \approx 0.28$ to $0.30$).\par
@@ -298,7 +298,7 @@ plt.show()
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.88\textwidth]{plot_5_churn_distribution.pdf}
+\includegraphics[width=0.96\linewidth]{plot_5_churn_distribution.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 5 (Churn Rate \& Tenure Distribution)}: Left: Churn rates across payment methods highlighting Electronic check ($45.3\%$) vs. Mailed check ($19.1\%$), Bank transfer ($16.7\%$), and Credit card ($15.2\%$). Right: Boxplots of tenure demonstrating substantially higher customer loyalty and tenure in automated payment channels (median tenure $\approx 43$ months) compared to manual payment methods.\par
