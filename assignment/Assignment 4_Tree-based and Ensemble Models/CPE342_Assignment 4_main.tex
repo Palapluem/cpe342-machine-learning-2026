@@ -36,6 +36,8 @@
 \definecolor{accentblue}{RGB}{37, 99, 235}
 \definecolor{codebg}{RGB}{248, 250, 252}
 \definecolor{codeframe}{RGB}{203, 213, 225}
+\definecolor{codeaccent}{HTML}{0969DA}
+\newcommand{\codevar}[1]{\textcolor{codeaccent}{\textbf{#1}}}
 \definecolor{keyword}{RGB}{124, 58, 237}
 \definecolor{string}{RGB}{22, 163, 74}
 \definecolor{comment}{RGB}{100, 116, 139}
@@ -66,7 +68,7 @@
 }
 
 \lstdefinestyle{output}{
-    basicstyle=\ttfamily\scriptsize\color{output},
+    basicstyle=\ttfamily\small\color{output},
     backgroundcolor=\color{codebg},
     frame=single,
     rulecolor=\color{codeframe},
@@ -104,7 +106,7 @@
 
 \section*{1. ภาพรวมของปัญหาและวัตถุประสงค์\\ \large(Problem Overview \& Objectives)}
 
-ในงานมอบหมาย Assignment 4 นี้ เราศึกษา พัฒนา และประเมินเปรียบเทียบแบบจำลองประเภท \textbf{ต้นไม้ตัดสินใจและการเรียนรู้แบบกลุ่ม (Tree-Based and Ensemble Learning)} เพื่อทำนายผลการพิจารณารับนักศึกษาเข้าศึกษาต่อในหลักสูตรบริหารธุรกิจมหาบัณฑิต (\textbf{MBA Admission Classification}) บนชุดข้อมูล \texttt{MBA.csv} ซึ่งประกอบด้วยข้อมูลประวัติของผู้สมัครรวม $N = 6,194$ รายการ โดยมีกลุ่มข้อมูลที่ได้รับการตัดสินผลแล้ว (Labeled Cohort) จำนวน $1,000$ รายการ แบ่งเป็นผู้ที่ผ่านการคัดเลือก (\textbf{Admit: 900 ราย หรือ 90\%}) และผู้ที่อยู่ในบัญชีสำรอง (\textbf{Waitlist: 100 ราย หรือ 10\%})
+ในงานมอบหมาย Assignment 4 นี้ เราศึกษา พัฒนา และประเมินเปรียบเทียบแบบจำลองประเภท \textbf{ต้นไม้ตัดสินใจและการเรียนรู้แบบกลุ่ม (Tree-Based and Ensemble Learning)} เพื่อทำนายผลการพิจารณารับนักศึกษาเข้าศึกษาต่อในหลักสูตรบริหารธุรกิจมหาบัณฑิต (\textbf{MBA Admission Classification}) บนชุดข้อมูล \codevar{MBA.csv} ซึ่งประกอบด้วยข้อมูลประวัติของผู้สมัครรวม $N = 6,194$ รายการ โดยมีกลุ่มข้อมูลที่ได้รับการตัดสินผลแล้ว (Labeled Cohort) จำนวน $1,000$ รายการ แบ่งเป็นผู้ที่ผ่านการคัดเลือก (\textbf{Admit: 900 ราย หรือ 90\%}) และผู้ที่อยู่ในบัญชีสำรอง (\textbf{Waitlist: 100 ราย หรือ 10\%})
 
 \subsection*{วัตถุประสงค์หลักของการทดลอง}
 \begin{enumerate}[leftmargin=18pt, itemsep=2pt]
@@ -114,7 +116,7 @@
         \item \textbf{Random Forest Classifier}: ตัวจำแนกกลุ่มแบบแบ็กกิ้งร่วมกับการสุ่มสเปซคุณลักษณะ (Bagging \& Random Subspace)
         \item \textbf{Gradient Boosting Classifier}: ตัวจำแนกกลุ่มแบบบูสต์เพิ่มพูนเชิงลำดับที่ปรับจูนค่าน้ำหนักตามเศษเหลือเทียม (Pseudo-Residuals Optimization)
     \end{itemize}
-    \item เพื่อวิเคราะห์และแก้ไขปัญหา \textbf{ภาวะความไม่สมดุลของคลาสข้อมูล (Class Imbalance)} ในสัดส่วน 9:1 ผ่านการกำหนดค่าน้ำหนักชดเชยต้นทุนความผิดพลาด (\texttt{class\_weight='balanced'}) และการใช้ตัวชี้วัดประสิทธิภาพเฉพาะทาง
+    \item เพื่อวิเคราะห์และแก้ไขปัญหา \textbf{ภาวะความไม่สมดุลของคลาสข้อมูล (Class Imbalance)} ในสัดส่วน 9:1 ผ่านการกำหนดค่าน้ำหนักชดเชยต้นทุนความผิดพลาด (\codevar{class\_weight='balanced'}) และการใช้ตัวชี้วัดประสิทธิภาพเฉพาะทาง
     \item เพื่อวิเคราะห์ระดับความสำคัญของตัวแปรคุณลักษณะ (\textbf{Feature Importance Analysis}) ได้แก่ เกรดเฉลี่ยสะสม (GPA), คะแนนสอบ GMAT, ประสบการณ์การทำงาน (Work Experience) และสายงานธุรกิจ (Industry) ต่อการตัดสินใจรับเข้าศึกษา
     \item เพื่อประเมินประสิทธิภาพเชิงลึกด้วยเกณฑ์วัดทางสถิติที่ครอบคลุม ได้แก่ Confusion Matrix, Precision, Recall, $F_1$-Score, ROC-AUC Curve และการประเมินแบบไขว้ 5 ส่วนแบบแบ่งชั้น (Stratified 5-Fold Cross-Validation)
 \end{enumerate}
@@ -147,7 +149,7 @@
 \end{equation}
 
 \subsection*{2.2 การตัดแต่งกิ่งต้นไม้เพื่อลดความซับซ้อนและการเรียนรู้เกิน\\ \normalsize(Tree Pruning \& Regularization)}
-ต้นไม้ตัดสินใจเดี่ยวที่ปล่อยให้เติบโตอย่างไร้การควบคุมจะขยายกิ่งก้านจนกระทั่งทุกโหนดปลายใบมีความคลาดเคลื่อนเป็นศูนย์ ซึ่งนำไปสู่ภาวะ \textbf{การเรียนรู้เกินและความแปรปรวนสูง (Overfitting \& High Variance)} การควบคุมทำได้โดยกำหนดความลึกสูงสุด (\texttt{max\_depth}), จำนวนตัวอย่างขั้นต่ำในการแตกกิ่ง (\texttt{min\_samples\_split}) และการตัดแต่งกิ่งตามต้นทุนความซับซ้อน (Cost-Complexity Pruning: CCP):
+ต้นไม้ตัดสินใจเดี่ยวที่ปล่อยให้เติบโตอย่างไร้การควบคุมจะขยายกิ่งก้านจนกระทั่งทุกโหนดปลายใบมีความคลาดเคลื่อนเป็นศูนย์ ซึ่งนำไปสู่ภาวะ \textbf{การเรียนรู้เกินและความแปรปรวนสูง (Overfitting \& High Variance)} การควบคุมทำได้โดยกำหนดความลึกสูงสุด (\codevar{max\_depth}), จำนวนตัวอย่างขั้นต่ำในการแตกกิ่ง (\codevar{min\_samples\_split}) และการตัดแต่งกิ่งตามต้นทุนความซับซ้อน (Cost-Complexity Pruning: CCP):
 \begin{equation}
     R_\alpha(T) = R(T) + \alpha |T|
 \end{equation}
@@ -191,13 +193,13 @@ Gradient Boosting สร้างแบบจำลองกลุ่มแบ�
 
 \section*{3. โครงสร้างชุดข้อมูลและการจัดเตรียมตัวแปร\\ \large(Dataset Architecture \& Preprocessing)}
 
-ชุดข้อมูล \texttt{MBA.csv} มีขนาด $6,194$ แถว และ $10$ คอลัมน์ โดยมีกระบวนการจัดเตรียมตัวแปรดังนี้:
+ชุดข้อมูล \codevar{MBA.csv} มีขนาด $6,194$ แถว และ $10$ คอลัมน์ โดยมีกระบวนการจัดเตรียมตัวแปรดังนี้:
 \begin{itemize}[leftmargin=18pt, itemsep=2pt]
-    \item \textbf{การคัดกรองแถวข้อมูลเป้าหมาย}: คัดเลือกเฉพาะ $1,000$ แถวที่มีผลการตัดสิน \texttt{admission} (`Admit' = 900 ราย, `Waitlist' = 100 ราย)
+    \item \textbf{การคัดกรองแถวข้อมูลเป้าหมาย}: คัดเลือกเฉพาะ $1,000$ แถวที่มีผลการตัดสิน \codevar{admission} (`Admit' = 900 ราย, `Waitlist' = 100 ราย)
     \item \textbf{การแปลงรหัสคลาสเป้าหมาย}: กำหนดให้ $y = 0$ สำหรับกลุ่ม `Admit' (คลาสเสียงข้างมาก) และ $y = 1$ สำหรับกลุ่ม `Waitlist' (คลาสเสียงข้างน้อย / คลาสที่สนใจตรวจจับ)
-    \item \textbf{การตัดตัวแปรระบุตัวตน}: ลบคอลัมน์ \texttt{application\_id} เนื่องจากเป็นเพียงลำดับไอดีที่ไม่มีคุณค่าเชิงทำนาย
-    \item \textbf{การจัดการค่าสูญหาย}: ตัวแปร \texttt{race} ที่มีค่าสูญหาย ถูกกำหนดให้เป็นหมวดหมู่เฉพาะ `Missing'
-    \item \textbf{การแปลงคุณลักษณะหมวดหมู่}: ตัวแปร \texttt{gender}, \texttt{international}, \texttt{major}, \texttt{race}, \texttt{work\_industry} ถูกแปลงเป็นรหัสหมวดหมู่จำนวนเต็ม (Category Codes)
+    \item \textbf{การตัดตัวแปรระบุตัวตน}: ลบคอลัมน์ \codevar{application\_id} เนื่องจากเป็นเพียงลำดับไอดีที่ไม่มีคุณค่าเชิงทำนาย
+    \item \textbf{การจัดการค่าสูญหาย}: ตัวแปร \codevar{race} ที่มีค่าสูญหาย ถูกกำหนดให้เป็นหมวดหมู่เฉพาะ `Missing'
+    \item \textbf{การแปลงคุณลักษณะหมวดหมู่}: ตัวแปร \codevar{gender}, \codevar{international}, \codevar{major}, \codevar{race}, \codevar{work\_industry} ถูกแปลงเป็นรหัสหมวดหมู่จำนวนเต็ม (Category Codes)
     \item \textbf{การแบ่งชุดข้อมูลแบบแบ่งชั้น}: ดำเนินการ Stratified Train/Test Split ในสัดส่วน 80/20 ($N_{train} = 800$, $N_{test} = 200$) เพื่อรักษาสัดส่วนคลาส $9:1$ ให้เท่าเทียมกันทั้งสองชุด
 \end{itemize}
 
@@ -217,7 +219,7 @@ Gradient Boosting สร้างแบบจำลองกลุ่มแบ�
 
 \clearpage
 \subsection*{4.2 โครงสร้างและกฎการตัดสินใจของ Decision Tree\\ \normalsize(Decision Tree Architecture \& Splitting Rules)}
-โครงสร้างและแผนผังกฎการตัดสินใจของต้นไม้ตัดสินใจเดี่ยวที่ผ่านการตัดแต่งกิ่ง (\texttt{max\_depth=3}, \texttt{class\_weight='balanced'}) แสดงใน Figure 2
+โครงสร้างและแผนผังกฎการตัดสินใจของต้นไม้ตัดสินใจเดี่ยวที่ผ่านการตัดแต่งกิ่ง (\codevar{max\_depth=3}, \codevar{class\_weight='balanced'}) แสดงใน Figure 2
 
 \begin{figure}[H]
     \centering
@@ -226,7 +228,7 @@ Gradient Boosting สร้างแบบจำลองกลุ่มแบ�
 \end{figure}
 
 \noindent
-\textbf{การแปลผล Figure 2}: โหนดราก (Root Node) ทำการตัดแบ่งด้วยตัวแปร \texttt{work\_industry} ($\le 12.5$) และ \texttt{gpa} ($\le 3.56$) ซึ่งชี้ให้เห็นว่าสายงานธุรกิจที่สังกัดและผลการเรียนระดับปริญญาตรีเป็นเกณฑ์ด่านแรกในการคัดกรองผู้สมัคร
+\textbf{การแปลผล Figure 2}: โหนดราก (Root Node) ทำการตัดแบ่งด้วยตัวแปร \codevar{work\_industry} ($\le 12.5$) และ \codevar{gpa} ($\le 3.56$) ซึ่งชี้ให้เห็นว่าสายงานธุรกิจที่สังกัดและผลการเรียนระดับปริญญาตรีเป็นเกณฑ์ด่านแรกในการคัดกรองผู้สมัคร
 
 \clearpage
 \subsection*{4.3 การวิเคราะห์ความสำคัญของตัวแปรคุณลักษณะ\\ \normalsize(Feature Importance Analysis)}
@@ -239,7 +241,7 @@ Gradient Boosting สร้างแบบจำลองกลุ่มแบ�
 \end{figure}
 
 \noindent
-\textbf{การแปลผล Figure 3}: ตัวแปร 4 อันดับแรกที่มีอิทธิพลสูงสุดต่อผลการตัดสินใจคือ \textbf{GMAT Score}, \textbf{GPA}, \textbf{Work Experience} และ \textbf{Work Industry} ซึ่งมีสัดส่วนความสำคัญรวมกันมากกว่า $80\%$ ในทุกโมเดล ขณะที่ตัวแปรทางประชากรศาสตร์ (\texttt{gender}, \texttt{race}, \texttt{international}) มีบทบาทน้อยมาก
+\textbf{การแปลผล Figure 3}: ตัวแปร 4 อันดับแรกที่มีอิทธิพลสูงสุดต่อผลการตัดสินใจคือ \textbf{GMAT Score}, \textbf{GPA}, \textbf{Work Experience} และ \textbf{Work Industry} ซึ่งมีสัดส่วนความสำคัญรวมกันมากกว่า $80\%$ ในทุกโมเดล ขณะที่ตัวแปรทางประชากรศาสตร์ (\codevar{gender}, \codevar{race}, \codevar{international}) มีบทบาทน้อยมาก
 
 \clearpage
 \subsection*{4.4 การประเมินผลลัพธ์ผ่าน Confusion Matrices\\ \normalsize(Confusion Matrix Diagnostic Analysis)}
@@ -279,7 +281,7 @@ Gradient Boosting สร้างแบบจำลองกลุ่มแบ�
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{plot_6_hyperparameter_tuning.pdf}
-    \caption{\textbf{Hyperparameter Validation Curves \& Bias-Variance Dynamics}: ซ้าย: ผลกระทบของความลึกต้นไม้ (\texttt{max\_depth}) ต่อ Decision Tree ขวา: ผลกระทบของจำนวนต้นไม้ (\texttt{n\_estimators}) ต่อ Random Forest}
+    \caption{\textbf{Hyperparameter Validation Curves \& Bias-Variance Dynamics}: ซ้าย: ผลกระทบของความลึกต้นไม้ (\codevar{max\_depth}) ต่อ Decision Tree ขวา: ผลกระทบของจำนวนต้นไม้ (\codevar{n\_estimators}) ต่อ Random Forest}
 \end{figure}
 
 \noindent
@@ -311,7 +313,7 @@ Gradient Boosting สร้างแบบจำลองกลุ่มแบ�
 \section*{5. การอภิปรายผลเชิงลึกและข้อมูลเชิงธุรกิจ\\ \large(In-Depth Discussion \& Business Insights)}
 
 \subsection*{5.1 พลวัตของความไม่สมดุลของข้อมูลและมาตรการแก้ไข\\ \normalsize(Class Imbalance Dynamics \& Cost-Sensitive Mitigation)}
-ในชุดข้อมูล MBA นี้ ผู้สมัครที่ได้รับการ Admit มีสัดส่วนสูงถึง 90\% หากใช้แบบจำลองมาตรฐานโดยไม่ถ่วงดุลค่าน้ำหนัก โมเดลจะเลือกทำนายทุกคนเป็น Admit ทั้งหมดเพื่อเพิ่มค่า Accuracy ให้สูง ($90\%$) การนำเทคนิค \textbf{Cost-Sensitive Balanced Weighting} (\texttt{class\_weight='balanced'}) มาปรับใช้ ช่วยบังคับให้โมเดลเพิ่มโทษต่อความผิดพลาดในคลาส Waitlist ส่งผลให้สามารถตรวจจับผู้สมัครกลุ่มสำรองได้จริง
+ในชุดข้อมูล MBA นี้ ผู้สมัครที่ได้รับการ Admit มีสัดส่วนสูงถึง 90\% หากใช้แบบจำลองมาตรฐานโดยไม่ถ่วงดุลค่าน้ำหนัก โมเดลจะเลือกทำนายทุกคนเป็น Admit ทั้งหมดเพื่อเพิ่มค่า Accuracy ให้สูง ($90\%$) การนำเทคนิค \textbf{Cost-Sensitive Balanced Weighting} (\codevar{class\_weight='balanced'}) มาปรับใช้ ช่วยบังคับให้โมเดลเพิ่มโทษต่อความผิดพลาดในคลาส Waitlist ส่งผลให้สามารถตรวจจับผู้สมัครกลุ่มสำรองได้จริง
 
 \subsection*{5.2 การเปรียบเทียบสถาปัตยกรรมแบบจำลองเดี่ยวและแบบกลุ่ม\\ \normalsize(Single Tree vs. Bagging vs. Boosting Comparison)}
 \begin{itemize}[leftmargin=18pt, itemsep=2pt]
@@ -339,7 +341,7 @@ Gradient Boosting สร้างแบบจำลองกลุ่มแบ�
 
 \section*{7. สรุปผลการดำเนินงาน\\ \large(Conclusion)}
 
-การทดลองบนชุดข้อมูล \texttt{MBA.csv} ยืนยันถึงคุณลักษณะเด่นและข้อจำกัดของแบบจำลองทั้ง 3 ประเภทตามทฤษฎีใน Lecture 5 โดย \textbf{Random Forest} เป็นแบบจำลองที่มีความเสถียรและให้ประสิทธิภาพในการจำแนกกลุ่มภาพรวมสูงสุด ($\text{CV AUC} = 0.6237$) ขณะที่ \textbf{Decision Tree} มีความโดดเด่นในด้านความสามารถในการอธิบายผล และ \textbf{Gradient Boosting} ให้ค่าความแม่นยำของกลุ่มหลักสูงสุด ($89.50\%$)
+การทดลองบนชุดข้อมูล \codevar{MBA.csv} ยืนยันถึงคุณลักษณะเด่นและข้อจำกัดของแบบจำลองทั้ง 3 ประเภทตามทฤษฎีใน Lecture 5 โดย \textbf{Random Forest} เป็นแบบจำลองที่มีความเสถียรและให้ประสิทธิภาพในการจำแนกกลุ่มภาพรวมสูงสุด ($\text{CV AUC} = 0.6237$) ขณะที่ \textbf{Decision Tree} มีความโดดเด่นในด้านความสามารถในการอธิบายผล และ \textbf{Gradient Boosting} ให้ค่าความแม่นยำของกลุ่มหลักสูงสุด ($89.50\%$)
 
 \needspace{8\baselineskip}
 \section*{สรุปผลลัพธ์ (Summary of Results)}

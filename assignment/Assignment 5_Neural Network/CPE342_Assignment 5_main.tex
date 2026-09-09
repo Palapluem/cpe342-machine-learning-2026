@@ -38,6 +38,8 @@
 \definecolor{accentblue}{RGB}{37, 99, 235}
 \definecolor{codebg}{RGB}{248, 250, 252}
 \definecolor{codeframe}{RGB}{203, 213, 225}
+\definecolor{codeaccent}{HTML}{0969DA}
+\newcommand{\codevar}[1]{\textcolor{codeaccent}{\textbf{#1}}}
 \definecolor{keyword}{RGB}{124, 58, 237}
 \definecolor{string}{RGB}{22, 163, 74}
 \definecolor{comment}{RGB}{100, 116, 139}
@@ -68,7 +70,7 @@
 }
 
 \lstdefinestyle{output}{
-    basicstyle=\ttfamily\scriptsize\color{output},
+    basicstyle=\ttfamily\small\color{output},
     backgroundcolor=\color{codebg},
     frame=single,
     rulecolor=\color{codeframe},
@@ -210,7 +212,7 @@ z = \sum_{i=1}^d w_i x_i + b = \mathbf{w}^T \mathbf{x} + b
 \begin{itemize}[leftmargin=18pt, itemsep=2pt]
     \item \textbf{จำนวนตัวอย่างทั้งหมด}: 70,000 ภาพ ประกอบด้วย Training Set 60,000 ภาพ และ Test Set 10,000 ภาพ
     \item \textbf{มิติของข้อมูล}: ภาพแต่ละภาพมีขนาด $28 \times 28$ พิกเซล ช่องสีเดียว (Grayscale) รวมเป็น 784 มิติต่อภาพ
-    \item \textbf{ชนิดและช่วงค่าของข้อมูล}: อยู่ในรูปแบบจำนวนเต็มไร้เครื่องหมาย 8 บิต (\texttt{uint8}) มีค่าความสว่างระหว่าง $0$ (พื้นหลังสีดำ) ถึง $255$ (เส้นลายมือเขียนสีขาว)
+    \item \textbf{ชนิดและช่วงค่าของข้อมูล}: อยู่ในรูปแบบจำนวนเต็มไร้เครื่องหมาย 8 บิต (\codevar{uint8}) มีค่าความสว่างระหว่าง $0$ (พื้นหลังสีดำ) ถึง $255$ (เส้นลายมือเขียนสีขาว)
     \item \textbf{คลาสเป้าหมาย}: ตัวเลขโดด 10 คลาส ได้แก่ $\{0, 1, 2, 3, 4, 5, 6, 7, 8, 9\}$ โดยมีการกระจายตัวของคลาสที่สมดุลอย่างยิ่ง ($\approx 6,000$ ภาพต่อคลาสในชุดฝึกสอน)
 \end{itemize}
 
@@ -221,13 +223,13 @@ z = \sum_{i=1}^d w_i x_i + b = \mathbf{w}^T \mathbf{x} + b
     \item \textbf{การคลี่มิติข้อมูล (Dimensional Flattening)}:
     แปลงเทนเซอร์ภาพ 2 มิติขนาด $(N, 28, 28)$ ให้อยู่ในรูปเวกเตอร์ 1 มิติขนาด $(N, 784)$ เพื่อให้สอดคล้องกับ Input Dimension ของ Dense Layer
     \item \textbf{การปรับสเกลข้อมูลแบบ Min-Max (Pixel Normalization)}:
-    แปลงชนิดข้อมูลจาก \texttt{uint8} เป็น \texttt{float32} พร้อมหารด้วย $255.0$ ทำให้ค่าความสว่างอยู่ในช่วง $[0.0, 1.0]$:
+    แปลงชนิดข้อมูลจาก \codevar{uint8} เป็น \codevar{float32} พร้อมหารด้วย $255.0$ ทำให้ค่าความสว่างอยู่ในช่วง $[0.0, 1.0]$:
     \begin{equation}
     x_{\text{norm}} = \frac{x}{255.0} \in [0.0, 1.0]
     \end{equation}
     การทำให้ข้อมูลมีสเกลที่สม่ำเสมอช่วยป้องกันปัญหาเกรเดียนต์เบี่ยงเบนและช่วยให้ฟังก์ชัน Loss ลู่เข้าสู่จุดต่ำสุดได้อย่างราบรื่น
     \item \textbf{การแปลงรหัสคลาสแบบ One-Hot Encoding}:
-    แปลงเวกเตอร์ป้ายกำกับจำนวนเต็ม $y \in \{0, 1, \dots, 9\}$ เป็นเวกเตอร์ฐานสองขนาด 10 มิติ $\mathbf{y} \in \{0, 1\}^{10}$ เช่น ตัวเลข $3 \rightarrow [0, 0, 0, 1, 0, 0, 0, 0, 0, 0]$ ผ่านฟังก์ชัน \texttt{keras.utils.to\_categorical}
+    แปลงเวกเตอร์ป้ายกำกับจำนวนเต็ม $y \in \{0, 1, \dots, 9\}$ เป็นเวกเตอร์ฐานสองขนาด 10 มิติ $\mathbf{y} \in \{0, 1\}^{10}$ เช่น ตัวเลข $3 \rightarrow [0, 0, 0, 1, 0, 0, 0, 0, 0, 0]$ ผ่านฟังก์ชัน \codevar{keras.utils.to\_categorical}
     \item \textbf{การแบ่งชุดข้อมูลฝึกสอนและตรวจสอบ (Train/Validation Split)}:
     แบ่งชุดข้อมูลฝึกสอน $60,000$ ตัวอย่าง ออกเป็น Training Set สัดส่วน $90\%$ ($N_{\text{train}} = 54,000$) สำหรับการปรับค่าน้ำหนัก และ Validation Set สัดส่วน $10\%$ ($N_{\text{val}} = 6,000$) สำหรับการติดตามประเมินผลการเรียนรู้และภาวะ Overfitting ในแต่ละรอบการฝึกสอน
 \end{enumerate}
@@ -492,11 +494,11 @@ z = \sum_{i=1}^d w_i x_i + b = \mathbf{w}^T \mathbf{x} + b
 \end{itemize}
 
 \subsection*{6.3 การเปรียบเทียบเชิงวิเคราะห์กับชุดข้อมูล Bank Marketing (Lab 1)\\ \normalsize(Comparative Analysis with Tabular MLP on Bank Marketing Data)}
-ในบทเรียนเบื้องต้น (Lab 1) ได้มีการทดลองใช้ MLP กับชุดข้อมูลตาราง \texttt{bank-data.csv} เพื่อทำนายการสมัครเงินฝากประจำ ($y \in \{0, 1\}$) เมื่อเปรียบเทียบกับงาน MNIST ในการทดลองนี้ พบความแตกต่างเชิงระเบียบวิธีที่สำคัญ:
+ในบทเรียนเบื้องต้น (Lab 1) ได้มีการทดลองใช้ MLP กับชุดข้อมูลตาราง \codevar{bank-data.csv} เพื่อทำนายการสมัครเงินฝากประจำ ($y \in \{0, 1\}$) เมื่อเปรียบเทียบกับงาน MNIST ในการทดลองนี้ พบความแตกต่างเชิงระเบียบวิธีที่สำคัญ:
 \begin{itemize}[leftmargin=18pt, itemsep=2pt]
     \item \textbf{ธรรมชาติของข้อมูล}: Bank Marketing เป็นข้อมูลแบบ Tabular ที่มีความไม่สมดุลของคลาสสูง (Class Imbalance: อัตราตอบรับ $\approx 11\%$) ขณะที่ MNIST เป็นข้อมูลภาพที่มีความสมดุลของคลาสสมบูรณ์แบบ
     \item \textbf{การเตรียมข้อมูล}: ข้อมูล Bank Marketing จำเป็นต้องใช้การเข้ารหัส One-Hot สำหรับตัวแปรหมวดหมู่ร่วมกับการทำ Standard Scaling ของตัวเลขเชิงปริมาณ ขณะที่ MNIST ใช้เพียงการหารค่าพิกเซลด้วย 255.0
-    \item \textbf{ฟังก์ชันเป้าหมาย}: Bank Marketing ใช้ \texttt{binary\_crossentropy} ร่วมกับ Output Node เดียว (Sigmoid) ขณะที่ MNIST ใช้ \texttt{categorical\_crossentropy} ร่วมกับ 10 Output Nodes (Softmax)
+    \item \textbf{ฟังก์ชันเป้าหมาย}: Bank Marketing ใช้ \codevar{binary\_crossentropy} ร่วมกับ Output Node เดียว (Sigmoid) ขณะที่ MNIST ใช้ \codevar{categorical\_crossentropy} ร่วมกับ 10 Output Nodes (Softmax)
 \end{itemize}
 
 \section*{7. สรุปผลการทดลองและข้อเสนอแนะเชิงประยุกต์\\ \large(Conclusions \& Practical Recommendations)}

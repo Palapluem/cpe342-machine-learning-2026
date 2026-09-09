@@ -36,6 +36,8 @@
 \definecolor{accentblue}{RGB}{37, 99, 235}
 \definecolor{codebg}{RGB}{248, 250, 252}
 \definecolor{codeframe}{RGB}{203, 213, 225}
+\definecolor{codeaccent}{HTML}{0969DA}
+\newcommand{\codevar}[1]{\textcolor{codeaccent}{\textbf{#1}}}
 \definecolor{keyword}{RGB}{124, 58, 237}
 \definecolor{string}{RGB}{22, 163, 74}
 \definecolor{comment}{RGB}{100, 116, 139}
@@ -66,7 +68,7 @@
 }
 
 \lstdefinestyle{output}{
-    basicstyle=\ttfamily\scriptsize\color{output},
+    basicstyle=\ttfamily\small\color{output},
     backgroundcolor=\color{codebg},
     frame=single,
     rulecolor=\color{codeframe},
@@ -104,14 +106,14 @@
 
 \section*{1. ภาพรวมของปัญหาและวัตถุประสงค์\\ \large(Problem Overview \& Objectives)}
 
-ในงานมอบหมายส่วนของ Activity นี้ เราศึกษาและวิเคราะห์พฤติกรรมการคงอยู่และการยกเลิกบริการของลูกค้า (Customer Retention \& Churn Dynamics) โดยประยุกต์ใช้ระเบียบวิธี \textbf{การวิเคราะห์การอยู่รอด (Survival Analysis)} ด้วยตัวประมาณค่าแบบนอนพารามิเตอร์ \textbf{Kaplan-Meier Estimator} บนชุดข้อมูล \texttt{Telco-Churn.csv} ซึ่งประกอบด้วยข้อมูลลูกค้ารวม $N = 7,043$ ราย
+ในงานมอบหมายส่วนของ Activity นี้ เราศึกษาและวิเคราะห์พฤติกรรมการคงอยู่และการยกเลิกบริการของลูกค้า (Customer Retention \& Churn Dynamics) โดยประยุกต์ใช้ระเบียบวิธี \textbf{การวิเคราะห์การอยู่รอด (Survival Analysis)} ด้วยตัวประมาณค่าแบบนอนพารามิเตอร์ \textbf{Kaplan-Meier Estimator} บนชุดข้อมูล \codevar{Telco-Churn.csv} ซึ่งประกอบด้วยข้อมูลลูกค้ารวม $N = 7,043$ ราย
 
 \subsection*{วัตถุประสงค์หลักของการวิเคราะห์}
 \begin{enumerate}[leftmargin=18pt, itemsep=2pt]
     \item เพื่อสร้างตัวแปรระยะเวลาการใช้บริการ $T = \text{tenure}$ (หน่วย: เดือน) และตัวบ่งชี้การเกิดเหตุการณ์ยกเลิกบริการ $E = \mathbb{I}(\text{Churn} == \text{'Yes'})$
     \item เพื่อจัดการปัญหา \textbf{ข้อมูลถูกจำกัดช่วงทางขวา (Right-Censoring)} สำหรับลูกค้าที่ยังคงใช้บริการอยู่ ณ ปัจจุบัน ($E = 0$)
     \item เพื่อประมาณค่าฟังก์ชันการอยู่รอดของประชากรโดยรวม $\hat{S}(t)$ พร้อมคำนวณช่วงความเชื่อมั่น 95\% ด้วยสูตรของ Greenwood
-    \item เพื่อเปรียบเทียบวิถีการอยู่รอดและความเสี่ยงในการยกเลิกบริการระหว่างช่องทางการชำระเงินทั้ง 4 รูปแบบ (\texttt{PaymentMethod}): \textbf{Electronic check}, \textbf{Mailed check}, \textbf{Bank transfer (automatic)} และ \textbf{Credit card (automatic)}
+    \item เพื่อเปรียบเทียบวิถีการอยู่รอดและความเสี่ยงในการยกเลิกบริการระหว่างช่องทางการชำระเงินทั้ง 4 รูปแบบ (\codevar{PaymentMethod}): \textbf{Electronic check}, \textbf{Mailed check}, \textbf{Bank transfer (automatic)} และ \textbf{Credit card (automatic)}
     \item เพื่อทดสอบนัยสำคัญทางสถิติด้วยการทดสอบ \textbf{Log-Rank Test} (ทั้งแบบ Multivariate และ Pairwise) เพื่อยืนยันความแตกต่างของเส้นโค้งการอยู่รอดอย่างมีนัยสำคัญ ($p < 0.001$)
     \item เพื่อนำผลลัพธ์เชิงปริมาณและค่าความน่าจะเป็น ณ ช่วงเวลาสำคัญ ($t = 12, 24, 36, 48, 60, 72$ เดือน) ไปแปลผลเชิงธุรกิจและเสนอแนะแนวทางลดอัตราการยกเลิกบริการ (Churn Mitigation Strategy)
 \end{enumerate}
@@ -176,11 +178,11 @@
 
 \section*{3. โครงสร้างชุดข้อมูลและการเตรียมตัวแปร\\ \large(Dataset Overview \& Preprocessing)}
 
-ชุดข้อมูล \texttt{Telco-Churn.csv} มีโครงสร้างขนาด $7,043$ แถว และ $21$ คอลัมน์ โดยประกอบด้วยตัวแปรที่นำมาใช้ในการวิเคราะห์ดังนี้:
+ชุดข้อมูล \codevar{Telco-Churn.csv} มีโครงสร้างขนาด $7,043$ แถว และ $21$ คอลัมน์ โดยประกอบด้วยตัวแปรที่นำมาใช้ในการวิเคราะห์ดังนี้:
 \begin{itemize}[leftmargin=18pt, itemsep=2pt]
-    \item \textbf{Duration Variable ($T$)}: คอลัมน์ \texttt{tenure} แทนระยะเวลา (เดือน) ที่ลูกค้าผูกพันกับผู้ให้บริการ ($0 \le T \le 72$)
-    \item \textbf{Event Indicator ($E$)}: คอลัมน์ \texttt{Churn} แปลงเป็น $E = 1$ เมื่อ Churn = `Yes' (เกิดเหตุการณ์) และ $E = 0$ เมื่อ Churn = `No' (ถูก Right-Censored)
-    \item \textbf{Segmentation Covariate}: คอลัมน์ \texttt{PaymentMethod} แบ่งเป็น 4 กลุ่ม ได้แก่ Electronic check, Mailed check, Bank transfer (automatic) และ Credit card (automatic)
+    \item \textbf{Duration Variable ($T$)}: คอลัมน์ \codevar{tenure} แทนระยะเวลา (เดือน) ที่ลูกค้าผูกพันกับผู้ให้บริการ ($0 \le T \le 72$)
+    \item \textbf{Event Indicator ($E$)}: คอลัมน์ \codevar{Churn} แปลงเป็น $E = 1$ เมื่อ Churn = `Yes' (เกิดเหตุการณ์) และ $E = 0$ เมื่อ Churn = `No' (ถูก Right-Censored)
+    \item \textbf{Segmentation Covariate}: คอลัมน์ \codevar{PaymentMethod} แบ่งเป็น 4 กลุ่ม ได้แก่ Electronic check, Mailed check, Bank transfer (automatic) และ Credit card (automatic)
 \end{itemize}
 
 \begin{table}[H]
