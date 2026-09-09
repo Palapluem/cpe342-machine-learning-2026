@@ -1,7 +1,7 @@
 % Compile: xelatex "CPE342_Assignment 5_main.tex" (รัน 2 รอบ)
 \documentclass[12pt,a4paper]{article}
 
-\usepackage{fontspec}
+\usepackage[no-math]{fontspec}
 \usepackage{polyglossia}
 \setdefaultlanguage{thai}
 \setotherlanguage{english}
@@ -17,6 +17,7 @@
 ]
 
 \usepackage{amsmath, amssymb, mathtools}
+\usepackage{bm}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{geometry}
@@ -104,9 +105,8 @@
     {\Large\textbf{Assignment 5: Deep Neural Networks (DNN)}}\\[4pt]
     {\large การจำแนกตัวเลขลายมือเขียน MNIST ด้วย Deep Neural Network, การปรับแต่งไฮเปอร์พารามิเตอร์ และการวินิจฉัยข้อผิดพลาดเชิงโครงสร้าง}\\[2pt]
     {\normalsize (Handwritten Digit Recognition via Multi-Layer Perceptrons, Hyperparameter Optimization, and Error Topology Analysis)}\\[6pt]
-    \textbf{คณะผู้จัดทำ:}\\[2pt]
-    \textcolor{accentblue}{\textbf{67070501027 นัธทวัฒน์ ปริมสิริคุณาวุฒิ (Natthawat Primsirikunawut)}}\\[2pt]
-    \textcolor{accentblue}{\textbf{67070501042 วิศิษฐ์ สุวรรณเนาว์ (Wisit Suwannao)}}
+    \textcolor{accentblue}{67070501027 นัธทวัฒน์ ปริมสิริคุณาวุฒิ}\\[2pt]
+    \textcolor{accentblue}{67070501042 วิศิษฐ์ สุวรรณเนาว์}
 \end{center}
 
 \vspace{0.5em}
@@ -143,7 +143,7 @@ z = \sum_{i=1}^d w_i x_i + b = \mathbf{w}^T \mathbf{x} + b
     \item \textbf{Rectified Linear Unit (ReLU)}: $g(z) = \max(0, z)$ เป็นฟังก์ชันมาตรฐานสำหรับ Hidden Layer ในงาน Deep Learning สมัยใหม่ เนื่องจากความชันเป็น 1 เสมอสำหรับ $z > 0$ ช่วยกำจัดปัญหา Vanishing Gradient ในฝั่งบวก และทำให้เกิด Sparse Activation ซึ่งส่งผลดีต่อประสิทธิภาพในการคำนวณ
     \item \textbf{Softmax Function}: ใช้ใน Output Layer สำหรับปัญหาการจำแนกหลายคลาส (Multiclass Classification, $K$ classes):
     \begin{equation}
-    \hat{y}_k = \text{Softmax}(z_k) = \frac{e^{z_k}}{\sum_{j=1}^K e^{z_j}} \quad \text{โดยที่} \quad \sum_{k=1}^K \hat{y}_k = 1, \; \hat{y}_k \in (0, 1)
+    \hat{y}_k = \operatorname{Softmax}(z_k) = \frac{e^{z_k}}{\sum_{j=1}^K e^{z_j}} \quad \text{โดยที่} \quad \sum_{k=1}^K \hat{y}_k = 1, \; \hat{y}_k \in (0, 1)
     \end{equation}
     ทำหน้าที่แปลงค่า Logits ของแต่ละคลาสให้กลายเป็นการแจกแจงความน่าจะเป็นที่สมบูรณ์
 \end{enumerate}
@@ -178,19 +178,19 @@ z = \sum_{i=1}^d w_i x_i + b = \mathbf{w}^T \mathbf{x} + b
 \end{itemize}
 
 \subsection*{1.5 พลวัตของอัลกอริทึมการหาค่าเหมาะที่สุด\\ \normalsize(Optimization Dynamics: SGD, Adagrad, RMSprop, Adam)}
-การอัปเดตพารามิเตอร์ $\boldsymbol{\theta} = \{\mathbf{W}, \mathbf{b}\}$ ขึ้นอยู่กับ Optimizer:
+การอัปเดตพารามิเตอร์ $\bm{\theta} = \{\mathbf{W}, \mathbf{b}\}$ ขึ้นอยู่กับ Optimizer:
 \begin{enumerate}[leftmargin=18pt, itemsep=3pt]
     \item \textbf{Stochastic Gradient Descent (SGD)}:
-    $\boldsymbol{\theta}_{t+1} = \boldsymbol{\theta}_t - \alpha \nabla_{\boldsymbol{\theta}} \mathcal{J}(\boldsymbol{\theta}_t)$
+    $\bm{\theta}_{t+1} = \bm{\theta}_t - \alpha \nabla_{\bm{\theta}} \mathcal{J}(\bm{\theta}_t)$
     เป็นการอัปเดตด้วยอัตราการเรียนรู้คงที่ $\alpha$ มักมีปัญหาการส่ายตัว (Oscillation) ในหุบผาที่มีความชันไม่เท่ากัน (Ravines) และลู่เข้าช้า
-    \item \textbf{Adagrad}: ปรับอัตราการเรียนรู้ตามผลรวมกำลังสองของเกรเดียนต์ในอดีต $G_t = G_{t-1} + g_t^2$, $\boldsymbol{\theta}_{t+1} = \boldsymbol{\theta}_t - \frac{\alpha}{\sqrt{G_t + \epsilon}} g_t$ ทำให้ค่าน้ำหนักที่ถูกอัปเดตบ่อยมีก้าวที่เล็กลง แต่มีข้อจำกัดคือ $G_t$ สะสมต่อเนื่องจนก้าวเล็กลงเรื่อย ๆ จนหยุดเรียนรู้ก่อนเวลา
+    \item \textbf{Adagrad}: ปรับอัตราการเรียนรู้ตามผลรวมกำลังสองของเกรเดียนต์ในอดีต $G_t = G_{t-1} + g_t^2$, $\bm{\theta}_{t+1} = \bm{\theta}_t - \frac{\alpha}{\sqrt{G_t + \epsilon}} g_t$ ทำให้ค่าน้ำหนักที่ถูกอัปเดตบ่อยมีก้าวที่เล็กลง แต่มีข้อจำกัดคือ $G_t$ สะสมต่อเนื่องจนก้าวเล็กลงเรื่อย ๆ จนหยุดเรียนรู้ก่อนเวลา
     \item \textbf{RMSprop}: แก้ไขปัญหาของ Adagrad โดยใช้น้ำหนักถ่วงแบบลดหลั่นทวีคูณ (Exponential Moving Average):
-    $s_t = \beta s_{t-1} + (1-\beta) g_t^2$, $\boldsymbol{\theta}_{t+1} = \boldsymbol{\theta}_t - \frac{\alpha}{\sqrt{s_t + \epsilon}} g_t$
+    $s_t = \beta s_{t-1} + (1-\beta) g_t^2$, $\bm{\theta}_{t+1} = \bm{\theta}_t - \frac{\alpha}{\sqrt{s_t + \epsilon}} g_t$
     \item \textbf{Adam (Adaptive Moment Estimation)}: ผสมผสาน Momentum (First Moment, $m_t$) เข้ากับ RMSprop (Second Moment, $v_t$) พร้อมการแก้ไขความเอนเอียง (Bias Correction):
     \begin{align}
     m_t &= \beta_1 m_{t-1} + (1-\beta_1) g_t, \qquad \hat{m}_t = \frac{m_t}{1 - \beta_1^t} \\
     v_t &= \beta_2 v_{t-1} + (1-\beta_2) g_t^2, \qquad \hat{v}_t = \frac{v_t}{1 - \beta_2^t} \\
-    \boldsymbol{\theta}_{t+1} &= \boldsymbol{\theta}_t - \frac{\alpha}{\sqrt{\hat{v}_t} + \epsilon} \hat{m}_t
+    \bm{\theta}_{t+1} &= \bm{\theta}_t - \frac{\alpha}{\sqrt{\hat{v}_t} + \epsilon} \hat{m}_t
     \end{align}
     ทำให้ Adam เป็น Optimizer ที่ได้รับความนิยมสูงสุดเนื่องจากการลู่เข้าที่รวดเร็วและทนทานต่อพื้นผิว Loss ที่ซับซ้อน
 \end{enumerate}
@@ -198,7 +198,7 @@ z = \sum_{i=1}^d w_i x_i + b = \mathbf{w}^T \mathbf{x} + b
 \subsection*{1.6 เทคนิคการควบคุมการรู้จำเกิน\\ \normalsize(Regularization via Dropout)}
 \textbf{Dropout} (Srivastava et al., 2014) เป็นเทคนิค Regularization ที่ทรงประสิทธิภาพ โดยในระหว่างการฝึกสอน จะสุ่มปิดการทำงานของโหนดประสาทด้วยความน่าจะเป็น $p$ (เช่น $p=0.2$):
 \begin{equation}
-\mathbf{r} \sim \text{Bernoulli}(1-p), \qquad \mathbf{\tilde{a}}^{[l]} = \mathbf{r} \odot \mathbf{a}^{[l]}
+\mathbf{r} \sim \operatorname{Bernoulli}(1-p), \qquad \tilde{\mathbf{a}}^{[l]} = \mathbf{r} \odot \mathbf{a}^{[l]}
 \end{equation}
 กลไกนี้บังคับไม่ให้โหนดประสาทพึ่งพาซึ่งกันและกัน (Co-adaptation) เปรียบเสมือนการสุ่มสร้างสถาปัตยกรรมย่อยจำนวนมหาศาลและรวมผลการทำนายแบบ Ensemble ช่วยลด Variance และป้องกันภาวะ Overfitting อย่างมีนัยสำคัญ
 
@@ -221,13 +221,13 @@ z = \sum_{i=1}^d w_i x_i + b = \mathbf{w}^T \mathbf{x} + b
     \item \textbf{การปรับสเกลข้อมูลแบบ Min-Max (Pixel Normalization)}:
     แปลงชนิดข้อมูลจาก \texttt{uint8} เป็น \texttt{float32} พร้อมหารด้วย $255.0$ ทำให้ค่าความสว่างอยู่ในช่วง $[0.0, 1.0]$:
     \begin{equation}
-    x_{norm} = \frac{x}{255.0} \in [0.0, 1.0]
+    x_{\text{norm}} = \frac{x}{255.0} \in [0.0, 1.0]
     \end{equation}
     การทำให้ข้อมูลมีสเกลที่สม่ำเสมอช่วยป้องกันปัญหาเกรเดียนต์เบี่ยงเบนและช่วยให้ฟังก์ชัน Loss ลู่เข้าสู่จุดต่ำสุดได้อย่างราบรื่น
     \item \textbf{การแปลงรหัสคลาสแบบ One-Hot Encoding}:
     แปลงเวกเตอร์ป้ายกำกับจำนวนเต็ม $y \in \{0, 1, \dots, 9\}$ เป็นเวกเตอร์ฐานสองขนาด 10 มิติ $\mathbf{y} \in \{0, 1\}^{10}$ เช่น ตัวเลข $3 \rightarrow [0, 0, 0, 1, 0, 0, 0, 0, 0, 0]$ ผ่านฟังก์ชัน \texttt{keras.utils.to\_categorical}
     \item \textbf{การแบ่งชุดข้อมูลฝึกสอนและตรวจสอบ (Train/Validation Split)}:
-    แบ่งชุดข้อมูลฝึกสอน $60,000$ ตัวอย่าง ออกเป็น Training Set สัดส่วน $90\%$ ($N_{train} = 54,000$) สำหรับการปรับค่าน้ำหนัก และ Validation Set สัดส่วน $10\%$ ($N_{val} = 6,000$) สำหรับการติดตามประเมินผลการเรียนรู้และภาวะ Overfitting ในแต่ละรอบการฝึกสอน
+    แบ่งชุดข้อมูลฝึกสอน $60,000$ ตัวอย่าง ออกเป็น Training Set สัดส่วน $90\%$ ($N_{\text{train}} = 54,000$) สำหรับการปรับค่าน้ำหนัก และ Validation Set สัดส่วน $10\%$ ($N_{\text{val}} = 6,000$) สำหรับการติดตามประเมินผลการเรียนรู้และภาวะ Overfitting ในแต่ละรอบการฝึกสอน
 \end{enumerate}
 
 \clearpage
