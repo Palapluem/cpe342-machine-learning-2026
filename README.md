@@ -42,7 +42,8 @@ cpe342-machine-learning-2026/
 │   │
 │   └── Assignment 5_Neural Network/
 │       ├── Assignment_5_Deep_Neural_Network.ipynb # Fully executed reference notebook
-│       └── CPE342_Assignment 5_main.pdf      # Publication-grade academic report (41 pages)
+│       ├── 1027_1042.ipynb               # Official course submission notebook
+│       └── CPE342_Assignment 5_main.pdf      # Publication-grade academic report
 ├── lecture/                                   # Lecture slides and demo notebooks
 │   ├── Lecture 1–12 PDFs                      # Course slide decks
 │   ├── ML_2_Training_Models.ipynb             # Demo: Gradient Descent & Linear Regression
@@ -143,7 +144,7 @@ cpe342-machine-learning-2026/
     * Architectural Depth & Dropout Ablation (Shallow vs. Deeper 512-256-128 vs. Deeper + Dropout 0.2, achieving **98.35% Test Accuracy** and **0.0662 Test Loss**).
   * Comparative methodological discussion with tabular MLP on Bank Marketing data (`lecture/ML_6_bank-data.csv`).
 * **Deliverables:**
-  * [`Assignment_5_Deep_Neural_Network.ipynb`](./assignment/Assignment%205_Neural%20Network/Assignment_5_Deep_Neural_Network.ipynb)
+  * [`Assignment_5_Deep_Neural_Network.ipynb`](./assignment/Assignment%205_Neural%20Network/Assignment_5_Deep_Neural_Network.ipynb) (Course Submission File: [`1027_1042.ipynb`](./assignment/Assignment%205_Neural%20Network/1027_1042.ipynb))
   * [`CPE342_Assignment 5_main.pdf`](./assignment/Assignment%205_Neural%20Network/CPE342_Assignment%205_main.pdf)
 
 ---
