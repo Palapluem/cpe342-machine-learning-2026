@@ -11,11 +11,8 @@
     ItalicFont     = Sarabun-Italic,
     BoldItalicFont = Sarabun-BoldItalic,
 ]
-% แก้ปัญหา polyglossia: monospace font ต้องรองรับ Thai script
-\newfontfamily\thaifonttt{Sarabun}[
-    BoldFont       = Sarabun-Bold,
-    ItalicFont     = Sarabun-Italic,
-]
+\setmonofont{Consolas}[Scale=0.92]
+\newfontfamily\thaifonttt{Consolas}[Scale=0.92]
 
 \usepackage{amsmath, amssymb, mathtools}
 \usepackage{graphicx}
@@ -63,6 +60,8 @@
     tabsize=4,
     xleftmargin=16pt,
     xrightmargin=4pt,
+    columns=flexible,
+    keepspaces=true,
     literate={≈}{{$\approx$}}1 {α}{{$\alpha$}}1 {β}{{$\beta$}}1
 }
 
@@ -75,6 +74,9 @@
     xleftmargin=8pt,
     xrightmargin=4pt,
     breaklines=true,
+    breakatwhitespace=false,
+    columns=flexible,
+    keepspaces=true,
     literate={≈}{{$\approx$}}1 {α}{{$\alpha$}}1 {β}{{$\beta$}}1
 }
 

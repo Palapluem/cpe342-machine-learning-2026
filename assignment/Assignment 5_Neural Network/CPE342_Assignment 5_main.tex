@@ -11,10 +11,8 @@
     ItalicFont     = Sarabun-Italic,
     BoldItalicFont = Sarabun-BoldItalic,
 ]
-\newfontfamily\thaifonttt{Sarabun}[
-    BoldFont       = Sarabun-Bold,
-    ItalicFont     = Sarabun-Italic,
-]
+\setmonofont{Consolas}[Scale=0.92]
+\newfontfamily\thaifonttt{Consolas}[Scale=0.92]
 
 \usepackage{amsmath, amssymb, mathtools}
 \usepackage{bm}
@@ -64,8 +62,7 @@
     tabsize=4,
     xleftmargin=16pt,
     xrightmargin=4pt,
-    columns=fixed,
-    basewidth=0.5em,
+    columns=flexible,
     keepspaces=true,
     literate={≈}{{$\approx$}}1 {α}{{$\alpha$}}1 {β}{{$\beta$}}1 {λ}{{$\lambda$}}1 {Λ}{{$\Lambda$}}1 {χ}{{$\chi$}}1 {η}{{$\eta$}}1 {ρ}{{$\rho$}}1 {σ}{{$\sigma$}}1
 }
@@ -80,8 +77,7 @@
     xrightmargin=4pt,
     breaklines=true,
     breakatwhitespace=false,
-    columns=fixed,
-    basewidth=0.5em,
+    columns=flexible,
     keepspaces=true,
     literate={≈}{{$\approx$}}1 {α}{{$\alpha$}}1 {β}{{$\beta$}}1 {λ}{{$\lambda$}}1 {Λ}{{$\Lambda$}}1 {χ}{{$\chi$}}1 {η}{{$\eta$}}1 {ρ}{{$\rho$}}1 {σ}{{$\sigma$}}1
 }
