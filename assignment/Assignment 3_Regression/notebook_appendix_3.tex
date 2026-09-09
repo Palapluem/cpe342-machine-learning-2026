@@ -5,6 +5,7 @@
 
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [1]}:
 \begin{lstlisting}[style=pycode]
 import os
@@ -41,6 +42,7 @@ print(f"Right-Censored Retained Customers (E=0): {(1-E).sum():,} ({(1-E).mean()*
 df[['customerID', 'tenure', 'PaymentMethod', 'Contract', 'MonthlyCharges', 'TotalCharges', 'Churn']].head()
 \end{lstlisting}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[1]}:
 \begin{lstlisting}[style=output]
 Telco Churn Dataset Loaded Successfully. Total Observations N = 7,043
@@ -55,7 +57,7 @@ Right-Censored Retained Customers (E=0): 5,174 (73.46%)
 
 [5 rows x 7 columns]
 \end{lstlisting}
-\needspace{4\baselineskip}
+\needspace{10\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 \textbf{\large 2. Overall Kaplan-Meier Survival Curve}\par\smallskip
@@ -63,6 +65,7 @@ We fit the Kaplan-Meier survival estimator on the full cohort ($N=7,043$) to est
 \end{tcolorbox}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [2]}:
 \begin{lstlisting}[style=pycode]
 # --- Overall Survival Estimation ---
@@ -91,15 +94,17 @@ plt.tight_layout()
 plt.savefig('plot_1_overall_km.pdf', bbox_inches='tight')
 plt.show()
 \end{lstlisting}
-\begin{center}
-\includegraphics[width=0.82\textwidth]{plot_1_overall_km.pdf}
-\end{center}
-\needspace{4\baselineskip}
-\vspace{0.8em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{plot_1_overall_km.pdf}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 1 (Overall Survival Curve)}: Kaplan-Meier non-parametric survival function $\hat{S}(t)$ for the full customer cohort ($N = 7,043$) with 95\% Greenwood confidence interval. Milestone annotations illustrate that 83.9\% of customers survive past 1 year ($t=12$), 78.4\% survive past 2 years ($t=24$), and 58.7\% remain active at 6 years ($t=72$). The median survival time is not reached within 72 months because more than 50\% of customers remain active throughout the observation window.\par
 \end{tcolorbox}
-\needspace{4\baselineskip}
+\vspace{1.0em}
+\end{minipage}
+\needspace{10\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 \textbf{\large 3. Comparative Survival Analysis by Payment Method}\par\smallskip
@@ -107,6 +112,7 @@ We segment customers into 4 distinct groups based on \texttt{PaymentMethod} to c
 \end{tcolorbox}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [3]}:
 \begin{lstlisting}[style=pycode]
 methods = ['Electronic check', 'Mailed check', 'Bank transfer (automatic)', 'Credit card (automatic)']
@@ -139,15 +145,17 @@ plt.tight_layout()
 plt.savefig('plot_2_km_by_payment.pdf', bbox_inches='tight')
 plt.show()
 \end{lstlisting}
-\begin{center}
-\includegraphics[width=0.82\textwidth]{plot_2_km_by_payment.pdf}
-\end{center}
-\needspace{4\baselineskip}
-\vspace{0.8em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{plot_2_km_by_payment.pdf}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 2 (Comparative Survival Curves)}: Kaplan-Meier survival curves comparing the four payment methods. Customers utilizing \textbf{Electronic check} exhibit a steep, continuous drop in survival probability, crossing the 50\% median threshold at $t = 47.0$ months. Conversely, automated payment channels (\textbf{Bank transfer} and \textbf{Credit card}) display nearly identical, superior retention curves maintaining $> 90\%$ survival past 2 years and $> 74\%$ at 6 years. \textbf{Mailed check} shows moderate early drop-off followed by long-term stabilization.\par
 \end{tcolorbox}
-\needspace{4\baselineskip}
+\vspace{1.0em}
+\end{minipage}
+\needspace{10\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 \textbf{\large 4. Individual Facet Plots with Confidence Bands}\par\smallskip
@@ -155,6 +163,7 @@ Plotting each payment method separately in a $2 \times 2$ grid to clearly inspec
 \end{tcolorbox}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [4]}:
 \begin{lstlisting}[style=pycode]
 fig, axes = plt.subplots(2, 2, figsize=(11, 8), sharex=True, sharey=True)
@@ -186,20 +195,25 @@ plt.savefig('plot_3_km_grid_by_payment.pdf', bbox_inches='tight')
 plt.close()
 print("Plot 3 saved to plot_3_km_grid_by_payment.pdf")
 \end{lstlisting}
-\begin{center}
-\includegraphics[width=0.82\textwidth]{plot_3_km_grid_by_payment.pdf}
-\end{center}
+\needspace{5\baselineskip}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[4]}:
 \begin{lstlisting}[style=output]
 Plot 3 saved to plot_3_km_grid_by_payment.pdf
 \end{lstlisting}
-\needspace{4\baselineskip}
-\vspace{0.8em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
+\vspace{0.4em}
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{plot_3_km_grid_by_payment.pdf}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 3 (Individual Survival Facets with 95\% CI)}: $2 \times 2$ facet grid of Kaplan-Meier survival curves with 95\% confidence bands for each payment method. The tight confidence intervals across all four subplots confirm high statistical precision resulting from large subgroup sample sizes ($n \ge 1,522$ per group).\par
 \end{tcolorbox}
-\needspace{4\baselineskip}
+\vspace{1.0em}
+\end{minipage}
+\needspace{10\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 \textbf{\large 5. Cumulative Hazard Function Analysis}\par\smallskip
@@ -207,6 +221,7 @@ The cumulative hazard function $\Lambda(t) = \int_0^t \lambda(u)\,du = -\ln S(t)
 \end{tcolorbox}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [5]}:
 \begin{lstlisting}[style=pycode]
 fig, ax = plt.subplots(figsize=(9, 5.5))
@@ -229,15 +244,17 @@ plt.tight_layout()
 plt.savefig('plot_4_cumulative_hazard.pdf', bbox_inches='tight')
 plt.show()
 \end{lstlisting}
-\begin{center}
-\includegraphics[width=0.82\textwidth]{plot_4_cumulative_hazard.pdf}
-\end{center}
-\needspace{4\baselineskip}
-\vspace{0.8em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{plot_4_cumulative_hazard.pdf}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 4 (Cumulative Hazard Curves)}: Cumulative hazard function $\Lambda(t) = -\ln S(t)$ across payment methods. Electronic check exhibits a steeply ascending, quasi-linear hazard rate surpassing $\Lambda(72) > 1.2$, indicating severe ongoing churn risk. In contrast, automated methods exhibit flat, gradual hazard accumulation ($\Lambda(72) \approx 0.28$ to $0.30$).\par
 \end{tcolorbox}
-\needspace{4\baselineskip}
+\vspace{1.0em}
+\end{minipage}
+\needspace{14\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 \textbf{\large 6. Distribution Analysis of Churn Rate \& Tenure}\par\smallskip
@@ -245,6 +262,7 @@ Examining the overall churn percentage and the distribution of customer tenure a
 \end{tcolorbox}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [6]}:
 \begin{lstlisting}[style=pycode]
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
@@ -277,15 +295,17 @@ plt.tight_layout()
 plt.savefig('plot_5_churn_distribution.pdf', bbox_inches='tight')
 plt.show()
 \end{lstlisting}
-\begin{center}
-\includegraphics[width=0.82\textwidth]{plot_5_churn_distribution.pdf}
-\end{center}
-\needspace{4\baselineskip}
-\vspace{0.8em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{plot_5_churn_distribution.pdf}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 5 (Churn Rate \& Tenure Distribution)}: Left: Churn rates across payment methods highlighting Electronic check ($45.3\%$) vs. Mailed check ($19.1\%$), Bank transfer ($16.7\%$), and Credit card ($15.2\%$). Right: Boxplots of tenure demonstrating substantially higher customer loyalty and tenure in automated payment channels (median tenure $\approx 43$ months) compared to manual payment methods.\par
 \end{tcolorbox}
-\needspace{4\baselineskip}
+\vspace{1.0em}
+\end{minipage}
+\needspace{10\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 \textbf{\large 7. Statistical Hypothesis Testing \& Quantitative Summary}\par\smallskip
@@ -293,6 +313,7 @@ We perform the \textbf{Multivariate Log-Rank Test} to test $H_0: S_1(t) = S_2(t)
 \end{tcolorbox}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [7]}:
 \begin{lstlisting}[style=pycode]
 # --- Log-Rank Hypothesis Testing ---
@@ -350,6 +371,7 @@ print("="*60)
 sum_df
 \end{lstlisting}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[7]}:
 \begin{lstlisting}[style=output]
 ============================================================
@@ -381,7 +403,7 @@ COMPREHENSIVE SURVIVAL SUMMARY TABLE
 
 [4 rows x 13 columns]
 \end{lstlisting}
-\needspace{4\baselineskip}
+\needspace{10\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 \textbf{\large 8. Summary of Results \& Domain Discussion}\par\smallskip

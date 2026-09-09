@@ -11,6 +11,7 @@ Loading required scientific libraries and configuring the system's Sarabun font 
 \end{tcolorbox}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [1]:}
 \begin{lstlisting}[style=pycode]
 import numpy as np
@@ -36,6 +37,7 @@ plt.rcParams['axes.unicode_minus'] = False # Prevent minus sign rendering issues
 print("Library and font setup complete")
 \end{lstlisting}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[1]:}
 \begin{lstlisting}[style=output]
 Library and font setup complete
@@ -48,6 +50,7 @@ Read the data from `CPE342\_Assignment 2\_Data.csv` and display the first few ro
 \end{tcolorbox}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [2]:}
 \begin{lstlisting}[style=pycode]
 # Read data
@@ -59,6 +62,7 @@ Y = df['Y'].values
 df.head()
 \end{lstlisting}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[2]:}
 \begin{lstlisting}[style=output]
 X         Y
@@ -75,6 +79,7 @@ Now, let's plot scatter plots to observe the relationship and trends between $X$
 \end{tcolorbox}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [3]:}
 \begin{lstlisting}[style=pycode]
 # Plot graphs to observe trends
@@ -100,14 +105,16 @@ plt.tight_layout()
 plt.savefig('plot_1_eda.pdf', bbox_inches='tight')
 plt.show()
 \end{lstlisting}
-\begin{center}
-\includegraphics[width=0.75\textwidth]{nb2_out_plot_1.png}
-\end{center}
-\needspace{4\baselineskip}
-\vspace{0.8em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{nb2_out_plot_1.png}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 1 (Exploratory Data Analysis)}: Scatter plots of $X$ vs. $Y$ and $X^2$ vs. $Y$ illustrating the non-linear decaying relationship in the dataset, confirming the necessity of fitting an exponential model rather than a simple linear model.
 \end{tcolorbox}
+\vspace{1.0em}
+\end{minipage}
 \needspace{4\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
@@ -204,6 +211,7 @@ We will now implement the Gradient Descent algorithm in Python using NumPy based
 \end{tcolorbox}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [4]:}
 \begin{lstlisting}[style=pycode]
 # Initialize hyperparameters
@@ -257,6 +265,7 @@ print(f"Final Parameters: C0 = {C0:.4f}, C1 = {C1:.4f}, C2 = {C2:.4f}")
 print(f"Final MSE Loss: {history_loss[-1]:.4f}")
 \end{lstlisting}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[4]:}
 \begin{lstlisting}[style=output]
 Converged at iteration 269
@@ -272,6 +281,7 @@ In this section, we analyze the training behavior and diagnostic performance of 
 \end{tcolorbox}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [5]:}
 \begin{lstlisting}[style=pycode]
 # Plot 1: Learning Curve
@@ -285,16 +295,19 @@ plt.yscale('log')
 plt.savefig('plot_2_loss_curve.pdf', bbox_inches='tight')
 plt.show()
 \end{lstlisting}
-\begin{center}
-\includegraphics[width=0.75\textwidth]{nb2_out_plot_2.png}
-\end{center}
-\needspace{4\baselineskip}
-\vspace{0.8em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{nb2_out_plot_2.png}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 2 (Learning Curve)}: Plot of MSE Loss over iterations (logarithmic scale) demonstrating rapid, monotonic convergence of the Gradient Descent algorithm from $0.0465 \rightarrow 0.0005$ (a $98.98\%$ reduction).
 \end{tcolorbox}
+\vspace{1.0em}
+\end{minipage}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [6]:}
 \begin{lstlisting}[style=pycode]
 # Plot 2: Convergence of parameters
@@ -310,16 +323,19 @@ plt.grid(True, linestyle='--', alpha=0.6)
 plt.savefig('plot_3_coeff_trajectory.pdf', bbox_inches='tight')
 plt.show()
 \end{lstlisting}
-\begin{center}
-\includegraphics[width=0.75\textwidth]{nb2_out_plot_3.png}
-\end{center}
-\needspace{4\baselineskip}
-\vspace{0.8em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{nb2_out_plot_3.png}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 3 (Parameter Evolution)}: Trajectories of coefficients $C_0, C_1, C_2$ across iterations, showing smooth and stable convergence from initial guesses $(0.5, 0.5, 0.1)$ toward optimal parameters $(0.9927, 0.9587, -1.3296)$.
 \end{tcolorbox}
+\vspace{1.0em}
+\end{minipage}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [7]:}
 \begin{lstlisting}[style=pycode]
 # Plot 3: Fitted Curve vs Actual Data
@@ -336,16 +352,19 @@ plt.grid(True, linestyle='--', alpha=0.6)
 plt.savefig('plot_4_fitted_curve.pdf', bbox_inches='tight')
 plt.show()
 \end{lstlisting}
-\begin{center}
-\includegraphics[width=0.75\textwidth]{nb2_out_plot_4.png}
-\end{center}
-\needspace{4\baselineskip}
-\vspace{0.8em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{nb2_out_plot_4.png}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 4 (Fitted Exponential Model)}: Actual data points plotted against the fitted exponential curve $\hat{y} = 0.9927 + 0.9587 e^{-1.3296 x}$, showing an accurate fit that captures the non-linear decay of the dataset.
 \end{tcolorbox}
+\vspace{1.0em}
+\end{minipage}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [8]:}
 \begin{lstlisting}[style=pycode]
 # Plot 4: Residuals
@@ -361,16 +380,19 @@ plt.grid(True, linestyle='--', alpha=0.6)
 plt.savefig('plot_5_residuals.pdf', bbox_inches='tight')
 plt.show()
 \end{lstlisting}
-\begin{center}
-\includegraphics[width=0.75\textwidth]{nb2_out_plot_5.png}
-\end{center}
-\needspace{4\baselineskip}
-\vspace{0.8em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{nb2_out_plot_5.png}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 5 (Residual Plot)}: Distribution of residuals ($y_i - \hat{y}_i$) scattered randomly around zero with constant variance, validating the assumption of homoscedasticity and confirming the absence of systematic bias.
 \end{tcolorbox}
+\vspace{1.0em}
+\end{minipage}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [9]:}
 \begin{lstlisting}[style=pycode]
 # Multi-panel combined summary dashboard
@@ -414,14 +436,16 @@ ax4.grid(True, linestyle='--', alpha=0.6)
 plt.tight_layout()
 plt.show()
 \end{lstlisting}
-\begin{center}
-\includegraphics[width=0.75\textwidth]{nb2_out_plot_6.png}
-\end{center}
-\needspace{4\baselineskip}
-\vspace{0.8em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{nb2_out_plot_6.png}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 6 (Comprehensive Training Diagnostics)}: Multi-panel summary dashboard comparing the learning curve, parameter evolution, non-linear regression curve, and residual distribution in a unified view.
 \end{tcolorbox}
+\vspace{1.0em}
+\end{minipage}
 \needspace{4\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
@@ -442,6 +466,7 @@ A higher $R^2$ score ($0.9818$ or $98.18\%$) indicates that the exponential mode
 \end{tcolorbox}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [10]:}
 \begin{lstlisting}[style=pycode]
 # Print summary statistics
@@ -463,6 +488,7 @@ print(f"Total Sum of Squares (SS_tot): {ss_tot:.6f}")
 print(f"R-squared (R^2): {r_squared:.6f}")
 \end{lstlisting}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[10]:}
 \begin{lstlisting}[style=output]
 === MODEL EVALUATION SUMMARY ===

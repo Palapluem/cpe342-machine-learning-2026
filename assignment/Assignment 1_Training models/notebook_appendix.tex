@@ -8,6 +8,7 @@
 \textbf{\large 0. Imports and Setup}\par\smallskip
 \end{tcolorbox}
 \vspace{1em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [1]:}
 \begin{lstlisting}[style=pycode]
 %matplotlib inline
@@ -38,6 +39,7 @@ plt.style.use('seaborn-v0_8-whitegrid')
 print("Plotting libraries and fonts loaded.")
 \end{lstlisting}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[1]:}
 \begin{lstlisting}[style=output]
 Plotting libraries and fonts loaded.
@@ -47,6 +49,7 @@ Plotting libraries and fonts loaded.
 \textbf{\large 1. Data}\par\smallskip
 \end{tcolorbox}
 \vspace{1em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [2]:}
 \begin{lstlisting}[style=pycode]
 # Advertising budget (X, in $1,000s) and Sales (Y, in 1,000 units)
@@ -60,6 +63,7 @@ print(f"X = {X}")
 print(f"Y = {Y}")
 \end{lstlisting}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[2]:}
 \begin{lstlisting}[style=output]
 n = 10
@@ -74,6 +78,7 @@ Minimise $S(\alpha, \beta) = \sum_i (Y_i - \alpha - \beta X_i)^2$ gives the Norm
 $$\begin{bmatrix} n & \sum X_i \\ \sum X_i & \sum X_i^2 \end{bmatrix} \begin{bmatrix} \alpha \\ \beta \end{bmatrix} = \begin{bmatrix} \sum Y_i \\ \sum X_i Y_i \end{bmatrix}$$
 \end{tcolorbox}
 \vspace{1em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [3]:}
 \begin{lstlisting}[style=pycode]
 sum_X   = X.sum()
@@ -92,6 +97,7 @@ print(f"  [{n:2d}  {sum_X:5.1f}] [alpha]   [{sum_Y:5.1f}]")
 print(f"  [{sum_X:2.0f} {sum_X2:5.1f}] [beta ] = [{sum_XY:5.1f}]")
 \end{lstlisting}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[3]:}
 \begin{lstlisting}[style=output]
 Summation table:
@@ -111,6 +117,7 @@ Normal Equation (matrix form):
 $$\beta = \frac{S_{xy}}{S_{xx}}, \qquad \alpha = \bar{Y} - \beta \bar{X}$$
 \end{tcolorbox}
 \vspace{1em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [4]:}
 \begin{lstlisting}[style=pycode]
 X_bar = X.mean()   # 5.5
@@ -131,6 +138,7 @@ assert np.isclose(beta, 19/15)
 assert np.isclose(alpha, 26/15)
 \end{lstlisting}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[4]:}
 \begin{lstlisting}[style=output]
 X_bar = 5.5,  Y_bar = 8.7
@@ -144,6 +152,7 @@ Fitted line: Y_hat = 1.7333 + 1.2667 * X
 \textbf{Verification — Method 1: Cramer's Rule}
 \end{tcolorbox}
 \vspace{1em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [5]:}
 \begin{lstlisting}[style=pycode]
 A = np.array([[n, sum_X], [sum_X, sum_X2]], dtype=float)
@@ -160,6 +169,7 @@ assert np.isclose(alpha_cr, alpha) and np.isclose(beta_cr, beta)
 print("[OK] Matches Sxx/Sxy result")
 \end{lstlisting}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[5]:}
 \begin{lstlisting}[style=output]
 Cramer's Rule → alpha = 1.733333,  beta = 1.266667
@@ -170,6 +180,7 @@ Cramer's Rule → alpha = 1.733333,  beta = 1.266667
 \textbf{Verification — Method 2: Pseudoinverse $(A^T A)^{-1} A^T Y$}
 \end{tcolorbox}
 \vspace{1em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [6]:}
 \begin{lstlisting}[style=pycode]
 A_mat = np.column_stack([np.ones(n), X])   # design matrix [1 | X]
@@ -180,6 +191,7 @@ assert np.isclose(alpha_ps, alpha) and np.isclose(beta_ps, beta)
 print("[OK] Matches all previous results")
 \end{lstlisting}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[6]:}
 \begin{lstlisting}[style=output]
 Pseudoinverse   → alpha = 1.733333,  beta = 1.266667
@@ -190,6 +202,7 @@ Pseudoinverse   → alpha = 1.733333,  beta = 1.266667
 \textbf{2c. Fitted Line}\par\smallskip
 \end{tcolorbox}
 \vspace{1em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [7]:}
 \begin{lstlisting}[style=pycode]
 Y_hat     = alpha + beta * X
@@ -203,6 +216,7 @@ for i in range(n):
     print(f"  {i+1:2d}   {X[i]:4.1f}  {Y[i]:4.1f}   {Y_hat[i]:7.4f}   {residuals[i]:+7.4f}")
 \end{lstlisting}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[7]:}
 \begin{lstlisting}[style=output]
 Fitted line: Y_hat = 1.7333 + 1.2667 * X
@@ -221,6 +235,7 @@ Month     X     Y    Y_hat      e_i
   10   10.0  15.0   14.4000   +0.6000
 \end{lstlisting}
 \vspace{1em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [8]:}
 \begin{lstlisting}[style=pycode]
 # --- Plot 1: Scatter + Regression Line ---
@@ -244,13 +259,16 @@ plt.tight_layout()
 fig1.savefig('plot_1_regression.pdf', dpi=300)
 plt.show()
 \end{lstlisting}
-\begin{center}
-\includegraphics[width=0.6\textwidth]{nb_out_plot_1.png}
-\end{center}
-\vspace{1em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=2pt,right=2pt,top=2pt,bottom=2pt]
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{nb_out_plot_1.png}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 1 (Regression Line)}: Scatter plot displaying the relationship between Advertising Budget and Sales, with the fitted OLS regression line.
 \end{tcolorbox}
+\vspace{1.0em}
+\end{minipage}
 \vspace{1em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=2pt,right=2pt,top=2pt,bottom=2pt]
 \textbf{\large 3. Task 2: Interpretation}\par\smallskip
@@ -262,6 +280,7 @@ plt.show()
 \textbf{3b. Prediction at X = 12 (\$12,000 budget)}\par\smallskip
 \end{tcolorbox}
 \vspace{1em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [9]:}
 \begin{lstlisting}[style=pycode]
 X_pred = 12.0
@@ -276,6 +295,7 @@ print("This prediction is extrapolation — treat with caution.")
 assert np.isclose(Y_pred, 16.9333333333)
 \end{lstlisting}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[9]:}
 \begin{lstlisting}[style=output]
 X = 12.0 (i.e., $12,000 advertising budget)
@@ -286,6 +306,7 @@ NOTE: X = 12 is beyond the observed maximum (X_max = 10).
 This prediction is extrapolation — treat with caution.
 \end{lstlisting}
 \vspace{1em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [10]:}
 \begin{lstlisting}[style=pycode]
 # --- Plot 7: Actual vs Predicted ---
@@ -315,13 +336,16 @@ plt.tight_layout()
 fig7.savefig('plot_7_actual_vs_pred.pdf', dpi=300)
 plt.show()
 \end{lstlisting}
-\begin{center}
-\includegraphics[width=0.6\textwidth]{nb_out_plot_2.png}
-\end{center}
-\vspace{1em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=2pt,right=2pt,top=2pt,bottom=2pt]
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{nb_out_plot_2.png}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 7 (Actual vs Predicted)}: Actual vs. Predicted values plot to visualize the overall fit of the model. Points close to the diagonal dashed line indicate accurate predictions.
 \end{tcolorbox}
+\vspace{1.0em}
+\end{minipage}
 \vspace{1em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=2pt,right=2pt,top=2pt,bottom=2pt]
 \textbf{\large 4. Task 3: Model Evaluation}\par\smallskip
@@ -329,6 +353,7 @@ plt.show()
 $$R^2 = 1 - \frac{SS_{\text{res}}}{SS_{\text{tot}}}, \quad SS_{\text{res}} = \sum e_i^2, \quad SS_{\text{tot}} = \sum (Y_i - \bar{Y})^2$$
 \end{tcolorbox}
 \vspace{1em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [11]:}
 \begin{lstlisting}[style=pycode]
 SS_res = np.sum(residuals ** 2)
@@ -348,6 +373,7 @@ assert np.isclose(R2, 0.9725691893)
 print("\n[OK] All assertions passed")
 \end{lstlisting}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[11]:}
 \begin{lstlisting}[style=output]
 SS_res = 3.733333
@@ -371,6 +397,7 @@ Residual std  = 0.644061
 \end{itemize}
 \end{tcolorbox}
 \vspace{1em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [12]:}
 \begin{lstlisting}[style=pycode]
 # --- Plot 2: Residuals Lollipop Chart ---
@@ -394,14 +421,18 @@ plt.tight_layout()
 fig2.savefig('plot_2_residuals_lollipop.pdf', dpi=300)
 plt.show()
 \end{lstlisting}
-\begin{center}
-\includegraphics[width=0.6\textwidth]{nb_out_plot_3.png}
-\end{center}
-\vspace{1em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=2pt,right=2pt,top=2pt,bottom=2pt]
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{nb_out_plot_3.png}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 2 (Residuals Lollipop Plot)}: Lollipop plot illustrating the residuals for each observation, showing the vertical distance between actual and predicted sales.
 \end{tcolorbox}
+\vspace{1.0em}
+\end{minipage}
 \vspace{1em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [13]:}
 \begin{lstlisting}[style=pycode]
 # --- Plot 3: Residuals vs Fitted ---
@@ -418,14 +449,18 @@ plt.tight_layout()
 fig3.savefig('plot_3_res_vs_fitted.pdf', dpi=300)
 plt.show()
 \end{lstlisting}
-\begin{center}
-\includegraphics[width=0.6\textwidth]{nb_out_plot_4.png}
-\end{center}
-\vspace{1em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=2pt,right=2pt,top=2pt,bottom=2pt]
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{nb_out_plot_4.png}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 3 (Residuals vs Fitted)}: Residuals vs. Fitted plot to check for non-linear patterns and homoscedasticity. Points scattered randomly around the 0 line indicate a good fit.
 \end{tcolorbox}
+\vspace{1.0em}
+\end{minipage}
 \vspace{1em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [14]:}
 \begin{lstlisting}[style=pycode]
 # --- Plot 4: Residual Distribution (Histogram) ---
@@ -442,14 +477,18 @@ plt.tight_layout()
 fig4.savefig('plot_4_res_dist.pdf', dpi=300)
 plt.show()
 \end{lstlisting}
-\begin{center}
-\includegraphics[width=0.6\textwidth]{nb_out_plot_5.png}
-\end{center}
-\vspace{1em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=2pt,right=2pt,top=2pt,bottom=2pt]
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{nb_out_plot_5.png}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 4 (Residuals Distribution)}: Histogram of residuals to assess whether they approximate a normal distribution (Normality assumption).
 \end{tcolorbox}
+\vspace{1.0em}
+\end{minipage}
 \vspace{1em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [15]:}
 \begin{lstlisting}[style=pycode]
 # --- Plot 5: Normal Q-Q Plot ---
@@ -466,14 +505,18 @@ plt.tight_layout()
 fig5.savefig('plot_5_qq.pdf', dpi=300)
 plt.show()
 \end{lstlisting}
-\begin{center}
-\includegraphics[width=0.6\textwidth]{nb_out_plot_6.png}
-\end{center}
-\vspace{1em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=2pt,right=2pt,top=2pt,bottom=2pt]
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{nb_out_plot_6.png}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 5 (Q-Q Plot)}: Q-Q plot comparing the quantiles of the residuals against a standard normal distribution. Points closely following the diagonal line suggest normality.
 \end{tcolorbox}
+\vspace{1.0em}
+\end{minipage}
 \vspace{1em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [16]:}
 \begin{lstlisting}[style=pycode]
 # --- Plot 6: Scale-Location Plot ---
@@ -490,10 +533,13 @@ plt.tight_layout()
 fig6.savefig('plot_6_scale_loc.pdf', dpi=300)
 plt.show()
 \end{lstlisting}
-\begin{center}
-\includegraphics[width=0.6\textwidth]{nb_out_plot_7.png}
-\end{center}
-\vspace{1em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=2pt,right=2pt,top=2pt,bottom=2pt]
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{nb_out_plot_7.png}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 6 (Scale-Location)}: Scale-Location plot to check for homoscedasticity (equal variance of residuals) across the range of fitted values. The trend line should be relatively horizontal.
 \end{tcolorbox}
+\vspace{1.0em}
+\end{minipage}

@@ -3,13 +3,14 @@
 โค้ด ผลลัพธ์ และการพล็อตภาพทั้งหมดด้านล่างเป็นการรันจริงจาก Jupyter Notebook
 \end{tcolorbox}
 
-\needspace{4\baselineskip}
+\needspace{12\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 \textbf{\large 2. Library Setup \& Environment Configuration}\par\smallskip
 \end{tcolorbox}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [1]}:
 \begin{lstlisting}[style=pycode]
 %matplotlib inline
@@ -45,11 +46,12 @@ plt.rcParams['axes.unicode_minus'] = False
 print("Libraries and plotting configuration loaded successfully.")
 \end{lstlisting}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[1]}:
 \begin{lstlisting}[style=output]
 Libraries and plotting configuration loaded successfully.
 \end{lstlisting}
-\needspace{4\baselineskip}
+\needspace{12\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 \textbf{\large 3. Data Loading \& Exploratory Data Analysis}\\\normalsize (EDA)\par\smallskip
@@ -57,6 +59,7 @@ We load \texttt{MBA.csv} and inspect its schema, missing values, and the target 
 \end{tcolorbox}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [2]}:
 \begin{lstlisting}[style=pycode]
 # Load MBA dataset
@@ -80,6 +83,7 @@ print("\nNumerical Feature Summary (Labeled Cohort):")
 df_labeled[['gpa', 'gmat', 'work_exp']].describe()
 \end{lstlisting}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[2]}:
 \begin{lstlisting}[style=output]
 Total dataset dimensions: 6194 rows, 10 columns
@@ -130,6 +134,7 @@ max       3.740000   780.000000     8.000000
 \end{lstlisting}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [3]}:
 \begin{lstlisting}[style=pycode]
 # Binary encoding for visualization: 0 = Admit (Majority), 1 = Waitlist (Minority)
@@ -170,15 +175,17 @@ plt.tight_layout()
 plt.savefig('plot_1_eda_distributions.pdf', bbox_inches='tight')
 plt.show()
 \end{lstlisting}
-\begin{center}
-\includegraphics[width=0.82\textwidth]{plot_1_eda_distributions.pdf}
-\end{center}
-\needspace{4\baselineskip}
-\vspace{0.8em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{plot_1_eda_distributions.pdf}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 1 (Exploratory Data Analysis \& Feature Distributions)}: Bivariate distributions comparing admitted ($n=900$) vs. waitlisted ($n=100$) applicants across academic and professional attributes. Left: Kernel density estimation (KDE) of Undergraduate GPA showing overlapping profiles around mean $\mu \approx 3.25$. Middle: GMAT score distribution highlighting subtle differences in variance. Right: Boxplot of work experience showing comparable median tenure ($\approx 5$ years) with higher outlier dispersion among admitted students.\par
 \end{tcolorbox}
-\needspace{4\baselineskip}
+\vspace{1.0em}
+\end{minipage}
+\needspace{12\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 \textbf{\large 4. Data Preprocessing \& Categorical Encoding}\par\smallskip
@@ -190,6 +197,7 @@ We prepare feature matrix $X$ and target vector $y$:\par
 \end{tcolorbox}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [4]}:
 \begin{lstlisting}[style=pycode]
 # Feature and Target Isolation
@@ -222,6 +230,7 @@ print(f"\nTraining Set: {X_train.shape[0]} samples (Admit: {sum(y_train==0)}, Wa
 print(f"Testing Set:  {X_test.shape[0]} samples (Admit: {sum(y_test==0)}, Waitlist: {sum(y_test==1)})")
 \end{lstlisting}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[4]}:
 \begin{lstlisting}[style=output]
 Categorical Encodings:
@@ -234,7 +243,7 @@ Categorical Encodings:
 Training Set: 800 samples (Admit: 720, Waitlist: 80)
 Testing Set:  200 samples (Admit: 180, Waitlist: 20)
 \end{lstlisting}
-\needspace{4\baselineskip}
+\needspace{12\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 \textbf{\large 5. Model 1 — Decision Tree Classifier}\par\smallskip
@@ -242,6 +251,7 @@ We fit a \textbf{Decision Tree Classifier} using the Information Gain (Entropy) 
 \end{tcolorbox}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [5]}:
 \begin{lstlisting}[style=pycode]
 # Instantiate and train Decision Tree
@@ -267,6 +277,7 @@ print(f"Test Accuracy: {accuracy_score(y_test, y_pred_dt)*100:.2f}%")
 print(f"ROC-AUC Score: {roc_auc_score(y_test, y_proba_dt):.4f}")
 \end{lstlisting}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[5]}:
 \begin{lstlisting}[style=output]
 ============================================================
@@ -286,6 +297,7 @@ ROC-AUC Score: 0.5258
 \end{lstlisting}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [6]}:
 \begin{lstlisting}[style=pycode]
 # Visualizing Pruned Decision Tree
@@ -305,15 +317,17 @@ plt.tight_layout()
 plt.savefig('plot_2_decision_tree.pdf', bbox_inches='tight')
 plt.show()
 \end{lstlisting}
-\begin{center}
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
 \includegraphics[width=0.95\textwidth]{plot_2_decision_tree.pdf}
-\end{center}
-\needspace{4\baselineskip}
-\vspace{0.8em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 2 (Decision Tree Architecture \& Splitting Flowchart)}: Interpretable tree diagram illustrating hierarchical binary splits based on Information Gain (Entropy). Top nodes identify critical threshold splits across GPA, GMAT, and Work Industry, showing sample counts, class distributions, and impurity reductions at each branch.\par
 \end{tcolorbox}
-\needspace{4\baselineskip}
+\vspace{1.0em}
+\end{minipage}
+\needspace{12\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 \textbf{\large 6. Model 2 — Random Forest Classifier}\par\smallskip
@@ -321,6 +335,7 @@ We train a \textbf{Random Forest Classifier} ($B = 150$ trees, \texttt{max\_dept
 \end{tcolorbox}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [7]}:
 \begin{lstlisting}[style=pycode]
 # Instantiate and train Random Forest
@@ -346,6 +361,7 @@ print(f"Test Accuracy: {accuracy_score(y_test, y_pred_rf)*100:.2f}%")
 print(f"ROC-AUC Score: {roc_auc_score(y_test, y_proba_rf):.4f}")
 \end{lstlisting}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[7]}:
 \begin{lstlisting}[style=output]
 ============================================================
@@ -363,7 +379,7 @@ weighted avg       0.82      0.73      0.77       200
 Test Accuracy: 73.00%
 ROC-AUC Score: 0.5519
 \end{lstlisting}
-\needspace{4\baselineskip}
+\needspace{12\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 \textbf{\large 7. Model 3 — Gradient Boosting Classifier}\par\smallskip
@@ -371,6 +387,7 @@ We train a \textbf{Gradient Boosting Classifier} ($M = 100$ boosting iterations,
 \end{tcolorbox}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [8]}:
 \begin{lstlisting}[style=pycode]
 # Instantiate and train Gradient Boosting
@@ -395,6 +412,7 @@ print(f"Test Accuracy: {accuracy_score(y_test, y_pred_gb)*100:.2f}%")
 print(f"ROC-AUC Score: {roc_auc_score(y_test, y_proba_gb):.4f}")
 \end{lstlisting}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[8]}:
 \begin{lstlisting}[style=output]
 ============================================================
@@ -412,7 +430,7 @@ weighted avg       0.85      0.90      0.86       200
 Test Accuracy: 89.50%
 ROC-AUC Score: 0.4981
 \end{lstlisting}
-\needspace{4\baselineskip}
+\needspace{12\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 \textbf{\large 8. Feature Importance Comparison}\par\smallskip
@@ -420,6 +438,7 @@ We evaluate and compare the \textbf{Mean Decrease in Impurity (Gini / Entropy Im
 \end{tcolorbox}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [9]}:
 \begin{lstlisting}[style=pycode]
 # Compile Feature Importance DataFrame
@@ -455,10 +474,9 @@ plt.show()
 print("\nFeature Importance Values:")
 imp_df.sort_values(by='Random Forest', ascending=False)
 \end{lstlisting}
-\begin{center}
-\includegraphics[width=0.82\textwidth]{plot_3_feature_importance.pdf}
-\end{center}
+\needspace{5\baselineskip}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[9]}:
 \begin{lstlisting}[style=output]
 Feature Importance Values:
@@ -473,12 +491,18 @@ major               0.000000       0.072573           0.071786
 international       0.000000       0.027487           0.058779
 gender              0.000000       0.025718           0.019362
 \end{lstlisting}
-\needspace{4\baselineskip}
-\vspace{0.8em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
+\vspace{0.4em}
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{plot_3_feature_importance.pdf}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 3 (Feature Importance Comparison)}: Horizontal bar chart comparing relative feature importances derived from Mean Decrease in Impurity. GMAT score, GPA, Work Experience, and Work Industry emerge as the dominant predictors across all three architectures, while demographic indicators (gender, race, international) exhibit lower direct influence.\par
 \end{tcolorbox}
-\needspace{4\baselineskip}
+\vspace{1.0em}
+\end{minipage}
+\needspace{12\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 \textbf{\large 9. Diagnostic Evaluations: Confusion Matrices \& ROC-AUC Analysis}\par\smallskip
@@ -486,6 +510,7 @@ We compare model performance across confusion matrices and \textbf{Receiver Oper
 \end{tcolorbox}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [10]}:
 \begin{lstlisting}[style=pycode]
 # Plot Side-by-Side Confusion Matrices
@@ -510,16 +535,19 @@ plt.tight_layout()
 plt.savefig('plot_4_confusion_matrices.pdf', bbox_inches='tight')
 plt.show()
 \end{lstlisting}
-\begin{center}
-\includegraphics[width=0.82\textwidth]{plot_4_confusion_matrices.pdf}
-\end{center}
-\needspace{4\baselineskip}
-\vspace{0.8em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{plot_4_confusion_matrices.pdf}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 4 (Comparative Confusion Matrices)}: $1 \times 3$ grid of Confusion Matrices on the testing cohort ($n=200$). Highlights the operational tradeoff: Decision Tree and Random Forest (with class balancing) capture more Waitlist cases ($8$ and $4$ true positives respectively) at the expense of false positives, whereas Gradient Boosting prioritizes majority class accuracy ($89.5\%$).\par
 \end{tcolorbox}
+\vspace{1.0em}
+\end{minipage}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [11]}:
 \begin{lstlisting}[style=pycode]
 # Plot ROC Curves
@@ -544,15 +572,17 @@ plt.tight_layout()
 plt.savefig('plot_5_roc_curves.pdf', bbox_inches='tight')
 plt.show()
 \end{lstlisting}
-\begin{center}
-\includegraphics[width=0.82\textwidth]{plot_5_roc_curves.pdf}
-\end{center}
-\needspace{4\baselineskip}
-\vspace{0.8em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{plot_5_roc_curves.pdf}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 5 (Receiver Operating Characteristic (ROC) Curves)}: Discrimination trajectories across varying classification thresholds. Random Forest achieves the highest test discrimination ($\text{AUC} = 0.5519$, 5-Fold $\text{CV AUC} = 0.6237$), effectively ranking applicant admission probabilities.\par
 \end{tcolorbox}
-\needspace{4\baselineskip}
+\vspace{1.0em}
+\end{minipage}
+\needspace{12\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 \textbf{\large 10. Hyperparameter Tuning \& Bias-Variance Analysis}\par\smallskip
@@ -560,6 +590,7 @@ We compute 5-Fold Stratified Cross-Validation curves to evaluate the impact of t
 \end{tcolorbox}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [12]}:
 \begin{lstlisting}[style=pycode]
 # Compute Validation Curves
@@ -620,22 +651,25 @@ plt.tight_layout()
 plt.savefig('plot_6_hyperparameter_tuning.pdf', bbox_inches='tight')
 plt.show()
 \end{lstlisting}
-\begin{center}
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
 \includegraphics[width=0.95\textwidth]{plot_6_hyperparameter_tuning.pdf}
-\end{center}
-\needspace{4\baselineskip}
-\vspace{0.8em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 6 (Hyperparameter Validation Curves \& Bias-Variance Dynamics)}: Left: Decision tree depth vs. ROC-AUC showing that unpruned trees ($\text{depth} > 4$) quickly overfit training data while test performance degrades. Right: Random Forest ensemble scaling showing asymptotic variance stabilization beyond $B = 100-150$ trees.\par
 \end{tcolorbox}
+\vspace{1.0em}
+\end{minipage}
 \clearpage
-\needspace{4\baselineskip}
+\needspace{12\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 \textbf{\large 11. Comprehensive Model Evaluation \& Summary Table}\par\smallskip
 \end{tcolorbox}
 \needspace{5\baselineskip}
 \vspace{0.8em}
+\needspace{5\baselineskip}
 \noindent\textbf{In [13]}:
 \begin{lstlisting}[style=pycode]
 # Compile Final Performance Summary Table
@@ -673,6 +707,7 @@ print("============================================================")
 perf_df
 \end{lstlisting}
 \smallskip
+\needspace{5\baselineskip}
 \noindent\textbf{Out[13]}:
 \begin{lstlisting}[style=output]
 ============================================================
@@ -688,7 +723,7 @@ COMPREHENSIVE MODEL EVALUATION BENCHMARK TABLE
 1        0.200       0.129   0.5519        0.6237  
 2        0.050       0.087   0.4981        0.6174
 \end{lstlisting}
-\needspace{4\baselineskip}
+\needspace{12\baselineskip}
 \vspace{0.8em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=4pt,bottom=4pt,breakable]
 \textbf{\large 12. Summary of Findings \& Domain Discussion}\par\smallskip

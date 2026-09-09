@@ -25,6 +25,7 @@ print("NumPy version:", np.__version__)
 print("Pandas version:", pd.__version__)
 \end{lstlisting}
 
+\needspace{5\baselineskip}
 \noindent\textbf{\small [Out 1]:}
 
 \begin{lstlisting}[style=output]
@@ -105,6 +106,7 @@ plt.subplots_adjust(top=0.90, bottom=0.10, left=0.06, right=0.98, wspace=0.35, h
 plt.show()
 \end{lstlisting}
 
+\needspace{5\baselineskip}
 \noindent\textbf{\small [Out 3]:}
 
 \begin{lstlisting}[style=output]
@@ -129,25 +131,16 @@ test_labels  shape: (10000,)
 Sample image index 0 has label: 5
 \end{lstlisting}
 
-\needspace{10\baselineskip}
-
-\begin{center}
-
-\vspace{-0.6em}
-
-\includegraphics[width=0.92\textwidth]{plot_1_mnist_eda.pdf}
-
-\vspace{-0.7em}
-
-\end{center}
-
-\vspace{-0.5em}
-
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=3pt,bottom=3pt,before skip=0pt,after skip=6pt,unbreakable]
-
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{plot_1_mnist_eda.pdf}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 1 (MNIST Exploratory Data Analysis \& Pixel Intensity Distribution)}: A $2 \times 5$ representative sample grid displaying MNIST digits $0$ through $9$ alongside a log-scale histogram of pixel values ($0$ to $255$). The histogram confirms that the majority of pixels reside at background zero while stroke pixels exhibit a continuous grayscale distribution, verifying dataset balance and data cleanliness prior to model ingestion.\par
-
 \end{tcolorbox}
+\vspace{1.0em}
+\end{minipage}
 
 \needspace{4\baselineskip}
 
@@ -206,6 +199,7 @@ model.compile(
 )
 \end{lstlisting}
 
+\needspace{5\baselineskip}
 \noindent\textbf{\small [Out 5]:}
 
 \begin{lstlisting}[style=output]
@@ -235,6 +229,7 @@ model.summary()
 # Total Trainable Parameters = 407,050
 \end{lstlisting}
 
+\needspace{5\baselineskip}
 \noindent\textbf{\small [Out 6]:}
 
 \begin{lstlisting}[style=output]
@@ -263,25 +258,16 @@ Model: "sequential"
  Non-trainable params: 0 (0.00 B)
 \end{lstlisting}
 
-\needspace{10\baselineskip}
-
-\begin{center}
-
-\vspace{-0.6em}
-
-\includegraphics[width=0.95\textwidth]{plot_2_dnn_architecture.pdf}
-
-\vspace{-0.7em}
-
-\end{center}
-
-\vspace{-0.5em}
-
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=3pt,bottom=3pt,before skip=0pt,after skip=6pt,unbreakable]
-
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.90\textwidth]{plot_2_dnn_architecture.pdf}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 2 (Baseline Deep Neural Network Architecture \& Dataflow)}: The baseline network comprises an Input Layer ($784$ features), a Hidden Layer ($512$ ReLU units with $401,920$ weights), and an Output Layer ($10$ Softmax units with $5,130$ weights), yielding $407,050$ total trainable parameters. The complete system architecture diagram and tensor dataflow schematic is formally illustrated in Figure 2 of the accompanying academic report.\par
-
 \end{tcolorbox}
+\vspace{1.0em}
+\end{minipage}
 
 \needspace{4\baselineskip}
 
@@ -325,6 +311,7 @@ print("One-hot encoded target shape:", y_train_oh.shape)
 print("Sample label one-hot vector:", y_train_oh[0], "<- Ground truth label:", train_labels[0])
 \end{lstlisting}
 
+\needspace{5\baselineskip}
 \noindent\textbf{\small [Out 7]:}
 
 \begin{lstlisting}[style=output]
@@ -370,6 +357,7 @@ history = model.fit(
 )
 \end{lstlisting}
 
+\needspace{5\baselineskip}
 \noindent\textbf{\small [Out 8]:}
 
 \begin{lstlisting}[style=output]
@@ -468,6 +456,7 @@ for ep in range(10):
     print(f"Epoch {ep+1:02d}: Train Loss={t_loss:.4f}, Val Loss={v_loss:.4f} (Gap={gap_loss:+.4f}) | Train Acc={t_acc:.4f}, Val Acc={v_acc:.4f} (Gap={gap_acc:+.4f})")
 \end{lstlisting}
 
+\needspace{5\baselineskip}
 \noindent\textbf{\small [Out 11]:}
 
 \begin{lstlisting}[style=output]
@@ -484,25 +473,16 @@ Epoch 09: Train Loss=0.2987, Val Loss=0.2404 (Gap=-0.0583) | Train Acc=0.9169, V
 Epoch 10: Train Loss=0.2886, Val Loss=0.2320 (Gap=-0.0567) | Train Acc=0.9198, Val Acc=0.9368 (Gap=+0.0171)
 \end{lstlisting}
 
-\needspace{10\baselineskip}
-
-\begin{center}
-
-\vspace{-0.6em}
-
-\includegraphics[width=0.92\textwidth]{plot_3_training_history.pdf}
-
-\vspace{-0.7em}
-
-\end{center}
-
-\vspace{-0.5em}
-
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=3pt,bottom=3pt,before skip=0pt,after skip=6pt,unbreakable]
-
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{plot_3_training_history.pdf}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 3 (Baseline Deep Neural Network Training History)}: Dual-panel learning curves depicting Categorical Cross-Entropy Loss (left) and Classification Accuracy (right) across 10 epochs for the baseline model (Single Hidden 512 ReLU, SGD $\eta=0.01$, Batch Size 128). Both training and validation curves descend monotonically without divergence, confirming steady convergence and the absence of pathological overfitting.\par
-
 \end{tcolorbox}
+\vspace{1.0em}
+\end{minipage}
 
 \needspace{4\baselineskip}
 
@@ -570,6 +550,7 @@ print(f"- Generalization loss gap (Test Loss - Train Loss): {(test_loss - train_
 print("Conclusion: Extremely low variance (test matches train/val), with moderate bias due to early SGD convergence.")
 \end{lstlisting}
 
+\needspace{5\baselineskip}
 \noindent\textbf{\small [Out 12]:}
 
 \begin{lstlisting}[style=output]
@@ -634,6 +615,7 @@ plt.tight_layout()
 plt.show()
 \end{lstlisting}
 
+\needspace{5\baselineskip}
 \noindent\textbf{\small [Out 13]:}
 
 \begin{lstlisting}[style=output]
@@ -676,25 +658,16 @@ Top-5 Most Frequent Misclassification Pairs (True -> Predicted):
   5. True Digit 7 -> Predicted as 2: 26 instances
 \end{lstlisting}
 
-\needspace{10\baselineskip}
-
-\begin{center}
-
-\vspace{-0.6em}
-
-\includegraphics[width=0.92\textwidth]{plot_4_confusion_matrix.pdf}
-
-\vspace{-0.7em}
-
-\end{center}
-
-\vspace{-0.5em}
-
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=3pt,bottom=3pt,before skip=0pt,after skip=6pt,unbreakable]
-
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{plot_4_confusion_matrix.pdf}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 4 (Confusion Matrix Heatmap on MNIST Test Set)}: Heatmap visualization of the $10 \times 10$ confusion matrix evaluated on the unseen test set ($N = 10,000$). The prominent diagonal entries confirm strong discriminative capability ($92.59\%$ overall accuracy for the baseline SGD model), while off-diagonal cells reveal morphological ambiguities, primarily between digits $9 \rightarrow 4$ ($39$ instances), $4 \rightarrow 9$ ($35$ instances), and $2 \rightarrow 8$ ($34$ instances).\par
-
 \end{tcolorbox}
+\vspace{1.0em}
+\end{minipage}
 
 \needspace{4\baselineskip}
 
@@ -811,6 +784,7 @@ plt.tight_layout()
 plt.show()
 \end{lstlisting}
 
+\needspace{5\baselineskip}
 \noindent\textbf{\small [Out 14]:}
 
 \begin{lstlisting}[style=output]
@@ -819,25 +793,16 @@ SGD (LR = 0.10) -> Test Loss: 0.0957 | Test Acc: 0.9715
 SGD (LR = 0.20) -> Test Loss: 0.0707 | Test Acc: 0.9789
 \end{lstlisting}
 
-\needspace{10\baselineskip}
-
-\begin{center}
-
-\vspace{-0.6em}
-
-\includegraphics[width=0.92\textwidth]{plot_5_learning_rate_comparison.pdf}
-
-\vspace{-0.7em}
-
-\end{center}
-
-\vspace{-0.5em}
-
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=3pt,bottom=3pt,before skip=0pt,after skip=6pt,unbreakable]
-
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{plot_5_learning_rate_comparison.pdf}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 5 (Learning Rate Sensitivity Analysis)}: Dual-panel trajectories comparing Validation Loss (left) and Validation Accuracy (right) for SGD under learning rates $\alpha \in \{0.01, 0.10, 0.20\}$. While $\alpha=0.01$ exhibits underdamping and sluggish convergence ($92.58\%$), $\alpha=0.20$ provides the optimal gradient step size, reaching $97.35\%$ test accuracy within 10 epochs.\par
-
 \end{tcolorbox}
+\vspace{1.0em}
+\end{minipage}
 
 \needspace{3\baselineskip}
 
@@ -894,6 +859,7 @@ plt.tight_layout()
 plt.show()
 \end{lstlisting}
 
+\needspace{6\baselineskip}
 \noindent\textbf{\small [Out 15]:}
 
 \begin{lstlisting}[style=output]
@@ -916,25 +882,16 @@ Optimizer: RMSprop (lr=0.001)   | Test Accuracy:  98.32% | Test Loss: 0.0628
 Optimizer: Adam (lr=0.001)      | Test Accuracy:  97.95% | Test Loss: 0.0664
 \end{lstlisting}
 
-\needspace{10\baselineskip}
-
-\begin{center}
-
-\vspace{-0.6em}
-
-\includegraphics[width=0.92\textwidth]{plot_6_optimizer_comparison.pdf}
-
-\vspace{-0.7em}
-
-\end{center}
-
-\vspace{-0.5em}
-
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=3pt,bottom=3pt,before skip=0pt,after skip=6pt,unbreakable]
-
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.88\textwidth]{plot_6_optimizer_comparison.pdf}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 6 (Optimizer Convergence \& Performance Benchmark)}: Comparison of convergence trajectories across four fundamental optimization algorithms (SGD, Adagrad, RMSprop, Adam) over 10 epochs. Adaptive moment estimation (RMSprop at $98.30\%$ and Adam at $98.00\%$) dramatically outperforms cumulative gradient decay (Adagrad at $94.96\%$) by dynamically scaling coordinate-wise learning rates.\par
-
 \end{tcolorbox}
+\vspace{1.0em}
+\end{minipage}
 
 \needspace{3\baselineskip}
 
@@ -1020,6 +977,7 @@ plt.tight_layout()
 plt.show()
 \end{lstlisting}
 
+\needspace{5\baselineskip}
 \noindent\textbf{\small [Out 16]:}
 
 \begin{lstlisting}[style=output]
@@ -1066,25 +1024,16 @@ Deeper Model (512-256-128 + Dropout 0.2 + Adam) -> Test Accuracy: 97.96% | Test 
 Saved benchmark summary table to: assignment/Assignment 5_Neural Network/benchmark_results.csv
 \end{lstlisting}
 
-\needspace{10\baselineskip}
-
-\begin{center}
-
-\vspace{-0.6em}
-
-\includegraphics[width=0.92\textwidth]{plot_7_architecture_ablation.pdf}
-
-\vspace{-0.7em}
-
-\end{center}
-
-\vspace{-0.5em}
-
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=3pt,bottom=3pt,before skip=0pt,after skip=6pt,unbreakable]
-
+\noindent\begin{minipage}{\linewidth}
+\centering
+\vspace{0.4em}
+\includegraphics[width=0.90\textwidth]{plot_7_architecture_ablation.pdf}
+\par\vspace{0.6em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 7 (Architectural Ablation \& Dropout Regularization Impact)}: Dual-panel loss (left) and accuracy (right) curves contrasting the Baseline Single-Hidden MLP against the Deeper Architecture (512-256-128) regularized with $20\%$ Dropout. The regularized deeper network constrains the generalization gap ($\Delta < 0.05\%$), prevents neuron co-adaptation, and maintains robust generalization on complex digit topologies.\par
-
 \end{tcolorbox}
+\vspace{1.0em}
+\end{minipage}
 
 \clearpage
 
