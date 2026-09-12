@@ -1,4 +1,4 @@
-# .gitignore for CPE342 machine learning repo
+﻿# .gitignore for CPE342 machine learning repo
 *.aux
 *.log
 *.out
@@ -11,3 +11,7 @@ exec_notebook.py
 read_friend.py
 trim_tex.py
 make_notebook.py
+
+# macOS and Windows system files
+.DS_Store
+Thumbs.db
