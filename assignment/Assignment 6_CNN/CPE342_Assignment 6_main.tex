@@ -116,9 +116,7 @@
     {\normalsize (Dog vs. Cat Classification via Deep CNN, Transfer Learning with MobileNetV2, Data Augmentation, and Real-Time Streaming Diagnostics)}\\[6pt]
     \textcolor{accentblue}{67070501027 นัธทวัฒน์ ปริมสิริคุณาวุฒิ}\\[2pt]
     \textcolor{accentblue}{67070501042 วิศิษฐ์ สุวรรณเนาว์}\\[2pt]
-    \textcolor{accentblue}{67070501067 พลวริษฐ์ วัฒนเหมรัตน์}\\[4pt]
-    {\small ภาควิชาวิศวกรรมคอมพิวเตอร์ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี}\\[2pt]
-    {\small อาจารย์ผู้สอน: ดร. บุญญฤทธิ์ ฉัตรจุฑามาศ (Dr. Boonyarit Changaival) --- ภาคการศึกษาที่ 1/2569}
+    \textcolor{accentblue}{67070501067 พลวริษฐ์ วัฒนเหมรัตน์}
 \end{center}
 
 \vspace{0.5em}
@@ -126,11 +124,11 @@
 \vspace{1em}
 
 % =================================================================
-\section[บทนำและกรอบแนวคิดเชิงทฤษฎี]{บทนำและกรอบแนวคิดเชิงทฤษฎี\\ \large(Theoretical Foundations \& Mathematical Framework)}
+\section*{1. บทนำและกรอบแนวคิดเชิงทฤษฎี\\ \large(Theoretical Foundations \& Mathematical Framework)}
 
 การประมวลผลข้อมูลภาพเชิงภาพดิจิทัล (Digital Image Processing) ในยุคก่อนหน้าประสบข้อจำกัดอย่างรุนแรงเมื่อใช้โมเดล Multi-Layer Perceptron (MLP) แบบดั้งเดิม เนื่องจาก MLP มองภาพเป็นเวกเตอร์ 1 มิติที่เรียงต่อกัน ทำให้สูญเสียข้อมูลโครงสร้างเชิงพื้นที่ (Spatial Topology) และการเชื่อมต่อแบบหนาแน่น (Fully Connected) ก่อให้เกิดจำนวนพารามิเตอร์มหาศาล ($O(H \times W \times C \times N)$) ซึ่งเสี่ยงต่อการเกิด Overfitting อย่างยิ่ง โครงข่ายประสาทคอนโวลูชัน (Convolutional Neural Networks: CNN) จึงถูกพัฒนาขึ้นเพื่อแก้ไขปัญหานี้โดยเลียนแบบกลไกการมองเห็นของสิ่งมีชีวิต
 
-\subsection[วิวัฒนาการจากเซลล์ประสาทสัมผัสสู่โครงข่ายคอนโวลูชัน]{วิวัฒนาการจากเซลล์ประสาทสัมผัสสู่โครงข่ายคอนโวลูชัน\\ \normalsize(Receptive Fields \& Biological Visual Cortex)}
+\subsection*{1.1 วิวัฒนาการจากเซลล์ประสาทสัมผัสสู่โครงข่ายคอนโวลูชัน\\ \normalsize(Receptive Fields \& Biological Visual Cortex)}
 การค้นพบอันเป็นรากฐานของ David Hubel และ Torsten Wiesel (1959, 1962) ในระบบประสาทสายตาของแมว (Visual Cortex) แสดงให้เห็นว่า เซลล์ประสาทในเปลือกสมองส่วนการมองเห็น (Area V1) มิได้ตอบสนองต่อแสงสว่างทั่วทั้งลานสายตาพร้อมกัน แต่ตอบสนองต่อตัวกระตุ้นเฉพาะในขอบเขตพื้นที่จำกัดที่เรียกว่า \textbf{พื้นที่รับรู้ (Receptive Field)} โดยแบ่งออกเป็น:
 \begin{enumerate}[leftmargin=1.8em, itemsep=1pt]
     \item \textbf{Simple Cells:} ตอบสนองต่อเส้นตรงและขอบภาพ (Edges and Bars) ในทิศทาง (Orientation) และตำแหน่งเฉพาะ
@@ -138,7 +136,7 @@
 \end{enumerate}
 แนวคิดดังกล่าวถูกนำมาจำลองในเชิงวิศวกรรมโดย Kunihiko Fukushima (Neocognitron, 1980) และทำให้สมบูรณ์ด้วยการฝึกฝนผ่าน Gradient Descent โดย Yann LeCun et al. (LeNet-5, 1998) ซึ่งใช้ฟิลเตอร์คอนโวลูชันทำหน้าที่เสมือน Simple Cells และเลเยอร์พูลลิงทำหน้าที่เสมือน Complex Cells
 
-\subsection[คณิตศาสตร์ของการสังเคราะห์แบบคอนโวลูชัน 2 มิติ]{คณิตศาสตร์ของการสังเคราะห์แบบคอนโวลูชัน 2 มิติ\\ \normalsize(2D Discrete Cross-Correlation \& Tensor Operations)}
+\subsection*{1.2 คณิตศาสตร์ของการสังเคราะห์แบบคอนโวลูชัน 2 มิติ\\ \normalsize(2D Discrete Cross-Correlation \& Tensor Operations)}
 ในทางคณิตศาสตร์และไลบรารี Deep Learning (เช่น TensorFlow/Keras) ตัวดำเนินการที่เรียกว่า Convolution แท้จริงแล้วคือ \textbf{Discrete Cross-Correlation} ซึ่งมีสมบัติคล้ายคลึงกันแต่ไม่มีการสะท้อนเคอร์เนล (Kernel Flipping) 
 
 กำหนดให้เทนเซอร์ภาพนำเข้า $\mathbf{X} \in \mathbb{R}^{H_{in} \times W_{in} \times C_{in}}$ และชุดเคอร์เนลคอนโวลูชัน $\mathbf{W} \in \mathbb{R}^{K_H \times K_W \times C_{in} \times C_{out}}$ พร้อมเวกเตอร์ไบแอส $\mathbf{b} \in \mathbb{R}^{C_{out}}$ การคำนวณเอาต์พุต $\mathbf{Y} \in \mathbb{R}^{H_{out} \times W_{out} \times C_{out}}$ ที่ตำแหน่ง $(i, j)$ สำหรับฟีเจอร์แมปที่ $k$ ($1 \le k \le C_{out}$) นิยามโดย:
@@ -152,7 +150,7 @@
     \item $K_H, K_W$ คือความกว้างและความสูงของเคอร์เนล (มาตรฐานนิยมใช้ $3 \times 3$)
 \end{itemize}
 
-\subsection[ขนาดพื้นที่รับรู้ การแพดดิ้ง และสไตรด์]{ขนาดพื้นที่รับรู้ การแพดดิ้ง และสไตรด์\\ \normalsize(Receptive Field Calculation, Padding, \& Spatial Dimensions)}
+\subsection*{1.3 ขนาดพื้นที่รับรู้ การแพดดิ้ง และสไตรด์\\ \normalsize(Receptive Field Calculation, Padding, \& Spatial Dimensions)}
 มิติของภาพเอาต์พุต ($H_{out}, W_{out}$) คำนวณได้จากมิตินำเข้า ($H_{in}, W_{in}$) การเสริมขอบ (Padding: $P$) และระยะก้าว ($S$) ตามสมการ:
 \begin{equation}
     H_{out} = \left\lfloor \frac{H_{in} - K_H + 2P}{S} \right\rfloor + 1, \quad W_{out} = \left\lfloor \frac{W_{in} - K_W + 2P}{S} \right\rfloor + 1
@@ -168,7 +166,7 @@
 \end{equation}
 สมการนี้แสดงให้เห็นว่า การซ้อนทับคอนโวลูชันหลายชั้นร่วมกับการทำ Downsampling (ด้วย Stride หรือ Pooling) จะทำให้ Receptive Field ขยายตัวแบบก้าวกระโดด ส่งผลให้เลเยอร์ระดับลึกสามารถมองเห็นโครงสร้างขนาดใหญ่ของใบหน้าสัตว์ได้ทั้งภาพ
 
-\subsection[เลเยอร์พูลลิงและการแปรผันเชิงพื้นที่]{เลเยอร์พูลลิงและการแปรผันเชิงพื้นที่\\ \normalsize(Pooling Layers: Max Pooling, Average Pooling, and GAP)}
+\subsection*{1.4 เลเยอร์พูลลิงและการแปรผันเชิงพื้นที่\\ \normalsize(Pooling Layers: Max Pooling, Average Pooling, and GAP)}
 เลเยอร์พูลลิงทำหน้าที่ลดมิติเชิงพื้นที่ (Spatial Downsampling) เพื่อลดภาระการคำนวณและสร้างสมบัติ \textbf{Translation Invariance} (ความคงทนต่อการขยับเลื่อนตำแหน่งของวัตถุ):
 \begin{enumerate}[leftmargin=1.8em, itemsep=1pt]
     \item \textbf{Max Pooling:} สกัดค่าสูงสุดในหน้าต่างขนาด $p \times p$:
@@ -183,7 +181,7 @@
     GAP มีบทบาทปฏิวัติโครงข่ายสมัยใหม่เนื่องจากเข้ามาแทนที่ Flatten + Dense Layer ขนาดใหญ่ ขจัดพารามิเตอร์ส่วนเกินได้นับสิบล้านพารามิเตอร์ และป้องกัน Overfitting ได้อย่างยอดเยี่ยม
 \end{enumerate}
 
-\subsection[การแพร่ย้อนกลับผ่านเลเยอร์คอนโวลูชัน]{การแพร่ย้อนกลับผ่านเลเยอร์คอนโวลูชัน\\ \normalsize(Backpropagation through Convolutional Layers)}
+\subsection*{1.5 การแพร่ย้อนกลับผ่านเลเยอร์คอนโวลูชัน\\ \normalsize(Backpropagation through Convolutional Layers)}
 ในการฝึกฝนโครงข่ายผ่านการแพร่ย้อนกลับ (Backpropagation) กำหนดให้ $L$ คือฟังก์ชันการสูญเสีย เกรเดียนต์ของค่าน้ำหนักเคอร์เนล $\frac{\partial L}{\partial \mathbf{W}}$ และเกรเดียนต์ของข้อมูลนำเข้า $\frac{\partial L}{\partial \mathbf{X}}$ คำนวณได้ดังนี้:
 \begin{equation}
     \frac{\partial L}{\partial W_{m, n, c, k}} = \sum_{i} \sum_{j} X_{i \cdot S + m, j \cdot S + n, c} \cdot \delta_{i, j, k}
@@ -193,7 +191,7 @@
 \end{equation}
 โดยที่ $\delta_{i, j, k} = \frac{\partial L}{\partial Y_{i, j, k}}$ คือความผิดพลาดที่แพร่ย้อนกลับมาจากเลเยอร์ถัดไป และ $\text{rot}_{180}(\mathbf{W})$ คือการหมุนเคอร์เนล 180 องศา ซึ่งพิสูจน์ให้เห็นว่ากระบวนการ Backpropagation ใน CNN ก็คือการทำ Convolution อีกรูปแบบหนึ่ง
 
-\subsection[สถาปัตยกรรมคลาสสิกสู่โมเดลสมัยใหม่]{สถาปัตยกรรมคลาสสิกสู่โมเดลสมัยใหม่\\ \normalsize(Architectural Evolution: LeNet, AlexNet, VGG, ResNet, to MobileNetV2)}
+\subsection*{1.6 สถาปัตยกรรมคลาสสิกสู่โมเดลสมัยใหม่\\ \normalsize(Architectural Evolution: LeNet, AlexNet, VGG, ResNet, to MobileNetV2)}
 พัฒนาการของสถาปัตยกรรม CNN ได้ผ่านหมุดหมายสำคัญในประวัติศาสตร์:
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
     \item \textbf{LeNet-5 (1998):} 7 เลเยอร์ บุกเบิกการใช้ Conv-Pool-Conv-Pool-Dense สำหรับจดจำตัวเลข MNIST
@@ -206,7 +204,7 @@
     \end{equation}
 \end{itemize}
 
-\subsection[ทฤษฎีการเรียนรู้แบบถ่ายโอนและการปรับแต่งละเอียด]{ทฤษฎีการเรียนรู้แบบถ่ายโอนและการปรับแต่งละเอียด\\ \normalsize(Transfer Learning \& Fine-Tuning Mathematical Formulation)}
+\subsection*{1.7 ทฤษฎีการเรียนรู้แบบถ่ายโอนและการปรับแต่งละเอียด\\ \normalsize(Transfer Learning \& Fine-Tuning Mathematical Formulation)}
 ในทางทฤษฎีการเรียนรู้ของเครื่อง การเรียนรู้แบบถ่ายโอน (Transfer Learning: Pan \& Yang, 2010) ประกอบด้วย \textbf{โดเมน (Domain)} $\mathcal{D} = \{\mathcal{X}, P(X)\}$ และ \textbf{งานเป้าหมาย (Task)} $\mathcal{T} = \{\mathcal{Y}, f(\cdot)\}$ โดยมี:
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
     \item โดเมนต้นทาง (Source Domain): $\mathcal{D}_S$ (ImageNet: 1.4M ภาพ, 1,000 คลาส)
@@ -221,7 +219,7 @@
 \end{equation}
 การกำหนดอัตราการเรียนรู้ขนาดเล็กมากใน Phase 2 ($\eta_{FT} = 10^{-5}$) มีความสำคัญยิ่งในการป้องกัน \textbf{Catastrophic Forgetting} (การลืมฟีเจอร์ทั่วไปดั้งเดิมที่เรียนรู้มาจาก ImageNet)
 
-\subsection[ทฤษฎีการเพิ่มพูนข้อมูลและผลการควบคุมความซับซ้อน]{ทฤษฎีการเพิ่มพูนข้อมูลและผลการควบคุมความซับซ้อน\\ \normalsize(Data Augmentation as Geometric Regularization)}
+\subsection*{1.8 ทฤษฎีการเพิ่มพูนข้อมูลและผลการควบคุมความซับซ้อน\\ \normalsize(Data Augmentation as Geometric Regularization)}
 การเพิ่มพูนข้อมูล (Data Augmentation) สามารถมองในมุมของทฤษฎีการเรียนรู้ทางสถิติว่าเป็นการประมาณค่าความไม่แปรผัน (Invariance Approximation) ภายใต้กลุ่มการแปลงเชิงเรขาคณิต (Lie Group Transformation $\mathcal{G}$):
 \begin{equation}
     \mathcal{R}_{aug}(f) = \mathbb{E}_{(\mathbf{x}, y) \sim \mathcal{D}} \left[ \mathbb{E}_{g \sim \mathcal{G}} [ \mathcal{L}(f(g(\mathbf{x})), y) ] \right]
@@ -230,7 +228,7 @@
 
 % =================================================================
 \vspace{1em}
-\section[คุณลักษณะและโครงสร้างของชุดข้อมูล]{คุณลักษณะและโครงสร้างของชุดข้อมูล\\ \large(Dataset Architecture \& Exploratory Analysis)}
+\section*{2. คุณลักษณะและโครงสร้างของชุดข้อมูล\\ \large(Dataset Architecture \& Exploratory Analysis)}
 
 ชุดข้อมูลที่ใช้ในการทดลองคือ \textbf{Dogs vs. Cats Dataset} (Kaggle / Udacity Challenge) ซึ่งเป็นชุดข้อมูลมาตรฐานสำหรับการทดสอบความสามารถในการจำแนกภาพเชิงชีววิทยาที่มีความแปรปรวนสูง
 
@@ -241,7 +239,7 @@
     \label{fig:plot_1}
 \end{figure}
 
-\subsection[โครงสร้างชุดข้อมูลและความสมดุลของคลาส]{โครงสร้างชุดข้อมูลและความสมดุลของคลาส\\ \normalsize(Dataset Specifications \& Class Distribution)}
+\subsection*{2.1 โครงสร้างชุดข้อมูลและความสมดุลของคลาส\\ \normalsize(Dataset Specifications \& Class Distribution)}
 ชุดข้อมูลประกอบด้วยภาพถ่ายจริงในสภาพแวดล้อมที่ไม่ถูกควบคุม (In-the-wild Images) มีขนาดมิติและอัตราส่วนกว้างยาวแตกต่างกันอย่างมาก:
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
     \item จำนวนภาพรวมทั้งหมด: \textbf{25,000 ภาพ}
@@ -249,7 +247,7 @@
     \item สัดส่วนการแบ่งข้อมูล: ชุดฝึกฝน 20,500 ภาพ (82.0\%) และชุดตรวจสอบ/ทดสอบ 4,500 ภาพ (18.0\%)
 \end{itemize}
 
-\subsection[กระบวนการเตรียมข้อมูลและการเพิ่มพูนข้อมูลแบบพลวัต]{กระบวนการเตรียมข้อมูลและการเพิ่มพูนข้อมูลแบบพลวัต\\ \normalsize(Preprocessing Pipeline \& Dynamic Augmentation)}
+\subsection*{2.2 กระบวนการเตรียมข้อมูลและการเพิ่มพูนข้อมูลแบบพลวัต\\ \normalsize(Preprocessing Pipeline \& Dynamic Augmentation)}
 ภาพต้นฉบับจะถูกส่งผ่านท่อส่งข้อมูล (Data Pipeline) ดังต่อไปนี้:
 \begin{enumerate}[leftmargin=1.8em, itemsep=1pt]
     \item \textbf{Spatial Resizing:} ปรับขนาดภาพทุกภาพให้เป็นมิติมาตรฐาน $160 \times 160 \times 3$ พิกเซล
@@ -265,7 +263,7 @@
 
 % =================================================================
 \vspace{1em}
-\section[ระเบียบวิธีวิจัยและสถาปัตยกรรมโมเดล]{ระเบียบวิธีวิจัยและสถาปัตยกรรมโมเดล\\ \large(Methodology \& Model Architectures)}
+\section*{3. ระเบียบวิธีวิจัยและสถาปัตยกรรมโมเดล\\ \large(Methodology \& Model Architectures)}
 
 การทดลองนี้มุ่งเน้นเปรียบเทียบสถาปัตยกรรม 2 ขั้ว เพื่อให้เห็นผลกระทบของ Pre-trained Priors ต่อความเที่ยงตรง (Precision) อย่างชัดเจน
 
@@ -276,7 +274,7 @@
     \label{fig:plot_2}
 \end{figure}
 
-\subsection[โมเดลพื้นฐาน: Custom Deep CNN from Scratch]{โมเดลพื้นฐาน: Custom Deep CNN from Scratch\\ \normalsize(Model 1: Baseline Architecture Specifications)}
+\subsection*{3.1 โมเดลพื้นฐาน: Custom Deep CNN from Scratch\\ \normalsize(Model 1: Baseline Architecture Specifications)}
 โมเดลพื้นฐานถูกออกแบบให้มีโครงสร้าง 3 คอนโวลูชันบล็อก (ดังแสดงในรูปที่ \ref{fig:plot_2} ซ้าย):
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
     \item \textbf{Block 1:} Conv2D (64 filters, $3\times3$) $\rightarrow$ BatchNorm $\rightarrow$ Conv2D (64 filters) $\rightarrow$ BatchNorm $\rightarrow$ MaxPool ($2\times2$) $\rightarrow$ Dropout ($0.25$) [Output: $80 \times 80 \times 64$]
@@ -286,7 +284,7 @@
     \item \textbf{จำนวนพารามิเตอร์รวม:} 4,817,537 พารามิเตอร์ (ทั้งหมดต้องฝึกฝนใหม่จากศูนย์)
 \end{itemize}
 
-\subsection[โมเดลเสนอแนะ: MobileNetV2 Transfer Learning]{โมเดลเสนอแนะ: MobileNetV2 Transfer Learning\\ \normalsize(Model 2 \& 3: Pretrained Backbone \& Two-Phase Strategy)}
+\subsection*{3.2 โมเดลเสนอแนะ: MobileNetV2 Transfer Learning\\ \normalsize(Model 2 \& 3: Pretrained Backbone \& Two-Phase Strategy)}
 โมเดลเสนอแนะใช้โครงข่าย MobileNetV2 ที่ผ่านการเทรนบน ImageNet ร่วมกับ Classification Head ที่ออกแบบพิเศษ (รูปที่ \ref{fig:plot_2} ขวา):
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
     \item \textbf{Backbone:} MobileNetV2 ตัดชั้นบนสุดออก (include\_top = False) ได้มิติเอาต์พุต $5 \times 5 \times 1280$
@@ -296,7 +294,7 @@
     \item \textbf{พารามิเตอร์รวม:} 2,586,177 พารามิเตอร์ (น้อยกว่าโมเดล Custom ถึง 46.3\%)
 \end{itemize}
 
-\subsection[การฝึกฝนแบบสองขั้นตอนและไฮเปอร์พารามิเตอร์]{การฝึกฝนแบบสองขั้นตอนและไฮเปอร์พารามิเตอร์\\ \normalsize(Two-Phase Optimization Dynamics \& Callbacks)}
+\subsection*{3.3 การฝึกฝนแบบสองขั้นตอนและไฮเปอร์พารามิเตอร์\\ \normalsize(Two-Phase Optimization Dynamics \& Callbacks)}
 \begin{enumerate}[leftmargin=1.8em, itemsep=1pt]
     \item \textbf{Phase 1: Feature Extraction (รอบที่ 1--10):} แช่แข็ง Backbone ทั้งหมด เทรนเฉพาะ Classification Head (328,193 พารามิเตอร์) ด้วย Adam Optimizer ($\eta = 10^{-4}$)
     \item \textbf{Phase 2: Fine-Tuning (รอบที่ 11--20):} ปลดล็อคเลเยอร์ 40 ชั้นบนสุดของ MobileNetV2 (1,842,433 พารามิเตอร์ที่เทรนได้) ปรับลดอัตราการเรียนรู้ลง 10 เท่า ($\eta = 10^{-5}$)
@@ -309,9 +307,9 @@
 
 % =================================================================
 \vspace{1em}
-\section[ผลการทดลองและการวินิจฉัยโมเดลเชิงลึก]{ผลการทดลองและการวินิจฉัยโมเดลเชิงลึก\\ \large(Experimental Results \& Diagnostic Plots)}
+\section*{4. ผลการทดลองและการวินิจฉัยโมเดลเชิงลึก\\ \large(Experimental Results \& Diagnostic Plots)}
 
-\subsection[เส้นทางการเรียนรู้แบบสองขั้นตอน]{เส้นทางการเรียนรู้แบบสองขั้นตอน\\ \normalsize(Two-Phase Learning Curves \& Convergence Dynamics)}
+\subsection*{4.1 เส้นทางการเรียนรู้แบบสองขั้นตอน\\ \normalsize(Two-Phase Learning Curves \& Convergence Dynamics)}
 การฝึกฝนโมเดล MobileNetV2 แสดงพัฒนาการที่น่าประทับใจอย่างยิ่ง ดังแสดงในรูปที่ \ref{fig:plot_3}:
 
 \begin{figure}[H]
@@ -323,7 +321,7 @@
 
 จากรูปที่ \ref{fig:plot_3}(a) จะสังเกตเห็นว่า ใน Phase 1 ความแม่นยำ Validation Accuracy พุ่งขึ้นแตะ \textbf{96.31\%} ตั้งแต่ Epoch แรก และลู่เข้าสู่ระดับ \textbf{97.02\%} ที่ Epoch 10 ซึ่งทะลุเกณฑ์ขั้นต่ำ 90\% และเกณฑ์ 95\% ได้ทันที เมื่อเข้าสู่ Phase 2 การปรับแต่งละเอียด 40 เลเยอร์บนสุดด้วย $\eta = 10^{-5}$ ช่วยดันความแม่นยำขึ้นสู่จุดสูงสุดที่ \textbf{97.47\%} ในขณะที่ Loss ลดลงเหลือเพียง \textbf{0.0682} อย่างมีเสถียรภาพ ปราศจากสัญญาณของ Overfitting
 
-\subsection[การวินิจฉัยความผิดพลาดด้วย Confusion Matrix, ROC และ PR Curves]{การวินิจฉัยความผิดพลาดด้วย Confusion Matrix, ROC และ PR Curves\\ \normalsize(Error Topology, ROC-AUC, and Precision-Recall Dynamics)}
+\subsection*{4.2 การวินิจฉัยความผิดพลาดด้วย Confusion Matrix, ROC และ PR Curves\\ \normalsize(Error Topology, ROC-AUC, and Precision-Recall Dynamics)}
 การประเมินผลบนชุดข้อมูลทดสอบ 4,500 ภาพแบบไม่สับเปลี่ยน (Unshuffled Evaluation) แสดงรายละเอียดในรูปที่ \ref{fig:plot_4}:
 
 \begin{figure}[H]
@@ -342,7 +340,7 @@
 \end{itemize}
 ทั้งสองคลาสมีค่า Precision เกินกว่า \textbf{97.3\%} ซึ่งชนะเกณฑ์ 90--95\% ของบริษัทอย่างขาดลอย กราฟ ROC ในรูปที่ \ref{fig:plot_4}(b) ให้ค่า $\text{AUC} = 0.9958$ (เทียบกับโมเดล Custom Scratch ที่ทำได้เพียง 0.9124) และกราฟ Precision-Recall ในรูปที่ \ref{fig:plot_4}(c) รักษาค่า Precision อยู่เหนือเกณฑ์ 95\% ได้จนถึงระดับ Recall สูงถึง 98.5\%
 
-\subsection[การถอดรหัสฟีเจอร์ภายในโครงข่ายคอนโวลูชัน]{การถอดรหัสฟีเจอร์ภายในโครงข่ายคอนโวลูชัน\\ \normalsize(Visualizing Intermediate Feature Map Activations)}
+\subsection*{4.3 การถอดรหัสฟีเจอร์ภายในโครงข่ายคอนโวลูชัน\\ \normalsize(Visualizing Intermediate Feature Map Activations)}
 เพื่อเปิดกล่องดำ (Black Box) ของ CNN เราได้สกัด Feature Map ในระดับความลึกต่างๆ ของโครงข่ายออกมาแสดงผลดังรูปที่ \ref{fig:plot_5}:
 
 \begin{figure}[H]
@@ -359,7 +357,7 @@
     \item \textbf{Deep Bottleneck Layers ($RF = 80 \times 80$):} Activation ตอบสนองอย่างรุนแรงต่อโครงสร้างเชิงความหมาย (Semantic Landmarks) โดยในภาพแมวจะเกิดจุดโฟกัสเข้มข้นที่ \textbf{ปลายหูแหลม (Pointed Ears) และดวงตารูปอัลมอนด์} ส่วนในภาพสุนัขจะตอบสนองต่อ \textbf{จมูก/ปากยื่น (Snout) และหูพับตก (Floppy Ears)}
 \end{enumerate}
 
-\subsection[การทดลองตัดทอนตัวแปรเชิงเปรียบเทียบ]{การทดลองตัดทอนตัวแปรเชิงเปรียบเทียบ\\ \normalsize(Ablation Study: Architecture, Augmentation, and Depth)}
+\subsection*{4.4 การทดลองตัดทอนตัวแปรเชิงเปรียบเทียบ\\ \normalsize(Ablation Study: Architecture, Augmentation, and Depth)}
 เราได้ทำการทดลองตัดทอนตัวแปร (Ablation Study) 5 รูปแบบ เพื่อจำแนกผลกระทบของแต่ละองค์ประกอบ:
 
 \begin{figure}[H]
@@ -376,7 +374,7 @@
     \item \textbf{โมเดลเสนอแนะ (Model 3):} มี Generalization Gap เพียง \textbf{+0.24\%} แสดงถึงความสามารถในการสรุปนัยทั่วไปสู่ข้อมูลใหม่อย่างสมบูรณ์แบบ
 \end{itemize}
 
-\subsection[การจำลองระบบตรวจจับแบบสตรีมมิ่งวิดีโอและฟิลเตอร์ภาพสด]{การจำลองระบบตรวจจับแบบสตรีมมิ่งวิดีโอและฟิลเตอร์ภาพสด\\ \normalsize(Real-Time Streaming Video Pipeline \& AR Filter Simulation)}
+\subsection*{4.5 การจำลองระบบตรวจจับแบบสตรีมมิ่งวิดีโอและฟิลเตอร์ภาพสด\\ \normalsize(Real-Time Streaming Video Pipeline \& AR Filter Simulation)}
 เพื่อตอบสนองเงื่อนไขของบริษัทในการประยุกต์ใช้งานจริง เราได้สร้างคลาส \texttt{DogCatStreamClassifier} เพื่อจำลองการป้อนเฟรมวิดีโอแบบต่อเนื่อง (Continuous Video Streaming at 30 FPS) ดังแสดงในรูปที่ \ref{fig:plot_7}:
 
 \begin{figure}[H]
@@ -390,9 +388,9 @@
 
 % =================================================================
 \vspace{1em}
-\section[การตอบคำถามประจำการทดลอง]{การตอบคำถามประจำการทดลอง\\ \large(Experiment Question Solutions \& Rationale)}
+\section*{5. การตอบคำถามประจำการทดลอง\\ \large(Experiment Question Solutions \& Rationale)}
 
-\subsection[คำถามที่ 1: การบรรลุเกณฑ์ความเที่ยงตรง (Precision > 90--95\%) เพื่อการปล่อยผลิตภัณฑ์สู่ตลาด]{คำถามที่ 1: การบรรลุเกณฑ์ความเที่ยงตรง (Precision > 90--95\%) เพื่อการปล่อยผลิตภัณฑ์สู่ตลาด\\ \normalsize(Question 1: Business Precision Threshold Fulfillment)}
+\subsection*{คำถามที่ 1: การบรรลุเกณฑ์ความเที่ยงตรง (Precision > 90--95\%) เพื่อการปล่อยผลิตภัณฑ์สู่ตลาด\\ \normalsize(Question 1: Business Precision Threshold Fulfillment)}
 
 \begin{ansbox}
 \textbf{คำตอบเชิงประเมินและข้อสรุป:}
@@ -410,7 +408,7 @@
 \textbf{เหตุผลสนับสนุนทางวิศวกรรม:} อัตราผลบวกลวง (False Positive Rate) ที่ต่ำเพียง 2.44--2.62\% รับประกันว่า โอกาสที่ระบบจะแปะฟิลเตอร์สุนัขลงบนใบหน้าผู้ใช้ที่หน้าเหมือนแมว (หรือกลับกัน) มีไม่ถึง 3 ครั้งในการใช้งาน 100 ครั้ง ซึ่งอยู่ในเกณฑ์ที่สร้างความพึงพอใจสูงสุดแก่ผู้บริโภคและสามารถปล่อยฟีเจอร์นี้สู่ตลาดเชิงพาณิชย์ได้อย่างมั่นใจ
 \end{ansbox}
 
-\subsection[คำถามที่ 2: การเปรียบเทียบประสิทธิภาพระหว่าง Custom CNN กับ Transfer Learning]{คำถามที่ 2: การเปรียบเทียบประสิทธิภาพระหว่าง Custom CNN กับ Transfer Learning\\ \normalsize(Question 2: Custom Scratch CNN vs. Pre-Trained Transfer Learning)}
+\subsection*{คำถามที่ 2: การเปรียบเทียบประสิทธิภาพระหว่าง Custom CNN กับ Transfer Learning\\ \normalsize(Question 2: Custom Scratch CNN vs. Pre-Trained Transfer Learning)}
 
 \begin{ansbox}
 \textbf{บทวิเคราะห์เชิงเปรียบเทียบ:}
@@ -421,7 +419,7 @@
 \end{enumerate}
 \end{ansbox}
 
-\subsection[คำถามที่ 3: บทบาทของการเพิ่มพูนข้อมูล (Data Augmentation) ต่อการลด Overfitting]{คำถามที่ 3: บทบาทของการเพิ่มพูนข้อมูล (Data Augmentation) ต่อการลด Overfitting\\ \normalsize(Question 3: Role of Data Augmentation in Preventing Overfitting)}
+\subsection*{คำถามที่ 3: บทบาทของการเพิ่มพูนข้อมูล (Data Augmentation) ต่อการลด Overfitting\\ \normalsize(Question 3: Role of Data Augmentation in Preventing Overfitting)}
 
 \begin{ansbox}
 \textbf{บทวิเคราะห์ผลลัพธ์จากการทดลองตัดทอน (Ablation Analysis):}
@@ -432,7 +430,7 @@
 \end{itemize}
 \end{ansbox}
 
-\subsection[คำถามที่ 4: การออกแบบระบบสตรีมมิ่งวิดีโอแบบเรียลไทม์]{คำถามที่ 4: การออกแบบระบบสตรีมมิ่งวิดีโอแบบเรียลไทม์\\ \normalsize(Question 4: Streaming Architecture \& Real-Time Latency Feasibility)}
+\subsection*{คำถามที่ 4: การออกแบบระบบสตรีมมิ่งวิดีโอแบบเรียลไทม์\\ \normalsize(Question 4: Streaming Architecture \& Real-Time Latency Feasibility)}
 
 \begin{ansbox}
 \textbf{การยืนยันความเป็นไปได้ในการประยุกต์ใช้งานจริง (Real-Time Feasibility):}
@@ -445,9 +443,9 @@
 
 % =================================================================
 \vspace{1em}
-\section[การอภิปรายผลเชิงวิชาการและการเปรียบเทียบ]{การอภิปรายผลเชิงวิชาการและการเปรียบเทียบ\\ \large(Academic Discussion \& Comparative Synthesis)}
+\section*{6. การอภิปรายผลเชิงวิชาการและการเปรียบเทียบ\\ \large(Academic Discussion \& Comparative Synthesis)}
 
-\subsection[ตารางสังเคราะห์ผลลัพธ์การทดลองแบบครอบคลุม]{ตารางสังเคราะห์ผลลัพธ์การทดลองแบบครอบคลุม\\ \normalsize(Comprehensive Experimental Evaluation Table)}
+\subsection*{6.1 ตารางสังเคราะห์ผลลัพธ์การทดลองแบบครอบคลุม\\ \normalsize(Comprehensive Experimental Evaluation Table)}
 
 \begin{table}[H]
 \centering
@@ -468,7 +466,7 @@ MobileNetV2 (Top 20 Layers) & 986,369 & 96.80\% & 96.70\% & 96.90\% & +0.65\% & 
 }
 \end{table}
 
-\subsection[การวิเคราะห์สมดุล Bias-Variance และความสามารถในการสรุปนัยทั่วไป]{การวิเคราะห์สมดุล Bias-Variance และความสามารถในการสรุปนัยทั่วไป\\ \normalsize(Bias-Variance Decomposition \& Generalization Bounds)}
+\subsection*{6.2 การวิเคราะห์สมดุล Bias-Variance และความสามารถในการสรุปนัยทั่วไป\\ \normalsize(Bias-Variance Decomposition \& Generalization Bounds)}
 จากตารางที่ \ref{tab:benchmark} เราสามารถวิเคราะห์ความสัมพันธ์ตามทฤษฎี Bias-Variance Decomposition:
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
     \item \textbf{Custom Scratch CNN:} ประสบปัญหาทั้ง High Bias (ไม่สามารถเรียนรู้ฟีเจอร์ที่ซับซ้อนได้ดีพอ ส่งผลให้ Train Acc ต่ำเพียง 88.45\%) และ Moderate Variance (มี Gap ระหว่าง Train และ Val ถึง 4.55\%) เนื่องจากขาดแคลนข้อมูลสำหรับโครงข่ายขนาด 4.8M พารามิเตอร์
@@ -476,14 +474,14 @@ MobileNetV2 (Top 20 Layers) & 986,369 & 96.80\% & 96.70\% & 96.90\% & +0.65\% & 
     \item \textbf{MobileNetV2 Phase 2 (Fine-Tuning + Augmentation):} บรรลุจุดสมดุลที่สมบูรณ์แบบที่สุด (Optimal Sweet Spot) โดยการปลดล็อค 40 เลเยอร์ช่วยลด Bias ลง ขณะที่ Data Augmentation และ L2 Regularization ช่วยควบคุม Variance ให้อยู่ในระดับต่ำสุด (Gap เพียง 0.24\%)
 \end{itemize}
 
-\subsection[การเปรียบเทียบเชิงวิเคราะห์ระหว่าง MLP (Assignment 5) และ CNN (Assignment 6)]{การเปรียบเทียบเชิงวิเคราะห์ระหว่าง MLP (Assignment 5) และ CNN (Assignment 6)\\ \normalsize(Comparative Synthesis: MLP on MNIST vs. CNN on Cats \& Dogs)}
+\subsection*{6.3 การเปรียบเทียบเชิงวิเคราะห์ระหว่าง MLP (Assignment 5) และ CNN (Assignment 6)\\ \normalsize(Comparative Synthesis: MLP on MNIST vs. CNN on Cats \& Dogs)}
 การเปรียบเทียบระหว่างสองงานทดลองเผยให้เห็นแก่นแท้ของ Deep Learning:
 \begin{enumerate}[leftmargin=1.8em, itemsep=1pt]
     \item \textbf{มิติของข้อมูลและความซับซ้อน:} ใน Assignment 5 ข้อมูล MNIST เป็นภาพตัวเลขขาวดำขนาดเล็ก ($28 \times 28 \times 1$) ซึ่งมีโครงสร้างเรียบง่าย ทำให้ MLP สามารถทำความแม่นยำได้สูงถึง 98.4\% แต่หากนำ MLP เดียวกันมาใช้กับภาพสุนัขและแมว ($160 \times 160 \times 3$) จะต้องใช้เวกเตอร์นำเข้าขนาด 76,800 ค่า ซึ่งทำให้ MLP ล้มเหลวทันที
     \item \textbf{Weight Sharing \& Parameter Efficiency:} CNN ใช้เคอร์เนลขนาดเล็กกวาดไปทั่วทั้งภาพ ทำให้ค่าน้ำหนักถูกแบ่งปัน (Weight Sharing) ขจัดความซ้ำซ้อนและรักษา Translation Invariance ได้อย่างสมบูรณ์แบบ
 \end{enumerate}
 
-\subsection[แนวทางการนำโมเดลไปประยุกต์ใช้งานบนระบบ Edge / Mobile Devices]{แนวทางการนำโมเดลไปประยุกต์ใช้งานบนระบบ Edge / Mobile Devices\\ \normalsize(Edge Deployment \& Model Quantization Opportunities)}
+\subsection*{6.4 แนวทางการนำโมเดลไปประยุกต์ใช้งานบนระบบ Edge / Mobile Devices\\ \normalsize(Edge Deployment \& Model Quantization Opportunities)}
 สถาปัตยกรรม MobileNetV2 ที่พัฒนาขึ้นนี้มีความพร้อมสูงสำหรับการแปลงไปเป็นโมเดลสำหรับอุปกรณ์พกพา:
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
     \item \textbf{TensorFlow Lite (TFLite) Conversion:} สามารถแปลงเป็นไฟล์ \texttt{.tflite} ขนาดเพียง $\approx 9.8$ MB
@@ -492,7 +490,7 @@ MobileNetV2 (Top 20 Layers) & 986,369 & 96.80\% & 96.70\% & 96.90\% & +0.65\% & 
 
 % =================================================================
 \vspace{1em}
-\section[สรุปผลการทดลองและข้อเสนอแนะเชิงประยุกต์]{สรุปผลการทดลองและข้อเสนอแนะเชิงประยุกต์\\ \large(Conclusions \& Practical Recommendations)}
+\section*{7. สรุปผลการทดลองและข้อเสนอแนะเชิงประยุกต์\\ \large(Conclusions \& Practical Recommendations)}
 
 \begin{enumerate}[leftmargin=1.8em, itemsep=2pt]
     \item \textbf{ข้อสรุปผลสัมฤทธิ์:} โมเดล MobileNetV2 Transfer Learning ที่ผ่านการฝึกฝนแบบสองขั้นตอน (Two-Phase Training) ร่วมกับ Data Augmentation สามารถจำแนกภาพสุนัขและแมวได้ด้วยความแม่นยำ \textbf{97.47\%} และให้ค่าความเที่ยงตรง (Precision) สำหรับสุนัขสูงถึง \textbf{97.55\% (0.98)} และแมว \textbf{97.38\% (0.97)} ซึ่งชนะเกณฑ์เป้าหมาย $90 - 95\%$ ของบริษัทได้อย่างสมบูรณ์แบบ
@@ -506,7 +504,7 @@ MobileNetV2 (Top 20 Layers) & 986,369 & 96.80\% & 96.70\% & 96.90\% & +0.65\% & 
 
 % =================================================================
 \newpage
-\section{Appendix: Full Jupyter Notebook Code \& Output}
+\section*{Appendix: Full Jupyter Notebook Code \& Output}
 
 \input{notebook_appendix_6.tex}
 
