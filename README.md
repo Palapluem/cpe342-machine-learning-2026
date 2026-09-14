@@ -48,7 +48,6 @@ cpe342-machine-learning-2026/
 │   └── Assignment 6_CNN/
 │       ├── 67_1027_1042_1067.ipynb            # Official course submission notebook
 │       ├── CNN_Homework.ipynb                 # Original assignment template
-│       ├── 66_1009_1034_1055.ipynb            # Senior reference notebook
 │       ├── CPE342_Assignment 6_main.tex      # LaTeX source report
 │       ├── CPE342_Assignment 6_main.pdf      # Publication-grade academic report (38 pages)
 │       ├── notebook_appendix_6.tex           # LaTeX appendix with executed notebook cells

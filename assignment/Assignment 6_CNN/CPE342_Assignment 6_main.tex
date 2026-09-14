@@ -270,12 +270,12 @@
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.98\textwidth]{plot_2_cnn_architectures_comparison.pdf}
-    \caption{แผนภาพเปรียบเทียบสถาปัตยกรรม: โมเดลพื้นฐาน Custom Scratch CNN (ซ้าย) เทียบกับโมเดลเสนอแนะ MobileNetV2 Transfer Learning (ขวา)}
+    \caption{แผนผังสถาปัตยกรรมโครงข่ายเชิงลึกและท่อส่งการประมวลผลข้อมูลระดับงานวิจัย (Research-Grade Architectural Pipeline): (a) ผังท่อส่งข้อมูลเทนเซอร์ 3 มิติ (3D Tensor Dataflow Pipeline) แสดงการลดทอนมิติเชิงพื้นที่ผ่าน Inverted Residual Blocks สู่ Global Average Pooling (GAP) และ Classification Head (b) โครงสร้างจุลภาค Inverted Residual Block พร้อมตัวคอขวดเชิงเส้น (Linear Bottleneck) และการเชื่อมต่อทางลัด (Identity Residual Shortcut) (c) ตารางสังเคราะห์มิติเชิงสถาปัตยกรรมและประสิทธิภาพเปรียบเทียบระหว่าง Custom Scratch CNN กับ MobileNetV2}
     \label{fig:plot_2}
 \end{figure}
 
 \subsection*{3.1 โมเดลพื้นฐาน: Custom Deep CNN from Scratch\\ \normalsize(Model 1: Baseline Architecture Specifications)}
-โมเดลพื้นฐานถูกออกแบบให้มีโครงสร้าง 3 คอนโวลูชันบล็อก (ดังแสดงในรูปที่ \ref{fig:plot_2} ซ้าย):
+โมเดลพื้นฐานถูกออกแบบให้มีโครงสร้าง 3 คอนโวลูชันบล็อก พร้อมชั้น Flattening ขนาดใหญ่ (เปรียบเทียบเชิงโครงสร้างในรูปที่ \ref{fig:plot_2}(c)):
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
     \item \textbf{Block 1:} Conv2D (64 filters, $3\times3$) $\rightarrow$ BatchNorm $\rightarrow$ Conv2D (64 filters) $\rightarrow$ BatchNorm $\rightarrow$ MaxPool ($2\times2$) $\rightarrow$ Dropout ($0.25$) [Output: $80 \times 80 \times 64$]
     \item \textbf{Block 2:} Conv2D (128 filters, $3\times3$) $\rightarrow$ BatchNorm $\rightarrow$ Conv2D (128 filters) $\rightarrow$ BatchNorm $\rightarrow$ MaxPool ($2\times2$) $\rightarrow$ Dropout ($0.25$) [Output: $40 \times 40 \times 128$]
@@ -285,7 +285,7 @@
 \end{itemize}
 
 \subsection*{3.2 โมเดลเสนอแนะ: MobileNetV2 Transfer Learning\\ \normalsize(Model 2 \& 3: Pretrained Backbone \& Two-Phase Strategy)}
-โมเดลเสนอแนะใช้โครงข่าย MobileNetV2 ที่ผ่านการเทรนบน ImageNet ร่วมกับ Classification Head ที่ออกแบบพิเศษ (รูปที่ \ref{fig:plot_2} ขวา):
+โมเดลเสนอแนะใช้โครงข่าย MobileNetV2 ที่ผ่านการฝึกฝนล่วงหน้าบน ImageNet ร่วมกับ Inverted Residual Blocks และ Global Average Pooling ดังแสดงในรูปที่ \ref{fig:plot_2}(a)--(b):
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
     \item \textbf{Backbone:} MobileNetV2 ตัดชั้นบนสุดออก (include\_top = False) ได้มิติเอาต์พุต $5 \times 5 \times 1280$
     \item \textbf{Global Pooling:} GlobalAveragePooling2D ยุบมิติเชิงพื้นที่เหลือเวกเตอร์ฟีเจอร์ขนาด 1,280
