@@ -40,10 +40,20 @@ cpe342-machine-learning-2026/
 │   │   ├── notebook_appendix_4.tex           # LaTeX appendix with executed notebook cells
 │   │   └── plot_1_*.pdf to plot_6_*.pdf       # High-resolution vector figures
 │   │
-│   └── Assignment 5_Neural Network/
-│       ├── Assignment_5_Deep_Neural_Network.ipynb # Fully executed reference notebook
-│       ├── 1027_1042.ipynb               # Official course submission notebook
-│       └── CPE342_Assignment 5_main.pdf      # Publication-grade academic report
+│   ├── Assignment 5_Neural Network/
+│   │   ├── Assignment_5_Deep_Neural_Network.ipynb # Fully executed reference notebook
+│   │   ├── 1027_1042_1067.ipynb               # Official course submission notebook
+│   │   └── CPE342_Assignment 5_main.pdf      # Publication-grade academic report
+│   │
+│   └── Assignment 6_CNN/
+│       ├── 67_1027_1042_1067.ipynb            # Official course submission notebook
+│       ├── CNN_Homework.ipynb                 # Original assignment template
+│       ├── 66_1009_1034_1055.ipynb            # Senior reference notebook
+│       ├── CPE342_Assignment 6_main.tex      # LaTeX source report
+│       ├── CPE342_Assignment 6_main.pdf      # Publication-grade academic report (30 pages)
+│       ├── notebook_appendix_6.tex           # LaTeX appendix with executed notebook cells
+│       ├── benchmark_results.csv & .json     # 5-model benchmark and ablation metrics
+│       └── plot_1_*.pdf to plot_7_*.pdf       # Publication-grade vector figures
 ├── lecture/                                   # Lecture slides and demo notebooks
 │   ├── Lecture 1–12 PDFs                      # Course slide decks
 │   ├── ML_2_Training_Models.ipynb             # Demo: Gradient Descent & Linear Regression
@@ -144,8 +154,31 @@ cpe342-machine-learning-2026/
     * Architectural Depth & Dropout Ablation (Shallow vs. Deeper 512-256-128 vs. Deeper + Dropout 0.2, achieving **98.35% Test Accuracy** and **0.0662 Test Loss**).
   * Comparative methodological discussion with tabular MLP on Bank Marketing data (`lecture/ML_6_bank-data.csv`).
 * **Deliverables:**
-  * [`Assignment_5_Deep_Neural_Network.ipynb`](./assignment/Assignment%205_Neural%20Network/Assignment_5_Deep_Neural_Network.ipynb) (Course Submission File: [`1027_1042.ipynb`](./assignment/Assignment%205_Neural%20Network/1027_1042.ipynb))
+  * [`Assignment_5_Deep_Neural_Network.ipynb`](./assignment/Assignment%205_Neural%20Network/Assignment_5_Deep_Neural_Network.ipynb) (Course Submission File: [`1027_1042_1067.ipynb`](./assignment/Assignment%205_Neural%20Network/1027_1042_1067.ipynb))
   * [`CPE342_Assignment 5_main.pdf`](./assignment/Assignment%205_Neural%20Network/CPE342_Assignment%205_main.pdf)
+
+---
+
+### [Assignment 6: Convolutional Neural Networks (CNN)](./assignment/Assignment%206_CNN/)
+* **Topic:** Deep Convolutional Neural Networks (CNN), Transfer Learning (MobileNetV2), Two-Phase Fine-Tuning, Data Augmentation, Feature Map Activations, and Real-Time Video Streaming Inference for Dog vs. Cat Classification ($N = 25,000$).
+* **Key Tasks:**
+  * Mathematical formulation of 2D Cross-Correlation, Receptive Fields (Hubel & Wiesel visual cortex), Zero-Padding (Valid vs Same), Stride, and Subsampling / Max Pooling.
+  * Architecture of MobileNetV2: Inverted Residual blocks, Depthwise Separable Convolutions, and Linear Bottlenecks (Sandler et al. 2018; Géron Ch. 14).
+  * Data ingestion pipeline: Udacity Dogs vs Cats dataset (25,000 images), geometric/photometric data augmentation (rotation, shifting, zooming, horizontal flipping, shear), and 80/20 train-validation splitting (18,000 train / 4,500 validation).
+  * Baseline Custom Scratch CNN (4 blocks, 4,816,513 parameters) ablation demonstrating sample inefficiency and overfitting (Accuracy: 84.15%, Dog Precision: 83.50%, failing the commercial >90–95% threshold).
+  * Two-Phase Transfer Learning Strategy:
+    * **Phase 1 (Feature Extraction):** Pretrained MobileNetV2 base frozen, training Global Average Pooling (GAP) + Dense(256) head with Adam ($\eta = 10^{-4}$), EarlyStopping, and ReduceLROnPlateau.
+    * **Phase 2 (Fine-Tuning):** Unfreezing top 40 layers of MobileNetV2 with low learning rate ($\eta = 10^{-5}$) to prevent catastrophic forgetting.
+  * Comprehensive model evaluation across all 4,500 validation images:
+    * Confusion Matrix: 2,196 True Cats, 2,190 True Dogs, 54 False Dogs, 60 False Cats.
+    * Classification Report: Dog Precision **97.59% (0.98)**, Cat Precision **97.34% (0.97)**, Accuracy **97.47%** (successfully passing commercial launch threshold >90–95%).
+  * Hierarchical Feature Map Activations Visualization (KMUTT Lecture 7 slides 3–16): early edges $\to$ mid-level textures $\to$ deep semantic facial structures (cat ears vs dog snouts).
+  * 5-Model Ablation Study: Scratch CNN vs TL Phase 1 vs TL Fine-Tuned + Augmentation vs TL without Augmentation vs Edge Quantized INT8 MobileNetV2 (0.65 MB, 4.2x speedup).
+  * Real-Time Streaming Video Pipeline (STEP 10): `DogCatStreamingEngine` achieving 54.3 FPS (18.4 ms latency/frame, exceeding 30 FPS requirement) with temporal smoothing and automated AR filter placement ("Dog Floppy Ears & Snout" vs "Cat Pointed Ears & Whiskers").
+* **Deliverables:**
+  * [`67_1027_1042_1067.ipynb`](./assignment/Assignment%206_CNN/67_1027_1042_1067.ipynb) (Official Course Submission File)
+  * [`CPE342_Assignment 6_main.pdf`](./assignment/Assignment%206_CNN/CPE342_Assignment%206_main.pdf) (Publication-Grade Academic Report)
+  * [`benchmark_results.csv`](./assignment/Assignment%206_CNN/benchmark_results.csv) & [`benchmark_results.json`](./assignment/Assignment%206_CNN/benchmark_results.json)
 
 ---
 
@@ -159,9 +192,11 @@ cpe342-machine-learning-2026/
 
 ---
 
-## 👤 Author
+## 👥 Authors & Contributors
 
-* **Wisit Suwannao (วิศิษฐ์ สุวรรณเนาว์)**
+* **Wisit Suwannao (วิศิษฐ์ สุวรรณเนาว์)** — 67070501042 (Assignments 1–6)
+* **Natthawat Primsirikunawut (นัธทวัฒน์ ปริมสิริคุณาวุฒิ)** — 67070501027 (Group Assignments 5 & 6)
+* **Polwarit Watthanahemmarat (พลวริษฐ์ วัฒนเหมรัตน์)** — 67070501067 (Group Assignments 5 & 6)
 
 ---
 
