@@ -292,8 +292,8 @@
     \item \textbf{จำนวนพารามิเตอร์รวม:} 4,817,537 พารามิเตอร์ (ทั้งหมดต้องฝึกฝนใหม่จากศูนย์)
 \end{itemize}
 
-\subsection*{3.2 โมเดลเสนอแนะ: MobileNetV2 Transfer Learning\\ \normalsize(Model 2 \& 3: Pretrained Backbone \& Two-Phase Strategy)}
-โมเดลเสนอแนะใช้โครงข่าย MobileNetV2 ที่ผ่านการฝึกฝนล่วงหน้าบน ImageNet ร่วมกับ Inverted Residual Blocks และ Global Average Pooling ดังแสดงในรูปที่ \ref{fig:plot_2}(a)--(b):
+\subsection*{3.2 โมเดล MobileNetV2 Transfer Learning\\ \normalsize(Model 2 \& 3: Pretrained Backbone \& Two-Phase Strategy)}
+การศึกษานี้ประยุกต์ใช้โครงข่าย MobileNetV2 Transfer Learning ที่ผ่านการฝึกฝนล่วงหน้าบน ImageNet ร่วมกับ Inverted Residual Blocks และ Global Average Pooling ดังแสดงในรูปที่ \ref{fig:plot_2}(a)--(b):
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
     \item \textbf{Backbone:} MobileNetV2 ตัดชั้นบนสุดออก (include\_top = False) ได้มิติเอาต์พุต $5 \times 5 \times 1280$
     \item \textbf{Global Pooling:} GlobalAveragePooling2D ยุบมิติเชิงพื้นที่เหลือเวกเตอร์ฟีเจอร์ขนาด 1,280
@@ -380,7 +380,7 @@
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
     \item \textbf{การไม่มี Data Augmentation (Model 4):} แม้จะ Fine-Tune โมเดลจนได้ Train Accuracy สูงถึง 99.10\% แต่ Validation Accuracy ตกลงมาอยู่ที่ 95.12\% ทำให้เกิด Generalization Gap สูงถึง \textbf{+3.98\%} ยืนยันว่า Data Augmentation มีบทบาทสำคัญในการต้านทาน Overfitting
     \item \textbf{ระดับความลึกของการปลดล็อคเลเยอร์ (Top 20 vs. Top 40):} การปลดล็อค 40 เลเยอร์ (Model 3) ให้ผลลัพธ์ดีกว่า 20 เลเยอร์ (Model 5: 96.80\%) เนื่องจาก 40 เลเยอร์ครอบคลุม Bottleneck บล็อกระดับกลางที่สามารถปรับตัวเข้ากับโดเมนภาพสัตว์เลี้ยงได้สมบูรณ์กว่า
-    \item \textbf{โมเดลเสนอแนะ (Model 3):} มี Generalization Gap เพียง \textbf{+0.24\%} แสดงถึงความสามารถในการสรุปนัยทั่วไปสู่ข้อมูลใหม่อย่างสมบูรณ์แบบ
+    \item \textbf{โมเดล MobileNetV2 Two-Phase (Model 3):} มี Generalization Gap เพียง \textbf{+0.24\%} แสดงถึงความสามารถในการสรุปนัยทั่วไปสู่ข้อมูลใหม่อย่างสมบูรณ์แบบ
 \end{itemize}
 
 \subsection*{4.5 การจำลองระบบตรวจจับแบบสตรีมมิ่งวิดีโอและฟิลเตอร์ภาพสด\\ \normalsize(Real-Time Streaming Video Pipeline \& AR Filter Simulation)}
@@ -407,7 +407,7 @@
 \begin{itemize}[leftmargin=1.5em, itemsep=2pt]
     \item \textbf{เกณฑ์ขั้นต่ำที่บริษัทกำหนด:} Precision $> 90.00\%$
     \item \textbf{เกณฑ์มาตรฐานระดับอุตสาหกรรม:} Precision $> 95.00\%$
-    \item \textbf{ผลลัพธ์ของโมเดลเสนอแนะ (MobileNetV2 Fine-Tuned):}
+    \item \textbf{ผลลัพธ์ของโมเดล MobileNetV2 Fine-Tuned (Model 3):}
     \begin{itemize}[leftmargin=1.2em]
         \item \textbf{Precision (สุนัข - Dog): 97.55\% (เทียบเท่า 0.98)} $\rightarrow$ เกินเกณฑ์เป้าหมาย $+2.55\%$
         \item \textbf{Precision (แมว - Cat): 97.38\% (เทียบเท่า 0.97)} $\rightarrow$ เกินเกณฑ์เป้าหมาย $+2.38\%$
@@ -469,7 +469,7 @@ Custom CNN (Scratch) & 4,816,513 & 84.15\% & 83.50\% & 85.20\% & +4.55\% & \text
 MobileNetV2 (Phase 1 Frozen) & 328,193 & 96.31\% & 96.10\% & 96.50\% & -2.12\% & \textcolor{green!60!black}{\textbf{ผ่าน}} \\
 MobileNetV2 (w/o Augmentation) & 1,842,433 & 95.12\% & 94.80\% & 95.40\% & +3.98\% & \textcolor{green!60!black}{\textbf{ผ่าน}} \\
 MobileNetV2 (Top 20 Layers) & 986,369 & 96.80\% & 96.70\% & 96.90\% & +0.65\% & \textcolor{green!60!black}{\textbf{ผ่าน}} \\
-\textbf{MobileNetV2 (เสนอแนะ: Top 40 + Aug)} & \textbf{1,842,433} & \textbf{97.47\%} & \textbf{97.55\%} & \textbf{97.38\%} & \textbf{+0.24\%} & \textcolor{green!60!black}{\textbf{ผ่านดีเยี่ยม}} \\
+\textbf{MobileNetV2 (Two-Phase: Top 40 + Aug)} & \textbf{1,842,433} & \textbf{97.47\%} & \textbf{97.55\%} & \textbf{97.38\%} & \textbf{+0.24\%} & \textcolor{green!60!black}{\textbf{ผ่านดีเยี่ยม}} \\
 \bottomrule
 \end{tabular}%
 }
