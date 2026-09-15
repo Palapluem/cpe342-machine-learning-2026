@@ -46,13 +46,13 @@ cpe342-machine-learning-2026/
 │   │   └── CPE342_Assignment 5_main.pdf      # Publication-grade academic report
 │   │
 │   └── Assignment 6_CNN/
-│       ├── 67_1027_1042_1067.ipynb            # Official course submission notebook
+│       ├── 67_1027_1042.ipynb            # Official course submission notebook
 │       ├── CNN_Homework.ipynb                 # Original assignment template
 │       ├── CPE342_Assignment 6_main.tex      # LaTeX source report
-│       ├── CPE342_Assignment 6_main.pdf      # Publication-grade academic report (38 pages)
+│       ├── CPE342_Assignment 6_main.pdf      # Publication-grade academic report (49 pages)
 │       ├── notebook_appendix_6.tex           # LaTeX appendix with executed notebook cells
 │       ├── benchmark_results.csv & .json     # 5-model benchmark and ablation metrics
-│       └── plot_1_*.pdf to plot_7_*.pdf       # Publication-grade vector figures
+│       └── plot_1_*.pdf to plot_8_*.pdf       # Publication-grade vector figures
 ├── lecture/                                   # Lecture slides and demo notebooks
 │   ├── Lecture 1–12 PDFs                      # Course slide decks
 │   ├── ML_2_Training_Models.ipynb             # Demo: Gradient Descent & Linear Regression
@@ -176,7 +176,7 @@ cpe342-machine-learning-2026/
   * 5-Model Ablation Study: Scratch CNN vs TL Phase 1 vs TL Fine-Tuned + Augmentation vs TL without Augmentation vs Edge Quantized INT8 MobileNetV2 (0.65 MB, 4.2x speedup).
   * Real-Time Streaming Video Pipeline (STEP 10): `DogCatStreamingEngine` achieving 54.3 FPS (18.4 ms latency/frame, exceeding 30 FPS requirement) with temporal smoothing and automated AR filter placement ("Dog Floppy Ears & Snout" vs "Cat Pointed Ears & Whiskers").
 * **Deliverables:**
-  * [`67_1027_1042_1067.ipynb`](./assignment/Assignment%206_CNN/67_1027_1042_1067.ipynb) (Official Course Submission File)
+  * [`67_1027_1042.ipynb`](./assignment/Assignment%206_CNN/67_1027_1042.ipynb) (Official Course Submission File)
   * [`CPE342_Assignment 6_main.pdf`](./assignment/Assignment%206_CNN/CPE342_Assignment%206_main.pdf) (Publication-Grade Academic Report)
   * [`benchmark_results.csv`](./assignment/Assignment%206_CNN/benchmark_results.csv) & [`benchmark_results.json`](./assignment/Assignment%206_CNN/benchmark_results.json)
 
@@ -192,11 +192,11 @@ cpe342-machine-learning-2026/
 
 ---
 
-## 👥 Authors & Contributors
+## 👤 Author
 
-* **Wisit Suwannao (วิศิษฐ์ สุวรรณเนาว์)** — 67070501042 (Assignments 1–6)
-* **Natthawat Primsirikunawut (นัธทวัฒน์ ปริมสิริคุณาวุฒิ)** — 67070501027 (Group Assignments 5 & 6)
-* **Polwarit Watthanahemmarat (พลวริษฐ์ วัฒนเหมรัตน์)** — 67070501067 (Group Assignments 5 & 6)
+* **Wisit Suwannao (วิศิษฐ์ สุวรรณเนาว์)** — 67070501042
+  * Department of Computer Engineering, Faculty of Engineering
+  * King Mongkut's University of Technology Thonburi (KMUTT)
 
 ---
 
