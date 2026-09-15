@@ -177,7 +177,7 @@ print('[Figure 1: Real photographic dataset samples and augmentation pipeline di
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.96\linewidth]{plot_1_dataset_samples_augmentation.pdf}
+\includegraphics[width=\linewidth]{plot_1_dataset_samples_augmentation.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 1 (Dog vs. Cat Dataset Exploratory Data Analysis \& Augmentation Pipeline)}: High-resolution photographic samples from the Kaggle/Udacity Dogs vs. Cats dataset ($12,500$ cats and $12,500$ dogs) alongside dynamic real-time geometric and photometric transformations (horizontal flip, random rotation $\pm 15^\circ$, zoom $1.2\times$, and contrast adjustment). The transformations enforce spatial and rotational invariance, dramatically mitigating overfitting, while the RGB pixel intensity distribution confirms balanced color spaces across both classes.\par
@@ -724,7 +724,7 @@ build_masterpiece_figure()
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.96\linewidth]{plot_2_cnn_architectures_comparison.pdf}
+\includegraphics[width=\linewidth]{plot_2_cnn_architectures_comparison.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 2 (Deep CNN Architectures Comparison, Inverted Residual Dataflow, and Complexity Synthesis)}: Multi-panel architectural schematic and structural pipeline benchmark. \textbf{Panel (a)} depicts the end-to-end tensor dataflow pipeline from raw RGB input ($160 \times 160 \times 3$) through dynamic online augmentation, isometric 3D feature representation downsampling across MobileNetV2 inverted residual blocks ($80 \times 80 \times 32 \to 40 \times 40 \times 64 \to 20 \times 20 \times 128 \to 10 \times 10 \times 256 \to 5 \times 5 \times 1280$), and Global Average Pooling (GAP) collapsing spatial dimensions to a 1,280-D vector. \textbf{Panel (b)} illustrates the micro-architecture of an Inverted Residual Block with an expansion factor $t=6$, showing $1 \times 1$ expansion, $3 \times 3$ depthwise convolution, linear bottleneck projection (omitting ReLU to prevent manifold collapse), and identity residual shortcut. \textbf{Panel (c)} synthesizes key architectural and efficiency metrics, highlighting that GAP reduces transition parameters by $98.7\%$ compared to Custom Scratch CNN flattening ($102,400$ weights), while depthwise separable convolutions achieve an $\sim 8.5\times$ reduction in computational operations.\par
@@ -892,7 +892,7 @@ plt.show()
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.96\linewidth]{plot_3_training_history_twophase.pdf}
+\includegraphics[width=\linewidth]{plot_3_training_history_twophase.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 3 (Two-Phase Transfer Learning Training History)}: Dual-panel learning trajectories displaying Binary Cross-Entropy Loss (left) and Classification Accuracy (right) across Phase 1 (Feature Extraction, epochs 1--8 with early stopping at epoch 5) and Phase 2 (Fine-Tuning of top 40 bottleneck layers, epochs 9--18). The fine-tuning phase smoothly raises validation accuracy to $97.47\%$ with zero catastrophic forgetting, crossing the $95\%$ commercial target line.\par
@@ -1023,7 +1023,7 @@ plt.show()
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.96\linewidth]{plot_4_confusion_matrix_roc_pr.pdf}
+\includegraphics[width=\linewidth]{plot_4_confusion_matrix_roc_pr.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 4 (Diagnostic Performance \& Error Topology: Confusion Matrix, ROC, and PR Curves)}: Multi-panel performance diagnostic on $4,500$ validation images ($2,250$ cats, $2,250$ dogs). The confusion matrix demonstrates exceptional class balance ($2,196$ true cats, $2,190$ true dogs; $54$ false dogs, $60$ false cats). The ROC curve achieves an AUC of $0.9962$, while the Precision-Recall curve yields an Average Precision of $0.9965$, confirming Dog Precision of $97.59\%$ and Cat Precision of $97.34\%$, comfortably surpassing the $90\text{--}95\%$ commercial threshold.\par
@@ -1091,7 +1091,7 @@ plt.show()
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.96\linewidth]{plot_5_feature_map_activations.pdf}
+\includegraphics[width=\linewidth]{plot_5_feature_map_activations.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 5 (Hierarchical Feature Map Activations Across MobileNetV2 Layers)}: Visual feature representations extracted across network depth matching KMUTT Lecture 7 principles. Early layers (receptive field $3 \times 3$) isolate fundamental edges, lines, and color gradients (analogous to biological Simple Cells in cortical area V1). Middle inverted residual blocks ($15 \times 15$) capture textural patterns and fur contours. Deep bottleneck layers ($80 \times 80$) activate selectively on class-discriminative semantic parts (pointed triangular cat ears vs. elongated dog snouts).\par
@@ -1158,7 +1158,7 @@ plt.show()
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.96\linewidth]{plot_6_ablation_augmentation_finetuning.pdf}
+\includegraphics[width=\linewidth]{plot_6_ablation_augmentation_finetuning.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 6 (Ablation Benchmark: Impact of Data Augmentation, Fine-Tuning, and Quantization)}: Comparative ablation across five architectures (Custom Scratch CNN, MobileNetV2 Phase 1, MobileNetV2 Fine-Tuned with Augmentation, MobileNetV2 without Augmentation, and INT8 Quantized MobileNetV2). The benchmark highlights that omitting data augmentation creates a severe generalization gap ($+7.41\%$), whereas Two-Phase fine-tuning achieves peak accuracy ($97.47\%$) and post-training INT8 quantization yields a $4.2\times$ latency reduction with negligible precision loss ($97.35\%$).\par
@@ -1315,7 +1315,7 @@ plt.show()
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.96\linewidth]{plot_7_inference_streaming_pipeline.pdf}
+\includegraphics[width=\linewidth]{plot_7_inference_streaming_pipeline.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 7 (Real-Time Video Streaming Inference Pipeline \& AR Filter Architecture)}: End-to-end continuous inference architecture for live video streams (30 FPS requirement). Video frames are resized, normalized, and evaluated through MobileNetV2 in $18.4\text{ ms}$ ($54.3\text{ FPS}$). A rolling temporal smoothing buffer ($\tau = 3\text{ frames}$) suppresses high-frequency classification jitter, smoothly driving the automated placement of AR facial filters (``Dog Floppy Ears \& Snout'' vs. ``Cat Pointed Ears \& Whiskers'').\par
@@ -1338,7 +1338,7 @@ print('[Figure 8: Empirical test predictions and failure topology analysis displ
 \noindent\begin{minipage}{\linewidth}
 \centering
 \vspace{0.4em}
-\includegraphics[width=0.96\linewidth]{plot_8_test_predictions_error_analysis.pdf}
+\includegraphics[width=\linewidth]{plot_8_test_predictions_error_analysis.pdf}
 \par\vspace{0.6em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=5pt,bottom=5pt,unbreakable]
 \textbf{Figure 8 (Qualitative Empirical Evaluation \& Failure Topology Analysis)}: Comprehensive empirical diagnostic on real test samples. Panel (a) showcases high-confidence predictions ($>99\%$) where the fine-tuned MobileNetV2 architecture accurately detects distinctive feline facial landmarks (triangular pointed ears, whisker geometry) and canine traits (elongated muzzle, snout, floppy ears). Panel (b) examines failure topologies (False Positives and False Negatives), identifying that long fluffy coats in dark lighting and curled sleeping postures constitute the primary confusion boundaries, while backlit silhouettes and partial occlusions remain robustly invariant under the transfer learned prior.\par
