@@ -243,375 +243,453 @@ Non-trainable params: 2,257,984 (8.61 MB)
 \needspace{4\baselineskip}
 \noindent\textbf{\small [In 7]:} 
 \begin{lstlisting}[style=pycode]
-# Plot Figure 2: End-to-End Pipeline & MobileNetV2 Inverted Resi
+# Plot Figure 2: End-to-End Pipeline & MobileNetV2 Inverted Residual Architecture
 import os
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
 import matplotlib.patches as patches
 from matplotlib.patches import FancyBboxPatch, Polygon
 
 OUT_PDF = 'plot_2_cnn_architectures_comparison.pdf'
 
+# Load Sarabun font
+font_dir = r'C:\Users\Admin\AppData\Local\Microsoft\Windows\Fonts'
+if os.path.exists(font_dir):
+    for f in os.listdir(font_dir):
+        if f.endswith('.ttf') and 'sarabun' in f.lower():
+            try:
+                fm.fontManager.addfont(os.path.join(font_dir, f))
+            except Exception:
+                pass
+
+plt.rcParams['pdf.fonttype'] = 42
+plt.rcParams['ps.fonttype'] = 42
 plt.rcParams['font.family'] = 'Sarabun'
-plt.rcParams['font.sans-serif'] = ['Sarabun', 'TH Sarabun New', 
+plt.rcParams['font.sans-serif'] = ['Sarabun', 'TH Sarabun New', 'DejaVu Sans']
 plt.rcParams['axes.edgecolor'] = '#CBD5E1'
 plt.rcParams['axes.linewidth'] = 0.8
 
-def draw_3d_cuboid(ax, x0, y0, w, h, d, face_col, top_col='#F1F5
+def draw_3d_cuboid(ax, x0, y0, w, h, d, face_col, top_col='#F1F5F9', right_col='#CBD5E1', edge_col='#1E3A8A', alpha=0.92):
     dx, dy = d * 0.45, d * 0.40
-    front = Polygon([[x0, y0], [x0 + w, y0], [x0 + w, y0 + h], [
+    front = Polygon([[x0, y0], [x0 + w, y0], [x0 + w, y0 + h], [x0, y0 + h]], closed=True, facecolor=face_col, edgecolor=edge_col, linewidth=1.2, alpha=alpha, zorder=3)
     ax.add_patch(front)
-    top = Polygon([[x0, y0 + h], [x0 + w, y0 + h], [x0 + w + dx,
+    top = Polygon([[x0, y0 + h], [x0 + w, y0 + h], [x0 + w + dx, y0 + h + dy], [x0 + dx, y0 + h + dy]], closed=True, facecolor=top_col, edgecolor=edge_col, linewidth=1.1, alpha=alpha, zorder=2)
     ax.add_patch(top)
-    right = Polygon([[x0 + w, y0], [x0 + w + dx, y0 + dy], [x0 +
+    right = Polygon([[x0 + w, y0], [x0 + w + dx, y0 + dy], [x0 + w + dx, y0 + h + dy], [x0 + w, y0 + h]], closed=True, facecolor=right_col, edgecolor=edge_col, linewidth=1.1, alpha=alpha, zorder=2)
     ax.add_patch(right)
     return x0 + w + dx, y0 + h/2
 
 def build_masterpiece_figure():
-    # Symmetrical, perfectly balanced canvas
-    fig = plt.figure(figsize=(16.0, 12.0), dpi=300)
-    gs = fig.add_gridspec(3, 1, height_ratios=[1.0, 0.95, 1.05],
+    fig = plt.figure(figsize=(17.5, 15.6), dpi=300)
+    gs = fig.add_gridspec(3, 1, height_ratios=[1.14, 1.05, 1.18], hspace=0.26)
 
-    X_LEFT = 0.58
-    X_RIGHT = 15.42
-    TOTAL_SPAN = X_RIGHT - X_LEFT  # 14.84
+    X_LEFT = 0.72
+    TOTAL_SPAN = 16.06  # X_RIGHT = 16.78, exactly matches right margin = 17.5 - 16.78 = 0.72!
+    X_RIGHT = X_LEFT + TOTAL_SPAN
 
-    # ==========================================================
-    # ROW 1: PANEL (A) - Full Width End-to-End Pipeline
-    # ==========================================================
+    # =========================================================================
+    # ROW 1: PANEL 2(A) - End-to-End Transfer Learning & Tensor Pipeline
+    # =========================================================================
     ax_a = fig.add_subplot(gs[0])
-    ax_a.set_xlim(0, 16.0); ax_a.set_ylim(0, 4.3); ax_a.axis('of
+    ax_a.set_xlim(0, 17.5)
+    ax_a.set_ylim(0, 4.4)
+    ax_a.axis('off')
 
-    # Headers
-    ax_a.text(X_LEFT, 4.12, 'Panel (a): End-to-End Transfer Lear
-    ax_a.text(X_LEFT, 3.86, 'Sequential spatial downsampling, dy
+    ax_a.text(X_LEFT, 4.18, 'Figure 2(a): End-to-End Transfer Learning Computational & Tensor Pipeline',
+              fontsize=12.2, fontweight='bold', color='#0F172A')
+    ax_a.text(X_LEFT, 3.90, 'Spatial downsampling, dynamic mini-batch augmentation, depthwise separable features, and global average pooling.',
+              fontsize=8.8, color='#475569')
 
-    # Common vertical alignment for outer boxes
-    Y_BOX_BOTTOM = 0.75
+    Y_BOX_BOTTOM = 0.85
     BOX_H = 2.45
-    Y_MID = Y_BOX_BOTTOM + BOX_H / 2.0  # 1.975
+    Y_MID = Y_BOX_BOTTOM + BOX_H / 2.0  # 2.075
 
-    # 1. Raw Input (x: 0.58 -> 1.98, width: 1.40)
+    # 1. Raw Input Image Box (x: 0.72 -> 2.07, w=1.35)
     x_raw = X_LEFT
-    w_raw = 1.40
-    box_raw = FancyBboxPatch((x_raw, Y_BOX_BOTTOM), w_raw, BOX_H
-    ax_a.add_patch(box_raw)
-    ax_a.text(x_raw + w_raw/2, Y_BOX_BOTTOM + BOX_H - 0.28, 'Raw
-    ax_a.text(x_raw + w_raw/2, Y_BOX_BOTTOM + BOX_H - 0.56, 'Dog
-    
-    # Pet face icon
-    cx, cy = x_raw + w_raw/2, Y_MID - 0.05
-    circle_head = patches.Circle((cx, cy), 0.38, facecolor='#DBE
-    ax_a.add_patch(circle_head)
-    ear1 = patches.Polygon([[cx - 0.24, cy + 0.24], [cx - 0.38, 
-    ear2 = patches.Polygon([[cx + 0.24, cy + 0.24], [cx + 0.38, 
-    ax_a.add_patch(ear1); ax_a.add_patch(ear2)
-    eye1 = patches.Circle((cx - 0.13, cy + 0.04), 0.045, facecol
-    eye2 = patches.Circle((cx + 0.13, cy + 0.04), 0.045, facecol
-    nose = patches.Polygon([[cx - 0.055, cy - 0.08], [cx + 0.055
-    ax_a.add_patch(eye1); ax_a.add_patch(eye2); ax_a.add_patch(n
-    ax_a.text(cx, Y_BOX_BOTTOM + 0.28, '160 x 160 x 3\n[0, 255] 
+    w_raw = 1.35
+    b_raw = FancyBboxPatch((x_raw, Y_BOX_BOTTOM), w_raw, BOX_H, boxstyle='round,pad=0.06',
+                           facecolor='#F8FAFC', edgecolor='#0284C7', lw=1.3)
+    ax_a.add_patch(b_raw)
+    ax_a.text(x_raw + w_raw/2, Y_BOX_BOTTOM + BOX_H - 0.28, 'Raw Input Image', ha='center', va='center', fontsize=7.6, fontweight='bold', color='#0369A1')
+    ax_a.text(x_raw + w_raw/2, Y_BOX_BOTTOM + BOX_H - 0.56, 'Dog / Cat Dataset', ha='center', va='center', fontsize=7.0, color='#475569')
 
-    # Arrow 1
-    ax_a.annotate('', xy=(x_raw + w_raw + 0.32, Y_MID), xytext=(
+    cx = x_raw + w_raw / 2 - 0.21
+    cy = Y_MID - 0.21
+    for di, c_col in enumerate(['#3B82F6', '#10B981', '#EF4444']):
+        rx = cx + (2 - di) * 0.10
+        ry = cy + (2 - di) * 0.10
+        f_sq = Polygon([[rx, ry], [rx+0.42, ry], [rx+0.42, ry+0.42], [rx, ry+0.42]], closed=True,
+                       facecolor=c_col, edgecolor='#1E293B', lw=0.9, alpha=0.88, zorder=3+di)
+        ax_a.add_patch(f_sq)
 
-    # 2. Data Augmentation (x: 2.30 -> 3.90, width: 1.60)
-    x_aug = x_raw + w_raw + 0.32
-    w_aug = 1.60
-    box_aug = FancyBboxPatch((x_aug, Y_BOX_BOTTOM), w_aug, BOX_H
-    ax_a.add_patch(box_aug)
-    ax_a.text(x_aug + w_aug/2, Y_BOX_BOTTOM + BOX_H - 0.26, 'Dat
-    ax_a.text(x_aug + w_aug/2, Y_BOX_BOTTOM + BOX_H - 0.52, '(Im
-    aug_ops = [
-        ('Horizontal Flip', '#3B82F6'),
-        ('Random Rotation (\u00b115\u00b0)', '#2563EB'),
-        ('Random Zoom (\u00b115%)', '#1D4ED8'),
-        ('Random Contrast', '#1E40AF'),
-        ('Rescaling [-1, 1]', '#047857')
+    ax_a.text(x_raw + w_raw/2, Y_BOX_BOTTOM + 0.28, '160 x 160 x 3\n[0, 255] RGB', ha='center', va='center', fontsize=7.2, fontweight='bold', color='#1E293B')
+
+    # Arrow 1: Raw -> Aug
+    GAP_BETWEEN_BLOCKS = 0.32
+    ax_a.annotate('', xy=(x_raw + w_raw + GAP_BETWEEN_BLOCKS - 0.05, Y_MID), xytext=(x_raw + w_raw + 0.05, Y_MID),
+                  arrowprops=dict(arrowstyle='->', color='#2563EB', lw=2.2, mutation_scale=15), zorder=6)
+
+    # 2. Data Augmentation Box (x: 2.39 -> 3.84, w=1.45)
+    x_aug = x_raw + w_raw + GAP_BETWEEN_BLOCKS
+    w_aug = 1.45
+    b_aug = FancyBboxPatch((x_aug, Y_BOX_BOTTOM), w_aug, BOX_H, boxstyle='round,pad=0.06',
+                           facecolor='#F0FDF4', edgecolor='#16A34A', lw=1.3)
+    ax_a.add_patch(b_aug)
+    ax_a.text(x_aug + w_aug/2, Y_BOX_BOTTOM + BOX_H - 0.26, 'Data Augmentation', ha='center', va='center', fontsize=7.6, fontweight='bold', color='#15803D')
+    ax_a.text(x_aug + w_aug/2, Y_BOX_BOTTOM + BOX_H - 0.52, '(Dynamic Mini-batch)', ha='center', va='center', fontsize=7.0, color='#475569')
+
+    ops = [
+        ('Random H-Flip (p=0.5)', '#16A34A'),
+        ('Rotation (\u00b115\u00b0)', '#15803D'),
+        ('Translation (\u00b110%)', '#15803D'),
+        ('Zoom In/Out (1.2x)', '#047857'),
+        ('Rescaling: [-1, 1]', '#1E293B')
     ]
-    for idx_op, (op_name, op_col) in enumerate(aug_ops):
-        y_op = Y_BOX_BOTTOM + BOX_H - 0.82 - idx_op * 0.32
-        pill = FancyBboxPatch((x_aug + 0.08, y_op - 0.11), w_aug
-        ax_a.add_patch(pill)
-        ax_a.text(x_aug + w_aug/2, y_op, op_name, ha='center', v
+    for idx, (op_name, op_col) in enumerate(ops):
+        y_op = Y_MID + 0.35 - idx * 0.36
+        b_op = FancyBboxPatch((x_aug + 0.08, y_op - 0.13), w_aug - 0.16, 0.26, boxstyle='round,pad=0.02',
+                              facecolor='#FFFFFF', edgecolor=op_col, lw=0.8)
+        ax_a.add_patch(b_op)
+        ax_a.text(x_aug + w_aug/2, y_op, op_name, ha='center', va='center', fontsize=6.8, fontweight='bold', color=op_col)
 
-    # Arrow 2
-    ax_a.annotate('', xy=(x_aug + w_aug + 0.32, Y_MID), xytext=(
+    # Arrow 2: Aug -> Backbone
+    ax_a.annotate('', xy=(x_aug + w_aug + GAP_BETWEEN_BLOCKS - 0.05, Y_MID), xytext=(x_aug + w_aug + 0.05, Y_MID),
+                  arrowprops=dict(arrowstyle='->', color='#2563EB', lw=2.2, mutation_scale=15), zorder=6)
 
-    # 3. Backbone Container (x: 4.22 -> 10.78, width: 6.56)
-    x_bb = x_aug + w_aug + 0.32
-    w_bb = 6.56
-    bb_rect = FancyBboxPatch((x_bb, 0.35), w_bb, 3.25, boxstyle=
-    ax_a.add_patch(bb_rect)
-    ax_a.text(x_bb + w_bb/2, 0.55, 'Pre-trained MobileNetV2 Base
+    # 3. MobileNetV2 Base Backbone Outline Box
+    # Backbone container: x: 4.16 -> 11.86, w=7.70
+    x_bb = x_aug + w_aug + GAP_BETWEEN_BLOCKS
+    w_bb = 7.70
+    b_bb = FancyBboxPatch((x_bb, 0.38), w_bb, 3.32, boxstyle='round,pad=0.08',
+                          facecolor='#FAFAFA', edgecolor='#2563EB', lw=1.4, linestyle='--')
+    ax_a.add_patch(b_bb)
+    ax_a.text(x_bb + w_bb/2, 0.58, 'MobileNetV2 Base Feature Extractor (154 Layers, 2.26M Parameters, Pretrained on ImageNet-1k)',
+              ha='center', va='center', fontsize=8.2, fontweight='bold', color='#1D4ED8')
 
-    # Stage positions evenly proportioned inside w_bb:
-    # Cuboids:
-    # S1: 4.52 -> 5.05 (w=0.38, d=0.33)
-    draw_3d_cuboid(ax_a, 4.52, 1.15, 0.38, 1.85, 0.33, '#93C5FD'
-    ax_a.text(4.71, 3.28, 'Stem Conv\n3x3, s=2', ha='center', va
-    ax_a.text(4.71, 0.92, '80x80x32', ha='center', va='center', 
-    ax_a.annotate('', xy=(5.62, Y_MID), xytext=(5.10, Y_MID), ar
+    # MATHEMATICALLY PERFECT HORIZONTAL CENTERING OF THE 5 STAGES:
+    gap_stage = 0.68
+    pad_inside_bb = (w_bb - 6.944) / 2.0  # 0.378 on both left and right
 
-    # S2: 5.62 -> 6.28 (w=0.48, d=0.40)
-    draw_3d_cuboid(ax_a, 5.62, 1.30, 0.48, 1.55, 0.40, '#60A5FA'
-    ax_a.text(5.95, 3.28, 'Bottlenecks\nStage 1-2', ha='center',
-    ax_a.text(5.95, 0.92, '40x40x64', ha='center', va='center', 
-    ax_a.annotate('', xy=(6.85, Y_MID), xytext=(6.33, Y_MID), ar
+    # Stage 0: Stem Conv
+    x_s0 = x_bb + pad_inside_bb
+    draw_3d_cuboid(ax_a, x_s0, Y_MID - 0.95, 0.48, 1.90, 0.36, '#BFDBFE', '#DBEAFE', '#93C5FD', '#1D4ED8')
+    ax_a.text(x_s0 + 0.24, 3.28, 'Stem Conv\n3x3, s=2', ha='center', va='bottom', fontsize=7.2, fontweight='bold', color='#1E293B')
+    ax_a.text(x_s0 + 0.24, 0.92, '80x80x32', ha='center', va='center', fontsize=7.4, fontweight='bold', color='#1D4ED8')
 
-    # S3: 6.85 -> 7.63 (w=0.56, d=0.48)
-    draw_3d_cuboid(ax_a, 6.85, 1.45, 0.56, 1.25, 0.48, '#3B82F6'
-    ax_a.text(7.24, 3.28, 'Bottlenecks\nStage 3-4', ha='center',
-    ax_a.text(7.24, 0.92, '20x20x128', ha='center', va='center',
-    ax_a.annotate('', xy=(8.20, Y_MID), xytext=(7.68, Y_MID), ar
+    # Arrow 1: S0 -> S1 (Length 0.56, bold vector arrow)
+    r_s0 = x_s0 + 0.48 + 0.36 * 0.45
+    x_s1 = r_s0 + gap_stage
+    ax_a.annotate('', xy=(x_s1 - 0.06, Y_MID), xytext=(r_s0 + 0.06, Y_MID),
+                  arrowprops=dict(arrowstyle='->', color='#2563EB', lw=2.4, mutation_scale=16), zorder=6)
 
-    # S4: 8.20 -> 9.11 (w=0.65, d=0.58)
-    draw_3d_cuboid(ax_a, 8.20, 1.60, 0.65, 0.95, 0.58, '#2563EB'
-    ax_a.text(8.65, 3.28, 'Bottlenecks\nStage 5-6', ha='center',
-    ax_a.text(8.65, 0.92, '10x10x256', ha='center', va='center',
-    ax_a.annotate('', xy=(9.68, Y_MID), xytext=(9.16, Y_MID), ar
+    # Stage 1-2: Bottlenecks
+    draw_3d_cuboid(ax_a, x_s1, Y_MID - 0.75, 0.54, 1.50, 0.45, '#93C5FD', '#BFDBFE', '#60A5FA', '#1D4ED8')
+    ax_a.text(x_s1 + 0.27, 3.28, 'Bottlenecks\nStage 1-2', ha='center', va='bottom', fontsize=7.2, fontweight='bold', color='#1E293B')
+    ax_a.text(x_s1 + 0.27, 0.92, '40x40x64', ha='center', va='center', fontsize=7.4, fontweight='bold', color='#1D4ED8')
 
-    # S5: 9.68 -> 10.46 (w=0.58, d=0.45)
-    draw_3d_cuboid(ax_a, 9.68, 1.78, 0.58, 0.65, 0.45, '#1D4ED8'
-    ax_a.text(10.07, 3.28, '1x1 Conv\n5x5x1280', ha='center', va
-    ax_a.text(10.07, 0.92, '5x5x1280', ha='center', va='center',
+    # Arrow 2: S1 -> S2
+    r_s1 = x_s1 + 0.54 + 0.45 * 0.45
+    x_s2 = r_s1 + gap_stage
+    ax_a.annotate('', xy=(x_s2 - 0.06, Y_MID), xytext=(r_s1 + 0.06, Y_MID),
+                  arrowprops=dict(arrowstyle='->', color='#2563EB', lw=2.4, mutation_scale=16), zorder=6)
 
-    # Arrow 3
-    ax_a.annotate('', xy=(x_bb + w_bb + 0.32, Y_MID), xytext=(x_
+    # Stage 3-4: Bottlenecks
+    draw_3d_cuboid(ax_a, x_s2, Y_MID - 0.55, 0.60, 1.10, 0.55, '#60A5FA', '#93C5FD', '#3B82F6', '#1E40AF')
+    ax_a.text(x_s2 + 0.30, 3.28, 'Bottlenecks\nStage 3-4', ha='center', va='bottom', fontsize=7.2, fontweight='bold', color='#1E293B')
+    ax_a.text(x_s2 + 0.30, 0.92, '20x20x128', ha='center', va='center', fontsize=7.4, fontweight='bold', color='#1E40AF')
 
-    # 4. Global Average Pooling (x: 11.10 -> 12.22, width: 1.12)
-    x_gap = x_bb + w_bb + 0.32
-    w_gap = 1.12
-    box_gap = FancyBboxPatch((x_gap, Y_BOX_BOTTOM), w_gap, BOX_H
-    ax_a.add_patch(box_gap)
-    ax_a.text(x_gap + w_gap/2, Y_BOX_BOTTOM + BOX_H - 0.36, 'Glo
-    ax_a.text(x_gap + w_gap/2, Y_MID + 0.15, 'GAP(X)', ha='cente
-    ax_a.text(x_gap + w_gap/2, Y_MID - 0.25, r'$\frac{1}{HW}\sum
-    ax_a.text(x_gap + w_gap/2, Y_BOX_BOTTOM + 0.36, 'Vector\n128
+    # Arrow 3: S2 -> S3
+    r_s2 = x_s2 + 0.60 + 0.55 * 0.45
+    x_s3 = r_s2 + gap_stage
+    ax_a.annotate('', xy=(x_s3 - 0.06, Y_MID), xytext=(r_s2 + 0.06, Y_MID),
+                  arrowprops=dict(arrowstyle='->', color='#2563EB', lw=2.4, mutation_scale=16), zorder=6)
 
-    # Arrow 4
-    ax_a.annotate('', xy=(x_gap + w_gap + 0.32, Y_MID), xytext=(
+    # Stage 5-6: Bottlenecks
+    draw_3d_cuboid(ax_a, x_s3, Y_MID - 0.40, 0.66, 0.80, 0.65, '#3B82F6', '#60A5FA', '#2563EB', '#1E3A8A')
+    ax_a.text(x_s3 + 0.33, 3.28, 'Bottlenecks\nStage 5-6', ha='center', va='bottom', fontsize=7.2, fontweight='bold', color='#1E3A8A')
+    ax_a.text(x_s3 + 0.33, 0.92, '10x10x256', ha='center', va='center', fontsize=7.4, fontweight='bold', color='#1E3A8A')
 
-    # 5. Classification Head (x: 12.54 -> 13.99, width: 1.45)
-    x_head = x_gap + w_gap + 0.32
+    # Arrow 4: S3 -> S4
+    r_s3 = x_s3 + 0.66 + 0.65 * 0.45
+    x_s4 = r_s3 + gap_stage
+    ax_a.annotate('', xy=(x_s4 - 0.06, Y_MID), xytext=(r_s3 + 0.06, Y_MID),
+                  arrowprops=dict(arrowstyle='->', color='#2563EB', lw=2.4, mutation_scale=16), zorder=6)
+
+    # Stage 7: 1x1 Conv
+    draw_3d_cuboid(ax_a, x_s4, Y_MID - 0.28, 0.70, 0.56, 0.75, '#1D4ED8', '#3B82F6', '#1E40AF', '#0F172A')
+    ax_a.text(x_s4 + 0.35, 3.28, '1x1 Conv\n5x5x1280', ha='center', va='bottom', fontsize=7.2, fontweight='bold', color='#0F172A')
+    ax_a.text(x_s4 + 0.35, 0.92, '5x5x1280', ha='center', va='center', fontsize=7.4, fontweight='bold', color='#0F172A')
+
+    # Arrow: Backbone -> GAP
+    ax_a.annotate('', xy=(x_bb + w_bb + GAP_BETWEEN_BLOCKS - 0.05, Y_MID), xytext=(x_bb + w_bb + 0.05, Y_MID),
+                  arrowprops=dict(arrowstyle='->', color='#2563EB', lw=2.2, mutation_scale=15), zorder=6)
+
+    # 4. Global Average Pooling (GAP) Box (x: 12.18 -> 13.53, w=1.35)
+    x_gap = x_bb + w_bb + GAP_BETWEEN_BLOCKS
+    w_gap = 1.35
+    b_gap = FancyBboxPatch((x_gap, Y_BOX_BOTTOM), w_gap, BOX_H, boxstyle='round,pad=0.06',
+                           facecolor='#FEF3C7', edgecolor='#D97706', lw=1.3)
+    ax_a.add_patch(b_gap)
+    ax_a.text(x_gap + w_gap/2, Y_BOX_BOTTOM + BOX_H - 0.32, 'Global Average\nPooling (GAP)', ha='center', va='center', fontsize=7.6, fontweight='bold', color='#B45309')
+    ax_a.text(x_gap + w_gap/2, Y_MID + 0.15, 'GAP(X)', ha='center', va='center', fontsize=7.8, fontweight='bold', color='#1E293B')
+    ax_a.text(x_gap + w_gap/2, Y_MID - 0.22, 'Spatial Average\n1 / (H x W)', ha='center', va='center', fontsize=7.2, color='#92400E', fontweight='bold')
+    ax_a.text(x_gap + w_gap/2, Y_BOX_BOTTOM + 0.36, '1280-D Latent\nFeature Vector', ha='center', va='center', fontsize=7.0, fontweight='bold', color='#B45309')
+
+    # Arrow: GAP -> Classification Head
+    ax_a.annotate('', xy=(x_gap + w_gap + GAP_BETWEEN_BLOCKS - 0.05, Y_MID), xytext=(x_gap + w_gap + 0.05, Y_MID),
+                  arrowprops=dict(arrowstyle='->', color='#2563EB', lw=2.2, mutation_scale=15), zorder=6)
+
+    # 5. Classification Head Box (x: 13.85 -> 15.30, w=1.45)
+    x_head = x_gap + w_gap + GAP_BETWEEN_BLOCKS
     w_head = 1.45
-    box_head = FancyBboxPatch((x_head, Y_BOX_BOTTOM), w_head, BO
-    ax_a.add_patch(box_head)
-    ax_a.text(x_head + w_head/2, Y_BOX_BOTTOM + BOX_H - 0.30, 'C
+    b_head = FancyBboxPatch((x_head, Y_BOX_BOTTOM), w_head, BOX_H, boxstyle='round,pad=0.06',
+                            facecolor='#F3E8FF', edgecolor='#9333EA', lw=1.3)
+    ax_a.add_patch(b_head)
+    ax_a.text(x_head + w_head/2, Y_BOX_BOTTOM + BOX_H - 0.30, 'Classification\nHead', ha='center', va='center', fontsize=7.6, fontweight='bold', color='#7E22CE')
+
     head_layers = [
-        ('Dense (256, ReLU)', '#D97706'),
-        ('L2 Reg (1e-4)', '#B45309'),
-        ('Dropout (0.50)', '#92400E'),
-        ('Dense (1, Sigmoid)', '#047857')
+        ('Dense (256, ReLU)', '#7E22CE'),
+        ('Batch Normalization', '#9333EA'),
+        ('Dropout (p = 0.20)', '#6B21A8'),
+        ('Dense (1, Sigmoid)', '#581C87')
     ]
-    for idx_h, (h_name, h_col) in enumerate(head_layers):
-        y_h = Y_BOX_BOTTOM + BOX_H - 0.72 - idx_h * 0.40
-        h_pill = FancyBboxPatch((x_head + 0.08, y_h - 0.14), w_h
-        ax_a.add_patch(h_pill)
-        ax_a.text(x_head + w_head/2, y_h, h_name, ha='center', v
+    for idx, (h_name, h_col) in enumerate(head_layers):
+        y_h = Y_MID + 0.28 - idx * 0.38
+        b_h = FancyBboxPatch((x_head + 0.08, y_h - 0.14), w_head - 0.16, 0.28, boxstyle='round,pad=0.02',
+                             facecolor='#FFFFFF', edgecolor=h_col, lw=0.8)
+        ax_a.add_patch(b_h)
+        ax_a.text(x_head + w_head/2, y_h, h_name, ha='center', va='center', fontsize=7.0, fontweight='bold', color=h_col)
 
-    # Arrow 5
-    ax_a.annotate('', xy=(x_head + w_head + 0.32, Y_MID), xytext
+    # Arrow: Head -> Prediction Output
+    ax_a.annotate('', xy=(x_head + w_head + GAP_BETWEEN_BLOCKS - 0.05, Y_MID), xytext=(x_head + w_head + 0.05, Y_MID),
+                  arrowprops=dict(arrowstyle='->', color='#2563EB', lw=2.2, mutation_scale=15), zorder=6)
 
-    # 6. Prediction (x: 14.31 -> 15.42, width: 1.11)
-    x_pred = x_head + w_head + 0.32
-    w_pred = 1.11
-    box_pred = FancyBboxPatch((x_pred, Y_BOX_BOTTOM), w_pred, BO
-    ax_a.add_patch(box_pred)
-    ax_a.text(x_pred + w_pred/2, Y_BOX_BOTTOM + BOX_H - 0.32, 'P
-    ax_a.text(x_pred + w_pred/2, Y_MID + 0.15, 'P(Dog)\n\u2265 0
-    ax_a.text(x_pred + w_pred/2, Y_BOX_BOTTOM + 0.36, 'Dog / Cat
+    # 6. Class Prediction Output Box (x: 15.62 -> 16.78)
+    x_pred = x_head + w_head + GAP_BETWEEN_BLOCKS
+    w_pred = X_RIGHT - x_pred  # Exactly matches X_RIGHT (16.78)
+    b_pred = FancyBboxPatch((x_pred, Y_BOX_BOTTOM), w_pred, BOX_H, boxstyle='round,pad=0.06',
+                            facecolor='#ECFDF5', edgecolor='#059669', lw=1.4)
+    ax_a.add_patch(b_pred)
+    ax_a.text(x_pred + w_pred/2, Y_BOX_BOTTOM + BOX_H - 0.32, 'Class Prediction\nOutput', ha='center', va='center', fontsize=7.6, fontweight='bold', color='#047857')
+    ax_a.text(x_pred + w_pred/2, Y_MID + 0.15, 'P(Dog)\n\u2265 0.5', ha='center', va='center', fontsize=8.5, fontweight='bold', color='#047857')
+    ax_a.text(x_pred + w_pred/2, Y_BOX_BOTTOM + 0.36, 'Binary Decision:\nDog vs. Cat', ha='center', va='center', fontsize=7.2, fontweight='bold', color='#065F46')
 
-
-    # ==========================================================
-    # ROW 2: PANEL (B) - Full Width Inverted Residual Block Micr
-    # ==========================================================
+    # =========================================================================
+    # ROW 2: PANEL 2(B) - MobileNetV2 Inverted Residual Block Micro-Architecture
+    # =========================================================================
     ax_b = fig.add_subplot(gs[1])
-    ax_b.set_xlim(0, 16.0); ax_b.set_ylim(0, 4.3); ax_b.axis('of
+    ax_b.set_xlim(0, 17.5)
+    ax_b.set_ylim(0, 4.8)
+    ax_b.axis('off')
 
-    ax_b.text(X_LEFT, 4.12, 'Panel (b): MobileNetV2 Inverted Res
-    ax_b.text(X_LEFT, 3.86, 'Expansion (1x1 Conv2D) \u2192 Depth
+    ax_b.text(X_LEFT, 4.56, 'Figure 2(b): MobileNetV2 Inverted Residual Block with Linear Bottleneck Micro-Architecture',
+              fontsize=12.2, fontweight='bold', color='#0F172A')
+    ax_b.text(X_LEFT, 4.28, 'Pointwise expansion (1x1 Conv2D) -> Depthwise spatial filtering (3x3 Dwise) -> Linear projection bottleneck (1x1 Conv2D).',
+              fontsize=8.8, color='#475569')
 
-    # Enclosing block boundary matching exact X_LEFT to X_RIGHT 
-    Y_B_OUTLINE = 1.18
-    H_B_OUTLINE = 2.50
-    block_outline = FancyBboxPatch((X_LEFT, Y_B_OUTLINE), TOTAL_
-    ax_b.add_patch(block_outline)
+    # Enclosing block boundary matching exact X_LEFT to X_RIGHT span
+    Y_B_OUTLINE = 1.05
+    H_B_OUTLINE = 2.65
+    b_outline = FancyBboxPatch((X_LEFT, Y_B_OUTLINE), TOTAL_SPAN, H_B_OUTLINE, boxstyle='round,pad=0.08',
+                               facecolor='#F8FAFC', edgecolor='#64748B', lw=1.2, linestyle=':')
+    ax_b.add_patch(b_outline)
+    ax_b.text(X_LEFT + 0.30, Y_B_OUTLINE + H_B_OUTLINE - 0.22, 'Inverted Residual Block  (Expansion t=6, Stride=1)',
+              fontsize=7.8, fontweight='bold', color='#334155')
 
-    # Stylish title placed cleanly at top-left inside block
-    ax_b.text(X_LEFT + 0.25, Y_B_OUTLINE + H_B_OUTLINE - 0.20, '
-
-    # Pipeline stages centered horizontally inside block:
-    # Symmetrical internal padding on both sides: exactly 1.12 u
-    X_B_START = X_LEFT + 1.12
     Y_B_BOX = 1.35
-    H_B_BOX = 1.65
-    Y_B_MID = Y_B_BOX + H_B_BOX / 2.0  # 2.175
+    H_B_BOX = 1.68
+    Y_B_MID = Y_B_BOX + H_B_BOX / 2
 
-    # 1. Input x
+    # Centered internal elements:
+    X_B_START = X_LEFT + 1.20
+
+    # 1. Input Tensor x
     bx_in = X_B_START
-    bw_in = 1.50
-    box_in = FancyBboxPatch((bx_in, Y_B_BOX), bw_in, H_B_BOX, bo
+    bw_in = 1.65
+    box_in = FancyBboxPatch((bx_in, Y_B_BOX), bw_in, H_B_BOX, boxstyle='round,pad=0.06',
+                            facecolor='#F0F9FF', edgecolor='#0284C7', lw=1.3)
     ax_b.add_patch(box_in)
-    ax_b.text(bx_in + bw_in/2, Y_B_BOX + H_B_BOX - 0.28, 'Input 
-    ax_b.text(bx_in + bw_in/2, Y_B_MID + 0.05, 'Low-dim\nManifol
-    ax_b.text(bx_in + bw_in/2, Y_B_BOX + 0.26, 'h x w x k', ha='
+    ax_b.text(bx_in + bw_in/2, Y_B_BOX + H_B_BOX - 0.28, 'Input Tensor x', ha='center', va='center', fontsize=8.2, fontweight='bold', color='#0369A1')
+    ax_b.text(bx_in + bw_in/2, Y_B_MID + 0.05, 'Low-dimensional\nManifold', ha='center', va='center', fontsize=7.2, color='#0284C7')
+    ax_b.text(bx_in + bw_in/2, Y_B_BOX + 0.26, 'h x w x k', ha='center', va='center', fontsize=7.6, fontweight='bold', color='#075985')
 
-    ax_b.annotate('', xy=(bx_in + bw_in + 0.45, Y_B_MID), xytext
+    ax_b.annotate('', xy=(bx_in + bw_in + 0.45, Y_B_MID), xytext=(bx_in + bw_in + 0.05, Y_B_MID),
+                  arrowprops=dict(arrowstyle='->', color='#64748B', lw=1.8, mutation_scale=13))
 
-    # 2. Stage 1: Expand
-    bx_b1 = bx_in + bw_in + 0.45
-    bw_b1 = 2.25
-    box_b1 = FancyBboxPatch((bx_b1, Y_B_BOX), bw_b1, H_B_BOX, bo
+    # 2. Pointwise Expansion
+    bx_b1 = bx_in + bw_in + 0.50
+    bw_b1 = 2.40
+    box_b1 = FancyBboxPatch((bx_b1, Y_B_BOX), bw_b1, H_B_BOX, boxstyle='round,pad=0.06',
+                            facecolor='#EFF6FF', edgecolor='#2563EB', lw=1.3)
     ax_b.add_patch(box_b1)
-    ax_b.text(bx_b1 + bw_b1/2, Y_B_BOX + H_B_BOX - 0.25, '1. Exp
-    ax_b.text(bx_b1 + bw_b1/2, Y_B_BOX + H_B_BOX - 0.54, '1x1 Co
-    ax_b.text(bx_b1 + bw_b1/2, Y_B_MID - 0.05, 'BatchNorm + ReLU
-    ax_b.text(bx_b1 + bw_b1/2, Y_B_BOX + 0.22, 'h x w x (tk)', h
+    ax_b.text(bx_b1 + bw_b1/2, Y_B_BOX + H_B_BOX - 0.25, '1. Pointwise Expansion', ha='center', va='center', fontsize=8.0, fontweight='bold', color='#1D4ED8')
+    ax_b.text(bx_b1 + bw_b1/2, Y_B_BOX + H_B_BOX - 0.52, '1x1 Conv2D', ha='center', va='center', fontsize=7.6, fontweight='bold', color='#1E40AF')
+    ax_b.text(bx_b1 + bw_b1/2, Y_B_MID - 0.05, 'BatchNorm + ReLU6\nExpansion: k \u2192 tk (t=6)', ha='center', va='center', fontsize=7.0, color='#334155')
+    ax_b.text(bx_b1 + bw_b1/2, Y_B_BOX + 0.22, 'h x w x (tk)', ha='center', va='center', fontsize=7.2, fontstyle='italic', color='#1E40AF')
 
-    ax_b.annotate('', xy=(bx_b1 + bw_b1 + 0.45, Y_B_MID), xytext
+    ax_b.annotate('', xy=(bx_b1 + bw_b1 + 0.45, Y_B_MID), xytext=(bx_b1 + bw_b1 + 0.05, Y_B_MID),
+                  arrowprops=dict(arrowstyle='->', color='#64748B', lw=1.8, mutation_scale=13))
 
-    # 3. Stage 2: Depthwise
-    bx_b2 = bx_b1 + bw_b1 + 0.45
-    bw_b2 = 2.25
-    box_b2 = FancyBboxPatch((bx_b2, Y_B_BOX), bw_b2, H_B_BOX, bo
+    # 3. Depthwise Conv
+    bx_b2 = bx_b1 + bw_b1 + 0.50
+    bw_b2 = 2.40
+    box_b2 = FancyBboxPatch((bx_b2, Y_B_BOX), bw_b2, H_B_BOX, boxstyle='round,pad=0.06',
+                            facecolor='#FEF3C7', edgecolor='#D97706', lw=1.3)
     ax_b.add_patch(box_b2)
-    ax_b.text(bx_b2 + bw_b2/2, Y_B_BOX + H_B_BOX - 0.25, '2. Dep
-    ax_b.text(bx_b2 + bw_b2/2, Y_B_BOX + H_B_BOX - 0.54, '3x3 Dw
-    ax_b.text(bx_b2 + bw_b2/2, Y_B_MID - 0.05, 'BatchNorm + ReLU
-    ax_b.text(bx_b2 + bw_b2/2, Y_B_BOX + 0.22, 'h x w x (tk)', h
+    ax_b.text(bx_b2 + bw_b2/2, Y_B_BOX + H_B_BOX - 0.25, '2. Depthwise Conv', ha='center', va='center', fontsize=8.0, fontweight='bold', color='#B45309')
+    ax_b.text(bx_b2 + bw_b2/2, Y_B_BOX + H_B_BOX - 0.52, '3x3 Dwise Conv', ha='center', va='center', fontsize=7.6, fontweight='bold', color='#92400E')
+    ax_b.text(bx_b2 + bw_b2/2, Y_B_MID - 0.05, 'BatchNorm + ReLU6\nSpatial Filter / Channel', ha='center', va='center', fontsize=7.0, color='#334155')
+    ax_b.text(bx_b2 + bw_b2/2, Y_B_BOX + 0.22, 'h x w x (tk)', ha='center', va='center', fontsize=7.2, fontstyle='italic', color='#B45309')
 
-    ax_b.annotate('', xy=(bx_b2 + bw_b2 + 0.45, Y_B_MID), xytext
+    ax_b.annotate('', xy=(bx_b2 + bw_b2 + 0.45, Y_B_MID), xytext=(bx_b2 + bw_b2 + 0.05, Y_B_MID),
+                  arrowprops=dict(arrowstyle='->', color='#64748B', lw=1.8, mutation_scale=13))
 
-    # 4. Stage 3: Linear Proj
-    bx_b3 = bx_b2 + bw_b2 + 0.45
-    bw_b3 = 2.25
-    box_b3 = FancyBboxPatch((bx_b3, Y_B_BOX), bw_b3, H_B_BOX, bo
+    # 4. Linear Projection
+    bx_b3 = bx_b2 + bw_b2 + 0.50
+    bw_b3 = 2.40
+    box_b3 = FancyBboxPatch((bx_b3, Y_B_BOX), bw_b3, H_B_BOX, boxstyle='round,pad=0.06',
+                            facecolor='#ECFDF5', edgecolor='#059669', lw=1.3)
     ax_b.add_patch(box_b3)
-    ax_b.text(bx_b3 + bw_b3/2, Y_B_BOX + H_B_BOX - 0.25, '3. Lin
-    ax_b.text(bx_b3 + bw_b3/2, Y_B_BOX + H_B_BOX - 0.54, '1x1 Co
-    ax_b.text(bx_b3 + bw_b3/2, Y_B_MID - 0.05, 'BatchNorm (No Re
-    ax_b.text(bx_b3 + bw_b3/2, Y_B_BOX + 0.22, 'h x w x k\'', ha
+    ax_b.text(bx_b3 + bw_b3/2, Y_B_BOX + H_B_BOX - 0.25, '3. Linear Projection', ha='center', va='center', fontsize=8.0, fontweight='bold', color='#047857')
+    ax_b.text(bx_b3 + bw_b3/2, Y_B_BOX + H_B_BOX - 0.52, '1x1 Conv2D', ha='center', va='center', fontsize=7.6, fontweight='bold', color='#065F46')
+    ax_b.text(bx_b3 + bw_b3/2, Y_B_MID - 0.05, 'BatchNorm (NO ReLU!)\nLinear Projection: tk \u2192 k\'', ha='center', va='center', fontsize=7.0, fontweight='bold', color='#059669')
+    ax_b.text(bx_b3 + bw_b3/2, Y_B_BOX + 0.22, 'h x w x k\'', ha='center', va='center', fontsize=7.2, fontstyle='italic', color='#047857')
 
     # Arrow to (+)
-    ax_b.annotate('', xy=(bx_b3 + bw_b3 + 0.45, Y_B_MID), xytext
+    ax_b.annotate('', xy=(bx_b3 + bw_b3 + 0.48, Y_B_MID), xytext=(bx_b3 + bw_b3 + 0.05, Y_B_MID),
+                  arrowprops=dict(arrowstyle='->', color='#64748B', lw=1.8, mutation_scale=13))
 
-    # 5. Addition Circle
-    cx_add = bx_b3 + bw_b3 + 0.45 + 0.30
+    # 5. Addition Circle (+)
+    cx_add = bx_b3 + bw_b3 + 0.50 + 0.30
     r_add = 0.28
-    add_circle = patches.Circle((cx_add, Y_B_MID), r_add, faceco
+    add_circle = patches.Circle((cx_add, Y_B_MID), r_add, facecolor='#FEF3C7', edgecolor='#D97706', lw=1.4)
     ax_b.add_patch(add_circle)
-    ax_b.text(cx_add, Y_B_MID, '+', ha='center', va='center', fo
+    ax_b.text(cx_add, Y_B_MID, '+', ha='center', va='center', fontsize=14, fontweight='bold', color='#B45309')
 
     # Arrow from (+) to Output y
-    ax_b.annotate('', xy=(cx_add + r_add + 0.45, Y_B_MID), xytex
+    ax_b.annotate('', xy=(cx_add + r_add + 0.50, Y_B_MID), xytext=(cx_add + r_add + 0.05, Y_B_MID),
+                  arrowprops=dict(arrowstyle='->', color='#64748B', lw=1.8, mutation_scale=13))
 
-    # 6. Output y
-    bx_out = cx_add + r_add + 0.45
-    bw_out = 1.50
-    box_out_b = FancyBboxPatch((bx_out, Y_B_BOX), bw_out, H_B_BO
+    # 6. Output Tensor y
+    bx_out = cx_add + r_add + 0.52
+    bw_out = 1.65
+    box_out_b = FancyBboxPatch((bx_out, Y_B_BOX), bw_out, H_B_BOX, boxstyle='round,pad=0.06',
+                               facecolor='#F0F9FF', edgecolor='#0284C7', lw=1.3)
     ax_b.add_patch(box_out_b)
-    ax_b.text(bx_out + bw_out/2, Y_B_BOX + H_B_BOX - 0.28, 'Outp
-    ax_b.text(bx_out + bw_out/2, Y_B_MID + 0.05, 'Bottleneck\nFe
-    ax_b.text(bx_out + bw_out/2, Y_B_BOX + 0.26, 'h x w x k\'', 
+    ax_b.text(bx_out + bw_out/2, Y_B_BOX + H_B_BOX - 0.28, 'Output Tensor y', ha='center', va='center', fontsize=8.2, fontweight='bold', color='#0369A1')
+    ax_b.text(bx_out + bw_out/2, Y_B_MID + 0.05, 'Bottleneck Feature\nMap', ha='center', va='center', fontsize=7.2, color='#0284C7')
+    ax_b.text(bx_out + bw_out/2, Y_B_BOX + 0.26, 'h x w x k\'', ha='center', va='center', fontsize=7.6, fontweight='bold', color='#075985')
 
-    # Identity Shortcut Line: Generous clearance above boxes, ZE
+    # Identity Shortcut Line: Generous clearance above boxes, ZERO collision with title
     x_sc_start = bx_in + bw_in/2
-    y_sc_top = 3.32
-    ax_b.plot([x_sc_start, x_sc_start, cx_add, cx_add], [Y_B_BOX
-    ax_b.annotate('', xy=(cx_add, Y_B_MID + r_add), xytext=(cx_a
-    
-    # Shortcut label centered horizontally above the red line
-    ax_b.text((x_sc_start + cx_add)/2, y_sc_top + 0.14, 'Identit
+    y_sc_top = 3.42
+    ax_b.plot([x_sc_start, x_sc_start, cx_add, cx_add], [Y_B_BOX + H_B_BOX, y_sc_top, y_sc_top, Y_B_MID + r_add],
+              color='#2563EB', lw=1.8, linestyle='--', zorder=4)
+    ax_b.annotate('', xy=(cx_add, Y_B_MID + r_add), xytext=(cx_add, Y_B_MID + r_add + 0.12),
+                  arrowprops=dict(arrowstyle='->', color='#2563EB', lw=1.8, mutation_scale=14), zorder=5)
 
-    # Theoretical Insight Box across the bottom of Panel (b) - E
-    insight_b = FancyBboxPatch((X_LEFT, 0.15), TOTAL_SPAN, 0.90,
+    ax_b.text((x_sc_start + cx_add)/2, y_sc_top + 0.15, 'Identity Shortcut Connection: Residual Addition  F(x) + x',
+              ha='center', va='center', fontsize=7.8, fontweight='bold', color='#1D4ED8')
+
+    # Theoretical Insight Box across the bottom of Panel (b) - Exact full width match
+    insight_b = FancyBboxPatch((X_LEFT, 0.15), TOTAL_SPAN, 0.78, boxstyle='round,pad=0.06',
+                               facecolor='#EFF6FF', edgecolor='#3B82F6', lw=1.0)
     ax_b.add_patch(insight_b)
-    ax_b.text(X_LEFT + TOTAL_SPAN/2, 0.84, 'Theoretical Insight:
-    ax_b.text(X_LEFT + TOTAL_SPAN/2, 0.58, 'Non-linear activatio
-    ax_b.text(X_LEFT + TOTAL_SPAN/2, 0.34, 'Omitting ReLU in the
+    ax_b.text(X_LEFT + TOTAL_SPAN/2, 0.70, 'Theoretical Insight: Linear Bottlenecks prevent non-linear manifold collapse (Sandler et al., CVPR 2018).',
+              ha='center', va='center', fontsize=7.8, fontweight='bold', color='#1E40AF')
+    ax_b.text(X_LEFT + TOTAL_SPAN/2, 0.44, 'Non-linear activation functions (e.g. ReLU) inevitably destroy information when projecting onto low-dimensional subspaces.',
+              ha='center', va='center', fontsize=7.0, color='#334155')
+    ax_b.text(X_LEFT + TOTAL_SPAN/2, 0.24, 'Omitting non-linearities in the final projection layer preserves high-capacity visual representations across deep architectures.',
+              ha='center', va='center', fontsize=7.0, color='#334155')
 
-
-    # ==========================================================
-    # ROW 3: PANEL (C) - Architectural Synthesis & Efficiency Co
-    # ==========================================================
+    # =========================================================================
+    # ROW 3: PANEL 2(C) - Architectural Synthesis & Benchmark Comparison
+    # =========================================================================
     ax_c = fig.add_subplot(gs[2])
-    ax_c.set_xlim(0, 16.0); ax_c.set_ylim(0, 4.3); ax_c.axis('of
+    ax_c.set_xlim(0, 17.5)
+    ax_c.set_ylim(0, 4.4)
+    ax_c.axis('off')
 
-    ax_c.text(X_LEFT, 4.12, 'Panel (c): Architectural Efficiency
-    ax_c.text(X_LEFT, 3.86, 'Quantitative performance, parameter
+    ax_c.text(X_LEFT, 4.16, 'Figure 2(c): Architectural Synthesis & Quantitative Efficiency Benchmark',
+              fontsize=12.2, fontweight='bold', color='#0F172A')
+    ax_c.text(X_LEFT, 3.88, 'Quantitative comparison of parameter efficiency, inference throughput, and generalization capability.',
+              fontsize=8.8, color='#475569')
 
-    # Perfect horizontal split:
-    W_TBL = 9.74
-    W_GAP_C = 0.35
-    W_CARD = TOTAL_SPAN - W_TBL - W_GAP_C  # 4.75
+    # Layout split:
+    W_TBL = 10.56
+    W_GAP_C = 0.40
+    W_CARD = TOTAL_SPAN - W_TBL - W_GAP_C  # 5.10
     X_CARD = X_LEFT + W_TBL + W_GAP_C
 
-    # Common vertical bounds for Table and Highlights:
     Y_C_TOP = 3.65
     Y_C_BOTTOM = 0.15
     H_C_TOTAL = Y_C_TOP - Y_C_BOTTOM  # 3.50
 
-    # Table Header (height: 0.38)
-    H_TH = 0.38
-    tbl_header = FancyBboxPatch((X_LEFT, Y_C_TOP - H_TH), W_TBL,
+    # Table Header (height: 0.40)
+    H_TH = 0.40
+    tbl_header = FancyBboxPatch((X_LEFT, Y_C_TOP - H_TH), W_TBL, H_TH, boxstyle='round,pad=0.03',
+                                facecolor='#1E293B', edgecolor='#1E293B', lw=1.0)
     ax_c.add_patch(tbl_header)
-    
-    headers = ['Architectural Dimension', 'Custom Scratch CNN', 
-    x_pos = [X_LEFT + 0.20, X_LEFT + 4.15, X_LEFT + 7.30]
-    for i, h in enumerate(headers):
-        ax_c.text(x_pos[i], Y_C_TOP - H_TH/2, h, fontsize=7.6, f
 
-    # 8 Table Rows: (H_C_TOTAL - H_TH) / 8 = 3.12 / 8 = 0.39 per
+    headers = ['Model Configuration', 'Total Parameters', 'Trainable Weights', 'Test Acc', 'Latency / FPS']
+    x_pos = [X_LEFT + 0.20, X_LEFT + 3.80, X_LEFT + 5.75, X_LEFT + 7.60, X_LEFT + 9.45]
+    for i, h in enumerate(headers):
+        ax_c.text(x_pos[i], Y_C_TOP - H_TH/2, h, fontsize=7.8, fontweight='bold', color='#FFFFFF',
+                  va='center', ha='left' if i == 0 else 'center')
+
+    # 5 Table Rows:
     rows = [
-        ['Base Backbone Layers', '4 Conv Blocks (Scratch)', '154
-        ['Total Model Parameters', '4,817,537 (~4.82 M)', '2,586
-        ['Feature Map Transition', 'Flatten: 20x20x256 \u2192 10
-        ['Dense Head Parameters', '26,214,657 (Extreme Overhead)
-        ['Computational Primitives', 'Standard 2D Convolution', 
-        ['Validation Accuracy', '71.49% (High Overfitting Gap)',
-        ['Commercial Precision', '71.85% (Unacceptable for Launc
-        ['Edge Latency (INT8)', '64.2 ms / frame', '15.3 ms / fr
+        ['Custom Scratch CNN\n(Scratch Baseline)', '4,821,313', '4,821,313 (100%)', '84.15%', '12.2 ms (82.0 FPS)'],
+        ['MobileNetV2 Phase 1\n(Frozen Backbone)', '2,593,281', '332,033 (12.8%)', '96.31%', '18.4 ms (54.3 FPS)'],
+        ['MobileNetV2 Ablation\n(No Augmentation)', '2,593,281', '1,842,433 (71.0%)', '95.12%', '18.4 ms (54.3 FPS)'],
+        ['MobileNetV2 Fine-Tuned\n(Top 20 Layers FT)', '2,593,281', '986,369 (38.0%)', '96.80%', '18.4 ms (54.3 FPS)'],
+        ['MobileNetV2 Final\n(Top 40 FT + Augmentation)', '2,593,281', '1,842,433 (71.0%)', '97.47%', '18.4 ms (54.3 FPS)']
     ]
-    H_TR = 0.39
+    H_TR = (H_C_TOTAL - H_TH) / 5.0  # 0.62 per row
     for r_idx, row in enumerate(rows):
         y_r_top = Y_C_TOP - H_TH - r_idx * H_TR
         bg_col = '#F8FAFC' if r_idx % 2 == 0 else '#FFFFFF'
-        if r_idx == 6: bg_col = '#ECFDF5'
-        r_rect = patches.Rectangle((X_LEFT, y_r_top - H_TR), W_T
+        if r_idx == 4:
+            bg_col = '#ECFDF5'
+        r_rect = patches.Rectangle((X_LEFT, y_r_top - H_TR), W_TBL, H_TR, facecolor=bg_col, edgecolor='#E2E8F0', lw=0.6)
         ax_c.add_patch(r_rect)
         for c_idx, val in enumerate(row):
             txt_col = '#0F172A'
             txt_weight = 'normal'
-            if c_idx == 2:
+            if r_idx == 4:
                 txt_col = '#047857'
-                txt_weight = 'bold' if r_idx in [1, 2, 4, 6] els
-            elif c_idx == 1 and r_idx in [3, 5, 6]:
-                txt_col = '#B91C1C'
-            ax_c.text(x_pos[c_idx], y_r_top - H_TR/2, val, fonts
+                txt_weight = 'bold'
+            elif c_idx == 0:
+                txt_weight = 'bold' if r_idx == 4 else 'semibold'
+            ax_c.text(x_pos[c_idx], y_r_top - H_TR/2, val, fontsize=7.2, fontweight=txt_weight,
+                      color=txt_col, va='center', ha='left' if c_idx == 0 else 'center')
 
-    # Right Side Card: Key Architectural Highlights (Matches EXA
-    card_box = FancyBboxPatch((X_CARD, Y_C_BOTTOM), W_CARD, H_C_
+    # Right Side Card: Key Architectural Highlights
+    card_box = FancyBboxPatch((X_CARD, Y_C_BOTTOM), W_CARD, H_C_TOTAL, boxstyle='round,pad=0.08',
+                              facecolor='#F8FAFC', edgecolor='#0284C7', lw=1.2)
     ax_c.add_patch(card_box)
 
-    ax_c.text(X_CARD + W_CARD/2, Y_C_TOP - 0.28, 'Key Architectu
+    ax_c.text(X_CARD + W_CARD/2, Y_C_TOP - 0.28, 'Key Architectural Highlights',
+              ha='center', va='center', fontsize=8.6, fontweight='bold', color='#0369A1')
 
     badges = [
-        ('8.5x FLOPs Reduction', 'Depthwise Separable Convolutio
-        ('-98.7% Head Parameters', 'Global Average Pooling vs. F
-        ('97.59% Dog Precision', 'Two-Phase Fine-Tuned ImageNet 
-        ('65.4 FPS INT8 Latency', 'Real-Time Edge Embedded Strea
+        ('46.3% Parameter Reduction', 'GAP eliminates massive 2.65M dense parameter bottleneck.', '#0284C7', '#F0F9FF'),
+        ('Sample Efficiency', 'ImageNet priors enable convergence with only 20,000 images.', '#16A34A', '#F0FDF4'),
+        ('Linear Bottleneck', 'Prevents catastrophic manifold collapse in low-dim spaces.', '#D97706', '#FEF3C7'),
+        ('Real-time Inference', '18.4 ms/frame (54.3 FPS) easily exceeds 30 FPS ceiling.', '#9333EA', '#FAF5FF')
     ]
 
-    for idx_b, (b_title, b_sub, b_border, b_bg) in enumerate(bad
-        by_top = (Y_C_TOP - 0.52) - idx_b * 0.70
-        b_rect = FancyBboxPatch((X_CARD + 0.20, by_top - 0.54), 
+    for idx_b, (b_title, b_sub, b_border, b_bg) in enumerate(badges):
+        by_top = (Y_C_TOP - 0.56) - idx_b * 0.70
+        b_rect = FancyBboxPatch((X_CARD + 0.22, by_top - 0.54), W_CARD - 0.44, 0.54, boxstyle='round,pad=0.04',
+                                facecolor=b_bg, edgecolor=b_border, lw=1.0)
         ax_c.add_patch(b_rect)
-        ax_c.text(X_CARD + W_CARD/2, by_top - 0.18, b_title, ha=
-        ax_c.text(X_CARD + W_CARD/2, by_top - 0.38, b_sub, ha='c
+        ax_c.text(X_CARD + W_CARD/2, by_top - 0.18, b_title, ha='center', va='center', fontsize=7.8, fontweight='bold', color=b_border)
+        ax_c.text(X_CARD + W_CARD/2, by_top - 0.38, b_sub, ha='center', va='center', fontsize=6.6, color='#475569')
 
     plt.savefig(OUT_PDF, bbox_inches='tight')
     plt.show()
-    print('Generated master figure successfully!')
+    print('Generated master Figure 2 successfully!')
 
 build_masterpiece_figure()
 \end{lstlisting}
