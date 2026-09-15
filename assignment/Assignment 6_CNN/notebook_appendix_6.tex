@@ -15,9 +15,9 @@
 \needspace{4\baselineskip}
 \noindent\textbf{\small [In 1]:} 
 \begin{lstlisting}[style=pycode]
-# =============================================
+# =====================================
 # STEP 1: Setup & Data Download
-# =============================================
+# =====================================
 # Download Udacity Cat vs Dog dataset
 !wget -c https://s3.amazonaws.com/content.udacity-data.com/nd089
 !unzip -qq Cat_Dog_data.zip
@@ -46,9 +46,9 @@ test  train
 \needspace{4\baselineskip}
 \noindent\textbf{\small [In 2]:} 
 \begin{lstlisting}[style=pycode]
-# =============================================
+# =====================================
 # STEP 2: Import libraries & Set Reproducibility
-# =============================================
+# =====================================
 import os
 import random
 import time
@@ -86,9 +86,9 @@ GPU Available     : [PhysicalDevice(name='/physical_device:GPU:0
 \needspace{4\baselineskip}
 \noindent\textbf{\small [In 3]:} 
 \begin{lstlisting}[style=pycode]
-# =============================================
+# =====================================
 # STEP 3: Data Augmentation & Generator Setup
-# =============================================
+# =====================================
 train_dir = "Cat_Dog_data/train"
 
 # Data augmentation configuration
@@ -150,11 +150,17 @@ print('[Figure 1: Real photographic dataset samples and augmenta
 \end{lstlisting}
 
 \needspace{4\baselineskip}
+\noindent\textbf{\small [Out 4]:} 
+\begin{lstlisting}[style=output]
+<Figure size 4800x3660 with 16 Axes>
+\end{lstlisting}
+
+\needspace{4\baselineskip}
 \noindent\textbf{\small [In 5]:} 
 \begin{lstlisting}[style=pycode]
-# =============================================
+# =====================================
 # Baseline Model: Custom Scratch CNN (Model 1 Ablation)
-# =============================================
+# =====================================
 # 4-block Convolutional Neural Network trained from scratch
 scratch_model = Sequential([
     Conv2D(32, (3, 3), activation='relu', padding='same', input_
@@ -192,9 +198,9 @@ Accuracy: 84.15% | Dog Precision: 83.50% -> [FAIL: Below 90-95%
 \needspace{4\baselineskip}
 \noindent\textbf{\small [In 6]:} 
 \begin{lstlisting}[style=pycode]
-# =============================================
+# =====================================
 # STEP 4: Build Model (Transfer Learning with MobileNetV2)
-# =============================================
+# =====================================
 # Load pretrained MobileNetV2 base without top classifier
 base = MobileNetV2(weights='imagenet', include_top=False, input_
 base.trainable = False  # Freeze pretrained weights in Phase 1
@@ -220,14 +226,14 @@ model.summary()
 \begin{lstlisting}[style=output]
 Model: "MobileNetV2_Transfer_Classifier"
 +-----------------------------+---------------------+----------+
-| Layer (type)                | Output Shape        |  Param # |
+| Layer (type)                | Output Shape        | Param #  |
 +-----------------------------+---------------------+----------+
-| input_1 (InputLayer)        | (None, 160, 160, 3) |        0 |
+| input_1 (InputLayer)        | (None, 160, 160, 3) | 0        |
 | mobilenetv2_1.00_160        | (None, 5, 5, 1280)  | 2,257,98 |
-| global_avg_pool (GAP2D)     | (None, 1280)        |        0 |
-| dense_256 (Dense)           | (None, 256)         |  327,936 |
-| dropout_0.5 (Dropout)       | (None, 256)         |        0 |
-| output_classifier (Dense)   | (None, 1)           |      257 |
+| global_avg_pool (GAP2D)     | (None, 1280)        | 0        |
+| dense_256 (Dense)           | (None, 256)         | 327,936  |
+| dropout_0.5 (Dropout)       | (None, 256)         | 0        |
+| output_classifier (Dense)   | (None, 1)           | 257      |
 +-----------------------------+---------------------+----------+
 Total params: 2,586,177 (9.87 MB)
 Trainable params: 328,193 (1.25 MB)
@@ -269,9 +275,9 @@ def build_masterpiece_figure():
     X_RIGHT = 15.42
     TOTAL_SPAN = X_RIGHT - X_LEFT  # 14.84
 
-    # =============================================
+    # ==========================================================
     # ROW 1: PANEL (A) - Full Width End-to-End Pipeline
-    # =============================================
+    # ==========================================================
     ax_a = fig.add_subplot(gs[0])
     ax_a.set_xlim(0, 16.0); ax_a.set_ylim(0, 4.3); ax_a.axis('of
 
@@ -416,9 +422,9 @@ def build_masterpiece_figure():
     ax_a.text(x_pred + w_pred/2, Y_BOX_BOTTOM + 0.36, 'Dog / Cat
 
 
-    # =============================================
+    # ==========================================================
     # ROW 2: PANEL (B) - Full Width Inverted Residual Block Micr
-    # =============================================
+    # ==========================================================
     ax_b = fig.add_subplot(gs[1])
     ax_b.set_xlim(0, 16.0); ax_b.set_ylim(0, 4.3); ax_b.axis('of
 
@@ -525,9 +531,9 @@ def build_masterpiece_figure():
     ax_b.text(X_LEFT + TOTAL_SPAN/2, 0.34, 'Omitting ReLU in the
 
 
-    # =============================================
+    # ==========================================================
     # ROW 3: PANEL (C) - Architectural Synthesis & Efficiency Co
-    # =============================================
+    # ==========================================================
     ax_c = fig.add_subplot(gs[2])
     ax_c.set_xlim(0, 16.0); ax_c.set_ylim(0, 4.3); ax_c.axis('of
 
@@ -611,11 +617,17 @@ build_masterpiece_figure()
 \end{lstlisting}
 
 \needspace{4\baselineskip}
+\noindent\textbf{\small [Out 7]:} 
+\begin{lstlisting}[style=output]
+<Figure size 4800x3600 with 3 Axes>
+\end{lstlisting}
+
+\needspace{4\baselineskip}
 \noindent\textbf{\small [In 8]:} 
 \begin{lstlisting}[style=pycode]
-# =============================================
+# =====================================
 # STEP 5: Callbacks (Regularization helpers)
-# =============================================
+# =====================================
 early_stop = EarlyStopping(
     monitor='val_accuracy',
     patience=3,
@@ -643,9 +655,9 @@ Callbacks configured: EarlyStopping (patience=3) and ReduceLROnP
 \needspace{4\baselineskip}
 \noindent\textbf{\small [In 9]:} 
 \begin{lstlisting}[style=pycode]
-# =============================================
+# =====================================
 # STEP 6: Training Phase 1 (Feature Extraction)
-# =============================================
+# =====================================
 history = model.fit(
     train_gen,
     validation_data=val_gen,
@@ -681,9 +693,9 @@ Epoch 8: early stopping
 \needspace{4\baselineskip}
 \noindent\textbf{\small [In 10]:} 
 \begin{lstlisting}[style=pycode]
-# =============================================
+# =====================================
 # STEP 7: Fine-tuning the Base (Phase 2)
-# =============================================
+# =====================================
 # Unfreeze last 40 layers of base for fine-tuning
 base.trainable = True
 for layer in base.layers[:-40]:
@@ -770,9 +782,9 @@ plt.show()
 \needspace{4\baselineskip}
 \noindent\textbf{\small [In 12]:} 
 \begin{lstlisting}[style=pycode]
-# =============================================
+# =====================================
 # STEP 8: Evaluate Final Model
-# =============================================
+# =====================================
 val_gen = datagen.flow_from_directory(
     train_dir,
     target_size=(160, 160),
@@ -818,7 +830,7 @@ print("=" * 60)
 \noindent\textbf{\small [Out 12]:} 
 \begin{lstlisting}[style=output]
 Found 4500 images belonging to 2 classes.
-141/141 [=============================================] - 131s 9
+141/141 [==============================] - 131s 931ms/step
 
 --- Prediction Alignment Sample ---
 cat/cat.0.jpg -> Pred: 0, True: 0
@@ -841,11 +853,11 @@ Classification Report:
    macro avg     0.9747    0.9747    0.9747      4500
 weighted avg     0.9747    0.9747    0.9747      4500
 
-=============================================
+============================================================
 Dog Precision : 97.59% (Target: >90-95%) -> [PASS]
 Cat Precision : 97.34% (Target: >90-95%) -> [PASS]
 Accuracy      : 97.47% (4,500 Samples) -> [PASS]
-=============================================
+============================================================
 \end{lstlisting}
 
 \needspace{4\baselineskip}
@@ -890,9 +902,9 @@ plt.show()
 \needspace{4\baselineskip}
 \noindent\textbf{\small [In 14]:} 
 \begin{lstlisting}[style=pycode]
-# =============================================
+# =====================================
 # STEP 8.1: Intermediate Feature Map Activations (Lecture 7)
-# =============================================
+# =====================================
 print("--- Hierarchical Feature Extraction Analysis (KMUTT Lectu
 print("1. Early Conv Layers (Receptive Field 3x3):")
 print("   - Detect low-level visual primitives: edges, direction
@@ -947,9 +959,9 @@ plt.show()
 \needspace{4\baselineskip}
 \noindent\textbf{\small [In 16]:} 
 \begin{lstlisting}[style=pycode]
-# =============================================
+# =====================================
 # STEP 8.2: Ablation Studies Benchmark Comparison
-# =============================================
+# =====================================
 benchmarks = [
     {"Model Name": "1. Custom Scratch CNN", "Params": "4.82M", "
     {"Model Name": "2. MobileNetV2 (Phase 1 TL)", "Params": "2.5
@@ -1003,9 +1015,9 @@ plt.show()
 \needspace{4\baselineskip}
 \noindent\textbf{\small [In 18]:} 
 \begin{lstlisting}[style=pycode]
-# =============================================
+# =====================================
 # STEP 9: Test with Your Own Image (Local File or Web URL)
-# =============================================
+# =====================================
 import urllib.request
 from io import BytesIO
 from PIL import Image
@@ -1056,9 +1068,9 @@ Filter Action    : Apply Dog Ears & Snout
 \needspace{4\baselineskip}
 \noindent\textbf{\small [In 19]:} 
 \begin{lstlisting}[style=pycode]
-# =============================================
+# =====================================
 # STEP 10: Real-Time Streaming Video Pipeline (Continuously Clas
-# =============================================
+# =====================================
 class DogCatStreamingEngine:
     """Continuous real-time video stream classifier with automat
     def __init__(self, model, threshold=0.50, smoothing_window=3
@@ -1159,6 +1171,80 @@ print('[Figure 8: Empirical test predictions and failure topolog
 \end{lstlisting}
 
 \needspace{4\baselineskip}
+\noindent\textbf{\small [Out 21]:} 
+\begin{lstlisting}[style=output]
+<Figure size 4740x3120 with 10 Axes>
+\end{lstlisting}
+
+\needspace{6\baselineskip}
 \vspace{0.8em}
-\noindent\textbf{\large Summary and Answers to Experiment Questions}
-\vspace{0.3em}
+\begin{tcolorbox}[colback=blue!3!white, colframe=blue!60!black, arc=4pt, breakable, title=\textbf{Summary and Answers to Experiment Questions (Jupyter Notebook Cell 30)}]
+\begin{lstlisting}[style=output]
+## Summary and Answers to Experiment Questions
+
+### Question 1: Commercial Target Satisfaction & Production Prec
+* **Business Target Requirement**: Prior to commercial product l
+* **Empirical Performance Evaluation**:
+  * **Model 1 (Custom Scratch CNN)**: Achieved a test precision 
+  * **Model 3 (MobileNetV2 Fine-Tuned + Augmentation)**: Achieve
+* **Theoretical Justification & Precision/Recall Tradeoff**:
+  * In commercial augmented reality (AR) video filters and live 
+  * False Positives ($FP$) represent the most damaging failure m
+  * The exceptional Area Under the ROC Curve (99.69%) and Precis
+
+### Question 2: Architectural Comparison: Custom Scratch CNN vs.
+* **Inductive Transfer Learning Formulation**:
+  * Under the inductive transfer learning paradigm (Pan & Yang, 
+  * Here, MobileNetV2 leverages pre-trained feature priors from 
+* **Visual Feature Hierarchy & Sample Efficiency**:
+  * As established in KMUTT Lecture 7 and Geron (2019, Chapter 1
+  * Early convolutional layers function as universal Gabor-like 
+  * Intermediate layers combine these primitives into textural m
+  * Deep layers synthesize holistic semantic structures (canine 
+  * Training a Custom Scratch CNN requires learning all hierarch
+* **Parameter Efficiency & Structural Regularization**:
+  * The Custom Scratch CNN incorporates 4,821,313 parameters, do
+  * MobileNetV2 utilizes Inverted Residual Blocks with Linear Bo
+* **Two-Phase Training Optimization Protocol**:
+  * **Phase 1 (Feature Extraction)**: The base backbone is froze
+  * **Phase 2 (Fine-Tuning)**: The top 40 layers of MobileNetV2 
+
+### Question 3: Mechanistic Role of Data Augmentation in Overfit
+* **Empirical Ablation Analysis**:
+  * In the ablation study comparing Model 4 (without augmentatio
+    * **Model 4 (No Augmentation)**: Training Accuracy reached 9
+    * **Model 3 (With Augmentation)**: Training Accuracy was 97.
+* **Theoretical Mechanism & Transformation Invariance**:
+  * As articulated by James et al. (ISLP, 2021, Chapter 10) and 
+  * Data augmentation enforces invariance to continuous Lie-grou
+    $$f(T(x)) \approx f(x) \quad \forall T \in \mathcal{G}$$
+  * Dynamically perturbing training images with random rotations
+
+### Question 4: Real-Time Streaming Pipeline Architecture & Edge
+* **Latency Budget & Streaming Throughput**:
+  * Standard real-time video streaming requires a frame rate of 
+    $$\Delta t_{budget} \le \frac{1}{30\text{ s}} \approx 33.33\
+  * Benchmark of the end-to-end live streaming inference pipelin
+    1. Video Frame Ingestion & Downsampling ($1920 \times 1080 \
+    2. Tensor Normalization & Rescaling ($[0, 255] \to [-1, 1]$ 
+    3. MobileNetV2 Deep Feature Extraction & Classification: $18
+    4. Softmax Evaluation & Exponential Moving Average (EMA) Tem
+    5. Dynamic AR Graphic Overlay & Display Rendering: $1.5\text
+    $$\text{Total End-to-End Latency} = 25.0\text{ ms} \quad (\a
+  * Because the complete pipeline executes in 25.0 ms, it provid
+* **Edge Deployment & Model Quantization Pathway**:
+  * For edge deployment on mobile consumer hardware (iOS and And
+  * Post-Training Quantization (INT8) via TensorFlow Lite conver
+  * On modern mobile Neural Processing Units (NPUs), such as the
+
+### References
+1. Géron, A. (2019). *Hands-On Machine Learning with Scikit-Lear
+2. James, G., Witten, D., Hastie, T., Tibshirani, R., & Taylor, 
+3. KMUTT CPE342 Department of Computer Engineering. (2026). *Lec
+4. KMUTT CPE342 Department of Computer Engineering. (2026). *Lec
+5. Sandler, M., Howard, A., Zhu, M., Zhmoginov, A., & Chen, L.-C
+6. Pan, S. J., & Yang, Q. (2010). A Survey on Transfer Learning.
+7. Lin, M., Chen, Q., & Yan, S. (2013). Network In Network. *arX
+8. Deng, J., Dong, W., Socher, R., Li, L.-J., Li, K., & Fei-Fei,
+\end{lstlisting}
+\end{tcolorbox}
