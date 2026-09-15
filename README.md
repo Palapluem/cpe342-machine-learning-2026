@@ -66,7 +66,8 @@ cpe342-machine-learning-2026/
 │   ├── ML_6_1_Intro_to_NN.ipynb               # In-Class Lab: Scikit-learn & Keras MLP on Bank Data (Week 6)
 │   ├── ML_6_2_Keras_Tutorial.ipynb            # Tutorial: Comprehensive Keras Sequential & MNIST (Week 6)
 │   ├── ML_6_Keras_Tutorial_Quickstart.ipynb   # Quickstart: TensorFlow Keras Sequential Pipeline (Week 6)
-│   └── ML_6_bank-data.csv                     # Dataset: Banking Marketing Tabular Data (Lecture 6, N = 45,211)
+│   ├── ML_6_bank-data.csv                     # Dataset: Banking Marketing Tabular Data (Lecture 6, N = 45,211)
+│   └── ML_7_CNN_in-class.ipynb               # In-Class Lab: Convolutional Neural Networks on MNIST & Dogs vs Cats (Week 7)
 │
 └── textbook/                                  # Reference textbooks (ISLR / O'Reilly)
 ```

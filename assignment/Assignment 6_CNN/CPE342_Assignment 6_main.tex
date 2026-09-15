@@ -191,6 +191,7 @@
 \end{equation}
 โดยที่ $\delta_{i, j, k} = \frac{\partial L}{\partial Y_{i, j, k}}$ คือความผิดพลาดที่แพร่ย้อนกลับมาจากเลเยอร์ถัดไป และ $\text{rot}_{180}(\mathbf{W})$ คือการหมุนเคอร์เนล 180 องศา ซึ่งพิสูจน์ให้เห็นว่ากระบวนการ Backpropagation ใน CNN ก็คือการทำ Convolution อีกรูปแบบหนึ่ง
 
+\clearpage
 \subsection*{1.6 สถาปัตยกรรมคลาสสิกสู่โมเดลสมัยใหม่\\ \normalsize(Architectural Evolution: LeNet, AlexNet, VGG, ResNet, to MobileNetV2)}
 พัฒนาการของสถาปัตยกรรม CNN ได้ผ่านหมุดหมายสำคัญในประวัติศาสตร์:
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
@@ -219,6 +220,7 @@
 \end{equation}
 การกำหนดอัตราการเรียนรู้ขนาดเล็กมากใน Phase 2 ($\eta_{FT} = 10^{-5}$) มีความสำคัญยิ่งในการป้องกัน \textbf{Catastrophic Forgetting} (การลืมฟีเจอร์ทั่วไปดั้งเดิมที่เรียนรู้มาจาก ImageNet)
 
+\clearpage
 \subsection*{1.8 ทฤษฎีการเพิ่มพูนข้อมูลและผลการควบคุมความซับซ้อน\\ \normalsize(Data Augmentation as Geometric Regularization)}
 การเพิ่มพูนข้อมูล (Data Augmentation) สามารถมองในมุมของทฤษฎีการเรียนรู้ทางสถิติว่าเป็นการประมาณค่าความไม่แปรผัน (Invariance Approximation) ภายใต้กลุ่มการแปลงเชิงเรขาคณิต (Lie Group Transformation $\mathcal{G}$):
 \begin{equation}
@@ -239,30 +241,36 @@
     \label{fig:plot_1}
 \end{figure}
 
+\clearpage
 \subsection*{2.1 โครงสร้างชุดข้อมูลและความสมดุลของคลาส\\ \normalsize(Dataset Specifications \& Class Distribution)}
-ชุดข้อมูลประกอบด้วยภาพถ่ายจริงในสภาพแวดล้อมที่ไม่ถูกควบคุม (In-the-wild Images) มีขนาดมิติและอัตราส่วนกว้างยาวแตกต่างกันอย่างมาก:
-\begin{itemize}[leftmargin=1.8em, itemsep=1pt]
-    \item จำนวนภาพรวมทั้งหมด: \textbf{25,000 ภาพ}
-    \item การกระจายตัวของคลาส: แมว 12,500 ภาพ (50.0\%) และสุนัข 12,500 ภาพ (50.0\%) ซึ่งเป็นชุดข้อมูลที่มีความสมดุลสมบูรณ์ (Perfect Class Balance: Imbalance Ratio = 1.000)
-    \item สัดส่วนการแบ่งข้อมูล: ชุดฝึกฝน 20,500 ภาพ (82.0\%) และชุดตรวจสอบ/ทดสอบ 4,500 ภาพ (18.0\%)
+ชุดข้อมูลประกอบด้วยภาพถ่ายจริงในสภาพแวดล้อมที่ไม่ถูกควบคุม (In-the-wild Images) มีมิติหลากหลาย:
+\begin{itemize}[leftmargin=1.8em, itemsep=0pt, topsep=1pt, parsep=0pt]
+\item จำนวนภาพรวมทั้งหมด: \textbf{25,000 ภาพ} แบ่งเป็น แมว 12,500 ภาพ (50.0\%) และสุนัข 12,500 ภาพ (50.0\%) สมดุลสมบูรณ์ (Imbalance Ratio = 1.000)
+\item สัดส่วนการแบ่งข้อมูล: ชุดฝึกฝน 20,500 ภาพ (82.0\%) และชุดตรวจสอบ/ทดสอบ 4,500 ภาพ (18.0\%)
 \end{itemize}
 
 \subsection*{2.2 กระบวนการเตรียมข้อมูลและการเพิ่มพูนข้อมูลแบบพลวัต\\ \normalsize(Preprocessing Pipeline \& Dynamic Augmentation)}
-ภาพต้นฉบับจะถูกส่งผ่านท่อส่งข้อมูล (Data Pipeline) ดังต่อไปนี้:
-\begin{enumerate}[leftmargin=1.8em, itemsep=1pt]
-    \item \textbf{Spatial Resizing:} ปรับขนาดภาพทุกภาพให้เป็นมิติมาตรฐาน $160 \times 160 \times 3$ พิกเซล
-    \item \textbf{Value Normalization:} ปรับสเกลค่าพิกเซลจาก $[0, 255]$ ให้อยู่ในช่วง $[-1, 1]$ สำหรับ MobileNetV2 และ $[0, 1]$ สำหรับ Custom CNN
-    \item \textbf{Augmentation Transformations:} สุ่มแปลงข้อมูลในแต่ละ Mini-batch:
-    \begin{itemize}[leftmargin=1.5em]
-        \item Horizontal Flip: สุ่มกลับภาพแนวนอน (สมมาตรซ้าย-ขวา)
-        \item Random Rotation: หมุนภาพแบบสุ่มไม่เกิน $\pm 20^\circ$
-        \item Random Zoom: ซูมขยายภาพแบบสุ่มไม่เกิน 15\%
-        \item Width \& Height Shifts: ขยับเลื่อนตำแหน่งภาพไม่เกิน 15\%
-    \end{itemize}
+ภาพต้นฉบับจะถูกส่งผ่านท่อส่งข้อมูล (Data Pipeline) ดังนี้:
+\begin{enumerate}[leftmargin=1.8em, itemsep=0pt, topsep=1pt, parsep=0pt]
+\item \textbf{Spatial Resizing:} ปรับขนาดภาพทุกภาพให้เป็นมิติมาตรฐาน $160 \times 160 \times 3$ พิกเซล
+\item \textbf{Value Normalization:} ปรับสเกลค่าพิกเซล Scale ($1/255$ หรือสู่ช่วง $[-1, 1]$ สำหรับ MobileNetV2 และ $[0, 1]$ สำหรับ Custom Scratch CNN)
+\item \textbf{Augmentation Transformations:} สุ่มแปลงข้อมูลใน Mini-batch: Horizontal Flip, Random Rotation ($\pm 20^\circ$), Random Zoom (15\%), และ Shift (15\%)
 \end{enumerate}
+
+\subsection*{2.3 ข้อกำหนดทางการของงานและเกณฑ์การประเมิน\\ \normalsize(Official Coursework Requirements \& Evaluation Thresholds)}
+ตามข้อกำหนดอย่างเป็นทางการของการทดลอง (Official Homework Specification) ผู้เรียนต้องดำเนินการครอบคลุม 4 มิติหลักดังนี้:
+\begin{enumerate}[leftmargin=1.8em, itemsep=0pt, topsep=1pt, parsep=0pt]
+\item \textbf{Data Pipeline:} จัดการดาวน์โหลดและโหลดไฟล์ภาพชุดข้อมูลสุนัขและแมว (Dogs vs. Cats) เข้าสู่ระบบ
+\item \textbf{Preprocessing \& Augmentation:} ปรับขนาดมิติภาพ (Spatial Resizing เช่น $150 \times 150$ หรือ $160 \times 160$ พิกเซล), ปรับสเกลค่าพิกเซล Scale ($1/255$ หรือ Normalization), และวางแผนแบ่งข้อมูล Train / Validation
+\item \textbf{Model Selection:} สามารถเลือกสร้าง Custom CNN จากศูนย์ (Scratch CNN) หรือใช้การเรียนรู้แบบถ่ายโอน (Transfer Learning เช่น VGG16, MobileNet, ResNet) มาตัดต่อเลเยอร์ Classification Head
+\item \textbf{เป้าหมายเชิงสมรรถนะ (Target Precision):} ต้องปรับแต่ง Hyperparameters จนได้ค่า Precision อยู่ในช่วง \textbf{90\% -- 95\% ขึ้นไป} จึงจะผ่านเกณฑ์
+\end{enumerate}
+\vspace{2pt}
+\noindent\textbf{ผลการทดสอบเชิงเปรียบเทียบ:} โมเดล Custom Scratch CNN ทำค่า Dog Precision ได้เพียง \textbf{83.50\%} (\textcolor{red}{\textbf{ไม่ผ่านเกณฑ์ 90--95\%}}) ในขณะที่โมเดล MobileNetV2 Transfer Learning สามารถทำ Dog Precision ได้สูงถึง \textbf{97.59\%} (Validation) และ \textbf{99.00\%} (Unshuffled Test) ซึ่ง\textcolor{accentblue}{\textbf{ผ่านเกณฑ์และทะลุเป้าหมาย 95\%}} อย่างขาดลอย
 
 % =================================================================
 \vspace{1em}
+\clearpage
 \section*{3. ระเบียบวิธีวิจัยและสถาปัตยกรรมโมเดล\\ \large(Methodology \& Model Architectures)}
 
 การทดลองนี้มุ่งเน้นเปรียบเทียบสถาปัตยกรรม 2 ขั้ว เพื่อให้เห็นผลกระทบของ Pre-trained Priors ต่อความเที่ยงตรง (Precision) อย่างชัดเจน
@@ -307,6 +315,7 @@
 
 % =================================================================
 \vspace{1em}
+\clearpage
 \section*{4. ผลการทดลองและการวินิจฉัยโมเดลเชิงลึก\\ \large(Experimental Results \& Diagnostic Plots)}
 
 \subsection*{4.1 เส้นทางการเรียนรู้แบบสองขั้นตอน\\ \normalsize(Two-Phase Learning Curves \& Convergence Dynamics)}
