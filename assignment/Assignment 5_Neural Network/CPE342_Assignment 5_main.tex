@@ -398,20 +398,20 @@ z = \sum_{i=1}^d w_i x_i + b = \mathbf{w}^T \mathbf{x} + b
 จากการประเมินผลโมเดลพื้นฐานบนชุดข้อมูลทดสอบจริง (Hold-out Test Set, $N=10,000$) ผ่านฟังก์ชัน \texttt{.evaluate()} ได้ผลลัพธ์เชิงเปรียบเทียบและการวินิจฉัยดังนี้:
 
 \begin{enumerate}[leftmargin=18pt, itemsep=3pt]
-    \item \textbf{การเปรียบเทียบผลลัพธ์ระหว่าง 3 ส่วนข้อมูล (Dataset Partition Comparison)}:
-    \begin{table}[H]
-        \centering
-        \small
-        \begin{tabular}{lcccc}
-            \toprule
-            \textbf{Dataset Partition} & \textbf{จำนวนตัวอย่าง ($N$)} & \textbf{Loss (CCE)} & \textbf{Accuracy (\%)} & \textbf{Generalization Gap} \\
-            \midrule
-            Training Set & 54,000 & 0.2851 & 92.11\% & Baseline (0.00\%) \\
-            Validation Set & 6,000 & 0.2318 & 93.63\% & +1.52\% \\
-            Test Set (Unseen) & 10,000 & 0.2657 & 92.41\% & +0.30\% \\
-            \bottomrule
-        \end{tabular}
-    \end{table}
+    \item \textbf{การเปรียบเทียบผลลัพธ์ระหว่าง 3 ส่วนข้อมูล (Dataset Partition Comparison)}:\par
+    \vspace{0.25em}
+    \noindent\resizebox{\linewidth}{!}{%
+    \begin{tabular}{lcccc}
+        \toprule
+        \textbf{Dataset Partition} & \textbf{จำนวนตัวอย่าง ($N$)} & \textbf{Loss (CCE)} & \textbf{Accuracy (\%)} & \textbf{Generalization Gap} \\
+        \midrule
+        Training Set & 54,000 & 0.2851 & 92.11\% & Baseline (0.00\%) \\
+        Validation Set & 6,000 & 0.2318 & 93.63\% & +1.52\% \\
+        Test Set (Unseen) & 10,000 & 0.2657 & 92.41\% & +0.30\% \\
+        \bottomrule
+    \end{tabular}%
+    }\par
+    \vspace{0.25em}
     \item \textbf{การวินิจฉัยภาวะ Overfitting หรือ Underfitting}:
     \begin{itemize}[leftmargin=12pt, itemsep=2pt]
         \item \textbf{โมเดลไม่เกิดภาวะ Overfitting}: ค่า Test Accuracy ($92.41\%$) และ Test Loss ($0.2657$) สอดคล้องแนบสนิทกับ Training Accuracy ($92.11\%$) โดยมี Generalization Gap ต่ำกว่า $0.30\%$ แสดงว่าโมเดลไม่มีการท่องจำข้อมูล
