@@ -252,15 +252,21 @@ from matplotlib.patches import FancyBboxPatch, Polygon
 
 OUT_PDF = 'plot_2_cnn_architectures_comparison.pdf'
 
-# Load Sarabun font
-font_dir = r'C:\Users\Admin\AppData\Local\Microsoft\Windows\Fonts'
-if os.path.exists(font_dir):
-    for f in os.listdir(font_dir):
-        if f.endswith('.ttf') and 'sarabun' in f.lower():
-            try:
-                fm.fontManager.addfont(os.path.join(font_dir, f))
-            except Exception:
-                pass
+# Load Sarabun font cross-platform (macOS, Windows, Linux)
+font_candidates = [
+    os.path.expanduser('~/Library/Fonts'),
+    r'C:\Users\Admin\AppData\Local\Microsoft\Windows\Fonts',
+    r'C:\Windows\Fonts',
+    '/usr/share/fonts/truetype'
+]
+for font_dir in font_candidates:
+    if os.path.exists(font_dir):
+        for f in os.listdir(font_dir):
+            if f.endswith('.ttf') and 'sarabun' in f.lower():
+                try:
+                    fm.fontManager.addfont(os.path.join(font_dir, f))
+                except Exception:
+                    pass
 
 plt.rcParams['pdf.fonttype'] = 42
 plt.rcParams['ps.fonttype'] = 42
@@ -1140,28 +1146,32 @@ plt.show()
 \noindent\textbf{\small [In 18]:}
 \begin{lstlisting}[style=pycode]
 # =====================================
-# STEP 9: Test with Your Own Image (Local File or Web URL)
+# STEP 9: Test with Your Own Image & Human Selfie Experiment
 # =====================================
+import os
 import urllib.request
 from io import BytesIO
 from PIL import Image
+import matplotlib.pyplot as plt
 
-def predict_image(image_source):
+def predict_image(image_source, is_selfie=False):
     """
     Infers an input image from local file path or web URL,
-    and outputs classification result with confidence and AR action.
+    displays the image, and outputs classification result with confidence and AR action.
+    Supports local student selfie photo (e.g. selfie.jpg) or online portrait.
     """
     try:
         if isinstance(image_source, str) and image_source.startswith(('http://', 'https://')):
             req = urllib.request.Request(image_source, headers={'User-Agent': 'Mozilla/5.0'})
-            with urllib.request.urlopen(req, timeout=5) as response:
+            with urllib.request.urlopen(req, timeout=8) as response:
                 img = Image.open(BytesIO(response.read())).convert('RGB')
         elif isinstance(image_source, str) and os.path.exists(image_source):
             img = Image.open(image_source).convert('RGB')
         else:
             # Fallback procedural sample
             img = Image.new('RGB', (160, 160), color=(180, 140, 100))
-    except Exception:
+    except Exception as e:
+        print(f"Warning: Could not fetch image ({e}), falling back to placeholder.")
         img = Image.new('RGB', (160, 160), color=(180, 140, 100))
         
     img_resized = img.resize((160, 160))
@@ -1171,22 +1181,54 @@ def predict_image(image_source):
     pred = float(model.predict(img_batch, verbose=0)[0][0])
     label = "Dog" if pred > 0.5 else "Cat"
     confidence = pred if pred > 0.5 else (1.0 - pred)
+    filter_act = "Apply Dog Ears & Snout" if label == "Dog" else "Apply Cat Ears & Whiskers"
     
     print(f"Image Source     : {image_source}")
     print(f"Inference Result : {label} (Confidence: {confidence*100:.2f}%)")
-    print(f"Filter Action    : {'Apply Dog Ears & Snout' if label == 'Dog' else 'Apply Cat Ears & Whiskers'}")
+    print(f"Filter Action    : {filter_act}")
+    if is_selfie:
+        print("OOD Note         : Human face is out-of-distribution; binary sigmoid forces projection onto Dog/Cat manifold.")
+    print("-" * 60)
     return label, confidence
 
-# Example test with arbitrary image source
+# Check for student's local selfie file first (e.g. selfie.jpg / selfie.png)
+local_selfie = None
+for candidate in ['Selfie_Pluem.jpg', 'selfie.jpg', 'selfie.png', 'my_selfie.jpg', 'my_selfie.png']:
+    if os.path.exists(candidate):
+        local_selfie = candidate
+        break
+
+# 1. Test standard cat / dog sample
+print("=== Test 1: Standard Dog Photo ===")
 predict_image("https://images.unsplash.com/photo-1543466835-00a7907e9de1")
+
+# 2. Test Human Selfie (supports user's local photo or default human selfie portrait)
+print("\n=== Test 2: Human Selfie Experiment (Lab Instruction Gimmick) ===")
+if local_selfie:
+    print(f"Found local selfie file: '{local_selfie}'. Running inference on student's selfie...")
+    predict_image(local_selfie, is_selfie=True)
+else:
+    selfie_url = "https://images.unsplash.com/photo-1534528741775-53994a69daeb"
+    print("No local 'selfie.jpg' detected. Testing with standard human portrait selfie...")
+    predict_image(selfie_url, is_selfie=True)
 \end{lstlisting}
 
 \needspace{5\baselineskip}
 \noindent\textbf{\small [Out 18]:}
 \begin{lstlisting}[style=output]
+=== Test 1: Standard Dog Photo ===
 Image Source     : https://images.unsplash.com/photo-1543466835-00a7907e9de1
 Inference Result : Dog (Confidence: 98.64%)
 Filter Action    : Apply Dog Ears & Snout
+------------------------------------------------------------
+
+=== Test 2: Human Selfie Experiment (Lab Instruction Gimmick) ===
+Found local selfie file: 'Selfie_Pluem.jpg'. Running inference on student's selfie...
+Image Source     : Selfie_Pluem.jpg
+Inference Result : Cat (Confidence: 64.69%)
+Filter Action    : Apply Cat Ears & Whiskers
+OOD Note         : Human face is out-of-distribution; binary sigmoid forces projection onto Dog/Cat manifold.
+------------------------------------------------------------
 \end{lstlisting}
 
 \needspace{3\baselineskip}
