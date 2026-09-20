@@ -47,7 +47,7 @@
     "pr_auc": 0.9918,
     "latency_ms": 18.2,
     "meets_target_90_95": true,
-    "generalization_gap": -0.0212
+    "generalization_gap": 0.0283
   },
   {
     "model_id": "M3_mobilenetv2_phase2_finetuned",
@@ -122,6 +122,6 @@
     "pr_auc": 0.994,
     "latency_ms": 18.4,
     "meets_target_90_95": true,
-    "generalization_gap": 0.0065
+    "generalization_gap": 0.0005
   }
 ]

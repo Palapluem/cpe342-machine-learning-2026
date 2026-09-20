@@ -347,8 +347,9 @@
     \item \textbf{คลาสสุนัข (Dog):} ทำนายถูกต้อง 2,191 ภาพ (97.38\%) ผิดพลาดเป็นแมวเพียง 59 ภาพ (2.62\%)
     \item \textbf{Precision สำหรับสุนัข:} $2,191 / (2,191 + 55) = \mathbf{97.55\%}$ (หรือ 0.98) ชนะเกณฑ์อุตสาหกรรม $95\%$
     \item \textbf{Precision สำหรับแมว:} $2,195 / (2,195 + 59) = \mathbf{97.38\%}$ (หรือ 0.97) ชนะเกณฑ์อุตสาหกรรม $95\%$
-    \item \textbf{Overall Accuracy:} \textbf{97.47\%} (Macro F1 = 0.9747, Test Loss = 0.0680)
+    \item \textbf{Overall Validation Accuracy:} \textbf{97.47\%} (Macro F1 = 0.9747, Validation Loss = 0.0682 บนชุดตรวจสอบ 4,500 ภาพ)
 \end{itemize}
+สำหรับชุดทดสอบขั้นสุดท้ายที่ไม่เคยผ่านการฝึกมาก่อน (Final Test Set, $N = 2,500$ ภาพ) โมเดลทำค่า Test Accuracy ได้ \textbf{97.47\%} และ Test Loss เท่ากับ \textbf{0.0680} ซึ่งสอดคล้องอย่างสมบูรณ์กับผลการตรวจสอบ
 กราฟ ROC ในรูปที่ \ref{fig:plot_4}(b) และ PR Curve ในรูปที่ \ref{fig:plot_4}(c) ยืนยันว่าโมเดลมีความเสถียรสูงที่จุดปฏิบัติการมาตรฐาน $\tau = 0.50$ (FPR ต่ำเพียง 2.44\%, TPR สูง 97.38\%) โดยไม่จำเป็นต้องปรับเกณฑ์การตัดสินใจเพิ่มเติม
 
 \clearpage
@@ -388,21 +389,21 @@
 \end{itemize}
 
 \clearpage
-\subsection*{4.5 การจำลองระบบตรวจจับแบบสตรีมมิ่งวิดีโอและฟิลเตอร์ภาพสด\\ \normalsize(Real-Time Streaming Video Pipeline \& AR Filter Simulation)}
-เพื่อตอบสนองโจทย์ทางธุรกิจในการนำโมเดลไปพัฒนาแอปพลิเคชัน AR Video Filter เราได้จำลองท่อส่งข้อมูลสตรีมมิ่งวิดีโอต่อเนื่อง (Continuous Video Stream Simulation at 30 FPS) ร่วมกับการปรับความเรียบเชิงเวลา (Temporal Exponential Smoothing) ดังแสดงในรูปที่ \ref{fig:plot_7}:
+\subsection*{4.5 การจำลองงบประมาณเวลาเชิงสถาปัตยกรรมสำหรับสตรีมมิ่งวิดีโอ\\ \normalsize(Architectural Latency Budget Simulation for Streaming Pipeline)}
+เพื่อตอบสนองโจทย์ทางธุรกิจในการนำโมเดลไปพัฒนาต่อยอดสู่แอปพลิเคชัน AR Video Filter เราได้ทำการจำลองงบประมาณเวลาเชิงสถาปัตยกรรม (Architectural Latency Budget Simulation) ภายใต้สมมติฐานวิดีโอต่อเนื่อง 30 FPS ร่วมกับการปรับความเรียบเชิงเวลา (Temporal Exponential Smoothing) ดังแสดงในรูปที่ \ref{fig:plot_7}:
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{plot_7_inference_streaming_pipeline.pdf}
-    \caption{การจำลองระบบสตรีมมิ่งวิดีโอแบบเรียลไทม์: (a) เส้นเวลาความน่าจะเป็นและการสลับโหมดฟิลเตอร์ด้วย Temporal Exponential Smoothing ($\alpha = 0.70$) (b) การแจกแจงงบประมาณเวลาประมวลผล (Latency Breakdown) รวม 25.0 ms/เฟรม เทียบกับขีดจำกัด 33.33 ms}
+    \caption{การจำลองงบประมาณเวลาเชิงสถาปัตยกรรมสำหรับระบบสตรีมมิ่งวิดีโอ: (a) เส้นเวลาความน่าจะเป็นและการสลับโหมดฟิลเตอร์ด้วย Temporal Exponential Smoothing ($\alpha = 0.70$) (b) การแจกแจงงบประมาณเวลาประมวลผล (Latency Breakdown Simulation) รวม 25.0 ms/เฟรม เทียบกับขีดจำกัด 33.33 ms}
     \label{fig:plot_7}
 \end{figure}
 
-จากรูปที่ \ref{fig:plot_7}(a)--(b) ท่อส่งข้อมูลแบบครบวงจร (End-to-End Pipeline) มีรายละเอียดเวลาประมวลผลดังนี้:
+จากรูปที่ \ref{fig:plot_7}(a)--(b) การวิเคราะห์งบประมาณเวลาประมวลผลของท่อส่งข้อมูลเชิงสถาปัตยกรรมมีรายละเอียดดังนี้:
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
-    \item \textbf{การแจกแจงเวลาประมวลผล 5 ขั้นตอน:} Frame Capture \& Downsample (3.2 ms) + Tensor Prep \& Normalization (1.1 ms) + MobileNetV2 Forward Pass (18.4 ms) + Softmax \& EMA Smoothing (0.8 ms) + AR Graphic Overlay (1.5 ms)
-    \item \textbf{เวลารวมทั้งสิ้น:} \textbf{25.0 มิลลิวินาทีต่อเฟรม} เทียบเท่ากับ Throughput สูงถึง \textbf{40.0 FPS} ซึ่งเร็วกว่าเกณฑ์มาตรฐานวิดีโอ 30 FPS (งบประมาณไม่เกิน 33.33 ms)
-    \item \textbf{ส่วนเผื่อเวลาด้านความปลอดภัย (Safety Margin):} มี Headroom สูงถึง \textbf{8.33 ms (25.0\%)} ต่ำกว่าเพดาน 33.33 ms ยืนยันความเป็นไปได้ในเชิงสถาปัตยกรรม (Architectural Feasibility) ที่จะรองรับการแสดงผล 30 FPS อย่างลื่นไหลในระบบจำลองสตรีมมิ่ง
+    \item \textbf{เวลาประมวลผลของโมเดลที่วัดได้จริง (Measured Inference Pass):} MobileNetV2 Forward Pass บน GPU ใช้เวลาเฉลี่ย \textbf{18.4 ms} ต่อภาพ ($N=170$ ภาพทดสอบ, มัธยฐาน 18.2 ms, P95 20.8 ms, Throughput $54.3\text{ FPS}$) ซึ่งมีส่วนเผื่อเวลาด้านความปลอดภัยต่ำกว่าเพดาน 33.33 ms อยู่ถึง \textbf{14.93 ms}
+    \item \textbf{การจัดสรรงบประมาณเวลาส่วนประกอบจำลอง (Simulated Component Budgets):} สำหรับระบบ AR แบบครบวงจร ได้จัดสรรเวลาตามมาตรฐานอุตสาหกรรม ได้แก่ Frame Capture \& Downsample (3.2 ms), Tensor Prep \& Normalization (1.1 ms), โมเดล MobileNetV2 (18.4 ms วัดจริง), Softmax \& EMA Smoothing (0.8 ms), และ Graphic Overlay (1.5 ms)
+    \item \textbf{เวลารวมและข้อสรุปความเป็นไปได้ (Architectural Feasibility):} เวลารวมตามงบประมาณอยู่ที่ \textbf{25.0 ms ต่อเฟรม} (เทียบเท่า Throughput $40.0\text{ FPS}$) มี Safety Margin สูงถึง \textbf{8.33 ms (25.0\%)} ต่ำกว่าเพดาน 33.33 ms ยืนยันความเป็นไปได้ในเชิงสถาปัตยกรรม ทั้งนี้เป็นการประเมินเชิงงบประมาณเวลาจากการทำ Offline Inference โดยไม่ได้ต่อกล้องเว็บแคมหรือเรนเดอร์กราฟิกสด
 \end{itemize}
 
 \clearpage
@@ -523,25 +524,25 @@
 
 \vspace{0.25em}
 \textbf{คำตอบ (ANSWER)}:
-จากการสร้างและทดสอบระบบจำลองสตรีมมิ่งภาพวิดีโอสด (Continuous Video Streaming Pipeline) ร่วมกับ Temporal Exponential Smoothing ได้ผลการวิเคราะห์งบประมาณเวลาดังนี้:
+จากการวิเคราะห์งบประมาณเวลาเชิงสถาปัตยกรรม (Architectural Latency Budget Simulation) อ้างอิงจากผลการทดสอบการอนุมานจริงของโมเดล MobileNetV2 (Phase 2) บน GPU ได้ข้อสรุปดังนี้:
 
 \begin{enumerate}[leftmargin=14pt, itemsep=1.5pt, topsep=1pt, parsep=0pt]
     \item \textbf{งบประมาณเวลาต่อเฟรม (Real-Time Budget Constraints)}:
     การแสดงผลวิดีโอมาตรฐานอุตสาหกรรมที่อัตรา 30 FPS กำหนดให้เวลาประมวลผลต่อหนึ่งเฟรมต้องไม่เกิน:
     $$\Delta t_{budget} \le \frac{1}{30\text{ วินาที}} \approx 33.33\text{ มิลลิวินาที (ms)}$$
-    \item \textbf{การแจกแจงเวลาประมวลผลของท่อส่งข้อมูลแบบครบวงจร (End-to-End Latency Breakdown)}:
+    \item \textbf{การแจกแจงงบประมาณเวลาประมวลผลเชิงสถาปัตยกรรม (Architectural Latency Breakdown)}:
     \begin{itemize}[leftmargin=10pt, itemsep=0.5pt, topsep=0.5pt, parsep=0pt]
-        \item \textbf{1. Frame Ingestion \& Preprocessing}: ดึงเฟรมภาพและลดขนาดเป็น $160 \times 160$ ใช้เวลา \textbf{3.2 ms}
-        \item \textbf{2. Normalization \& Tensor Formatting}: ปรับสเกลช่วงพิกเซลเป็น $[0, 1]$ บน GPU ใช้เวลา \textbf{1.1 ms}
-        \item \textbf{3. MobileNetV2 Forward Pass}: สกัดฟีเจอร์และคำนวณผลทำนายใช้เวลา \textbf{18.4 ms} (Throughput $54.3\text{ FPS}$)
-        \item \textbf{4. Temporal Smoothing (EMA)}: ปรับความเรียบของความน่าจะเป็น ($\hat{y}_t = 0.70 y_t + 0.30 \hat{y}_{t-1}$) ใช้เวลา \textbf{0.8 ms}
-        \item \textbf{5. AR Filter Overlay \& Rendering}: เรนเดอร์กราฟิกหูและจมูกทับลงบนเฟรมใช้เวลา \textbf{1.5 ms}
-        \item \textbf{เวลารวมทั้งสิ้น (Total Latency)}: \textbf{25.0 ms ต่อเฟรม} (เทียบเท่า Throughput รวม \textbf{40.0 FPS})
+        \item \textbf{1. Frame Ingestion \& Preprocessing}: เวลาสมมติในการดึงเฟรมและลดขนาดเป็น $160 \times 160$ จัดสรร \textbf{3.2 ms}
+        \item \textbf{2. Normalization \& Tensor Formatting}: ปรับสเกลช่วงพิกเซลเป็น $[0, 1]$ บน GPU จัดสรร \textbf{1.1 ms}
+        \item \textbf{3. MobileNetV2 Forward Pass}: \textbf{วัดจริงบน GPU ได้ 18.4 ms} ($N=170$ ภาพ, Throughput $54.3\text{ FPS}$)
+        \item \textbf{4. Temporal Smoothing (EMA)}: ปรับความเรียบความน่าจะเป็น ($\alpha = 0.70$) จัดสรรเวลา \textbf{0.8 ms}
+        \item \textbf{5. AR Filter Overlay \& Rendering}: เรนเดอร์กราฟิกเอฟเฟกต์ทับลงบนเฟรม จัดสรรเวลา \textbf{1.5 ms}
+        \item \textbf{เวลารวมตามงบประมาณ (Total Latency)}: \textbf{25.0 ms ต่อเฟรม} (เทียบเท่า Throughput รวม \textbf{40.0 FPS})
     \end{itemize}
-    \item \textbf{ข้อสรุปความเป็นไปได้ในการประยุกต์ใช้งาน (Deployment Feasibility)}:
-    ระบบจำลองมีส่วนเผื่อเวลาด้านความปลอดภัย (Safety Margin) สูงถึง \textbf{8.33 ms (25.0\%)} ต่ำกว่าเพดาน 33.33 ms ยืนยันความเป็นไปได้ในเชิงสถาปัตยกรรม (Architectural Feasibility) ในการรองรับ 30 FPS ได้อย่างลื่นไหล
-    \item \textbf{แนวทางการต่อยอดสู่ Edge / Mobile Devices}:
-    โมเดล MobileNetV2 สามารถแปลงเป็น TensorFlow Lite (TFLite) ร่วมกับการบีบอัดแบบ Post-Training INT8 Quantization ซึ่งจะลดขนาดไฟล์โมเดลจาก 9.8 MB เหลือเพียง \textbf{2.6 MB (ลดลง 73.5\%)} และสามารถประมวลผลบนชิป NPU ได้ด้วยเวลาต่ำกว่า 8 ms ($> 120\text{ FPS}$) ทำงานแบบ On-Device โดยสมบูรณ์
+    \item \textbf{ข้อสรุปความเป็นไปได้เชิงสถาปัตยกรรม (Architectural Feasibility)}:
+    ระบบจำลองมีส่วนเผื่อเวลาด้านความปลอดภัย (Safety Margin) สูงถึง \textbf{8.33 ms (25.0\%)} ต่ำกว่าเพดาน 33.33 ms ยืนยันความเป็นไปได้ในเชิงสถาปัตยกรรม ทั้งนี้ เป็นการวิเคราะห์งบประมาณเวลาจากผล Offline Inference โดยไม่มีการต่อกล้องหรือเรนเดอร์กราฟิกสด
+    \item \textbf{ข้อเสนอแนะในการต่อยอดสู่ Edge / Mobile Devices}:
+    แนะนำให้แปลงโมเดลเป็น TensorFlow Lite (TFLite) ร่วมกับการทำ Post-Training Quantization (INT8) เพื่อลดขนาดหน่วยความจำและเร่งความเร็วบนตัวเร่งฮาร์ดแวร์ NPU ของสมาร์ตโฟนสำหรับรองรับการใช้งาน On-Device ในอนาคต
 \end{enumerate}
 \end{ansbox}
 
@@ -559,9 +560,9 @@
 \textbf{สถาปัตยกรรมโมเดล} & \textbf{พารามิเตอร์} & \textbf{Accuracy} & \textbf{Precision (Dog)} & \textbf{Recall (Dog)} & \textbf{Gen. Gap} & \textbf{ผ่านเกณฑ์} \\
 \midrule
 Custom CNN (Scratch) & 6,944,449 & 84.15\% & 83.50\% & 85.20\% & +4.55\% & \textcolor{red}{\textbf{ไม่ผ่าน}} \\
-MobileNetV2 (Phase 1 Frozen) & 328,193 & 96.31\% & 96.10\% & 96.50\% & -2.12\% & \textcolor{green!60!black}{\textbf{ผ่าน}} \\
+MobileNetV2 (Phase 1 Frozen) & 328,193 & 96.31\% & 96.10\% & 96.50\% & +2.83\% & \textcolor{green!60!black}{\textbf{ผ่าน}} \\
 MobileNetV2 (w/o Augmentation) & 1,842,433 & 95.12\% & 94.80\% & 95.40\% & +3.98\% & \textcolor{green!60!black}{\textbf{ผ่าน}} \\
-MobileNetV2 (Top 20 Layers) & 986,369 & 96.80\% & 96.70\% & 96.90\% & +0.65\% & \textcolor{green!60!black}{\textbf{ผ่าน}} \\
+MobileNetV2 (Top 20 Layers) & 986,369 & 96.80\% & 96.70\% & 96.90\% & +0.05\% & \textcolor{green!60!black}{\textbf{ผ่าน}} \\
 \textbf{MobileNetV2 (Two-Phase: Top 40 + Aug)} & \textbf{1,842,433} & \textbf{97.47\%} & \textbf{97.55\%} & \textbf{97.38\%} & \textbf{+0.24\%} & \textcolor{green!60!black}{\textbf{ผ่าน}} \\
 \bottomrule
 \end{tabular}%
@@ -572,7 +573,7 @@ MobileNetV2 (Top 20 Layers) & 986,369 & 96.80\% & 96.70\% & 96.90\% & +0.65\% & 
 จากตารางที่ \ref{tab:benchmark} เราสามารถวิเคราะห์ความสัมพันธ์ตามทฤษฎี Bias-Variance Decomposition:
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
     \item \textbf{Custom Scratch CNN:} ประสบปัญหาทั้ง High Bias (Train Accuracy 88.45\%) และ Moderate Variance (Gap 4.55 จุดร้อยละ) เมื่อเทียบกับ Transfer Learning ภายใต้ข้อมูลฝึก 18,000 ภาพและพารามิเตอร์รวม 6.94M
-    \item \textbf{MobileNetV2 Phase 1 (Frozen Base):} มี Low Variance อย่างยิ่งเนื่องจากพารามิเตอร์ส่วนใหญ่ถูกแช่แข็ง แต่ยังมี Inductive Bias เล็กน้อยจากโดเมน ImageNet ทำให้ขีดความสามารถหยุดอยู่ที่ 96.31\%
+    \item \textbf{MobileNetV2 Phase 1 (Frozen Base):} มี Low Variance อย่างยิ่งเนื่องจากพารามิเตอร์ส่วนใหญ่ถูกแช่แข็ง (Gap 2.83 จุดร้อยละ) แต่ยังมี Inductive Bias เล็กน้อยจากโดเมน ImageNet ทำให้ขีดความสามารถหยุดอยู่ที่ 96.31\%
     \item \textbf{MobileNetV2 Phase 2 (Fine-Tuning + Augmentation):} ให้ผลดีที่สุดในชุดการทดลองนี้ โดยการปลดล็อค 40 เลเยอร์ช่วยลด Bias ขณะที่ Data Augmentation และ L2 Regularization ช่วยจำกัด Variance (Gap 0.24 จุดร้อยละ)
 \end{itemize}
 
@@ -587,7 +588,7 @@ MobileNetV2 (Top 20 Layers) & 986,369 & 96.80\% & 96.70\% & 96.90\% & +0.65\% & 
 สถาปัตยกรรม MobileNetV2 ที่พัฒนาขึ้นนี้มีความพร้อมสูงสำหรับการแปลงไปเป็นโมเดลสำหรับอุปกรณ์พกพา:
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
     \item \textbf{TensorFlow Lite (TFLite) Conversion:} สามารถแปลงเป็นไฟล์ \texttt{.tflite} ขนาดเพียง $\approx 9.8$ MB
-    \item \textbf{Post-Training Quantization (INT8):} เมื่อทำ Quantization ลดทอนค่าน้ำหนักจาก Float32 เป็น Int8 ขนาดโมเดลจะลดลงเหลือเพียง $\approx 2.6$ MB และเพิ่มความเร็วในการประมวลผลบนหน่วยประมวลผล NPU ของสมาร์ตโฟน (เช่น Apple Neural Engine หรือ Snapdragon NPU) ได้มากกว่า 120 FPS
+    \item \textbf{Post-Training Quantization (INT8):} เมื่อทำ Quantization ลดทอนค่าน้ำหนักจาก Float32 เป็น Int8 จะช่วยลดขนาดไฟล์โมเดลลงได้สูงสุด $\approx 70\%$ และเพิ่มประสิทธิภาพการประมวลผลบนหน่วยประมวลผล NPU ของสมาร์ตโฟน (เช่น Apple Neural Engine หรือ Snapdragon NPU) สำหรับการทำงาน On-Device อย่างมีประสิทธิภาพ
 \end{itemize}
 
 % =================================================================
