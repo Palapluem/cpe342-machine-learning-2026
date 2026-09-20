@@ -113,7 +113,7 @@
     {\Large\textbf{CPE 342 Machine Learning}}\\[2pt]
     {\Large\textbf{Assignment 6: Convolutional Neural Networks (CNN)}}\\[4pt]
     {\large การจำแนกภาพสุนัขและแมวด้วย Convolutional Neural Network, การเรียนรู้แบบถ่ายโอน (Transfer Learning) และการเพิ่มพูนข้อมูลเพื่อระบบตรวจจับแบบสตรีมมิ่ง}\\[2pt]
-    {\normalsize (Dog vs. Cat Classification via Deep CNN, Transfer Learning with MobileNetV2, Data Augmentation, and Real-Time Streaming Diagnostics)}\\[6pt]
+    {\normalsize (Dog vs. Cat Classification via Deep CNN, Transfer Learning with MobileNetV2, Data Augmentation, and Offline Inference Diagnostics)}\\[6pt]
     \textcolor{accentblue}{67070501027 นัธทวัฒน์ ปริมสิริคุณาวุฒิ}\\[2pt]
     \textcolor{accentblue}{67070501042 วิศิษฐ์ สุวรรณเนาว์}
 \end{center}
@@ -236,7 +236,7 @@
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{plot_1_dataset_samples_augmentation.pdf}
-    \caption{\textbf{Exploratory Data Analysis \& Dynamic Augmentation Pipeline}: (a) Authentic photographic samples from Kaggle/Udacity Dogs vs. Cats dataset ($N=25,000$, balanced 1:1 ratio). (b) Dynamic data augmentation transformations pipeline applied to natural photographs. (c) Empirical pixel intensity and RGB color channel distribution analysis.}
+    \caption{\textbf{Exploratory Data Analysis \& Dynamic Augmentation Pipeline}: Layout ที่เก็บจากรายงานเดิมใช้สื่อสารแนวคิดชุดข้อมูลสมดุลและ Training-only Augmentation เท่านั้น; เนื่องจาก Dataset ไม่อยู่ใน Local Repository จึงไม่ใช้ภาพนี้เป็นหลักฐาน Sample-level Provenance โดย Notebook มีโค้ดสร้าง Figure ใหม่จากไฟล์จริงเมื่อรันบน Cloud}
     \label{fig:plot_1}
 \end{figure}
 
@@ -245,27 +245,27 @@
 ชุดข้อมูลประกอบด้วยภาพถ่ายจริงในสภาพแวดล้อมที่ไม่ถูกควบคุม (In-the-wild Images) มีมิติหลากหลาย:
 \begin{itemize}[leftmargin=1.8em, itemsep=0pt, topsep=1pt, parsep=0pt]
 \item จำนวนภาพรวมทั้งหมด: \textbf{25,000 ภาพ} แบ่งเป็น แมว 12,500 ภาพ (50.0\%) และสุนัข 12,500 ภาพ (50.0\%) สมดุลสมบูรณ์ (Imbalance Ratio = 1.000)
-\item สัดส่วนการแบ่งข้อมูล: ชุดฝึกฝน 20,500 ภาพ (82.0\%) และชุดตรวจสอบ/ทดสอบ 4,500 ภาพ (18.0\%)
+\item สัดส่วนการแบ่งข้อมูลแบบคงที่ด้วย Seed 42: ชุดฝึกฝน 18,000 ภาพ, ชุดตรวจสอบ 4,500 ภาพ และชุดทดสอบสุดท้ายที่ไม่แตะต้องระหว่างพัฒนา 2,500 ภาพ
 \end{itemize}
 
 \subsection*{2.2 กระบวนการเตรียมข้อมูลและการเพิ่มพูนข้อมูลแบบพลวัต\\ \normalsize(Preprocessing Pipeline \& Dynamic Augmentation)}
 ภาพต้นฉบับจะถูกส่งผ่านท่อส่งข้อมูล (Data Pipeline) ดังนี้:
 \begin{enumerate}[leftmargin=1.8em, itemsep=0pt, topsep=1pt, parsep=0pt]
 \item \textbf{Spatial Resizing:} ปรับขนาดภาพทุกภาพให้เป็นมิติมาตรฐาน $160 \times 160 \times 3$ พิกเซล
-\item \textbf{Value Normalization:} ปรับสเกลค่าพิกเซล Scale ($1/255$ หรือสู่ช่วง $[-1, 1]$ สำหรับ MobileNetV2 และ $[0, 1]$ สำหรับ Custom Scratch CNN)
-\item \textbf{Augmentation Transformations:} สุ่มแปลงข้อมูลใน Mini-batch: Horizontal Flip, Random Rotation ($\pm 20^\circ$), Random Zoom (15\%), และ Shift (15\%)
+\item \textbf{Value Normalization:} ปรับสเกลค่าพิกเซลด้วย $1/255$ ให้ทุกโมเดลรับข้อมูลในช่วง $[0,1]$ อย่างสอดคล้องกัน
+\item \textbf{Training-only Augmentation:} ใช้ Horizontal Flip, Rotation ($\pm 15^\circ$), Translation ($\pm 10\%$), Zoom ($\pm 20\%$) และ Brightness $0.8$--$1.2$ เฉพาะชุดฝึกฝน ส่วน Validation และ Final Test ใช้เพียง Resize และ Rescale
 \end{enumerate}
 
 \subsection*{2.3 ข้อกำหนดทางการของงานและเกณฑ์การประเมิน\\ \normalsize(Official Coursework Requirements \& Evaluation Thresholds)}
 ตามข้อกำหนดอย่างเป็นทางการของการทดลอง (Official Homework Specification) ผู้เรียนต้องดำเนินการครอบคลุม 4 มิติหลักดังนี้:
 \begin{enumerate}[leftmargin=1.8em, itemsep=0pt, topsep=1pt, parsep=0pt]
-\item \textbf{Data Pipeline:} จัดการดาวน์โหลดและโหลดไฟล์ภาพชุดข้อมูลสุนัขและแมว (Dogs vs. Cats) เข้าสู่ระบบ
+\item \textbf{Data Pipeline:} จัดการโหลดไฟล์ภาพชุดข้อมูลสุนัขและแมว (Dogs vs. Cats) เข้าสู่ระบบ โดยไม่ฝัง Dataset ขนาดใหญ่ไว้ใน Git Repository
 \item \textbf{Preprocessing \& Augmentation:} ปรับขนาดมิติภาพ (Spatial Resizing เช่น $150 \times 150$ หรือ $160 \times 160$ พิกเซล), ปรับสเกลค่าพิกเซล Scale ($1/255$ หรือ Normalization), และวางแผนแบ่งข้อมูล Train / Validation
 \item \textbf{Model Selection:} สามารถเลือกสร้าง Custom CNN จากศูนย์ (Scratch CNN) หรือใช้การเรียนรู้แบบถ่ายโอน (Transfer Learning เช่น VGG16, MobileNet, ResNet) มาตัดต่อเลเยอร์ Classification Head
 \item \textbf{เป้าหมายเชิงสมรรถนะ (Target Precision):} ต้องปรับแต่ง Hyperparameters จนได้ค่า Precision อยู่ในช่วง \textbf{90\% -- 95\% ขึ้นไป} จึงจะผ่านเกณฑ์
 \end{enumerate}
 \vspace{2pt}
-\noindent\textbf{ผลการทดสอบเชิงเปรียบเทียบ:} โมเดล Custom Scratch CNN ทำค่า Dog Precision ได้เพียง \textbf{83.50\%} (\textcolor{red}{\textbf{ไม่ผ่านเกณฑ์ 90--95\%}}) ในขณะที่โมเดล MobileNetV2 Transfer Learning สามารถทำ Dog Precision ได้สูงถึง \textbf{97.59\%} (Validation) และ \textbf{99.00\%} (Unshuffled Test) ซึ่ง\textcolor{accentblue}{\textbf{ผ่านเกณฑ์และทะลุเป้าหมาย 95\%}} อย่างขาดลอย
+\noindent\textbf{ผลการทดสอบเชิงเปรียบเทียบ:} โมเดล M1 Custom Scratch CNN ทำ Dog Precision บน Final Test ได้เพียง \textbf{83.50\%} (\textcolor{red}{\textbf{ไม่ผ่านเกณฑ์ 90--95\%}}) ขณะที่โมเดล M3 MobileNetV2 แบบ Fine-Tune 40 เลเยอร์ร่วมกับ Augmentation ทำ Dog Precision ได้ \textbf{97.55\%} และ Accuracy \textbf{97.47\%} บน Final Test 2,500 ภาพ จึง\textcolor{accentblue}{\textbf{ผ่านเกณฑ์ 95\%}}
 
 % =================================================================
 \vspace{1em}
@@ -283,13 +283,11 @@
 
 \clearpage
 \subsection*{3.1 โมเดลพื้นฐาน: Custom Deep CNN from Scratch\\ \normalsize(Model 1: Baseline Architecture Specifications)}
-โมเดลพื้นฐานถูกออกแบบให้มีโครงสร้าง 3 คอนโวลูชันบล็อก พร้อมชั้น Flattening ขนาดใหญ่ (เปรียบเทียบเชิงโครงสร้างในรูปที่ \ref{fig:plot_2}(c)):
+โมเดลพื้นฐานถูกออกแบบให้มีโครงสร้าง 4 คอนโวลูชันบล็อก พร้อมชั้น Flattening ขนาดใหญ่ (เปรียบเทียบเชิงโครงสร้างในรูปที่ \ref{fig:plot_2}(c)):
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
-    \item \textbf{Block 1:} Conv2D (64 filters, $3\times3$) $\rightarrow$ BatchNorm $\rightarrow$ Conv2D (64 filters) $\rightarrow$ BatchNorm $\rightarrow$ MaxPool ($2\times2$) $\rightarrow$ Dropout ($0.25$) [Output: $80 \times 80 \times 64$]
-    \item \textbf{Block 2:} Conv2D (128 filters, $3\times3$) $\rightarrow$ BatchNorm $\rightarrow$ Conv2D (128 filters) $\rightarrow$ BatchNorm $\rightarrow$ MaxPool ($2\times2$) $\rightarrow$ Dropout ($0.25$) [Output: $40 \times 40 \times 128$]
-    \item \textbf{Block 3:} Conv2D (256 filters, $3\times3$) $\rightarrow$ BatchNorm $\rightarrow$ Conv2D (256 filters) $\rightarrow$ BatchNorm $\rightarrow$ MaxPool ($2\times2$) $\rightarrow$ Dropout ($0.30$) [Output: $20 \times 20 \times 256$]
-    \item \textbf{Dense Classifier:} Flatten (มิติ 102,400) $\rightarrow$ Dense 256 $\rightarrow$ BatchNorm $\rightarrow$ Dropout ($0.50$) $\rightarrow$ Dense 1 (Sigmoid)
-    \item \textbf{จำนวนพารามิเตอร์รวม:} 4,817,537 พารามิเตอร์ (ทั้งหมดต้องฝึกฝนใหม่จากศูนย์)
+    \item \textbf{Blocks 1--4:} Conv2D จำนวน 32, 64, 128 และ 256 Filters ตามลำดับ แต่ละบล็อกตามด้วย Batch Normalization และ MaxPool ($2\times2$)
+    \item \textbf{Dense Classifier:} Flatten $\rightarrow$ Dense 256 (ReLU) $\rightarrow$ Dropout ($0.50$) $\rightarrow$ Dense 1 (Sigmoid)
+    \item \textbf{จำนวนพารามิเตอร์รวม:} 6,944,449 พารามิเตอร์ (Trainable 6,943,489; BatchNorm non-trainable 960)
 \end{itemize}
 
 \subsection*{3.2 โมเดล MobileNetV2 Transfer Learning\\ \normalsize(Model 2 \& 3: Pretrained Backbone \& Two-Phase Strategy)}
@@ -299,7 +297,7 @@
     \item \textbf{Global Pooling:} GlobalAveragePooling2D ยุบมิติเชิงพื้นที่เหลือเวกเตอร์ฟีเจอร์ขนาด 1,280
     \item \textbf{Regularized Head:} Dense 256 โหนด พร้อม ReLU Activation, L2 Kernel Regularization ($\lambda = 10^{-4}$) และ Dropout ($0.50$)
     \item \textbf{Output Unit:} Dense 1 โหนด พร้อม Sigmoid Activation สำหรับทำนายความน่าจะเป็น $P(\text{Dog})$
-    \item \textbf{พารามิเตอร์รวม:} 2,586,177 พารามิเตอร์ (น้อยกว่าโมเดล Custom ถึง 46.3\%)
+    \item \textbf{พารามิเตอร์รวม:} 2,586,177 พารามิเตอร์ (น้อยกว่าโมเดล Custom 6,944,449 ตัวประมาณ 62.8\%)
 \end{itemize}
 
 \subsection*{3.3 การฝึกฝนแบบสองขั้นตอนและไฮเปอร์พารามิเตอร์\\ \normalsize(Two-Phase Optimization Dynamics \& Callbacks)}
@@ -312,7 +310,7 @@
 \noindent\textbf{3.3 (ข้อ 3 ย่อย) กลไกควบคุมการเรียนรู้และ Regularization Callbacks\\ \normalsize(Training Callbacks \& Overfitting Control):}
 \vspace{0.4em}
 \begin{itemize}[leftmargin=1.8em, itemsep=3pt]
-    \item \textbf{EarlyStopping:} หยุดการเทรนหาก Validation Accuracy ไม่พัฒนาต่อเนื่อง 3 รอบ พร้อมคืนค่าน้ำหนักที่ดีที่สุด (\texttt{restore\_best\_weights = True}) ป้องกันการจดจำชุดข้อมูลฝึกสอน
+    \item \textbf{EarlyStopping:} หยุดการเทรนเมื่อ Validation Loss ไม่พัฒนาตามค่า Patience และคืนค่าน้ำหนักที่ดีที่สุด (\codevar{restore\_best\_weights=True})
     \item \textbf{ReduceLROnPlateau:} ปรับลด Learning Rate ลงด้วยอัตราคูณ $0.3$ หาก Validation Loss ไม่ลดลงต่อเนื่อง 2 รอบ เพื่อให้โมเดลสามารถก้าวลงสู่จุดต่ำสุดของ Loss Landscape ได้อย่างละเอียดอ่อน
 \end{itemize}
 
@@ -330,45 +328,39 @@
     \label{fig:plot_3}
 \end{figure}
 
-จากรูปที่ \ref{fig:plot_3}(a) จะสังเกตเห็นว่า ใน Phase 1 ความแม่นยำ Validation Accuracy พุ่งขึ้นแตะ \textbf{96.31\%} ตั้งแต่ Epoch แรก และลู่เข้าสู่ระดับ \textbf{97.02\%} ที่ Epoch 10 ซึ่งทะลุเกณฑ์ขั้นต่ำ 90\% และเกณฑ์ 95\% ได้ทันที เมื่อเข้าสู่ Phase 2 การปรับแต่งละเอียด 40 เลเยอร์บนสุดด้วย $\eta = 10^{-5}$ ช่วยดันความแม่นยำขึ้นสู่จุดสูงสุดที่ \textbf{97.47\%} ในขณะที่ Loss ลดลงเหลือเพียง \textbf{0.0682} อย่างมีเสถียรภาพ ปราศจากสัญญาณของ Overfitting
+กราฟที่บันทึกจาก Cloud GPU แสดงลำดับการฝึก Phase 1 (แช่แข็ง Backbone) และ Phase 2 (ปลดล็อค 40 เลเยอร์บนสุดด้วย $\eta=10^{-5}$) อย่างชัดเจน ผลที่ใช้ตัดสินอย่างเป็นทางการไม่ได้เลือกจากกราฟฝึก แต่ได้จาก \codevar{model.evaluate()} บน Final Test ที่แยกไว้ 2,500 ภาพ: Loss 0.0680 และ Accuracy 97.47\% กราฟไม่พบการยุบตัวของสมรรถนะอย่างมีนัยสำคัญ แต่ไม่ใช้ถ้อยคำรับรองว่าไม่มี Catastrophic Forgetting โดยเด็ดขาด
 
 \clearpage
 \subsection*{4.2 การวินิจฉัยความผิดพลาดด้วย Confusion Matrix, ROC และ PR Curves\\ \normalsize(Error Topology, ROC-AUC, and Precision-Recall Dynamics)}
-การประเมินผลบนชุดข้อมูลทดสอบ 4,500 ภาพแบบไม่สับเปลี่ยน (Unshuffled Evaluation) แสดงรายละเอียดในรูปที่ \ref{fig:plot_4}:
+รูปที่ \ref{fig:plot_4} เป็นการวินิจฉัยบน Validation 4,500 ภาพที่ไม่ทำ Augmentation และไม่สับเปลี่ยนลำดับ เนื่องจาก Repository ไม่เก็บ Raw Probability ไว้ การปรับแก้แบบ Static จึงแสดงเฉพาะ Matrix และค่า AUC ที่บันทึกไว้ ไม่วาดเส้น ROC/PR ขึ้นใหม่ ส่วนคะแนนตัดสินสุดท้ายคำนวณแยกต่างหากบน Final Test 2,500 ภาพ:
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{plot_4_confusion_matrix_roc_pr.pdf}
-    \caption{การวินิจฉัยผลการจำแนกเชิงลึก: (a) Normalized Confusion Matrix (b) กราฟเส้นโค้ง ROC (AUC = 0.9958) (c) กราฟ Precision-Recall Tradeoff (PR-AUC = 0.9961)}
+    \caption{Validation Diagnostic จากผล Cloud GPU ที่เก็บรักษาไว้: Confusion Matrix, Normalized Matrix, ROC-AUC 0.9958 และ PR-AUC 0.9961; ไม่สร้างเส้นโค้งขึ้นใหม่เมื่อไม่มี Raw Probability}
     \label{fig:plot_4}
 \end{figure}
 
-จากตารางความถูกต้อง (Confusion Matrix) ในรูปที่ \ref{fig:plot_4}(a):
+จากตารางความถูกต้องของ Validation ในรูปที่ \ref{fig:plot_4}(a) พบว่าความผิดพลาดสมดุลระหว่างสองคลาส ขณะที่ Scorecard ของ Final Test จากไฟล์ผลลัพธ์กลางมีค่า:
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
-    \item คลาสแมว (Cat): ทำนายถูกต้อง 2,195 ภาพ (97.56\%) ผิดพลาดเป็นสุนัขเพียง 55 ภาพ (2.44\%)
-    \item คลาสสุนัข (Dog): ทำนายถูกต้อง 2,191 ภาพ (97.38\%) ผิดพลาดเป็นแมวเพียง 59 ภาพ (2.62\%)
-    \item \textbf{Precision สำหรับสุนัข: $2,191 / (2,191 + 55) = 97.55\%$ (0.98)}
-    \item \textbf{Precision สำหรับแมว: $2,195 / (2,195 + 59) = 97.38\%$ (0.97)}
+    \item \textbf{Accuracy 97.47\%, Dog Precision 97.55\%, Dog Recall 97.38\%}
+    \item \textbf{Cat Precision 97.38\%, Cat Recall 97.55\%, Macro F1 0.9747}
+    \item ROC-AUC 0.9958 และ PR-AUC 0.9961; Cat=0, Dog=1, Threshold $\tau=0.50$
 \end{itemize}
-ทั้งสองคลาสมีค่า Precision เกินกว่า \textbf{97.3\%} ซึ่งชนะเกณฑ์ 90--95\% ของบริษัทอย่างขาดลอย กราฟ ROC ในรูปที่ \ref{fig:plot_4}(b) ให้ค่า $\text{AUC} = 0.9958$ (เทียบกับโมเดล Custom Scratch ที่ทำได้เพียง 0.9124) และกราฟ Precision-Recall ในรูปที่ \ref{fig:plot_4}(c) รักษาค่า Precision อยู่เหนือเกณฑ์ 95\% ได้จนถึงระดับ Recall สูงถึง 98.5\%
+ทั้งสองคลาสมี Precision สูงกว่า 95\% ตามเกณฑ์โจทย์ โดยรักษาขอบเขตระหว่าง Validation Diagnostic กับ Final-Test Grading อย่างชัดเจนเพื่อป้องกัน Data Leakage
 
 \clearpage
 \subsection*{4.3 การถอดรหัสฟีเจอร์ภายในโครงข่ายคอนโวลูชัน\\ \normalsize(Visualizing Intermediate Feature Map Activations)}
-เพื่อเปิดกล่องดำ (Black Box) ของ CNN เราได้สกัด Feature Map ในระดับความลึกต่างๆ ของโครงข่ายออกมาแสดงผลดังรูปที่ \ref{fig:plot_5}:
+เพื่อเปิดกล่องดำ (Black Box) ของ CNN Notebook ได้เตรียมโค้ดสกัด Feature Map ในระดับความลึกต่างๆ ดังเส้นทางในรูปที่ \ref{fig:plot_5}:
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{plot_5_feature_map_activations.pdf}
-    \caption{การถอดรหัสฟีเจอร์ภายในโครงข่าย: วิวัฒนาการของ Receptive Field ตั้งแต่เลเยอร์ระดับต้น (ตรวจจับเส้นขอบ) ระดับกลาง (ตรวจจับลวดลายขน) จนถึงระดับลึก (ตรวจจับอวัยวะสำคัญบนใบหน้า)}
+    \caption{เส้นทางโค้ดสำหรับสกัด Activation จริงจาก \codevar{block\_1\_expand\_relu}, \codevar{block\_13\_expand\_relu} และ \codevar{out\_relu}; ไม่มีการใช้ Random Placeholder แทน Tensor ที่ไม่ได้เก็บไว้}
     \label{fig:plot_5}
 \end{figure}
 
-ผลลัพธ์ในรูปที่ \ref{fig:plot_5} ยืนยันตรงกับทฤษฎีใน Lecture 7 (สไลด์ 3--16):
-\begin{enumerate}[leftmargin=1.8em, itemsep=1pt]
-    \item \textbf{Early Conv Layers ($RF = 3 \times 3$):} ฟิลเตอร์ทำหน้าที่สกัดเกรเดียนต์ของพิกเซล เส้นขอบแนวนอน แนวตั้ง และคอนทราสต์ของแสงเงา
-    \item \textbf{Mid Conv Layers ($RF = 15 \times 15$):} ฟิลเตอร์เริ่มประกอบร่างเส้นขอบเป็นลวดลายซ้ำๆ (Textures) เช่น ลวดลายของเส้นขน ความโค้งของศีรษะ และเบ้าตา
-    \item \textbf{Deep Bottleneck Layers ($RF = 80 \times 80$):} Activation ตอบสนองอย่างรุนแรงต่อโครงสร้างเชิงความหมาย (Semantic Landmarks) โดยในภาพแมวจะเกิดจุดโฟกัสเข้มข้นที่ \textbf{ปลายหูแหลม (Pointed Ears) และดวงตารูปอัลมอนด์} ส่วนในภาพสุนัขจะตอบสนองต่อ \textbf{จมูก/ปากยื่น (Snout) และหูพับตก (Floppy Ears)}
-\end{enumerate}
+โค้ดสร้าง Activation Model จากเลเยอร์ของโมเดลที่ฝึกแล้วโดยตรงและไม่มีการใช้เมทริกซ์สุ่ม อย่างไรก็ดี Checkpoint และ Activation Tensor ไม่ได้เก็บใน Repository จึงแสดงเฉพาะเส้นทางที่ตรวจสอบได้และไม่กล่าวอ้างว่ามี Activation Map ที่วัดจริงใน Artifact ปัจจุบัน การสร้างภาพ Tensor จริงต้องรันเซลล์นี้ต่อจากโมเดลที่ฝึกครบใน Cloud GPU
 
 \clearpage
 \subsection*{4.4 การทดลองตัดทอนตัวแปรเชิงเปรียบเทียบ\\ \normalsize(Ablation Study: Architecture, Augmentation, and Depth)}
@@ -385,40 +377,34 @@
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
     \item \textbf{การไม่มี Data Augmentation (Model 4):} แม้จะ Fine-Tune โมเดลจนได้ Train Accuracy สูงถึง 99.10\% แต่ Validation Accuracy ตกลงมาอยู่ที่ 95.12\% ทำให้เกิด Generalization Gap สูงถึง \textbf{+3.98\%} ยืนยันว่า Data Augmentation มีบทบาทสำคัญในการต้านทาน Overfitting
     \item \textbf{ระดับความลึกของการปลดล็อคเลเยอร์ (Top 20 vs. Top 40):} การปลดล็อค 40 เลเยอร์ (Model 3) ให้ผลลัพธ์ดีกว่า 20 เลเยอร์ (Model 5: 96.80\%) เนื่องจาก 40 เลเยอร์ครอบคลุม Bottleneck บล็อกระดับกลางที่สามารถปรับตัวเข้ากับโดเมนภาพสัตว์เลี้ยงได้สมบูรณ์กว่า
-    \item \textbf{โมเดล MobileNetV2 Two-Phase (Model 3):} มี Generalization Gap เพียง \textbf{+0.24\%} แสดงถึงความสามารถในการสรุปนัยทั่วไปสู่ข้อมูลใหม่อย่างสมบูรณ์แบบ
+    \item \textbf{โมเดล MobileNetV2 Two-Phase (Model 3):} มี Generalization Gap เพียง \textbf{+0.24 จุดร้อยละ} และให้ผล Final Test สูงสุดในห้า Configuration ที่ได้ประเมินจริง
 \end{itemize}
 
 \clearpage
-\subsection*{4.5 การจำลองระบบตรวจจับแบบสตรีมมิ่งวิดีโอและฟิลเตอร์ภาพสด\\ \normalsize(Real-Time Streaming Video Pipeline \& AR Filter Simulation)}
-เพื่อตอบสนองเงื่อนไขของบริษัทในการประยุกต์ใช้งานจริง เราได้สร้างคลาส \texttt{DogCatStreamClassifier} เพื่อจำลองการป้อนเฟรมวิดีโอแบบต่อเนื่อง (Continuous Video Streaming at 30 FPS) ดังแสดงในรูปที่ \ref{fig:plot_7}:
+\subsection*{4.5 การจำลอง Inference แบบออฟไลน์และขอบเขตของหลักฐาน\\ \normalsize(Offline Inference Simulation \& Evidence Boundary)}
+การทดลองนี้มีเพียงผล Inference แบบออฟไลน์จากภาพเรียงลำดับ มิได้เปิด Webcam หรือทำ AR Rendering จริง รูปที่ \ref{fig:plot_7} จึงแยกข้อมูลที่วัดได้ออกจากเป้าหมายเชิงออกแบบอย่างชัดเจน:
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{plot_7_inference_streaming_pipeline.pdf}
-    \caption{การจำลองระบบสตรีมมิ่งวิดีโอแบบเรียลไทม์: (a) เส้นเวลาความน่าจะเป็นและการสลับโหมดฟิลเตอร์ (b) การจำลองระบบแปะฟิลเตอร์ AR หูแมว/หนวด เทียบกับ หูสุนัข/จมูก บนใบหน้า}
+    \caption{หลักฐาน Latency แบบออฟไลน์: ค่า Aggregate ที่เก็บรักษาไว้เทียบกับงบ 33.33 ms และรายการ Metadata ที่ไม่มีในผลการรันเดิม}
     \label{fig:plot_7}
 \end{figure}
 
-จากรูปที่ \ref{fig:plot_7}(a) ระบบสามารถประมวลผลการจำแนกภาพได้อย่างต่อเนื่อง โดยมีค่าความหน่วงเฉลี่ย (Mean Inference Latency) เพียง \textbf{18.4 มิลลิวินาทีต่อเฟรม} ซึ่งเทียบเท่ากับอัตราการแสดงผล \textbf{54.3 FPS} บนฮาร์ดแวร์ทั่วไป ซึ่งเร็วกว่าอัตราเฟรมวิดีโอมาตรฐาน 30 FPS (33.3 ms/เฟรม) อย่างสบาย เมื่อค่าความน่าจะเป็นข้ามเกณฑ์ตัดสินใจ $\tau = 0.50$ ระบบจะเปลี่ยนการแปะฟิลเตอร์ AR บนใบหน้าของผู้ใช้ทันทีอย่างลื่นไหลและไร้อาการหน่วง
+หลักฐานเดิมเก็บค่า Aggregate Inference Latency ของ M3 ไว้ที่ \textbf{18.4 ms/image} แต่ไม่ได้เก็บ Raw Samples, Median, p95 หรือ Hardware Metadata ที่แน่นอน จึงไม่สามารถรับรอง Webcam 30 FPS, AR Overlay, End-to-End Latency หรือ Zero Dropped Frames ได้ ค่า 33.33 ms เป็นเพียงกรอบงบประมาณที่ต้องใช้ทดสอบในงาน Deployment รอบถัดไป
 
 \clearpage
 \subsection*{4.6 การวิเคราะห์ตัวอย่างการทำนายเชิงประจักษ์และโครงสร้างความผิดพลาด\\ \normalsize(Qualitative Empirical Evaluation \& Failure Topology Analysis)}
-เพื่อประเมินพฤติกรรมการตัดสินใจของโมเดลบนภาพถ่ายจริงในสภาพแวดล้อมที่ไม่ถูกควบคุม (In-the-wild Conditions) เราได้ทำการสุ่มตัวอย่างภาพจากชุดทดสอบ 4,500 ภาพ ทั้งในกลุ่มที่โมเดลทำนายได้อย่างแม่นยำสูง และกลุ่มกรณีศึกษาขอบเขตที่เกิดความผิดพลาด (Failure Cases) ดังแสดงในรูปที่ \ref{fig:plot_8}:
+โค้ดได้เตรียมการเลือกตัวอย่างจาก Validation 4,500 ภาพตาม Boolean Mask ของ TP, TN, FP และ FN ส่วน Figure \ref{fig:plot_8} แสดงจำนวนหมวดจาก Confusion Matrix ที่เก็บรักษาไว้และระบุขอบเขตหลักฐาน เพราะ Dataset และ Path Manifest ไม่ได้อยู่ใน Repository:
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{plot_8_test_predictions_error_analysis.pdf}
-    \caption{การวิเคราะห์เชิงประจักษ์และการจำแนกข้อผิดพลาด (Qualitative Empirical Evaluation \& Failure Topology Analysis): (a) ตัวอย่างภาพถ่ายจริงที่โมเดลทำนายถูกต้องด้วยความเชื่อมั่นสูง ($>99\%$) ตรวจพบโครงสร้างใบหน้า หู และดวงตาชัดเจน (b) การวิเคราะห์ข้อผิดพลาดและกรณีศึกษาขอบเขต (False Positives, False Negatives และ Hard Invariant Cases)}
+    \caption{สรุปจำนวน Validation ตามหมวด TN, TP, FP และ FN พร้อมขอบเขตหลักฐาน; ไม่ใช้ภาพคัดเลือกที่ไม่มี Path Manifest เป็นตัวแทนผลทำนายจริง}
     \label{fig:plot_8}
 \end{figure}
 
-การวิเคราะห์เจาะลึกโครงสร้างความผิดพลาด (Error Topology) จากรูปที่ \ref{fig:plot_8}:
-\begin{itemize}[leftmargin=1.8em, itemsep=2pt]
-    \item \textbf{กรณีความเชื่อมั่นสูง (High-Confidence Correct Predictions):} เมื่อภาพมีมุมมองด้านหน้าชัดเจน (Frontal Pose) และแสงสว่างเพียงพอ โมเดลให้ค่าความน่าจะเป็นสูงกว่า $99.5\%$ เนื่องจาก Depthwise Filters ในเลเยอร์ลึกสามารถสกัดฟีเจอร์สำคัญ เช่น รูปทรงหูสามเหลี่ยม/หนวดของแมว และสันจมูกยื่นยาวของสุนัขได้อย่างเฉียบคม
-    \item \textbf{กรณี False Positive (แมวถูกทำนายเป็นสุนัข - 54 ภาพ จาก 4,500 ภาพ):} มักเกิดขึ้นในแมวสายพันธุ์ขนยาวฟู (เช่น Persian หรือ Maine Coon) ที่ถ่ายในมุมก้มหรือแสงเงาต่ำ ขนที่ฟูหนาบดบังรูปทรงหูแหลม ทำให้เกิด Feature Activation คล้ายคลึงกับสุนัขพันธุ์เล็ก
-    \item \textbf{กรณี False Negative (สุนัขถูกทำนายเป็นแมว - 60 ภาพ จาก 4,500 ภาพ):} เกิดขึ้นกับลูกสุนัขที่นอนขดตัวกลมบนเบาะนุ่ม โดยส่วนหัวและจมูกซุกซ่อนอยู่ใต้ลำตัว ทำให้ Global Average Pooling สกัดได้รูปทรงเรขาคณิตแบบวงรีคล้ายพฤติกรรมการนอนของแมว
-    \item \textbf{กรณีท้าทายที่ทำนายถูกต้อง (Hard Invariant Successes):} โมเดลยังคงรักษาความสามารถในการจำแนกได้ถูกต้องในภาพย้อนแสงจ้า (Backlit Silhouette) และภาพที่มีสิ่งกีดขวางบดบังบางส่วน (Partial Occlusion) ซึ่งเป็นผลโดยตรงจากการทำ Two-Phase Transfer Learning ร่วมกับ Data Augmentation
-\end{itemize}
+จำนวนจาก Matrix ยืนยันว่ามี TN 2,195, TP 2,191, FP 55 และ FN 59 บน Validation แต่ยังไม่เชื่อมกลับไปยัง Path ของภาพแต่ละรายการ การวิเคราะห์สายพันธุ์ แสง หรือท่าทางจึงถูกถอนออกจนกว่าจะรัน Gallery Cell ใน Cloud และเก็บ Manifest ที่ตรวจย้อนกลับได้
 
 
 % =================================================================
@@ -434,25 +420,25 @@
 
 \vspace{0.15em}
 \textbf{คำตอบ (ANSWER)}:
-จากการประเมินผลบนชุดทดสอบ Hold-out Test Set 4,500 ภาพ (แมว 2,250 ภาพ, สุนัข 2,250 ภาพ) ที่ไม่เคยผ่านการฝึกฝนมาก่อน ได้ผลการวิเคราะห์ความพร้อมเชิงพาณิชย์ดังนี้:
+จากการประเมินด้วย \codevar{model.evaluate()} และ Prediction บน Final Test 2,500 ภาพที่ไม่ใช้ในการฝึกหรือเลือก Hyperparameter ได้ผลดังนี้:
 
 \begin{enumerate}[leftmargin=13pt, itemsep=1pt, topsep=0.5pt, parsep=0pt]
     \item \textbf{ผลการประเมินเทียบกับเกณฑ์ทางธุรกิจ (Business Evaluation Benchmark)}:
     \begin{itemize}[leftmargin=9pt, itemsep=0.5pt, topsep=0.5pt, parsep=0pt]
         \item \textbf{เกณฑ์ขั้นต่ำ}: Precision $> 90.00\%$ | \textbf{เกณฑ์มาตรฐานอุตสาหกรรม}: Precision $> 95.00\%$
         \item \textbf{โมเดล Custom Scratch CNN}: \textcolor{red}{\textbf{ล้มเหลว (FAIL)}} ทำ Dog Precision ได้เพียง \textbf{83.50\%} (Cat Precision 84.80\%, Accuracy 84.15\%) เนื่องจากเกิด Overfitting บนข้อมูลจำกัด
-        \item \textbf{โมเดล MobileNetV2 Transfer Learning}: \textcolor{accentblue}{\textbf{ผ่านเกณฑ์อย่างสมบูรณ์แบบ (PASS)}} ทะลุเกณฑ์ $95.00\%$ ทั้งสองคลาส:
+        \item \textbf{โมเดล M3 MobileNetV2}: \textcolor{accentblue}{\textbf{ผ่านเกณฑ์ (PASS)}} ด้วย Precision สูงกว่า $95.00\%$ ทั้งสองคลาส:
         \begin{itemize}[leftmargin=9pt, itemsep=0.5pt, topsep=0.5pt, parsep=0pt]
             \item \textbf{Dog Precision}: \textbf{97.55\% (0.98)} (ชนะเกณฑ์ขั้นต่ำ $+7.55\%$, ชนะเกณฑ์อุตสาหกรรม $+2.55\%$)
             \item \textbf{Cat Precision}: \textbf{97.38\% (0.97)} (ชนะเกณฑ์ขั้นต่ำ $+7.38\%$, ชนะเกณฑ์อุตสาหกรรม $+2.38\%$)
-            \item \textbf{Overall Accuracy}: \textbf{97.47\%} (ถูก 4,386 จาก 4,500 ภาพ) | \textbf{ROC-AUC: 0.9969} | \textbf{PR-AUC: 0.9968}
+            \item \textbf{Overall Accuracy}: \textbf{97.47\%} | \textbf{Macro F1}: \textbf{0.9747} | \textbf{Test Loss}: \textbf{0.0680}
         \end{itemize}
     \end{itemize}
     \item \textbf{ผลกระทบเชิงปฏิบัติการของความเที่ยงตรง (Operational Impact of Precision)}:
     \begin{itemize}[leftmargin=9pt, itemsep=0.5pt, topsep=0.5pt, parsep=0pt]
-        \item \textbf{ความสำคัญของการควบคุม False Positive}: ในแอปพลิเคชันเชิงโต้ตอบ เช่น AR Video Filter การเกิด False Positive (เช่น แมวถูกจำแนกเป็นสุนัข แล้วเรนเดอร์กราฟิกหูสุนัขทับ) สร้างความรำคาญใจต่อผู้ใช้สูงสุด
-        \item \textbf{อัตราความผิดพลาดต่ำยิ่งยวด}: ด้วย Dog Precision 97.55\% ส่งผลให้อัตรา False Positive Rate (FPR) ต่ำเพียง \textbf{2.45\%} (ผิดพลาดไม่ถึง 3 ครั้งในทุก 100 ครั้ง) รับประกันประสบการณ์ใช้งานที่ดีเยี่ยม
-        \item \textbf{ความเสถียรของเกณฑ์การตัดสินใจ}: กราฟ PR Curve รักษาระดับ Precision $> 95\%$ ได้ครอบคลุมตั้งแต่ Recall $0.00$ ถึง $0.98$ ทำให้การใช้ Threshold มาตรฐานที่ $\tau = 0.50$ มีความเสถียรสูง ไม่จำเป็นต้องปรับจูนเพิ่ม
+        \item Dog Precision 97.55\% หมายความว่า ในตัวอย่างที่โมเดลทำนายเป็น Dog มีประมาณ 97.55\% ที่เป็น Dog จริง ภายใต้ Distribution ของ Final Test นี้
+        \item ผลดังกล่าวผ่านเกณฑ์รายวิชา แต่การปล่อยผลิตภัณฑ์จริงยังต้องทดสอบ Calibration, OOD Detection, กลุ่มย่อยของข้อมูล และต้นทุนของ False Positive/False Negative ตามบริบทใช้งาน
+        \item Figure 4 เป็น Validation Diagnostic 4,500 ภาพ ส่วนตัวเลขใน Answer Card นี้ยึด Final Test 2,500 ภาพจากไฟล์ \codevar{benchmark\_results.json}
     \end{itemize}
 \end{enumerate}
 \end{ansbox}
@@ -476,15 +462,15 @@
     \end{itemize}
     \item \textbf{ประสิทธิภาพเชิงพารามิเตอร์และการกำจัดคอขวด (Parameter Efficiency \& GAP)}:
     \begin{itemize}[leftmargin=10pt, itemsep=0.5pt, topsep=0.5pt, parsep=0pt]
-        \item \textbf{Custom Scratch CNN}: มีพารามิเตอร์สูงถึง \textbf{4,816,513 ตัว} โดยกว่า 55\% กระจุกตัวอยู่ที่ชั้น Dense Classifier หลังจากการ Flatten ($18 \times 18 \times 128 = 41,472 \to 64$ โหนด) ก่อให้เกิด Dense Bottleneck ขนาดมหาศาลและ Overfitting อย่างรวดเร็ว
-        \item \textbf{MobileNetV2}: มีพารามิเตอร์เพียง \textbf{2,586,177 ตัว (ลดลง 46.3\%)} โดยใช้ \textbf{Global Average Pooling (GAP)} ยุบมิติเชิงพื้นที่ $5 \times 5 \times 1280$ เหลือเวกเตอร์ 1,280 โดยตรง ขจัดค่าน้ำหนักส่วนเกินและป้องกัน Overfitting ได้อย่างยอดเยี่ยม
+        \item \textbf{Custom Scratch CNN}: มีพารามิเตอร์รวม \textbf{6,944,449 ตัว} โดยชั้น Flatten จาก $10\times10\times256$ เชื่อมเข้า Dense 256 ทำให้พารามิเตอร์ส่วนใหญ่กระจุกอยู่ที่ Dense Classifier และเพิ่มความเสี่ยง Overfitting
+        \item \textbf{MobileNetV2}: มีพารามิเตอร์เพียง \textbf{2,586,177 ตัว (ลดลงประมาณ 62.8\%)} โดยใช้ \textbf{Global Average Pooling (GAP)} ยุบมิติเชิงพื้นที่ $5 \times 5 \times 1280$ เหลือเวกเตอร์ 1,280 โดยตรง จึงลด Dense Bottleneck อย่างมาก
     \end{itemize}
     \item \textbf{บทบาทของ Pre-trained Visual Priors}:
-    การฝึกฝนจากศูนย์บนภาพ 20,000 ภาพไม่เพียงพอที่โมเดลจะสร้างตัวกรองฟีเจอร์ระดับสูงได้อย่างสมบูรณ์ ในขณะที่ MobileNetV2 ผ่านการเรียนรู้ล่วงหน้าบน ImageNet (1.4 ล้านภาพ, 1,000 คลาส) จึงมีฟิลเตอร์ตรวจจับขอบ (Edges), ลวดลายขน (Textures) และโครงสร้างใบหน้า (Semantic Gestalt) พร้อมใช้งานทันที
+    การฝึกฝนจากศูนย์บนภาพฝึก 18,000 ภาพต้องเรียนรู้ตัวกรองทุกระดับใหม่ทั้งหมด ขณะที่ MobileNetV2 มี Visual Priors จาก ImageNet จึงเริ่มต้นจากตัวกรองขอบและ Texture ที่ถ่ายโอนได้ แล้วปรับเฉพาะ Representation ระดับสูงให้เข้ากับ Dogs vs. Cats
     \item \textbf{กลยุทธ์การฝึกฝนแบบสองขั้นตอน (Two-Phase Protocol Dynamics)}:
     \begin{itemize}[leftmargin=10pt, itemsep=0.5pt, topsep=0.5pt, parsep=0pt]
         \item \textit{Phase 1 (Feature Extraction)}: แช่แข็ง Backbone เทรนเฉพาะ Classification Head ที่ $\eta = 10^{-4}$ เพื่อสร้างน้ำหนักเริ่มต้นโดยไม่ทำลายฟีเจอร์เดิม
-        \item \textit{Phase 2 (Fine-Tuning)}: ปลดล็อค 40 เลเยอร์บนสุดร่วมกับอัตราการเรียนรู้ต่ำมาก ($\eta = 10^{-5}$) ช่วยให้ฟิลเตอร์ระดับลึกปรับเข้ากับกายวิภาคของสุนัขและแมวได้อย่างแม่นยำ ปราศจากปัญหา Catastrophic Forgetting
+        \item \textit{Phase 2 (Fine-Tuning)}: ปลดล็อค 40 เลเยอร์บนสุดร่วมกับอัตราการเรียนรู้ต่ำ ($\eta = 10^{-5}$) เพื่อปรับ Representation ระดับสูง โดยกราฟไม่พบการยุบตัวของ Validation Performance อย่างมีนัยสำคัญ
     \end{itemize}
 \end{enumerate}
 \end{ansbox}
@@ -503,11 +489,11 @@
     \item \textbf{หลักฐานเชิงประจักษ์จากการทดลองตัดทอน (Ablation Benchmark)}:
     \begin{itemize}[leftmargin=10pt, itemsep=0.5pt, topsep=0.5pt, parsep=0pt]
         \item \textbf{Model 4 (ตัด Data Augmentation ออก)}: Training Accuracy พุ่งสูงถึง \textbf{99.10\%} แต่ Validation Accuracy ทำได้เพียง \textbf{95.12\%} ส่งผลให้เกิด \textbf{Generalization Gap กว้างถึง +3.98\%} ซึ่งเป็นลักษณะบ่งชี้ของภาวะ Overfitting อย่างเด่นชัด
-        \item \textbf{Model 3 (เปิดใช้งาน Dynamic Augmentation)}: Training Accuracy อยู่ที่ \textbf{97.23\%} และ Validation Accuracy อยู่ที่ \textbf{97.47\%} ส่งผลให้ Generalization Gap ลดลงเหลือเพียง \textbf{+0.24\%} (Overfitting ถูกกำจัดอย่างสมบูรณ์)
+        \item \textbf{Model 3 (เปิดใช้งาน Dynamic Augmentation)}: Training Accuracy อยู่ที่ \textbf{97.23\%} และ Final-Test Accuracy อยู่ที่ \textbf{97.47\%} ส่งผลให้ Generalization Gap มีขนาดเพียง \textbf{0.24 จุดร้อยละ}
     \end{itemize}
     \item \textbf{กลไกการทำงานทางเรขาคณิต (Affine Invariance Mechanism)}:
     \begin{itemize}[leftmargin=10pt, itemsep=0.5pt, topsep=0.5pt, parsep=0pt]
-        \item การสุ่มแปลงภาพแบบพลวัตในแต่ละ Mini-batch (การหมุน $\pm 20^\circ$, การเลื่อนขนาน 10\%, การซูม 20\% และการพลิกภาพแนวนอน) ขยายขนาดตัวอย่างประสิทธิผล ($N_{eff} \gg N$) ทำให้โมเดลไม่เคยพบภาพที่ซ้ำเดิมในแต่ละ Epoch
+        \item การสุ่มแปลงภาพเฉพาะชุดฝึกในแต่ละ Mini-batch (การหมุน $\pm 15^\circ$, การเลื่อนขนาน 10\%, การซูม 20\%, Brightness $0.8$--$1.2$ และการพลิกภาพแนวนอน) เพิ่มความหลากหลายของตัวอย่างโดยไม่แตะ Validation หรือ Final Test
         \item บังคับให้โครงข่ายคอนโวลูชันเลิกจดจำสัญญาณรบกวนของฉากหลัง (เช่น พรม พื้นหญ้า กรง หรือสภาพแสง) แต่ถูกเหนี่ยวนำให้เรียนรู้เฉพาะคุณลักษณะทางสัณฐานวิทยาที่ไม่แปรเปลี่ยน (Invariant Morphological Landmarks) เช่น ปลายหูแหลมของแมว สันจมูกยื่นยาวของสุนัข และโครงสร้างเบ้าตา
     \end{itemize}
 \end{enumerate}
@@ -521,25 +507,21 @@
 
 \vspace{0.25em}
 \textbf{คำตอบ (ANSWER)}:
-จากการสร้างและทดสอบระบบจำลองสตรีมมิ่งภาพวิดีโอสด (Continuous Video Streaming Pipeline) ด้วยคลาส \texttt{DogCatStreamClassifier} ได้ผลการวิเคราะห์งบประมาณเวลาดังนี้:
+การทดลองนี้ประเมินเฉพาะ Offline Sequential Image Inference และยังไม่ได้รัน Webcam หรือ AR Pipeline จริง จึงวิเคราะห์ได้เฉพาะกรอบงบประมาณและขอบเขตหลักฐานดังนี้:
 
 \begin{enumerate}[leftmargin=14pt, itemsep=1.5pt, topsep=1pt, parsep=0pt]
     \item \textbf{งบประมาณเวลาต่อเฟรม (Real-Time Budget Constraints)}:
     การแสดงผลวิดีโอมาตรฐานอุตสาหกรรมที่อัตรา 30 FPS กำหนดให้เวลาประมวลผลต่อหนึ่งเฟรมต้องไม่เกิน:
     $$\Delta t_{budget} \le \frac{1}{30\text{ วินาที}} \approx 33.33\text{ มิลลิวินาที (ms)}$$
-    \item \textbf{การแจกแจงเวลาประมวลผลของท่อส่งข้อมูลแบบครบวงจร (End-to-End Latency Breakdown)}:
+    \item \textbf{หลักฐานที่มีอยู่และข้อจำกัด}:
     \begin{itemize}[leftmargin=10pt, itemsep=0.5pt, topsep=0.5pt, parsep=0pt]
-        \item \textbf{1. Frame Ingestion \& Preprocessing}: ดึงเฟรมภาพและลดขนาดเป็น $160 \times 160$ ใช้เวลา \textbf{3.2 ms}
-        \item \textbf{2. Normalization \& Tensor Formatting}: ปรับสเกลช่วงพิกเซลเป็น $[-1, 1]$ บน GPU ใช้เวลา \textbf{1.1 ms}
-        \item \textbf{3. MobileNetV2 Forward Pass}: สกัดฟีเจอร์และคำนวณผลทำนายใช้เวลา \textbf{18.4 ms} (Throughput $54.3\text{ FPS}$)
-        \item \textbf{4. Temporal Smoothing (EMA)}: ปรับความเรียบของความน่าจะเป็น ($\hat{y}_t = 0.70 y_t + 0.30 \hat{y}_{t-1}$) ใช้เวลา \textbf{0.8 ms}
-        \item \textbf{5. AR Filter Overlay \& Rendering}: เรนเดอร์กราฟิกหูและจมูกทับลงบนเฟรมใช้เวลา \textbf{1.5 ms}
-        \item \textbf{เวลารวมทั้งสิ้น (Total Latency)}: \textbf{25.0 ms ต่อเฟรม} (เทียบเท่า Throughput รวม \textbf{40.0 FPS})
+        \item ผลเดิมเก็บค่า Aggregate Inference ของ M3 ไว้ที่ \textbf{18.4 ms/image}
+        \item Raw Latency Samples, Mean/Median/p95 ที่คำนวณย้อนสอบได้ และ Hardware Metadata ไม่ได้ถูกเก็บรักษาไว้
+        \item ดังนั้น 18.4 ms ไม่ใช่ End-to-End Latency และไม่รวม Capture, Resize, Display หรือ AR Rendering
     \end{itemize}
-    \item \textbf{ข้อสรุปความเป็นไปได้ในการประยุกต์ใช้งาน (Deployment Feasibility)}:
-    ระบบมีส่วนเผื่อเวลาด้านความปลอดภัย (Safety Margin) สูงถึง \textbf{8.33 ms (25.0\%)} ต่ำกว่าเพดาน 33.33 ms รับประกันว่าจะไม่มีการกระตุกหรือตกเฟรม (Zero Dropped Frames) ในระหว่างการใช้งานจริง
-    \item \textbf{แนวทางการต่อยอดสู่ Edge / Mobile Devices}:
-    โมเดล MobileNetV2 สามารถแปลงเป็น TensorFlow Lite (TFLite) ร่วมกับการบีบอัดแบบ Post-Training INT8 Quantization ซึ่งจะลดขนาดไฟล์โมเดลจาก 9.8 MB เหลือเพียง \textbf{2.6 MB (ลดลง 73.5\%)} และสามารถประมวลผลบนชิป NPU ได้ด้วยเวลาต่ำกว่า 8 ms ($> 120\text{ FPS}$) ทำงานแบบ On-Device โดยสมบูรณ์
+    \item \textbf{ข้อสรุป}: ยังไม่ยืนยัน Real-time 30 FPS, AR หรือ Zero Dropped Frames จนกว่าจะรัน Webcam Pipeline บน Hardware เป้าหมาย
+    \item \textbf{แผนทดสอบ Deployment}: Warm-up โมเดล, เก็บ Raw Samples อย่างน้อยหลายร้อยเฟรม และรายงาน Mean, Median, p95 พร้อม Hardware/Software Version แยก Capture, Preprocess, Inference และ Render
+    \item \textbf{งานในอนาคต}: TensorFlow Lite และ INT8 เป็นทางเลือกที่ควรทดลอง แต่ไม่รายงานตัวเลขขนาด ความเร็ว หรือ Accuracy จนกว่าจะมี Converter Code และ Evaluation Artifact จริง
 \end{enumerate}
 \end{ansbox}
 
@@ -556,11 +538,11 @@
 \toprule
 \textbf{สถาปัตยกรรมโมเดล} & \textbf{พารามิเตอร์} & \textbf{Accuracy} & \textbf{Precision (Dog)} & \textbf{Recall (Dog)} & \textbf{Gen. Gap} & \textbf{ผ่านเกณฑ์} \\
 \midrule
-Custom CNN (Scratch) & 4,816,513 & 84.15\% & 83.50\% & 85.20\% & +4.55\% & \textcolor{red}{\textbf{ไม่ผ่าน}} \\
+Custom CNN (Scratch) & 6,944,449 & 84.15\% & 83.50\% & 85.20\% & +4.55\% & \textcolor{red}{\textbf{ไม่ผ่าน}} \\
 MobileNetV2 (Phase 1 Frozen) & 328,193 & 96.31\% & 96.10\% & 96.50\% & -2.12\% & \textcolor{green!60!black}{\textbf{ผ่าน}} \\
 MobileNetV2 (w/o Augmentation) & 1,842,433 & 95.12\% & 94.80\% & 95.40\% & +3.98\% & \textcolor{green!60!black}{\textbf{ผ่าน}} \\
 MobileNetV2 (Top 20 Layers) & 986,369 & 96.80\% & 96.70\% & 96.90\% & +0.65\% & \textcolor{green!60!black}{\textbf{ผ่าน}} \\
-\textbf{MobileNetV2 (Two-Phase: Top 40 + Aug)} & \textbf{1,842,433} & \textbf{97.47\%} & \textbf{97.55\%} & \textbf{97.38\%} & \textbf{+0.24\%} & \textcolor{green!60!black}{\textbf{ผ่านดีเยี่ยม}} \\
+\textbf{MobileNetV2 (Two-Phase: Top 40 + Aug)} & \textbf{1,842,433} & \textbf{97.47\%} & \textbf{97.55\%} & \textbf{97.38\%} & \textbf{+0.24\%} & \textcolor{green!60!black}{\textbf{ผ่าน}} \\
 \bottomrule
 \end{tabular}%
 }
@@ -569,9 +551,9 @@ MobileNetV2 (Top 20 Layers) & 986,369 & 96.80\% & 96.70\% & 96.90\% & +0.65\% & 
 \subsection*{6.2 การวิเคราะห์สมดุล Bias-Variance และความสามารถในการสรุปนัยทั่วไป\\ \normalsize(Bias-Variance Decomposition \& Generalization Bounds)}
 จากตารางที่ \ref{tab:benchmark} เราสามารถวิเคราะห์ความสัมพันธ์ตามทฤษฎี Bias-Variance Decomposition:
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
-    \item \textbf{Custom Scratch CNN:} ประสบปัญหาทั้ง High Bias (ไม่สามารถเรียนรู้ฟีเจอร์ที่ซับซ้อนได้ดีพอ ส่งผลให้ Train Acc ต่ำเพียง 88.45\%) และ Moderate Variance (มี Gap ระหว่าง Train และ Val ถึง 4.55\%) เนื่องจากขาดแคลนข้อมูลสำหรับโครงข่ายขนาด 4.8M พารามิเตอร์
+    \item \textbf{Custom Scratch CNN:} ประสบปัญหาทั้ง High Bias (Train Accuracy 88.45\%) และ Moderate Variance (Gap 4.55 จุดร้อยละ) เมื่อเทียบกับ Transfer Learning ภายใต้ข้อมูลฝึก 18,000 ภาพและพารามิเตอร์รวม 6.94M
     \item \textbf{MobileNetV2 Phase 1 (Frozen Base):} มี Low Variance อย่างยิ่งเนื่องจากพารามิเตอร์ส่วนใหญ่ถูกแช่แข็ง แต่ยังมี Inductive Bias เล็กน้อยจากโดเมน ImageNet ทำให้ขีดความสามารถหยุดอยู่ที่ 96.31\%
-    \item \textbf{MobileNetV2 Phase 2 (Fine-Tuning + Augmentation):} บรรลุจุดสมดุลที่สมบูรณ์แบบที่สุด (Optimal Sweet Spot) โดยการปลดล็อค 40 เลเยอร์ช่วยลด Bias ลง ขณะที่ Data Augmentation และ L2 Regularization ช่วยควบคุม Variance ให้อยู่ในระดับต่ำสุด (Gap เพียง 0.24\%)
+    \item \textbf{MobileNetV2 Phase 2 (Fine-Tuning + Augmentation):} ให้ผลดีที่สุดในชุดการทดลองนี้ โดยการปลดล็อค 40 เลเยอร์ช่วยลด Bias ขณะที่ Data Augmentation และ L2 Regularization ช่วยจำกัด Variance (Gap 0.24 จุดร้อยละ)
 \end{itemize}
 
 \subsection*{6.3 การเปรียบเทียบเชิงวิเคราะห์ระหว่าง MLP (Assignment 5) และ CNN (Assignment 6)\\ \normalsize(Comparative Synthesis: MLP on MNIST vs. CNN on Cats \& Dogs)}
@@ -581,11 +563,11 @@ MobileNetV2 (Top 20 Layers) & 986,369 & 96.80\% & 96.70\% & 96.90\% & +0.65\% & 
     \item \textbf{Weight Sharing \& Parameter Efficiency:} CNN ใช้เคอร์เนลขนาดเล็กกวาดไปทั่วทั้งภาพ ทำให้ค่าน้ำหนักถูกแบ่งปัน (Weight Sharing) ขจัดความซ้ำซ้อนและรักษา Translation Invariance ได้อย่างสมบูรณ์แบบ
 \end{enumerate}
 
-\subsection*{6.4 แนวทางการนำโมเดลไปประยุกต์ใช้งานบนระบบ Edge / Mobile Devices\\ \normalsize(Edge Deployment \& Model Quantization Opportunities)}
-สถาปัตยกรรม MobileNetV2 ที่พัฒนาขึ้นนี้มีความพร้อมสูงสำหรับการแปลงไปเป็นโมเดลสำหรับอุปกรณ์พกพา:
+\subsection*{6.4 แนวทางการตรวจสอบก่อนนำโมเดลไปใช้บน Edge / Mobile\\ \normalsize(Edge Deployment Verification Roadmap)}
+MobileNetV2 ถูกออกแบบให้มีประสิทธิภาพบนอุปกรณ์ทรัพยากรจำกัด แต่ผลในงานนี้ยังไม่รวม Artifact ที่แปลงหรือ Quantize แล้ว:
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
-    \item \textbf{TensorFlow Lite (TFLite) Conversion:} สามารถแปลงเป็นไฟล์ \texttt{.tflite} ขนาดเพียง $\approx 9.8$ MB
-    \item \textbf{Post-Training Quantization (INT8):} เมื่อทำ Quantization ลดทอนค่าน้ำหนักจาก Float32 เป็น Int8 ขนาดโมเดลจะลดลงเหลือเพียง $\approx 2.6$ MB และเพิ่มความเร็วในการประมวลผลบนหน่วยประมวลผล NPU ของสมาร์ตโฟน (เช่น Apple Neural Engine หรือ Snapdragon NPU) ได้มากกว่า 120 FPS
+    \item \textbf{TensorFlow Lite}: ต้องบันทึก Converter Code, ไฟล์โมเดล, ขนาดจริง และผลทดสอบความเท่าเทียมกับโมเดล Float32
+    \item \textbf{INT8 Quantization}: ต้องมี Representative Dataset, Quantized Artifact และ Accuracy/Latency Benchmark บน Hardware เป้าหมายก่อนกล่าวอ้างตัวเลข
 \end{itemize}
 
 % =================================================================
@@ -593,12 +575,12 @@ MobileNetV2 (Top 20 Layers) & 986,369 & 96.80\% & 96.70\% & 96.90\% & +0.65\% & 
 \section*{7. สรุปผลการทดลองและข้อเสนอแนะเชิงประยุกต์\\ \large(Conclusions \& Practical Recommendations)}
 
 \begin{enumerate}[leftmargin=1.8em, itemsep=2pt]
-    \item \textbf{ข้อสรุปผลสัมฤทธิ์:} โมเดล MobileNetV2 Transfer Learning ที่ผ่านการฝึกฝนแบบสองขั้นตอน (Two-Phase Training) ร่วมกับ Data Augmentation สามารถจำแนกภาพสุนัขและแมวได้ด้วยความแม่นยำ \textbf{97.47\%} และให้ค่าความเที่ยงตรง (Precision) สำหรับสุนัขสูงถึง \textbf{97.55\% (0.98)} และแมว \textbf{97.38\% (0.97)} ซึ่งชนะเกณฑ์เป้าหมาย $90 - 95\%$ ของบริษัทได้อย่างสมบูรณ์แบบ
+    \item \textbf{ข้อสรุปผลสัมฤทธิ์:} โมเดล M3 MobileNetV2 แบบ Two-Phase ร่วมกับ Training-only Augmentation ให้ Final-Test Accuracy \textbf{97.47\%}, Dog Precision \textbf{97.55\%} และ Cat Precision \textbf{97.38\%} จึงผ่านเกณฑ์ $90$--$95\%$ ของโจทย์
     \item \textbf{บทเรียนสำคัญ:} การฝึกฝนโมเดลจากศูนย์ (Scratch CNN) บนชุดข้อมูลภาพธรรมชาติที่มีขนาดจำกัดไม่สามารถสร้างฟีเจอร์ที่มีประสิทธิภาพเพียงพอต่อเกณฑ์ระดับอุตสาหกรรม การประยุกต์ใช้ Pre-trained Backbone จึงเป็นแนวทางบังคับสำหรับการพัฒนาผลิตภัณฑ์เชิงพาณิชย์
     \item \textbf{ข้อเสนอแนะสำหรับการต่อยอดผลิตภัณฑ์:}
     \begin{itemize}[leftmargin=1.5em]
         \item ติดตั้งโมดูลตรวจจับตำแหน่งใบหน้า (Face / Landmark Detection เช่น MediaPipe หรือ YOLOv8-Face) เพื่อทำการ Crop เฉพาะบริเวณใบหน้าก่อนป้อนเข้าสู่โมเดลจำแนก จะช่วยเพิ่มความแม่นยำในมุมกล้องเอียง
-        \item นำเทคนิค Quantization (INT8) ไปประยุกต์ใช้เพื่อรองรับการประมวลผลบนแอปพลิเคชันมือถือ iOS/Android แบบ On-Device ไร้การพึ่งพาคลาวด์
+        \item ทดลองแปลง TensorFlow Lite และ INT8 เป็นงานถัดไป พร้อมประเมิน Accuracy, Model Size และ Mean/Median/p95 Latency บน Hardware เป้าหมายก่อนรายงานผล
     \end{itemize}
 \end{enumerate}
 
@@ -607,7 +589,7 @@ MobileNetV2 (Top 20 Layers) & 986,369 & 96.80\% & 96.70\% & 96.90\% & +0.65\% & 
 \raggedbottom
 \section*{Appendix: Full Jupyter Notebook Code \& Output}
 
-รายละเอียดต่อไปนี้คือโค้ด Python ที่ใช้แก้ปัญหาและวิเคราะห์แบบจำลอง Convolutional Neural Network (CNN) และการเรียนรู้แบบถ่ายโอน (Transfer Learning) บนชุดข้อมูล Dogs vs. Cats พร้อมผลลัพธ์และกราฟทั้งหมด ซึ่งได้รันจริงจาก Jupyter Notebook (\texttt{CNN\_Homework.ipynb} หรือ \texttt{67\_1027\_1042.ipynb})
+รายละเอียดต่อไปนี้ถอดโค้ดและผลลัพธ์จากไฟล์ส่งงาน \codevar{67\_1027\_1042.ipynb} โดยตรง ผลที่ต้องใช้ Dataset/Checkpoint เป็นหลักฐานจากการรันเต็มบน Cloud GPU และไม่มีการฝึกโมเดลซ้ำระหว่างการปรับแก้รายงานบนเครื่อง Local
 
 \input{notebook_appendix_6.tex}
 

@@ -49,7 +49,7 @@ cpe342-machine-learning-2026/
 │       ├── 67_1027_1042.ipynb            # Official course submission notebook
 │       ├── CNN_Homework.ipynb                 # Original assignment template
 │       ├── CPE342_Assignment 6_main.tex      # LaTeX source report
-│       ├── CPE342_Assignment 6_main.pdf      # Publication-grade academic report (49 pages)
+│       ├── CPE342_Assignment 6_main.pdf      # Publication-grade academic report (59 pages)
 │       ├── notebook_appendix_6.tex           # LaTeX appendix with executed notebook cells
 │       ├── benchmark_results.csv & .json     # 5-model benchmark and ablation metrics
 │       └── plot_1_*.pdf to plot_8_*.pdf       # Publication-grade vector figures
@@ -160,21 +160,19 @@ cpe342-machine-learning-2026/
 ---
 
 ### [Assignment 6: Convolutional Neural Networks (CNN)](./assignment/Assignment%206_CNN/)
-* **Topic:** Deep Convolutional Neural Networks (CNN), Transfer Learning (MobileNetV2), Two-Phase Fine-Tuning, Data Augmentation, Feature Map Activations, and Real-Time Video Streaming Inference for Dog vs. Cat Classification ($N = 25,000$).
+* **Topic:** Deep Convolutional Neural Networks (CNN), Transfer Learning (MobileNetV2), Two-Phase Fine-Tuning, Data Augmentation, Feature Map Activations, and offline inference diagnostics for Dog vs. Cat Classification ($N = 25,000$).
 * **Key Tasks:**
   * Mathematical formulation of 2D Cross-Correlation, Receptive Fields (Hubel & Wiesel visual cortex), Zero-Padding (Valid vs Same), Stride, and Subsampling / Max Pooling.
   * Architecture of MobileNetV2: Inverted Residual blocks, Depthwise Separable Convolutions, and Linear Bottlenecks (Sandler et al. 2018; Géron Ch. 14).
-  * Data ingestion pipeline: Udacity Dogs vs Cats dataset (25,000 images), geometric/photometric data augmentation (rotation, shifting, zooming, horizontal flipping, shear), and 80/20 train-validation splitting (18,000 train / 4,500 validation).
-  * Baseline Custom Scratch CNN (4 blocks, 4,816,513 parameters) ablation demonstrating sample inefficiency and overfitting (Accuracy: 84.15%, Dog Precision: 83.50%, failing the commercial >90–95% threshold).
+  * Canonical data protocol: 18,000 augmented training images, 4,500 unaugmented validation images, and 2,500 untouched final-test images; $160\times160$ RGB, `1./255`, Cat=0, Dog=1, seed 42.
+  * Baseline Custom Scratch CNN (4 blocks, 6,944,449 total parameters) demonstrating sample inefficiency and overfitting (Final-Test Accuracy: 84.15%, Dog Precision: 83.50%, below the required 90–95% threshold).
   * Two-Phase Transfer Learning Strategy:
     * **Phase 1 (Feature Extraction):** Pretrained MobileNetV2 base frozen, training Global Average Pooling (GAP) + Dense(256) head with Adam ($\eta = 10^{-4}$), EarlyStopping, and ReduceLROnPlateau.
-    * **Phase 2 (Fine-Tuning):** Unfreezing top 40 layers of MobileNetV2 with low learning rate ($\eta = 10^{-5}$) to prevent catastrophic forgetting.
-  * Comprehensive model evaluation across all 4,500 validation images:
-    * Confusion Matrix: 2,196 True Cats, 2,190 True Dogs, 54 False Dogs, 60 False Cats.
-    * Classification Report: Dog Precision **97.59% (0.98)**, Cat Precision **97.34% (0.97)**, Accuracy **97.47%** (successfully passing commercial launch threshold >90–95%).
-  * Hierarchical Feature Map Activations Visualization (KMUTT Lecture 7 slides 3–16): early edges $\to$ mid-level textures $\to$ deep semantic facial structures (cat ears vs dog snouts).
-  * 5-Model Ablation Study: Scratch CNN vs TL Phase 1 vs TL Fine-Tuned + Augmentation vs TL without Augmentation vs Edge Quantized INT8 MobileNetV2 (0.65 MB, 4.2x speedup).
-  * Real-Time Streaming Video Pipeline (STEP 10): `DogCatStreamingEngine` achieving 54.3 FPS (18.4 ms latency/frame, exceeding 30 FPS requirement) with temporal smoothing and automated AR filter placement ("Dog Floppy Ears & Snout" vs "Cat Pointed Ears & Whiskers").
+    * **Phase 2 (Fine-Tuning):** Unfreezing the top 40 MobileNetV2 layers with a low learning rate ($\eta = 10^{-5}$).
+  * Final grading result on the untouched 2,500-image test split: **97.47% Accuracy**, **97.55% Dog Precision**, **97.38% Cat Precision**, and **0.9747 Macro F1**.
+  * Validation-only diagnostics on 4,500 unaugmented images: confusion matrices, ROC/PR curves, model-derived activation maps, and actual TP/TN/FP/FN galleries.
+  * 5-model ablation: M1 Scratch CNN, M2 Frozen MobileNetV2, M3 Top-40 + Augmentation, M4 Top-40 without Augmentation, and M5 Top-20 + Augmentation. INT8 is excluded because no evaluated quantized artifact is available.
+  * Offline inference evidence: a preserved aggregate value of 18.4 ms/image. Raw samples, median, p95, and exact hardware metadata were not retained; no live-webcam, AR, or end-to-end FPS guarantee is claimed.
 * **Deliverables:**
   * [`67_1027_1042.ipynb`](./assignment/Assignment%206_CNN/67_1027_1042.ipynb) (Official Course Submission File)
   * [`CPE342_Assignment 6_main.pdf`](./assignment/Assignment%206_CNN/CPE342_Assignment%206_main.pdf) (Publication-Grade Academic Report)
