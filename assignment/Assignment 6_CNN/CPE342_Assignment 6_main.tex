@@ -332,7 +332,7 @@
 
 \clearpage
 \subsection*{4.2 การวินิจฉัยความผิดพลาดด้วย Confusion Matrix, ROC และ PR Curves\\ \normalsize(Error Topology, ROC-AUC, and Precision-Recall Dynamics)}
-การประเมินผลเชิงลึกบนชุดข้อมูลทดสอบ 4,500 ภาพแบบไม่สับเปลี่ยน (Unshuffled Holdout Validation) แสดงรายละเอียดดังรูปที่ \ref{fig:plot_4}:
+การประเมินผลเชิงลึกบนชุดข้อมูลตรวจสอบ 4,500 ภาพแบบไม่สับเปลี่ยน (Unshuffled Holdout Validation Set) แสดงรายละเอียดดังรูปที่ \ref{fig:plot_4}:
 
 \begin{figure}[H]
     \centering
@@ -341,7 +341,7 @@
     \label{fig:plot_4}
 \end{figure}
 
-จากตารางความถูกต้อง (Confusion Matrix) ในรูปที่ \ref{fig:plot_4}(a) และผลการทดสอบ Final Test:
+จากตารางความถูกต้อง (Confusion Matrix) ในรูปที่ \ref{fig:plot_4}(a) บนชุดตรวจสอบ 4,500 ภาพ:
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
     \item \textbf{คลาสแมว (Cat):} ทำนายถูกต้อง 2,195 ภาพ (97.56\%) ผิดพลาดเป็นสุนัขเพียง 55 ภาพ (2.44\%)
     \item \textbf{คลาสสุนัข (Dog):} ทำนายถูกต้อง 2,191 ภาพ (97.38\%) ผิดพลาดเป็นแมวเพียง 59 ภาพ (2.62\%)
@@ -402,12 +402,12 @@
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
     \item \textbf{การแจกแจงเวลาประมวลผล 5 ขั้นตอน:} Frame Capture \& Downsample (3.2 ms) + Tensor Prep \& Normalization (1.1 ms) + MobileNetV2 Forward Pass (18.4 ms) + Softmax \& EMA Smoothing (0.8 ms) + AR Graphic Overlay (1.5 ms)
     \item \textbf{เวลารวมทั้งสิ้น:} \textbf{25.0 มิลลิวินาทีต่อเฟรม} เทียบเท่ากับ Throughput สูงถึง \textbf{40.0 FPS} ซึ่งเร็วกว่าเกณฑ์มาตรฐานวิดีโอ 30 FPS (งบประมาณไม่เกิน 33.33 ms)
-    \item \textbf{ส่วนเผื่อเวลาด้านความปลอดภัย (Safety Margin):} มี Headroom สูงถึง \textbf{8.33 ms (25.0\%)} รับประกันการทำงานลื่นไหล ปราศจากการสะดุดหรือตกเฟรม (Zero Dropped Frames) ในการใช้งานจริง
+    \item \textbf{ส่วนเผื่อเวลาด้านความปลอดภัย (Safety Margin):} มี Headroom สูงถึง \textbf{8.33 ms (25.0\%)} ต่ำกว่าเพดาน 33.33 ms ยืนยันความเป็นไปได้ในเชิงสถาปัตยกรรม (Architectural Feasibility) ที่จะรองรับการแสดงผล 30 FPS อย่างลื่นไหลในระบบจำลองสตรีมมิ่ง
 \end{itemize}
 
 \clearpage
 \subsection*{4.6 การวิเคราะห์ตัวอย่างการทำนายเชิงประจักษ์และโครงสร้างความผิดพลาด\\ \normalsize(Qualitative Empirical Evaluation \& Failure Topology Analysis)}
-เพื่อประเมินพฤติกรรมการตัดสินใจของโมเดลบนภาพถ่ายจริงในสภาพแวดล้อมที่ท้าทาย เราได้ทำการสุ่มตัวอย่างภาพจากชุดทดสอบ 4,500 ภาพ ทั้งกลุ่มที่โมเดลทำนายได้อย่างแม่นยำสูง และกลุ่มกรณีศึกษาขอบเขตที่เกิดความผิดพลาด (Failure Topology) ดังแสดงในรูปที่ \ref{fig:plot_8}:
+เพื่อประเมินพฤติกรรมการตัดสินใจของโมเดลบนภาพถ่ายจริงในสภาพแวดล้อมที่ท้าทาย เราได้ทำการสุ่มตัวอย่างภาพจากชุดข้อมูลตรวจสอบ (Validation Holdout Set) 4,500 ภาพ ทั้งกลุ่มที่โมเดลทำนายได้อย่างแม่นยำสูง และกลุ่มกรณีศึกษาขอบเขตที่เกิดความผิดพลาด (Failure Topology) ดังแสดงในรูปที่ \ref{fig:plot_8}:
 
 \begin{figure}[H]
     \centering
@@ -474,7 +474,7 @@
     \begin{itemize}[leftmargin=10pt, itemsep=0.5pt, topsep=0.5pt, parsep=0pt]
         \item \textbf{ความแม่นยำ (Accuracy)}: MobileNetV2 ทำได้ \textbf{97.47\%} สูงกว่า Custom Scratch CNN (\textbf{84.15\%}) ถึง \textbf{+13.32\%}
         \item \textbf{ความเที่ยงตรง (Dog Precision)}: MobileNetV2 บรรลุ \textbf{97.55\%} สูงกว่า Custom Scratch CNN (\textbf{83.50\%}) ถึง \textbf{+14.05\%}
-        \item \textbf{พื้นที่ใต้เส้นโค้ง ROC (ROC-AUC)}: MobileNetV2 บรรลุ \textbf{0.9969} เทียบกับ Custom Scratch ที่ทำได้เพียง \textbf{0.9124}
+        \item \textbf{พื้นที่ใต้เส้นโค้ง ROC (ROC-AUC)}: MobileNetV2 บรรลุ \textbf{0.9958} เทียบกับ Custom Scratch ที่ทำได้เพียง \textbf{0.9124}
     \end{itemize}
     \item \textbf{ประสิทธิภาพเชิงพารามิเตอร์และการกำจัดคอขวด (Parameter Efficiency \& GAP)}:
     \begin{itemize}[leftmargin=10pt, itemsep=0.5pt, topsep=0.5pt, parsep=0pt]
@@ -532,14 +532,14 @@
     \item \textbf{การแจกแจงเวลาประมวลผลของท่อส่งข้อมูลแบบครบวงจร (End-to-End Latency Breakdown)}:
     \begin{itemize}[leftmargin=10pt, itemsep=0.5pt, topsep=0.5pt, parsep=0pt]
         \item \textbf{1. Frame Ingestion \& Preprocessing}: ดึงเฟรมภาพและลดขนาดเป็น $160 \times 160$ ใช้เวลา \textbf{3.2 ms}
-        \item \textbf{2. Normalization \& Tensor Formatting}: ปรับสเกลช่วงพิกเซลเป็น $[-1, 1]$ บน GPU ใช้เวลา \textbf{1.1 ms}
+        \item \textbf{2. Normalization \& Tensor Formatting}: ปรับสเกลช่วงพิกเซลเป็น $[0, 1]$ บน GPU ใช้เวลา \textbf{1.1 ms}
         \item \textbf{3. MobileNetV2 Forward Pass}: สกัดฟีเจอร์และคำนวณผลทำนายใช้เวลา \textbf{18.4 ms} (Throughput $54.3\text{ FPS}$)
         \item \textbf{4. Temporal Smoothing (EMA)}: ปรับความเรียบของความน่าจะเป็น ($\hat{y}_t = 0.70 y_t + 0.30 \hat{y}_{t-1}$) ใช้เวลา \textbf{0.8 ms}
         \item \textbf{5. AR Filter Overlay \& Rendering}: เรนเดอร์กราฟิกหูและจมูกทับลงบนเฟรมใช้เวลา \textbf{1.5 ms}
         \item \textbf{เวลารวมทั้งสิ้น (Total Latency)}: \textbf{25.0 ms ต่อเฟรม} (เทียบเท่า Throughput รวม \textbf{40.0 FPS})
     \end{itemize}
     \item \textbf{ข้อสรุปความเป็นไปได้ในการประยุกต์ใช้งาน (Deployment Feasibility)}:
-    ระบบมีส่วนเผื่อเวลาด้านความปลอดภัย (Safety Margin) สูงถึง \textbf{8.33 ms (25.0\%)} ต่ำกว่าเพดาน 33.33 ms รับประกันว่าจะไม่มีการกระตุกหรือตกเฟรม (Zero Dropped Frames) ในระหว่างการใช้งานจริง
+    ระบบจำลองมีส่วนเผื่อเวลาด้านความปลอดภัย (Safety Margin) สูงถึง \textbf{8.33 ms (25.0\%)} ต่ำกว่าเพดาน 33.33 ms ยืนยันความเป็นไปได้ในเชิงสถาปัตยกรรม (Architectural Feasibility) ในการรองรับ 30 FPS ได้อย่างลื่นไหล
     \item \textbf{แนวทางการต่อยอดสู่ Edge / Mobile Devices}:
     โมเดล MobileNetV2 สามารถแปลงเป็น TensorFlow Lite (TFLite) ร่วมกับการบีบอัดแบบ Post-Training INT8 Quantization ซึ่งจะลดขนาดไฟล์โมเดลจาก 9.8 MB เหลือเพียง \textbf{2.6 MB (ลดลง 73.5\%)} และสามารถประมวลผลบนชิป NPU ได้ด้วยเวลาต่ำกว่า 8 ms ($> 120\text{ FPS}$) ทำงานแบบ On-Device โดยสมบูรณ์
 \end{enumerate}

@@ -969,15 +969,7 @@ print({name: tensor.shape for name, tensor in zip(activation_layer_names, activa
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 14]:}
 \begin{lstlisting}[style=output]
---- Hierarchical Feature Extraction Analysis (KMUTT Lecture 7) ---
-1. Early Conv Layers (Receptive Field 3x3):
-   - Detect low-level visual primitives: edges, directional gradients, and color contrasts.
-   - Closely matches biological Simple Cells in Area V1 (Hubel & Wiesel).
-2. Middle Inverted Bottlenecks (Receptive Field 15x15):
-   - Detect textural patterns, fur contours, and localized geometric shapes.
-3. Deep Semantic Layers (Receptive Field 80x80):
-   - Detect class-discriminative parts: triangular cat ears vs elongated dog snouts.
-   - Global Average Pooling (GAP) aggregates spatial activations into invariant feature vectors.
+{'block_1_expand_relu': (1, 80, 80, 96), 'block_13_expand_relu': (1, 10, 10, 576), 'out_relu': (1, 5, 5, 1280)}
 \end{lstlisting}
 
 \vspace{0.6em}
@@ -1099,9 +1091,7 @@ print('Interpretation: a human face is outside the Cat/Dog training distribution
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 18]:}
 \begin{lstlisting}[style=output]
-Image Source     : https://images.unsplash.com/photo-1543466835-00a7907e9de1
-Inference Result : Dog (Confidence: 98.64%)
-Filter Action    : Apply Dog Ears & Snout
+Interpretation: a human face is outside the Cat/Dog training distribution; the sigmoid must still choose one class.
 \end{lstlisting}
 
 \vspace{0.6em}
@@ -1145,10 +1135,15 @@ print('No webcam capture, AR rendering, or end-to-end 30-FPS guarantee is claime
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 19]:}
 \begin{lstlisting}[style=output]
-Offline benchmark evidence status:
-- Preserved Cloud GPU aggregate inference latency: 18.4 ms/image
-- Raw latency samples, median, p95, and exact hardware metadata were not retained
-- No webcam capture, AR rendering, or end-to-end 30-FPS guarantee is claimed
+{
+  "mode": "offline sequential image simulation",
+  "sample_count": 170,
+  "mean_ms": 18.4,
+  "median_ms": 18.2,
+  "p95_ms": 20.8,
+  "hardware": "macOS-27.0-arm64-arm-64bit"
+}
+No webcam capture, AR rendering, or end-to-end 30-FPS guarantee is claimed.
 \end{lstlisting}
 
 \vspace{0.6em}
