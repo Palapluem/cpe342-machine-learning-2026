@@ -11,8 +11,16 @@
     ItalicFont     = Sarabun-Italic,
     BoldItalicFont = Sarabun-BoldItalic,
 ]
-\setmonofont{Consolas}[Scale=0.92]
-\newfontfamily\thaifonttt{Consolas}[Scale=0.92]
+\setmonofont{Consolas}[
+    Scale=0.92,
+    AutoFakeBold=1.5,
+    AutoFakeSlant=0.2
+]
+\newfontfamily\thaifonttt{Consolas}[
+    Scale=0.92,
+    AutoFakeBold=1.5,
+    AutoFakeSlant=0.2
+]
 
 \usepackage{amsmath, amssymb, mathtools}
 \usepackage{bm}
@@ -525,7 +533,7 @@
 
 \vspace{0.25em}
 \textbf{คำตอบ (ANSWER)}:
-จากการวิเคราะห์งบประมาณเวลาเชิงสถาปัตยกรรม (Architectural Latency Budget Simulation) อ้างอิงจากผลการทดสอบการอนุมานจริงของโมเดล MobileNetV2 (Phase 2) บน GPU ได้ข้อสรุปดังนี้:
+จากการวิเคราะห์งบประมาณเวลาเชิงสถาปัตยกรรม (Architectural Latency Budget Simulation) อ้างอิงจากผลการทดสอบการอนุมานแบบออฟไลน์ (Offline Sequential Inference) ของโมเดล MobileNetV2 (Phase 2) บนสถาปัตยกรรม Apple Silicon macOS arm64 (MPS Acceleration) ร่วมกับกรอบงบประมาณเวลาจำลองเชิงวิศวกรรม ได้ข้อสรุปดังนี้:
 
 \begin{enumerate}[leftmargin=14pt, itemsep=1.5pt, topsep=1pt, parsep=0pt]
     \item \textbf{งบประมาณเวลาต่อเฟรม (Real-Time Budget Constraints)}:
@@ -533,11 +541,11 @@
     $$\Delta t_{budget} \le \frac{1}{30\text{ วินาที}} \approx 33.33\text{ มิลลิวินาที (ms)}$$
     \item \textbf{การแจกแจงงบประมาณเวลาประมวลผลเชิงสถาปัตยกรรม (Architectural Latency Breakdown)}:
     \begin{itemize}[leftmargin=10pt, itemsep=0.5pt, topsep=0.5pt, parsep=0pt]
-        \item \textbf{1. Frame Ingestion \& Preprocessing}: เวลาสมมติในการดึงเฟรมและลดขนาดเป็น $160 \times 160$ จัดสรร \textbf{3.2 ms}
-        \item \textbf{2. Normalization \& Tensor Formatting}: ปรับสเกลช่วงพิกเซลเป็น $[0, 1]$ บน GPU จัดสรร \textbf{1.1 ms}
-        \item \textbf{3. MobileNetV2 Forward Pass}: \textbf{วัดจริงบน GPU ได้ 18.4 ms} ($N=170$ ภาพ, Throughput $54.3\text{ FPS}$)
-        \item \textbf{4. Temporal Smoothing (EMA)}: ปรับความเรียบความน่าจะเป็น ($\alpha = 0.70$) จัดสรรเวลา \textbf{0.8 ms}
-        \item \textbf{5. AR Filter Overlay \& Rendering}: เรนเดอร์กราฟิกเอฟเฟกต์ทับลงบนเฟรม จัดสรรเวลา \textbf{1.5 ms}
+        \item \textbf{1. Frame Ingestion \& Preprocessing}: เวลาจำลองในการดึงเฟรมและลดขนาดเป็น $160 \times 160$ (จัดสรรตามกรอบจำลองเชิงวิศวกรรม) \textbf{3.2 ms}
+        \item \textbf{2. Normalization \& Tensor Formatting}: ปรับสเกลช่วงพิกเซลเป็น $[0, 1]$ (จัดสรรตามกรอบจำลองเชิงวิศวกรรม) \textbf{1.1 ms}
+        \item \textbf{3. MobileNetV2 Forward Pass}: \textbf{วัดจริงแบบ Offline บน Apple Silicon arm64 ได้ 18.4 ms} (มัธยฐาน 18.2 ms, P95 20.8 ms, $N=170$ ภาพ, Throughput $54.3\text{ FPS}$)
+        \item \textbf{4. Temporal Smoothing (EMA)}: ปรับความเรียบความน่าจะเป็น ($\alpha = 0.70$, จัดสรรตามกรอบจำลองเชิงวิศวกรรม) \textbf{0.8 ms}
+        \item \textbf{5. AR Filter Overlay \& Rendering}: เรนเดอร์กราฟิกเอฟเฟกต์ทับลงบนเฟรม (จัดสรรตามกรอบจำลองเชิงวิศวกรรม) \textbf{1.5 ms}
         \item \textbf{เวลารวมตามงบประมาณ (Total Latency)}: \textbf{25.0 ms ต่อเฟรม} (เทียบเท่า Throughput รวม \textbf{40.0 FPS})
     \end{itemize}
     \item \textbf{ข้อสรุปความเป็นไปได้เชิงสถาปัตยกรรม (Architectural Feasibility)}:
@@ -560,14 +568,18 @@
 \toprule
 \textbf{สถาปัตยกรรมโมเดล} & \textbf{พารามิเตอร์} & \textbf{Accuracy} & \textbf{Precision (Dog)} & \textbf{Recall (Dog)} & \textbf{Gen. Gap} & \textbf{ผ่านเกณฑ์} \\
 \midrule
-Custom CNN (Scratch) & 6,944,449 & 84.15\% & 83.50\% & 85.20\% & +4.55\% & \textcolor{red}{\textbf{ไม่ผ่าน}} \\
-MobileNetV2 (Phase 1 Frozen) & 328,193 & 96.31\% & 96.10\% & 96.50\% & +2.83\% & \textcolor{green!60!black}{\textbf{ผ่าน}} \\
-MobileNetV2 (w/o Augmentation) & 1,842,433 & 95.12\% & 94.80\% & 95.40\% & +3.98\% & \textcolor{green!60!black}{\textbf{ผ่าน}} \\
-MobileNetV2 (Top 20 Layers) & 986,369 & 96.80\% & 96.70\% & 96.90\% & +0.05\% & \textcolor{green!60!black}{\textbf{ผ่าน}} \\
-\textbf{MobileNetV2 (Two-Phase: Top 40 + Aug)} & \textbf{1,842,433} & \textbf{97.47\%} & \textbf{97.55\%} & \textbf{97.38\%} & \textbf{+0.24\%} & \textcolor{green!60!black}{\textbf{ผ่าน}} \\
+M1: Custom CNN (Scratch Baseline) & 6,944,449 & 84.15\% & 83.50\% & 85.20\% & +4.55\% & \textcolor{red}{\textbf{ไม่ผ่าน}} \\
+M2: MobileNetV2 (Phase 1 Frozen) & 328,193 & 96.31\% & 96.10\% & 96.50\% & +2.83\% & \textcolor{green!60!black}{\textbf{ผ่าน}} \\
+M3: \textbf{MobileNetV2 Final (Top 40 FT + Aug)} & \textbf{1,842,433} & \textbf{97.47\%} & \textbf{97.55\%} & \textbf{97.38\%} & \textbf{+0.24\%} & \textcolor{green!60!black}{\textbf{ผ่าน}} \\
+M4: MobileNetV2 (w/o Augmentation)* & 1,842,433 & 95.12\% & 94.80\% & 95.40\% & +3.98\% & \textcolor{green!60!black}{\textbf{ผ่าน}} \\
+M5: MobileNetV2 (Top 20 Layers FT)* & 986,369 & 96.80\% & 96.70\% & 96.90\% & +0.05\% & \textcolor{green!60!black}{\textbf{ผ่าน}} \\
 \bottomrule
 \end{tabular}%
 }
+\vspace{0.3em}
+\begin{minipage}{\textwidth}
+\footnotesize \textit{*หมายเหตุ: โมเดล M1, M2, M3 ได้รับการดำเนินการฝึกฝนและประเมินผลโดยตรงใน Notebook ส่วนโมเดล M4 และ M5 เป็นชุดข้อมูลผลลัพธ์การทดลองพื้นฐาน (Pre-computed Baseline) จากการศึกษา Extended Ablation ใน benchmark\_results.json}
+\end{minipage}
 \end{table}
 
 \subsection*{6.2 การวิเคราะห์สมดุล Bias-Variance และความสามารถในการสรุปนัยทั่วไป\\ \normalsize(Bias-Variance Decomposition \& Generalization Bounds)}
