@@ -29,7 +29,8 @@ else:
 Dataset root      : <cloud-workspace>/Cat_Dog_data
 Dataset available : True
 Policy            : dataset download and local retraining are disabled during remediation
-Execution note    : full experiment executed on the Cloud GPU environment\end{lstlisting}
+Execution note    : full experiment executed on the Cloud GPU environment
+\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -72,7 +73,8 @@ print(f"GPU Available     : {tf.config.list_physical_devices('GPU')}")\end{lstli
 \begin{lstlisting}[style=output]
 TensorFlow Version: 2.16.1
 NumPy Version     : 2.4.1
-GPU Available     : [PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]\end{lstlisting}
+GPU Available     : [PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]
+\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -121,7 +123,8 @@ print(f"Class mapping: {train_gen.class_indices}")\end{lstlisting}
 Found 18000 images belonging to 2 classes.
 Found 4500 images belonging to 2 classes.
 Found 2500 images belonging to 2 classes.
-Class mapping: {'cat': 0, 'dog': 1}\end{lstlisting}
+Class mapping: {'cat': 0, 'dog': 1}
+\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -160,7 +163,8 @@ plt.show()\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 4]:}
 \begin{lstlisting}[style=output]
-<Figure size at plot_1_dataset_samples_augmentation>\end{lstlisting}
+<Figure size at plot_1_dataset_samples_augmentation>
+\end{lstlisting}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.96\linewidth]{plot_1_dataset_samples_augmentation.pdf}
@@ -200,7 +204,8 @@ print(f"M1 final test: loss={m1_test_loss:.4f}, accuracy={m1_test_accuracy:.4f}"
 \noindent\textbf{\small [Out 5]:}
 \begin{lstlisting}[style=output]
 M1 Cloud GPU final-test record (N=2,500): loss=0.4180, accuracy=0.8415, Dog precision=0.8350
-Result: FAIL — below the required 90–95% precision threshold\end{lstlisting}
+Result: FAIL — below the required 90–95% precision threshold
+\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -236,7 +241,8 @@ Model: "MobileNetV2_Transfer_Classifier"
 +-----------------------------+---------------------+----------+
 Total params: 2,586,177 (9.87 MB)
 Trainable params: 328,193 (1.25 MB)
-Non-trainable params: 2,257,984 (8.61 MB)\end{lstlisting}
+Non-trainable params: 2,257,984 (8.61 MB)
+\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -705,7 +711,8 @@ build_masterpiece_figure()\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 7]:}
 \begin{lstlisting}[style=output]
-<Figure 2: architecture comparison>\end{lstlisting}
+<Figure 2: architecture comparison>
+\end{lstlisting}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.96\linewidth]{plot_2_cnn_architectures_comparison.pdf}
@@ -738,7 +745,8 @@ print("Callbacks configured: EarlyStopping (patience=3) and ReduceLROnPlateau (f
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 8]:}
 \begin{lstlisting}[style=output]
-Callbacks configured: EarlyStopping (patience=3) and ReduceLROnPlateau (factor=0.3)\end{lstlisting}
+Callbacks configured: EarlyStopping (patience=3) and ReduceLROnPlateau (factor=0.3)
+\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -774,7 +782,8 @@ Epoch 7/10
 Epoch 8/10
 563/563 - 647s - 1s/step - accuracy: 0.9625 - loss: 0.1554 - val_accuracy: 0.9609 - val_loss: 0.1542 - learning_rate: 1.0000e-04
 Restoring model weights from the end of the best epoch: 5.
-Epoch 8: early stopping\end{lstlisting}
+Epoch 8: early stopping
+\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -827,7 +836,8 @@ Epoch 8/10
 Epoch 9/10
 563/563 - 854s - 2s/step - accuracy: 0.9741 - loss: 0.1523 - val_accuracy: 0.9700 - val_loss: 0.1566 - learning_rate: 1.0000e-05
 Epoch 10/10
-563/563 - 851s - 2s/step - accuracy: 0.9761 - loss: 0.1403 - val_accuracy: 0.9747 - val_loss: 0.1448 - learning_rate: 1.0000e-05\end{lstlisting}
+563/563 - 851s - 2s/step - accuracy: 0.9761 - loss: 0.1403 - val_accuracy: 0.9747 - val_loss: 0.1448 - learning_rate: 1.0000e-05
+\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -859,7 +869,8 @@ plt.show()\end{lstlisting}
 \noindent\textbf{\small [Out 11]:}
 \begin{lstlisting}[style=output]
 [Figure 3: Two-phase training history curves displayed successfully]
-<Figure size at plot_3_training_history_twophase>\end{lstlisting}
+<Figure size at plot_3_training_history_twophase>
+\end{lstlisting}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.96\linewidth]{plot_3_training_history_twophase.pdf}
@@ -889,7 +900,8 @@ val_gen.reset(); val_prob = model.predict(val_gen, verbose=1).ravel(); val_pred 
 model.evaluate() -> loss=0.0680, accuracy=0.9747, N=2500
 Dog precision=0.9755
 Cat precision=0.9738
-Validation diagnostics retained separately for Figures 4 and 8 (N=4500)\end{lstlisting}
+Validation diagnostics retained separately for Figures 4 and 8 (N=4500)
+\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -925,7 +937,8 @@ plt.show()\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 13]:}
 \begin{lstlisting}[style=output]
-<Figure size at plot_4_confusion_matrix_roc_pr>\end{lstlisting}
+<Figure size at plot_4_confusion_matrix_roc_pr>
+\end{lstlisting}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.96\linewidth]{plot_4_confusion_matrix_roc_pr.pdf}
@@ -953,7 +966,8 @@ print({name: tensor.shape for name, tensor in zip(activation_layer_names, activa
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 14]:}
 \begin{lstlisting}[style=output]
-{'block_1_expand_relu': (1, 80, 80, 96), 'block_13_expand_relu': (1, 10, 10, 576), 'out_relu': (1, 5, 5, 1280)}\end{lstlisting}
+{'block_1_expand_relu': (1, 80, 80, 96), 'block_13_expand_relu': (1, 10, 10, 576), 'out_relu': (1, 5, 5, 1280)}
+\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -974,7 +988,8 @@ plt.tight_layout(); plt.savefig('plot_5_feature_map_activations.pdf', bbox_inche
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 15]:}
 \begin{lstlisting}[style=output]
-<Figure size at plot_5_feature_map_activations>\end{lstlisting}
+<Figure size at plot_5_feature_map_activations>
+\end{lstlisting}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.96\linewidth]{plot_5_feature_map_activations.pdf}
@@ -1003,7 +1018,8 @@ M2  test_acc=0.9631  dog_precision=0.9610
 M3  test_acc=0.9747  dog_precision=0.9755
 M4  test_acc=0.9512  dog_precision=0.9480
 M5  test_acc=0.9680  dog_precision=0.9670
-INT8 is not included: no implemented/evaluated INT8 artifact is available.\end{lstlisting}
+INT8 is not included: no implemented/evaluated INT8 artifact is available.
+\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -1027,7 +1043,8 @@ plt.tight_layout(); plt.savefig('plot_6_ablation_augmentation_finetuning.pdf'); 
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 17]:}
 \begin{lstlisting}[style=output]
-<Figure size at plot_6_ablation_augmentation_finetuning>\end{lstlisting}
+<Figure size at plot_6_ablation_augmentation_finetuning>
+\end{lstlisting}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.96\linewidth]{plot_6_ablation_augmentation_finetuning.pdf}
@@ -1057,7 +1074,8 @@ print('Interpretation: a human face is outside the Cat/Dog training distribution
 \noindent\textbf{\small [Out 18]:}
 \begin{lstlisting}[style=output]
 <Figure size 400x400 with 1 Axes>
-Interpretation: a human face is outside the Cat/Dog training distribution; the sigmoid must still choose one class.\end{lstlisting}
+Interpretation: a human face is outside the Cat/Dog training distribution; the sigmoid must still choose one class.
+\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -1097,7 +1115,8 @@ print('No webcam capture, AR rendering, or end-to-end 30-FPS guarantee is claime
   "p95_ms": 20.8,
   "hardware": "macOS-27.0-arm64-arm-64bit"
 }
-No webcam capture, AR rendering, or end-to-end 30-FPS guarantee is claimed.\end{lstlisting}
+No webcam capture, AR rendering, or end-to-end 30-FPS guarantee is claimed.
+\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -1125,7 +1144,8 @@ plt.tight_layout(); plt.savefig('plot_7_inference_streaming_pipeline.pdf', bbox_
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 20]:}
 \begin{lstlisting}[style=output]
-<Figure size at plot_7_inference_streaming_pipeline>\end{lstlisting}
+<Figure size at plot_7_inference_streaming_pipeline>
+\end{lstlisting}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.96\linewidth]{plot_7_inference_streaming_pipeline.pdf}
@@ -1156,7 +1176,8 @@ plt.subplots_adjust(top=0.92, bottom=0.04, hspace=0.35, wspace=0.15); plt.savefi
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 21]:}
 \begin{lstlisting}[style=output]
-<Figure size at plot_8_test_predictions_error_analysis>\end{lstlisting}
+<Figure size at plot_8_test_predictions_error_analysis>
+\end{lstlisting}
 \begin{figure}[H]
 \centering
 \vspace{-0.6em}
