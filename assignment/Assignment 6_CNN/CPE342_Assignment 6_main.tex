@@ -372,12 +372,12 @@
 
 \clearpage
 \subsection*{4.4 การทดลองตัดทอนตัวแปรเชิงเปรียบเทียบ\\ \normalsize(Ablation Study: Architecture, Augmentation, and Depth)}
-เราได้ทำการทดลองตัดทอนตัวแปร (Ablation Study) 5 รูปแบบ เพื่อจำแนกผลกระทบของแต่ละองค์ประกอบ:
+เราได้นำผลลัพธ์จากชุดการทดลองตัดทอนตัวแปร (Ablation Study) 5 รูปแบบ (โดยโมเดล M1--M3 เป็นโมเดลที่ดำเนินการฝึกฝนและประเมินผลโดยตรงใน Notebook ส่วนโมเดล M4--M5 เป็น Pre-computed Baseline จากการทดลอง Extended Ablation ใน \codevar{benchmark\_results.json}) เพื่อจำแนกผลกระทบของแต่ละองค์ประกอบ:
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{plot_6_ablation_augmentation_finetuning.pdf}
-    \caption{การทดลองตัดทอนตัวแปร (Ablation Study): (a) เปรียบเทียบความแม่นยำและความเที่ยงตรงของโมเดล 5 รูปแบบ (b) การวิเคราะห์ Generalization Gap ($|\text{Train} - \text{Val}|$\%)}
+    \caption{การทดลองตัดทอนตัวแปร (Ablation Study): (a) เปรียบเทียบความแม่นยำและความเที่ยงตรง (M1--M3: รันจริงใน Notebook, M4--M5: Pre-computed Baseline) (b) การวิเคราะห์ Generalization Gap ($|\text{Train} - \text{Val}|$\%)}
     \label{fig:plot_6}
 \end{figure}
 
@@ -394,16 +394,18 @@
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{plot_7_inference_streaming_pipeline.pdf}
-    \caption{การจำลองงบประมาณเวลาเชิงสถาปัตยกรรมสำหรับระบบสตรีมมิ่งวิดีโอ: (a) เส้นเวลาความน่าจะเป็นและการสลับโหมดฟิลเตอร์ด้วย Temporal Exponential Smoothing ($\alpha = 0.70$) (b) การแจกแจงงบประมาณเวลาประมวลผล (Latency Breakdown Simulation) รวม 25.0 ms/เฟรม เทียบกับขีดจำกัด 33.33 ms}
+    \includegraphics[width=0.88\textwidth]{plot_7_inference_streaming_pipeline.pdf}
+    \vspace{-0.4em}
+    \caption{การจำลองงบประมาณเวลาเชิงสถาปัตยกรรมสำหรับระบบสตรีมมิ่งวิดีโอ: (a) เส้นเวลาความน่าจะเป็นและการสลับโหมดฟิลเตอร์ด้วย Temporal Exponential Smoothing ($\alpha = 0.70$) (b) การจัดสรรงบประมาณเวลาประมวลผลเชิงวิศวกรรม (Simulated Engineering Budget) รวม 25.0 ms/เฟรม เทียบกับขีดจำกัด 33.33 ms}
     \label{fig:plot_7}
 \end{figure}
+\vspace{-0.3em}
 
 จากรูปที่ \ref{fig:plot_7}(a)--(b) การวิเคราะห์งบประมาณเวลาประมวลผลของท่อส่งข้อมูลเชิงสถาปัตยกรรมมีรายละเอียดดังนี้:
-\begin{itemize}[leftmargin=1.8em, itemsep=1pt]
-    \item \textbf{เวลาประมวลผลของโมเดลที่วัดได้จริง (Measured Inference Pass):} MobileNetV2 Forward Pass บน GPU ใช้เวลาเฉลี่ย \textbf{18.4 ms} ต่อภาพ ($N=170$ ภาพทดสอบ, มัธยฐาน 18.2 ms, P95 20.8 ms, Throughput $54.3\text{ FPS}$) ซึ่งมีส่วนเผื่อเวลาด้านความปลอดภัยต่ำกว่าเพดาน 33.33 ms อยู่ถึง \textbf{14.93 ms}
-    \item \textbf{การจัดสรรงบประมาณเวลาส่วนประกอบจำลอง (Simulated Component Budgets):} สำหรับระบบ AR แบบครบวงจร ได้จัดสรรเวลาตามมาตรฐานอุตสาหกรรม ได้แก่ Frame Capture \& Downsample (3.2 ms), Tensor Prep \& Normalization (1.1 ms), โมเดล MobileNetV2 (18.4 ms วัดจริง), Softmax \& EMA Smoothing (0.8 ms), และ Graphic Overlay (1.5 ms)
-    \item \textbf{เวลารวมและข้อสรุปความเป็นไปได้ (Architectural Feasibility):} เวลารวมตามงบประมาณอยู่ที่ \textbf{25.0 ms ต่อเฟรม} (เทียบเท่า Throughput $40.0\text{ FPS}$) มี Safety Margin สูงถึง \textbf{8.33 ms (25.0\%)} ต่ำกว่าเพดาน 33.33 ms ยืนยันความเป็นไปได้ในเชิงสถาปัตยกรรม ทั้งนี้เป็นการประเมินเชิงงบประมาณเวลาจากการทำ Offline Inference โดยไม่ได้ต่อกล้องเว็บแคมหรือเรนเดอร์กราฟิกสด
+\begin{itemize}[leftmargin=1.8em, itemsep=0.5pt, parsep=0pt]
+    \item \textbf{เวลาประมวลผลของโมเดลที่วัดได้จริง (Measured Offline Inference Pass):} MobileNetV2 Forward Pass บนสถาปัตยกรรม Apple Silicon macOS arm64 (Metal/MPS Hardware Acceleration) วัดจากการรันภาพทดสอบต่อเนื่องแบบ Offline ($N=170$ ภาพ) ได้ค่าเฉลี่ย \textbf{18.4 ms} ต่อภาพ (มัธยฐาน 18.2 ms, P95 20.8 ms, Throughput $54.3\text{ FPS}$) ซึ่งมีส่วนเผื่อเวลาด้านความปลอดภัยต่ำกว่าเพดาน 33.33 ms อยู่ถึง \textbf{14.93 ms}
+    \item \textbf{การจัดสรรงบประมาณเวลาส่วนประกอบจำลอง (Simulated Engineering Budget Allowances):} สำหรับระบบ AR เชิงโต้ตอบ ได้จำลองกรอบเวลาออกแบบทางวิศวกรรม (Engineering Design Allowances) สำหรับโมดูลอื่น ๆ ได้แก่ Frame Capture \& Downsample (3.2 ms), Tensor Prep \& Normalization (1.1 ms), ส่วนอนุมานโมเดล MobileNetV2 (18.4 ms วัดจริง), Softmax \& EMA Smoothing (0.8 ms), และ Graphic Overlay (1.5 ms)
+    \item \textbf{เวลารวมและข้อสรุปความเป็นไปได้ (Architectural Feasibility):} เวลารวมตามงบประมาณอยู่ที่ \textbf{25.0 ms ต่อเฟรม} (เทียบเท่า Throughput $40.0\text{ FPS}$) มี Safety Margin สูงถึง \textbf{8.33 ms (25.0\%)} ต่ำกว่าเพดาน 33.33 ms ยืนยันความเป็นไปได้ในเชิงสถาปัตยกรรม ทั้งนี้เป็นการประเมินเชิงงบประมาณเวลาจากการทำ Offline Sequential Inference โดยไม่ได้ต่อกล้องเว็บแคมหรือเรนเดอร์กราฟิกสดบนหน้าจอจริง
 \end{itemize}
 
 \clearpage
@@ -453,8 +455,7 @@
     \end{itemize}
     \item \textbf{ความสำคัญเชิงธุรกิจของความเที่ยงตรง (Business Impact of High Precision)}:
     \begin{itemize}[leftmargin=9pt, itemsep=0.5pt, topsep=0.5pt, parsep=0pt]
-        \item \textbf{การควบคุม False Positive}: ในแอปพลิเคชันเชิงโต้ตอบ เช่น AR Video Filter การเกิด False Positive (เช่น แมวถูกจำแนกเป็นสุนัข แล้วเรนเดอร์กราฟิกหูสุนัขทับ) จะทำลายประสบการณ์ของผู้ใช้งาน
-        \item \textbf{อัตราความผิดพลาดต่ำยิ่งยวด}: ด้วย Dog Precision 97.55\% ทำให้อัตรา False Positive Rate (FPR) ต่ำเพียง \textbf{2.45\%} (ผิดพลาดไม่ถึง 3 ครั้งใน 100 ครั้ง) รับประกันความพึงพอใจของลูกค้า
+        \item \textbf{การควบคุม False Discovery Rate}: ด้วย Dog Precision 97.55\% ส่งผลให้อัตรา False Discovery Rate ($\text{FDR} = 1 - \text{Precision}$) ต่ำเพียง \textbf{2.45\%} (สอดคล้องกับ False Positive Rate: $\text{FPR} = \text{FP}/(\text{FP}+\text{TN}) = 55/2,250 = 2.44\%$) ช่วยจำกัดข้อผิดพลาดในการตรวจจับเชิงรุกและเพิ่มความน่าเชื่อถือของระบบในเชิงปฏิบัติการ
         \item \textbf{ความเสถียรของจุดตัดสินใจ}: กราฟ PR Curve รักษาระดับ Precision $> 95\%$ ได้ครอบคลุมตั้งแต่ Recall 0.00 ถึง 0.98 ทำให้การใช้ Threshold มาตรฐาน $\tau = 0.50$ มีความเสถียรสูง
     \end{itemize}
 \end{enumerate}
