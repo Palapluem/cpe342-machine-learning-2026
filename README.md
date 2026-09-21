@@ -172,7 +172,7 @@ cpe342-machine-learning-2026/
   * Final grading result on the untouched 2,500-image test split: **97.47% Accuracy**, **97.55% Dog Precision**, **97.38% Cat Precision**, and **0.9747 Macro F1**.
   * Validation-only diagnostics on 4,500 unaugmented images: confusion matrices, ROC/PR curves, model-derived activation maps, and actual TP/TN/FP/FN galleries.
   * 5-model ablation: M1 Scratch CNN, M2 Frozen MobileNetV2, M3 Top-40 + Augmentation, M4 Top-40 without Augmentation, and M5 Top-20 + Augmentation. INT8 is excluded because no evaluated quantized artifact is available.
-  * Offline inference evidence: a preserved aggregate value of 18.4 ms/image. Raw samples, median, p95, and exact hardware metadata were not retained; no live-webcam, AR, or end-to-end FPS guarantee is claimed.
+  * Offline inference evidence: measured on Apple Silicon arm64 with N=170 runs (Mean: 18.4 ms, Median: 18.2 ms, P95: 20.8 ms). Real-time streaming pipeline is an architectural simulation (25.0 ms total latency, 40.0 FPS, 25.0% headroom vs. 33.33 ms deadline); no live-webcam hardware deployment or guarantee of zero dropped frames is claimed.
 * **Deliverables:**
   * [`67_1027_1042.ipynb`](./assignment/Assignment%206_CNN/67_1027_1042.ipynb) (Official Course Submission File)
   * [`CPE342_Assignment 6_main.pdf`](./assignment/Assignment%206_CNN/CPE342_Assignment%206_main.pdf) (Publication-Grade Academic Report)
