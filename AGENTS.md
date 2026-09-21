@@ -36,10 +36,11 @@ This document serves as the authoritative, comprehensive Workspace Rules and Sys
 ## 2. Directory Hygiene & File Management Rules
 
 ### 2.1 The Zero-Script Rule for Python (`*.py`)
-- **STRICT PROHIBITION:** Never save any `.py` script files directly in the repository root (`d:\cpe342-machine-learning`) or inside any assignment directory (`assignment/Assignment *`).
+- **STRICT PROHIBITION:** Never save any `.py` script files directly in the repository root or inside any assignment directory (`assignment/Assignment *`).
 - **Allowed Location for Scripts:** All helper scripts, migration tools, figure verification scripts, or LaTeX processors MUST be created and executed exclusively inside the assistant's temporary scratch directory:
-  `C:\Users\Admin\.gemini\antigravity-ide\brain\<conversation-id>\scratch\`
-- **Pre-Commit Verification:** Run `Get-ChildItem -Recurse -Filter *.py` across the workspace before staging. If any `.py` files exist in the repository tree, delete them immediately.
+  `<appDataDir>/brain/<conversation-id>/scratch/`
+- **Pre-Commit Verification:** Verify zero `.py` files exist in the repository tree before staging (`git status`, `find . -name "*.py"` or `Get-ChildItem -Recurse -Filter *.py`). If any `.py` files exist in the repository tree, delete them immediately.
+- **Strict Dataset / Artifact Cleanliness:** Never commit raw dataset folders (e.g. `Cat_Dog_data/`, `__MACOSX/`), uncompressed batches, or intermediate archive zip files to git.
 
 ### 2.2 Git Commit & Synchronization
 - **Always Keep Up-to-Date:** Every set of edits must be tested, compiled, staged, committed, and pushed to `origin/main`:
@@ -151,13 +152,11 @@ This document serves as the authoritative, comprehensive Workspace Rules and Sys
        โค้ด ผลลัพธ์ และการพล็อตภาพทั้งหมดด้านล่างเป็นการรันจริงจาก Jupyter Notebook
        \end{tcolorbox}
        ```
-     - **No Cell 0 Markdown Card:** Jump immediately after the blue box into:
-       ```latex
-       \vspace{0.6em}
-       \needspace{3\baselineskip}
-       \noindent\textbf{\small [In 1]:}
-       ```
-     - **Figure Sizing in Appendix:** Standardize all figures to `width=0.96\linewidth`.
+     - **No Cell 0 Markdown Card:** Jump immediately after the blue box into `[In 1]`.
+     - **Figure Sizing & Captions in Appendix:** Standardize all figures to `width=0.96\linewidth`. Always precede or accompany each plot output with its corresponding markdown explanation card (using `tcolorbox` with `halign=left, before upper={\sloppy\raggedright}`).
+     - **Strict Byte-for-Byte Accuracy (Zero-Tolerance):** Every code `[In]` listing and plaintext `[Out]` listing in the LaTeX appendix must match the notebook cells byte-for-byte, including trailing newlines and exact strings.
+     - **Unconditional Figure Generation:** In the notebook, all figures must be generated unconditionally using `plt.savefig(...)` without any `if not Path(...).exists()` caching bypasses or synthetic fallbacks.
+     - **Overfull / Underfull Zero-Warning Rule:** Use `\sloppy` and `\raggedright` inside boxes containing code tokens or long URLs to guarantee zero XeLaTeX overfull `\hbox` warnings.
 
 ---
 

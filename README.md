@@ -49,7 +49,7 @@ cpe342-machine-learning-2026/
 │       ├── 67_1027_1042.ipynb            # Official course submission notebook
 │       ├── CNN_Homework.ipynb                 # Original assignment template
 │       ├── CPE342_Assignment 6_main.tex      # LaTeX source report
-│       ├── CPE342_Assignment 6_main.pdf      # Publication-grade academic report (59 pages)
+│       ├── CPE342_Assignment 6_main.pdf      # Publication-grade academic report (61 pages)
 │       ├── notebook_appendix_6.tex           # LaTeX appendix with executed notebook cells
 │       ├── benchmark_results.csv & .json     # 5-model benchmark and ablation metrics
 │       └── plot_1_*.pdf to plot_8_*.pdf       # Publication-grade vector figures
