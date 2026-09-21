@@ -600,11 +600,11 @@ M5: MobileNetV2 (Top 20 Layers FT)* & 986,369 & 96.80\% & 96.70\% & 96.90\% & +0
     \item \textbf{Weight Sharing \& Parameter Efficiency:} CNN ใช้เคอร์เนลขนาดเล็กกวาดไปทั่วทั้งภาพ ทำให้ค่าน้ำหนักถูกแบ่งปัน (Weight Sharing) ขจัดความซ้ำซ้อนและรักษา Translation Invariance ได้อย่างสมบูรณ์แบบ
 \end{enumerate}
 
-\subsection*{6.4 แนวทางการนำโมเดลไปประยุกต์ใช้งานบนระบบ Edge / Mobile Devices\\ \normalsize(Edge Deployment \& Model Quantization Opportunities)}
-สถาปัตยกรรม MobileNetV2 ที่พัฒนาขึ้นนี้มีความพร้อมสูงสำหรับการแปลงไปเป็นโมเดลสำหรับอุปกรณ์พกพา:
+\subsection*{6.4 แนวทางการนำโมเดลไปประยุกต์ใช้งานบนระบบ Edge / Mobile Devices\\ \normalsize(Edge Deployment \& Model Quantization Roadmap)}
+สถาปัตยกรรม MobileNetV2 ที่พัฒนาขึ้นนี้มีความพร้อมสำหรับการนำไปประยุกต์ใช้งานจริงในอนาคต:
 \begin{itemize}[leftmargin=1.8em, itemsep=0.5pt, topsep=1pt, parsep=0pt]
-    \item \textbf{TensorFlow Lite (TFLite) Conversion:} สามารถแปลงเป็นไฟล์ \texttt{.tflite} ขนาดเพียง $\approx 9.8$ MB
-    \item \textbf{Post-Training Quantization (INT8):} เมื่อประยุกต์ทำ Quantization เพื่อลดทอนค่าน้ำหนักจาก Float32 เป็น Int8 จะช่วยลดขนาดไฟล์โมเดลลงได้สูงสุด $\approx 70\%$ และเพิ่มประสิทธิภาพการประมวลผลบนหน่วยประมวลผล NPU ของสมาร์ตโฟน (เช่น Apple Neural Engine หรือ Snapdragon NPU) สำหรับการทำงาน On-Device อย่างมีประสิทธิภาพ
+    \item \textbf{TensorFlow Lite (TFLite) Conversion:} รองรับการแปลงโมเดลไปสู่รูปแบบ \texttt{.tflite} เพื่อนำไปประมวลผล On-Device บนสมาร์ตโฟน
+    \item \textbf{Post-Training Quantization (INT8):} แนวทางการลดทอนค่าน้ำหนักจาก Float32 เป็น Int8 เป็นการประมาณการเชิงทฤษฎีเพื่อลดการใช้หน่วยความจำและเร่งความเร็วบน NPU สำหรับการใช้งานจริง (โครงงานนี้ประเมินเฉพาะโมเดล Float32 ตามผลทดลองจริง)
 \end{itemize}
 
 % =================================================================

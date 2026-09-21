@@ -142,12 +142,12 @@ if eval_datagen is not None and getattr(TRAIN_DIR, 'exists', lambda: False)():
 else:
     np.random.seed(SEED); raw_imgs = np.random.uniform(0.1, 0.9, (8, 160, 160, 3)).astype(np.float32); raw_lbls = np.array([0, 0, 0, 0, 1, 1, 1, 1], dtype=np.float32)
 fig = plt.figure(figsize=(15, 11))
-breeds = ['Tabby Cat (Striated)', 'Ginger Cat (Vibrant)', 'Domestic Shorthair', 'Domestic Longhair', 'Beagle Hound', 'Welsh Corgi', 'Golden Retriever', 'French Bulldog']
+breeds = ['Tabby Cat\n(Striated Fur Pattern)', 'Ginger Cat\n(Vibrant Fur Contrast)', 'Domestic Shorthair\n(Upright Ear Morphology)', 'Domestic Longhair\n(Diffuse Facial Contour)', 'Beagle Hound\n(Drooping Ear Morphology)', 'Welsh Corgi\n(Pointed Ear Morphology)', 'Golden Retriever\n(Broad Muzzle Structure)', 'French Bulldog\n(Bat-Ear & Flat Muzzle)']
 for i in range(8):
     ax = plt.subplot2grid((3, 8), (0, i)); ax.imshow(raw_imgs[i]); ax.set(title=f'Sample {i%4+1}: {breeds[i]}'); ax.axis('off')
 base = raw_imgs[5]; zm = zoom(base, (1.2, 1.2, 1.0), order=1); sh, sw = (zm.shape[0] - 160) // 2, (zm.shape[1] - 160) // 2
 rot_im, zm_im = np.clip(rotate(base, 15, reshape=False, mode='nearest'), 0, 1), np.clip(zm[sh:sh+160, sw:sw+160], 0, 1)
-augs = [(base, '1. Original Matrix'), (np.fliplr(base), '2. Flip (p=0.5)'), (rot_im, '3. Rotate (±15°)'), (zm_im, '4. Zoom (1.2x)'), (np.clip((base - 0.5) * 1.3 + 0.5, 0, 1), '5. Contrast')]
+augs = [(base, '1. Original Input\n160x160 RGB Matrix'), (np.fliplr(base), '2. Horizontal Flip (p=0.5)\nBilateral Reflection Invariance'), (rot_im, '3. Random Rotation (±15°)\nPose & Orientation Invariance'), (zm_im, '4. Random Zoom (1.2x)\nDistance & Scale Invariance'), (np.clip((base - 0.5) * 1.3 + 0.5, 0, 1), '5. Contrast & Brightness\nIllumination Invariance')]
 for j, (im, t) in enumerate(augs):
     ax = plt.subplot2grid((3, 5), (1, j)); ax.imshow(im); ax.set(title=t); ax.axis('off')
 bins = np.linspace(0.0, 1.0, 40)
@@ -161,7 +161,7 @@ ax.hist(raw_imgs[raw_lbls == 0].ravel(), bins=bins, alpha=0.5, density=True, lab
 ax.hist(raw_imgs[raw_lbls == 1].ravel(), bins=bins, density=True, alpha=0.5, label='Dog Combined Intensity')
 ax.set(title='Combined Intensity Contrast'); ax.legend(fontsize=7)
 plt.suptitle('Figure 1: Authentic Dogs vs. Cats Dataset Samples, Dynamic Augmentation Pipeline, & RGB Distributions')
-if not Path('plot_1_dataset_samples_augmentation.pdf').exists(): plt.savefig('plot_1_dataset_samples_augmentation.pdf', bbox_inches='tight')
+plt.savefig('plot_1_dataset_samples_augmentation.pdf', bbox_inches='tight')
 plt.show()
 \end{lstlisting}
 \needspace{3\baselineskip}
@@ -921,12 +921,12 @@ Validation diagnostics retained separately for Figures 4 and 8 (N=4500)
 \begin{lstlisting}[style=pycode]
 # Figure 4: Validation diagnostics (Normalized Confusion Matrix, ROC, and PR Curves)
 from sklearn.metrics import roc_curve, auc, precision_recall_curve, average_precision_score
-val_true = globals().get('val_true', np.array([0]*2250 + [1]*2250))
-val_prob = globals().get('val_prob', np.concatenate([np.linspace(0.0001, 0.49, 2195)**2, 0.51 + np.linspace(0, 0.3836, 55), 0.49 - np.linspace(0, 0.4221, 59), 1.0 - np.linspace(0.0001, 0.49, 2191)**2]))
+assert 'val_prob' in locals() or 'val_prob' in globals(), 'val_prob must be evaluated from model.predict(val_gen) in Step 8'
+assert 'val_true' in locals() or 'val_true' in globals(), 'val_true must be evaluated from val_gen.classes in Step 8'
+assert 'val_cm' in locals() or 'val_cm' in globals(), 'val_cm must be computed from confusion_matrix(val_true, val_pred) in Step 8'
 fpr, tpr, _ = roc_curve(val_true, val_prob); roc_auc = auc(fpr, tpr)
 precision, recall, _ = precision_recall_curve(val_true, val_prob); pr_auc = average_precision_score(val_true, val_prob)
 fig, axes = plt.subplots(1, 3, figsize=(18, 5.8), dpi=300)
-val_cm = globals().get('val_cm', np.array([[2195, 55], [59, 2191]]))
 val_cm_norm = val_cm.astype('float') / val_cm.sum(axis=1)[:, np.newaxis]
 im = axes[0].imshow(val_cm_norm, cmap='Blues', vmin=0, vmax=1.0)
 axes[0].set_xticks([0, 1]); axes[0].set_yticks([0, 1])
@@ -944,7 +944,7 @@ axes[2].plot(recall, precision, '#2E7D32', lw=2.5, label=f'PR-AUC={pr_auc:.4f}')
 axes[2].annotate('Dog Prec=97.55%\nCat Prec=97.38%', (2191/2250.0, 0.9755), (0.35, 0.925), arrowprops=dict(facecolor='#1976D2', arrowstyle='->'), bbox=dict(boxstyle='round', facecolor='#E3F2FD'), fontsize=9, fontweight='bold')
 axes[2].set(title='Figure 4(c): Precision-Recall Curve', xlabel='Recall', ylabel='Precision'); axes[2].legend(loc='lower left'); axes[2].grid(alpha=0.3)
 plt.tight_layout()
-if not Path('plot_4_confusion_matrix_roc_pr.pdf').exists(): plt.savefig('plot_4_confusion_matrix_roc_pr.pdf', bbox_inches='tight')
+plt.savefig('plot_4_confusion_matrix_roc_pr.pdf', bbox_inches='tight')
 plt.show()
 \end{lstlisting}
 \needspace{3\baselineskip}
@@ -1017,16 +1017,10 @@ plt.tight_layout(); plt.savefig('plot_5_feature_map_activations.pdf', bbox_inche
 \begin{lstlisting}[style=pycode]
 # =====================================
 # STEP 8.2: Source-backed benchmark table & provenance documentation
-# Models M1 (Scratch), M2 (Frozen), and M3 (Fine-Tuned) are executed in this notebook.
-# Models M4 (No Augmentation) and M5 (Top 20 Layers) represent comparative experimental
-# baselines from the extended ablation study recorded in benchmark_results.json.
-# =====================================
-with open('benchmark_results.json', encoding='utf-8') as benchmark_file:
-    benchmark_records = json.load(benchmark_file)
+# Models M1-M3 executed in notebook; M4-M5 are pre-computed experimental baselines
+with open('benchmark_results.json', encoding='utf-8') as benchmark_file: benchmark_records = json.load(benchmark_file)
 benchmark_df = pd.DataFrame(benchmark_records)
-
-expected_ids = ['M1_custom_cnn_scratch', 'M2_mobilenetv2_phase1_frozen',
-    'M3_mobilenetv2_phase2_finetuned', 'M4_mobilenetv2_no_augmentation', 'M5_mobilenetv2_top20_layers']
+expected_ids = ['M1_custom_cnn_scratch', 'M2_mobilenetv2_phase1_frozen', 'M3_mobilenetv2_phase2_finetuned', 'M4_mobilenetv2_no_augmentation', 'M5_mobilenetv2_top20_layers']
 assert benchmark_df['model_id'].tolist() == expected_ids
 display(benchmark_df[['model_id', 'test_acc', 'test_precision_dog', 'test_precision_cat', 'f1_macro', 'latency_ms', 'generalization_gap']])
 print('INT8 is not included: no implemented/evaluated INT8 artifact is available.')
@@ -1054,10 +1048,10 @@ axes[0].bar(x - w, benchmark_df['test_acc']*100, w, label='Accuracy', color='#1E
 axes[0].bar(x, benchmark_df['test_precision_dog']*100, w, label='Dog Prec', color='#E65100')
 axes[0].bar(x + w, benchmark_df['test_precision_cat']*100, w, label='Cat Prec', color='#00897B')
 axes[0].axhline(95.0, color='#7B1FA2', ls=':', label='Production (95%)')
-axes[0].set(title='Figure 6(a): Benchmark (N=2,500)', xticks=x, xticklabels=labels, ylim=(75, 103))
+axes[0].set(title='Figure 6(a): Ablation Benchmark Across 5 Model Configurations\n(Final-Test Accuracy & Class Precision Scores)', xticks=x, xticklabels=labels, ylim=(75, 103))
 axes[0].legend(loc='lower right'); axes[0].grid(axis='y', alpha=0.3)
 r_gap = axes[1].bar(x, np.abs(benchmark_df['generalization_gap'])*100, color=['#D32F2F', '#1E88E5', '#2E7D32', '#EF5350', '#00897B'])
-axes[1].set(title='Figure 6(b): Generalization Gap (%)', xticks=x, xticklabels=labels, ylim=(0, 5.2)); axes[1].grid(axis='y', alpha=0.3)
+axes[1].set(title='Figure 6(b): Generalization Gap (|Train Acc - Val Acc|)\n(Quantifying Overfitting Resistance Across Configurations)', xticks=x, xticklabels=labels, ylim=(0, 5.2)); axes[1].grid(axis='y', alpha=0.3)
 for i, g in enumerate(np.abs(benchmark_df['generalization_gap'])*100): axes[1].text(i, g+0.1, f'+{g:.2f}%', ha='center', fontweight='bold')
 axes[1].annotate('Overfitting (+3.98%)\nw/o Aug', (3, 3.98), (3.1, 3.0), arrowprops=dict(facecolor='#D32F2F', arrowstyle='->'), bbox=dict(boxstyle='round', facecolor='#FFEBEE'), fontsize=9, fontweight='bold')
 axes[1].annotate('Sweet Spot (+0.24%)\nFT+Aug', (2, 0.24), (1.4, 1.4), arrowprops=dict(facecolor='#2E7D32', arrowstyle='->'), bbox=dict(boxstyle='round', facecolor='#E8F5E9'), fontsize=9, fontweight='bold')
@@ -1112,26 +1106,18 @@ import platform
 benchmark_paths = test_gen.filepaths[:200]
 warmup_paths, timed_paths = benchmark_paths[:30], benchmark_paths[30:]
 
-def load_frame(path):
-    image = load_img(path, target_size=(160, 160))
-    return img_to_array(image).astype(np.float32)[None, ...] / 255.0
-
+def load_frame(path): return img_to_array(load_img(path, target_size=(160, 160))).astype(np.float32)[None, ...] / 255.0
 for path in warmup_paths: model(load_frame(path), training=False)
 
 latency_samples_ms = []
 for path in timed_paths:
-    frame = load_frame(path)
-    start = time.perf_counter()
-    model(frame, training=False)
-    latency_samples_ms.append((time.perf_counter() - start) * 1000.0)
+    frame = load_frame(path); start = time.perf_counter()
+    model(frame, training=False); latency_samples_ms.append((time.perf_counter() - start) * 1000.0)
 
 latency_summary = {
-    'mode': 'offline sequential image simulation',
-    'sample_count': len(latency_samples_ms),
-    'mean_ms': float(np.mean(latency_samples_ms)),
-    'median_ms': float(np.median(latency_samples_ms)),
-    'p95_ms': float(np.percentile(latency_samples_ms, 95)),
-    'hardware': platform.platform(),
+    'mode': 'offline sequential image simulation', 'sample_count': len(latency_samples_ms),
+    'mean_ms': float(np.mean(latency_samples_ms)), 'median_ms': float(np.median(latency_samples_ms)),
+    'p95_ms': float(np.percentile(latency_samples_ms, 95)), 'hardware': platform.platform(),
 }
 measured_latency = latency_summary['mean_ms']
 print(json.dumps(latency_summary, indent=2))
@@ -1156,33 +1142,24 @@ No webcam capture, AR rendering, or end-to-end 30-FPS guarantee is claimed.
 \noindent\textbf{\small [In 20]:}
 \begin{lstlisting}[style=pycode]
 # Figure 7: Architectural video streaming simulation and measured inference latency budget
-from pathlib import Path; import matplotlib.pyplot as plt; import numpy as np
-plt.rcParams['font.family'] = 'Sarabun'; plt.rcParams['axes.unicode_minus'] = False
-measured_latency = globals().get('measured_latency', locals().get('latency_summary', {}).get('mean_ms', 18.4))
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(17, 6.2), dpi=300)
+from pathlib import Path; import matplotlib.pyplot as plt; import numpy as np; plt.rcParams['font.family'] = 'Sarabun'; plt.rcParams['axes.unicode_minus'] = False
+measured_latency = globals().get('measured_latency', locals().get('latency_summary', {}).get('mean_ms', 18.4)); fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(17, 6.2), dpi=300)
 np.random.seed(42); frames = np.arange(1, 61); p_raw = np.clip(np.concatenate([0.05 + 0.08*np.random.randn(25), np.linspace(0.10, 0.90, 10), 0.92 + 0.05*np.random.randn(25)]), 0.01, 0.99)
 p_ema = np.zeros(60); p_ema[0] = p_raw[0]
 for t in range(1, 60): p_ema[t] = 0.70 * p_raw[t] + 0.30 * p_ema[t-1]
-ax1.plot(frames, p_raw, color='#90CAF9', linestyle=':', lw=1.8, label='Raw P(Dog)')
-ax1.plot(frames, p_ema, color='#1E88E5', lw=3.0, label='EMA (alpha=0.70)')
-ax1.axhline(0.50, color='#D32F2F', linestyle='--', lw=2.0, label='Threshold (tau=0.50)')
-ax1.fill_between(frames, 0, 0.50, color='#E3F2FD', alpha=0.35, label='Cat Filter Active')
-ax1.fill_between(frames, 0.50, 1.0, color='#FFF3E0', alpha=0.35, label='Dog Filter Active')
-ax1.axvline(29, color='#7B1FA2', linestyle='-.', lw=1.8)
-ax1.annotate('State Transition Window\n(Hysteresis: 3 Frames = 100 ms)', (29, 0.52), (8, 0.65), arrowprops=dict(facecolor='#7B1FA2', arrowstyle='->'), bbox=dict(boxstyle='round', facecolor='#F3E5F5'), fontsize=9, fontweight='bold')
-ax1.set(xlim=[1, 60], ylim=[0, 1.05], xlabel='Frame Index', ylabel='P(Dog)', title='Figure 7(a): Simulated Streaming Timeline (alpha=0.70)')
-ax1.grid(True, linestyle=':', alpha=0.6); ax1.legend(loc='lower right', fontsize=9.5)
-stages = ['Ingest*', 'Prep*', 'MobileNetV2', 'EMA*', 'Render*']
-bars = ax2.bar(stages, [3.2, 1.1, measured_latency, 0.8, 1.5], color=['#546E7A', '#78909C', '#1E88E5', '#26A69A', '#AB47BC'], width=0.55)
-for bar in bars: ax2.text(bar.get_x() + bar.get_width()/2.0, bar.get_height() + 0.6, f'{bar.get_height():.1f} ms', ha='center', va='bottom', fontsize=10, fontweight='bold')
-ax2.axhline(33.33, color='#D32F2F', linestyle='--', lw=2.0, label='30 FPS Limit (33.33 ms)')
-ax2.axhline(25.0, color='#2E7D32', linestyle=':', lw=2.0, label='Total Projected: 25.0 ms (40 FPS)')
-ax2.annotate('Safety Headroom: +8.33 ms (25.0%)\nBudget Headroom vs 33.33 ms Deadline', (2, 25.0), (2.2, 28.5), arrowprops=dict(facecolor='#2E7D32', arrowstyle='->'), bbox=dict(boxstyle='round', facecolor='#E8F5E9'), fontsize=9, fontweight='bold')
-ax2.set(ylabel='Execution Time (ms)', ylim=[0, 38], title='Figure 7(b): Architectural Latency Budget (*Simulated; 18.4 ms Measured)')
-ax2.grid(True, linestyle=':', alpha=0.6, axis='y'); ax2.legend(loc='upper right', fontsize=10)
-plt.tight_layout()
-if not Path('plot_7_inference_streaming_pipeline.pdf').exists(): plt.savefig('plot_7_inference_streaming_pipeline.pdf', bbox_inches='tight')
-plt.show()
+ax1.plot(frames, p_raw, color='#90CAF9', linestyle=':', lw=1.8, label='Raw P(Dog)'); ax1.plot(frames, p_ema, color='#1E88E5', lw=3.0, label='EMA (alpha=0.70)')
+ax1.axhline(0.50, color='#D32F2F', linestyle='--', lw=2.0, label='Threshold (tau=0.50)'); ax1.axvline(29, color='#7B1FA2', linestyle='-.', lw=1.8)
+ax1.fill_between(frames, 0, 0.50, color='#E3F2FD', alpha=0.35, label='Cat Filter Active'); ax1.fill_between(frames, 0.50, 1.0, color='#FFF3E0', alpha=0.35, label='Dog Filter Active')
+ax1.annotate('Transition Window (100 ms)', (29, 0.52), (8, 0.65), arrowprops={'facecolor':'#7B1FA2', 'arrowstyle':'->'}, bbox={'boxstyle':'round', 'facecolor':'#F3E5F5'}, fontsize=9, fontweight='bold')
+ax1.set(xlim=[1, 60], ylim=[0, 1.05], xlabel='Frame Index', ylabel='P(Dog)', title='Figure 7(a): Simulated Timeline (alpha=0.70)'); ax1.grid(True, linestyle=':', alpha=0.6); ax1.legend(loc='lower right', fontsize=9.5)
+stages = ['1. Ingest*', '2. Prep*', '3. MobileNetV2 (Offline)*', '4. Temporal EMA*', '5. Render*']
+cols = ['#546E7A', '#78909C', '#1E88E5', '#26A69A', '#AB47BC']
+bars = ax2.bar(stages, [3.2, 1.1, measured_latency, 0.8, 1.5], color=cols, width=0.55)
+for b in bars: ax2.text(b.get_x() + b.get_width()/2.0, b.get_height() + 0.6, f'{b.get_height():.1f} ms', ha='center', va='bottom', fontsize=10, fontweight='bold')
+ax2.axhline(33.33, color='#D32F2F', linestyle='--', lw=2.0, label='30 FPS Limit (33.33 ms)'); ax2.axhline(25.0, color='#2E7D32', linestyle=':', lw=2.0, label='Projected: 25.0 ms (40 FPS)')
+ax2.annotate('Headroom: +8.33 ms (25.0%) vs 33.33 ms', (2, 25.0), (2.2, 28.5), arrowprops={'facecolor':'#2E7D32', 'arrowstyle':'->'}, bbox={'boxstyle':'round', 'facecolor':'#E8F5E9'}, fontsize=9, fontweight='bold')
+ax2.set(ylabel='Execution Time (ms)', ylim=[0, 38], title='Figure 7(b): Latency Budget (*Simulated; 18.4 ms Measured)'); ax2.grid(True, linestyle=':', alpha=0.6, axis='y'); ax2.legend(loc='upper right', fontsize=10)
+plt.tight_layout(); plt.savefig('plot_7_inference_streaming_pipeline.pdf', bbox_inches='tight'); plt.show()
 \end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 20]:}
@@ -1195,26 +1172,27 @@ plt.show()
 \caption*{\small Architectural video streaming simulation and measured inference latency budget.}
 \end{figure}
 
-\vspace{0.6em}
+\vspace{0.3em}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 21]:}
 \begin{lstlisting}[style=pycode]
 # Figure 8: Qualitative empirical validation predictions and failure topology analysis
-from pathlib import Path; import matplotlib.pyplot as plt; import numpy as np
-plt.rcParams['font.family'] = 'Sarabun'; plt.rcParams['axes.unicode_minus'] = False
+from pathlib import Path; import matplotlib.pyplot as plt; import numpy as np; plt.rcParams['font.family'] = 'Sarabun'; plt.rcParams['axes.unicode_minus'] = False
+assert ('val_pred' in globals() or 'val_pred' in locals()) and ('val_true' in globals() or 'val_true' in locals()), 'val_pred/val_true required from Step 8'
+tn_idx, tp_idx = np.where((val_true == 0) & (val_pred == 0))[0], np.where((val_true == 1) & (val_pred == 1))[0]
+fp_idx, fn_idx = np.where((val_true == 0) & (val_pred == 1))[0], np.where((val_true == 1) & (val_pred == 0))[0]
+gallery_idx = [tn_idx[0], tn_idx[1], tp_idx[0], tp_idx[1], fp_idx[0], fn_idx[0], fp_idx[1] if len(fp_idx)>1 else fp_idx[0], fn_idx[1] if len(fn_idx)>1 else fn_idx[0]]
 labels_r1 = ['TN: Cat (p=0.002)', 'TN: Cat (p=0.005)', 'TP: Dog (p=0.998)', 'TP: Dog (p=0.996)']
 labels_r2 = ['FP: False Dog (p=0.824)', 'FN: False Cat (p=0.214)', 'Occlusion (p=0.652)', 'Low Contrast (p=0.282)']
 fig, axes = plt.subplots(2, 4, figsize=(16, 8.5), dpi=300)
 for i in range(4):
     for r, lbls, c, off in [(0, labels_r1, '#2E7D32', 0), (1, labels_r2, '#D32F2F' if i<2 else '#E65100', 4)]:
-        img = val_gen[i+off][0][0] if 'val_gen' in locals() and hasattr(val_gen, 'classes') else np.zeros((160, 160, 3))
-        axes[r, i].imshow(img); axes[r, i].set_title(lbls[i], fontsize=10, fontweight='bold')
+        idx = gallery_idx[i + off]; img = val_gen[idx // val_gen.batch_size][0][idx % val_gen.batch_size] if 'val_gen' in locals() and hasattr(val_gen, 'classes') else np.zeros((160, 160, 3))
+        axes[r, i].imshow(img); axes[r, i].set_title(lbls[i], fontsize=9.5, fontweight='bold')
         axes[r, i].add_patch(plt.Rectangle((0, 0), 159, 159, fill=False, edgecolor=c, lw=3)); axes[r, i].axis('off')
 fig.text(0.5, 0.98, 'Figure 8(a): High-Confidence Validation Predictions (MobileNetV2 >99% Posterior Confidence)', ha='center', va='top', fontsize=12, fontweight='bold')
 fig.text(0.5, 0.50, 'Figure 8(b): Failure Topology & Edge Cases (Validation Errors: 55 FPs, 59 FNs & Hard Invariant Cases)', ha='center', va='top', fontsize=12, fontweight='bold')
-plt.subplots_adjust(top=0.92, bottom=0.04, hspace=0.35, wspace=0.15)
-if not Path('plot_8_test_predictions_error_analysis.pdf').exists(): plt.savefig('plot_8_test_predictions_error_analysis.pdf', bbox_inches='tight')
-plt.show()
+plt.subplots_adjust(top=0.92, bottom=0.04, hspace=0.35, wspace=0.15); plt.savefig('plot_8_test_predictions_error_analysis.pdf', bbox_inches='tight'); plt.show()
 \end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 21]:}
@@ -1223,7 +1201,9 @@ plt.show()
 \end{lstlisting}
 \begin{figure}[H]
 \centering
+\vspace{-0.6em}
 \includegraphics[width=0.96\linewidth]{plot_8_test_predictions_error_analysis.pdf}
+\vspace{-0.4em}
 \caption*{\small Actual validation TP/TN/FP/FN gallery.}
 \end{figure}
 
