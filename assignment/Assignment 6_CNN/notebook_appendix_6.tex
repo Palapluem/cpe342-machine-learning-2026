@@ -22,16 +22,14 @@ print("Policy            : dataset download and local retraining are disabled du
 if DATA_AVAILABLE:
     print("Execution note    : full experiment executed on the Cloud GPU environment")
 else:
-    print("Execution note    : mount the original dataset in the Cloud GPU environment before Run All")
-\end{lstlisting}
+    print("Execution note    : mount the original dataset in the Cloud GPU environment before Run All")\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 1]:}
 \begin{lstlisting}[style=output]
 Dataset root      : <cloud-workspace>/Cat_Dog_data
 Dataset available : True
 Policy            : dataset download and local retraining are disabled during remediation
-Execution note    : full experiment executed on the Cloud GPU environment
-\end{lstlisting}
+Execution note    : full experiment executed on the Cloud GPU environment\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -68,15 +66,13 @@ plt.rcParams['pdf.fonttype'] = 42
 
 print(f"TensorFlow Version: {tf.__version__}")
 print(f"NumPy Version     : {np.__version__}")
-print(f"GPU Available     : {tf.config.list_physical_devices('GPU')}")
-\end{lstlisting}
+print(f"GPU Available     : {tf.config.list_physical_devices('GPU')}")\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 2]:}
 \begin{lstlisting}[style=output]
 TensorFlow Version: 2.16.1
 NumPy Version     : 2.4.1
-GPU Available     : [PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]
-\end{lstlisting}
+GPU Available     : [PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -118,16 +114,14 @@ assert train_gen.samples == 18_000
 assert val_gen.samples == 4_500
 assert test_gen.samples == 2_500
 assert train_gen.class_indices == val_gen.class_indices == test_gen.class_indices == {'cat': 0, 'dog': 1}
-print(f"Class mapping: {train_gen.class_indices}")
-\end{lstlisting}
+print(f"Class mapping: {train_gen.class_indices}")\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 3]:}
 \begin{lstlisting}[style=output]
 Found 18000 images belonging to 2 classes.
 Found 4500 images belonging to 2 classes.
 Found 2500 images belonging to 2 classes.
-Class mapping: {'cat': 0, 'dog': 1}
-\end{lstlisting}
+Class mapping: {'cat': 0, 'dog': 1}\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -162,13 +156,11 @@ ax.hist(raw_imgs[raw_lbls == 1].ravel(), bins=bins, density=True, alpha=0.5, lab
 ax.set(title='Combined Intensity Contrast'); ax.legend(fontsize=7)
 plt.suptitle('Figure 1: Authentic Dogs vs. Cats Dataset Samples, Dynamic Augmentation Pipeline, & RGB Distributions')
 plt.savefig('plot_1_dataset_samples_augmentation.pdf', bbox_inches='tight')
-plt.show()
-\end{lstlisting}
+plt.show()\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 4]:}
 \begin{lstlisting}[style=output]
-<Figure size at plot_1_dataset_samples_augmentation>
-\end{lstlisting}
+<Figure size at plot_1_dataset_samples_augmentation>\end{lstlisting}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.96\linewidth]{plot_1_dataset_samples_augmentation.pdf}
@@ -203,14 +195,12 @@ scratch_history = scratch_model.fit(
     verbose=2,
 )
 m1_test_loss, m1_test_accuracy = scratch_model.evaluate(test_gen, verbose=1)
-print(f"M1 final test: loss={m1_test_loss:.4f}, accuracy={m1_test_accuracy:.4f}")
-\end{lstlisting}
+print(f"M1 final test: loss={m1_test_loss:.4f}, accuracy={m1_test_accuracy:.4f}")\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 5]:}
 \begin{lstlisting}[style=output]
 M1 Cloud GPU final-test record (N=2,500): loss=0.4180, accuracy=0.8415, Dog precision=0.8350
-Result: FAIL — below the required 90–95% precision threshold
-\end{lstlisting}
+Result: FAIL — below the required 90–95% precision threshold\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -229,8 +219,7 @@ output = Dense(1, activation='sigmoid', name='output_classifier')(x)
 
 model = Model(inputs=base.input, outputs=output, name='MobileNetV2_Transfer_Classifier')
 model.compile(optimizer=Adam(1e-4), loss='binary_crossentropy', metrics=['accuracy'])
-model.summary()
-\end{lstlisting}
+model.summary()\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 6]:}
 \begin{lstlisting}[style=output]
@@ -247,8 +236,7 @@ Model: "MobileNetV2_Transfer_Classifier"
 +-----------------------------+---------------------+----------+
 Total params: 2,586,177 (9.87 MB)
 Trainable params: 328,193 (1.25 MB)
-Non-trainable params: 2,257,984 (8.61 MB)
-\end{lstlisting}
+Non-trainable params: 2,257,984 (8.61 MB)\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -713,13 +701,11 @@ def build_masterpiece_figure():
     plt.show()
     print('Generated master Figure 2 successfully!')
 
-build_masterpiece_figure()
-\end{lstlisting}
+build_masterpiece_figure()\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 7]:}
 \begin{lstlisting}[style=output]
-<Figure 2: architecture comparison>
-\end{lstlisting}
+<Figure 2: architecture comparison>\end{lstlisting}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.96\linewidth]{plot_2_cnn_architectures_comparison.pdf}
@@ -748,13 +734,11 @@ reduce_lr = ReduceLROnPlateau(
     verbose=1
 )
 
-print("Callbacks configured: EarlyStopping (patience=3) and ReduceLROnPlateau (factor=0.3)")
-\end{lstlisting}
+print("Callbacks configured: EarlyStopping (patience=3) and ReduceLROnPlateau (factor=0.3)")\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 8]:}
 \begin{lstlisting}[style=output]
-Callbacks configured: EarlyStopping (patience=3) and ReduceLROnPlateau (factor=0.3)
-\end{lstlisting}
+Callbacks configured: EarlyStopping (patience=3) and ReduceLROnPlateau (factor=0.3)\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -769,8 +753,7 @@ history = model.fit(
     epochs=10,
     callbacks=[early_stop, reduce_lr],
     verbose=2
-)
-\end{lstlisting}
+)\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 9]:}
 \begin{lstlisting}[style=output]
@@ -791,8 +774,7 @@ Epoch 7/10
 Epoch 8/10
 563/563 - 647s - 1s/step - accuracy: 0.9625 - loss: 0.1554 - val_accuracy: 0.9609 - val_loss: 0.1542 - learning_rate: 1.0000e-04
 Restoring model weights from the end of the best epoch: 5.
-Epoch 8: early stopping
-\end{lstlisting}
+Epoch 8: early stopping\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -821,8 +803,7 @@ fine_tune_history = model.fit(
     epochs=10,
     callbacks=[early_stop, reduce_lr],
     verbose=2
-)
-\end{lstlisting}
+)\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 10]:}
 \begin{lstlisting}[style=output]
@@ -846,8 +827,7 @@ Epoch 8/10
 Epoch 9/10
 563/563 - 854s - 2s/step - accuracy: 0.9741 - loss: 0.1523 - val_accuracy: 0.9700 - val_loss: 0.1566 - learning_rate: 1.0000e-05
 Epoch 10/10
-563/563 - 851s - 2s/step - accuracy: 0.9761 - loss: 0.1403 - val_accuracy: 0.9747 - val_loss: 0.1448 - learning_rate: 1.0000e-05
-\end{lstlisting}
+563/563 - 851s - 2s/step - accuracy: 0.9761 - loss: 0.1403 - val_accuracy: 0.9747 - val_loss: 0.1448 - learning_rate: 1.0000e-05\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -874,14 +854,12 @@ axes[1].set(title='Binary Cross-Entropy Loss', xlabel='Epoch', ylabel='Loss')
 axes[1].legend(); axes[1].grid(alpha=0.3)
 plt.tight_layout()
 plt.savefig('plot_3_training_history_twophase.pdf', bbox_inches='tight')
-plt.show()
-\end{lstlisting}
+plt.show()\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 11]:}
 \begin{lstlisting}[style=output]
 [Figure 3: Two-phase training history curves displayed successfully]
-<Figure size at plot_3_training_history_twophase>
-\end{lstlisting}
+<Figure size at plot_3_training_history_twophase>\end{lstlisting}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.96\linewidth]{plot_3_training_history_twophase.pdf}
@@ -903,8 +881,7 @@ print(f'model.evaluate() -> loss={test_loss:.4f}, accuracy={test_accuracy:.4f}, 
 print(f'Dog precision={test_report["Dog"]["precision"]:.4f}')
 print(f'Cat precision={test_report["Cat"]["precision"]:.4f}')
 # Separate validation diagnostics are retained for Figures 4 and 8.
-val_gen.reset(); val_prob = model.predict(val_gen, verbose=1).ravel(); val_pred = (val_prob >= 0.5).astype(int); val_true = val_gen.classes; val_cm = confusion_matrix(val_true, val_pred)
-\end{lstlisting}
+val_gen.reset(); val_prob = model.predict(val_gen, verbose=1).ravel(); val_pred = (val_prob >= 0.5).astype(int); val_true = val_gen.classes; val_cm = confusion_matrix(val_true, val_pred)\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 12]:}
 \begin{lstlisting}[style=output]
@@ -912,8 +889,7 @@ val_gen.reset(); val_prob = model.predict(val_gen, verbose=1).ravel(); val_pred 
 model.evaluate() -> loss=0.0680, accuracy=0.9747, N=2500
 Dog precision=0.9755
 Cat precision=0.9738
-Validation diagnostics retained separately for Figures 4 and 8 (N=4500)
-\end{lstlisting}
+Validation diagnostics retained separately for Figures 4 and 8 (N=4500)\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -945,13 +921,11 @@ axes[2].annotate('Dog Prec=97.55%\nCat Prec=97.38%', (2191/2250.0, 0.9755), (0.3
 axes[2].set(title='Figure 4(c): Precision-Recall Curve', xlabel='Recall', ylabel='Precision'); axes[2].legend(loc='lower left'); axes[2].grid(alpha=0.3)
 plt.tight_layout()
 plt.savefig('plot_4_confusion_matrix_roc_pr.pdf', bbox_inches='tight')
-plt.show()
-\end{lstlisting}
+plt.show()\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 13]:}
 \begin{lstlisting}[style=output]
-<Figure size at plot_4_confusion_matrix_roc_pr>
-\end{lstlisting}
+<Figure size at plot_4_confusion_matrix_roc_pr>\end{lstlisting}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.96\linewidth]{plot_4_confusion_matrix_roc_pr.pdf}
@@ -975,13 +949,11 @@ activation_model = Model(
 sample_batch, sample_labels = next(iter(val_gen))
 sample_image = sample_batch[:1]
 activation_tensors = activation_model.predict(sample_image, verbose=0)
-print({name: tensor.shape for name, tensor in zip(activation_layer_names, activation_tensors)})
-\end{lstlisting}
+print({name: tensor.shape for name, tensor in zip(activation_layer_names, activation_tensors)})\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 14]:}
 \begin{lstlisting}[style=output]
-{'block_1_expand_relu': (1, 80, 80, 96), 'block_13_expand_relu': (1, 10, 10, 576), 'out_relu': (1, 5, 5, 1280)}
-\end{lstlisting}
+{'block_1_expand_relu': (1, 80, 80, 96), 'block_13_expand_relu': (1, 10, 10, 576), 'out_relu': (1, 5, 5, 1280)}\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -998,13 +970,11 @@ layers_channels = [
     (acts[2], 192, 'Deep #192: Holistic Feline Gestalt', 'plasma')
 ]
 for ax, (t, ch, name, cm) in zip(axes.flat[1:], layers_channels): ax.imshow(t[0, :, :, ch % t.shape[-1]], cmap=cm); ax.set(title=name); ax.axis('off')
-plt.tight_layout(); plt.savefig('plot_5_feature_map_activations.pdf', bbox_inches='tight'); plt.show()
-\end{lstlisting}
+plt.tight_layout(); plt.savefig('plot_5_feature_map_activations.pdf', bbox_inches='tight'); plt.show()\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 15]:}
 \begin{lstlisting}[style=output]
-<Figure size at plot_5_feature_map_activations>
-\end{lstlisting}
+<Figure size at plot_5_feature_map_activations>\end{lstlisting}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.96\linewidth]{plot_5_feature_map_activations.pdf}
@@ -1023,8 +993,7 @@ benchmark_df = pd.DataFrame(benchmark_records)
 expected_ids = ['M1_custom_cnn_scratch', 'M2_mobilenetv2_phase1_frozen', 'M3_mobilenetv2_phase2_finetuned', 'M4_mobilenetv2_no_augmentation', 'M5_mobilenetv2_top20_layers']
 assert benchmark_df['model_id'].tolist() == expected_ids
 display(benchmark_df[['model_id', 'test_acc', 'test_precision_dog', 'test_precision_cat', 'f1_macro', 'latency_ms', 'generalization_gap']])
-print('INT8 is not included: no implemented/evaluated INT8 artifact is available.')
-\end{lstlisting}
+print('INT8 is not included: no implemented/evaluated INT8 artifact is available.')\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 16]:}
 \begin{lstlisting}[style=output]
@@ -1034,8 +1003,7 @@ M2  test_acc=0.9631  dog_precision=0.9610
 M3  test_acc=0.9747  dog_precision=0.9755
 M4  test_acc=0.9512  dog_precision=0.9480
 M5  test_acc=0.9680  dog_precision=0.9670
-INT8 is not included: no implemented/evaluated INT8 artifact is available.
-\end{lstlisting}
+INT8 is not included: no implemented/evaluated INT8 artifact is available.\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -1055,13 +1023,11 @@ axes[1].set(title='Figure 6(b): Generalization Gap (|Train Acc - Val Acc|)\n(Qua
 for i, g in enumerate(np.abs(benchmark_df['generalization_gap'])*100): axes[1].text(i, g+0.1, f'+{g:.2f}%', ha='center', fontweight='bold')
 axes[1].annotate('Overfitting (+3.98%)\nw/o Aug', (3, 3.98), (3.1, 3.0), arrowprops=dict(facecolor='#D32F2F', arrowstyle='->'), bbox=dict(boxstyle='round', facecolor='#FFEBEE'), fontsize=9, fontweight='bold')
 axes[1].annotate('Sweet Spot (+0.24%)\nFT+Aug', (2, 0.24), (1.4, 1.4), arrowprops=dict(facecolor='#2E7D32', arrowstyle='->'), bbox=dict(boxstyle='round', facecolor='#E8F5E9'), fontsize=9, fontweight='bold')
-plt.tight_layout(); plt.savefig('plot_6_ablation_augmentation_finetuning.pdf'); plt.show()
-\end{lstlisting}
+plt.tight_layout(); plt.savefig('plot_6_ablation_augmentation_finetuning.pdf'); plt.show()\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 17]:}
 \begin{lstlisting}[style=output]
-<Figure size at plot_6_ablation_augmentation_finetuning>
-\end{lstlisting}
+<Figure size at plot_6_ablation_augmentation_finetuning>\end{lstlisting}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.96\linewidth]{plot_6_ablation_augmentation_finetuning.pdf}
@@ -1086,14 +1052,12 @@ selfie_confidence = max(selfie_probability, 1.0 - selfie_probability)
 plt.figure(figsize=(4, 4)); plt.imshow(selfie); plt.axis('off')
 plt.title(f'OOD forced binary output: {selfie_label} ({selfie_confidence:.1%})')
 plt.tight_layout(); plt.show()
-print('Interpretation: a human face is outside the Cat/Dog training distribution; the sigmoid must still choose one class.')
-\end{lstlisting}
+print('Interpretation: a human face is outside the Cat/Dog training distribution; the sigmoid must still choose one class.')\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 18]:}
 \begin{lstlisting}[style=output]
 <Figure size 400x400 with 1 Axes>
-Interpretation: a human face is outside the Cat/Dog training distribution; the sigmoid must still choose one class.
-\end{lstlisting}
+Interpretation: a human face is outside the Cat/Dog training distribution; the sigmoid must still choose one class.\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -1121,8 +1085,7 @@ latency_summary = {
 }
 measured_latency = latency_summary['mean_ms']
 print(json.dumps(latency_summary, indent=2))
-print('No webcam capture, AR rendering, or end-to-end 30-FPS guarantee is claimed.')
-\end{lstlisting}
+print('No webcam capture, AR rendering, or end-to-end 30-FPS guarantee is claimed.')\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 19]:}
 \begin{lstlisting}[style=output]
@@ -1134,8 +1097,7 @@ print('No webcam capture, AR rendering, or end-to-end 30-FPS guarantee is claime
   "p95_ms": 20.8,
   "hardware": "macOS-27.0-arm64-arm-64bit"
 }
-No webcam capture, AR rendering, or end-to-end 30-FPS guarantee is claimed.
-\end{lstlisting}
+No webcam capture, AR rendering, or end-to-end 30-FPS guarantee is claimed.\end{lstlisting}
 
 \vspace{0.6em}
 \needspace{3\baselineskip}
@@ -1159,13 +1121,11 @@ for b in bars: ax2.text(b.get_x() + b.get_width()/2.0, b.get_height() + 0.6, f'{
 ax2.axhline(33.33, color='#D32F2F', linestyle='--', lw=2.0, label='30 FPS Limit (33.33 ms)'); ax2.axhline(25.0, color='#2E7D32', linestyle=':', lw=2.0, label='Projected: 25.0 ms (40 FPS)')
 ax2.annotate('Headroom: +8.33 ms (25.0%) vs 33.33 ms', (2, 25.0), (2.2, 28.5), arrowprops={'facecolor':'#2E7D32', 'arrowstyle':'->'}, bbox={'boxstyle':'round', 'facecolor':'#E8F5E9'}, fontsize=9, fontweight='bold')
 ax2.set(ylabel='Execution Time (ms)', ylim=[0, 38], title='Figure 7(b): Latency Budget (*Simulated; 18.4 ms Measured)'); ax2.grid(True, linestyle=':', alpha=0.6, axis='y'); ax2.legend(loc='upper right', fontsize=10)
-plt.tight_layout(); plt.savefig('plot_7_inference_streaming_pipeline.pdf', bbox_inches='tight'); plt.show()
-\end{lstlisting}
+plt.tight_layout(); plt.savefig('plot_7_inference_streaming_pipeline.pdf', bbox_inches='tight'); plt.show()\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 20]:}
 \begin{lstlisting}[style=output]
-<Figure size at plot_7_inference_streaming_pipeline>
-\end{lstlisting}
+<Figure size at plot_7_inference_streaming_pipeline>\end{lstlisting}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.96\linewidth]{plot_7_inference_streaming_pipeline.pdf}
@@ -1192,13 +1152,11 @@ for i in range(4):
         axes[r, i].add_patch(plt.Rectangle((0, 0), 159, 159, fill=False, edgecolor=c, lw=3)); axes[r, i].axis('off')
 fig.text(0.5, 0.98, 'Figure 8(a): High-Confidence Validation Predictions (MobileNetV2 >99% Posterior Confidence)', ha='center', va='top', fontsize=12, fontweight='bold')
 fig.text(0.5, 0.50, 'Figure 8(b): Failure Topology & Edge Cases (Validation Errors: 55 FPs, 59 FNs & Hard Invariant Cases)', ha='center', va='top', fontsize=12, fontweight='bold')
-plt.subplots_adjust(top=0.92, bottom=0.04, hspace=0.35, wspace=0.15); plt.savefig('plot_8_test_predictions_error_analysis.pdf', bbox_inches='tight'); plt.show()
-\end{lstlisting}
+plt.subplots_adjust(top=0.92, bottom=0.04, hspace=0.35, wspace=0.15); plt.savefig('plot_8_test_predictions_error_analysis.pdf', bbox_inches='tight'); plt.show()\end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 21]:}
 \begin{lstlisting}[style=output]
-<Figure size at plot_8_test_predictions_error_analysis>
-\end{lstlisting}
+<Figure size at plot_8_test_predictions_error_analysis>\end{lstlisting}
 \begin{figure}[H]
 \centering
 \vspace{-0.6em}
@@ -1230,5 +1188,4 @@ An **offline image-inference benchmark** was evaluated across $N=170$ sequential
 
 ### Final grading model
 
-**M3 MobileNetV2 — top 40 layers fine-tuned with training-only augmentation.** Cat=0, Dog=1; input `160×160×3`; rescale `1./255`; seed 42.
-\end{lstlisting}
+**M3 MobileNetV2 — top 40 layers fine-tuned with training-only augmentation.** Cat=0, Dog=1; input `160×160×3`; rescale `1./255`; seed 42.\end{lstlisting}
