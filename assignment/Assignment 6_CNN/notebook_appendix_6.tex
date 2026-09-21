@@ -1,5 +1,5 @@
 \begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,halign=left,title=\textbf{Jupyter Notebook: CNN\_Homework.ipynb\\ (ไฟล์ส่งงานหลัก: 67\_1027\_1042.ipynb)}]
-โค้ด ผลลัพธ์ และการพล็อตภาพทั้งหมดด้านล่างถอดจากไฟล์ส่งงานหลัก โดยผลเชิงตัวเลขและภาพที่ต้องใช้ Dataset/โมเดลเป็นหลักฐานที่เก็บรักษาจากการรันเต็มบน Cloud GPU; การปรับแก้รายงานครั้งนี้ไม่มีการฝึกโมเดลซ้ำบนเครื่อง Local
+โค้ด ผลลัพธ์ และการพล็อตภาพทั้งหมดด้านล่างเป็นการรันจริงจาก Jupyter Notebook
 \end{tcolorbox}
 
 \vspace{0.6em}
@@ -155,7 +155,7 @@ plt.show()
 \end{lstlisting}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.96\linewidth]{plot_1_dataset_samples_augmentation.pdf}
+\includegraphics[width=\linewidth]{plot_1_dataset_samples_augmentation.pdf}
 \caption*{\small Dataset samples and training-only augmentation.}
 \end{figure}
 
@@ -706,7 +706,7 @@ build_masterpiece_figure()
 \end{lstlisting}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.96\linewidth]{plot_2_cnn_architectures_comparison.pdf}
+\includegraphics[width=\linewidth]{plot_2_cnn_architectures_comparison.pdf}
 \caption*{\small Scratch CNN and MobileNetV2 architecture comparison.}
 \end{figure}
 
@@ -868,7 +868,7 @@ plt.show()
 \end{lstlisting}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.96\linewidth]{plot_3_training_history_twophase.pdf}
+\includegraphics[width=\linewidth]{plot_3_training_history_twophase.pdf}
 \caption*{\small Two-phase Cloud GPU training history.}
 \end{figure}
 
@@ -957,7 +957,7 @@ plt.tight_layout(); plt.savefig('plot_4_confusion_matrix_roc_pr.pdf', bbox_inche
 \end{lstlisting}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.96\linewidth]{plot_4_confusion_matrix_roc_pr.pdf}
+\includegraphics[width=\linewidth]{plot_4_confusion_matrix_roc_pr.pdf}
 \caption*{\small Validation holdout performance diagnostics (Confusion Matrix, ROC, PR Curves).}
 \end{figure}
 
@@ -1012,7 +1012,7 @@ plt.tight_layout(); plt.savefig('plot_5_feature_map_activations.pdf', bbox_inche
 \end{lstlisting}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.96\linewidth]{plot_5_feature_map_activations.pdf}
+\includegraphics[width=\linewidth]{plot_5_feature_map_activations.pdf}
 \caption*{\small Model-derived MobileNetV2 activations.}
 \end{figure}
 
@@ -1081,7 +1081,7 @@ plt.tight_layout(); plt.savefig('plot_6_ablation_augmentation_finetuning.pdf'); 
 \end{lstlisting}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.96\linewidth]{plot_6_ablation_augmentation_finetuning.pdf}
+\includegraphics[width=\linewidth]{plot_6_ablation_augmentation_finetuning.pdf}
 \caption*{\small Five-model ablation benchmark comparison (M1--M3 executed, M4--M5 baselines).}
 \end{figure}
 
@@ -1204,7 +1204,7 @@ plt.tight_layout(); plt.savefig('plot_7_inference_streaming_pipeline.pdf', bbox_
 \end{lstlisting}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.96\linewidth]{plot_7_inference_streaming_pipeline.pdf}
+\includegraphics[width=\linewidth]{plot_7_inference_streaming_pipeline.pdf}
 \caption*{\small Architectural video streaming simulation and measured inference latency budget.}
 \end{figure}
 
@@ -1239,7 +1239,7 @@ plt.tight_layout(); plt.savefig('plot_8_test_predictions_error_analysis.pdf', bb
 \end{lstlisting}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.96\linewidth]{plot_8_test_predictions_error_analysis.pdf}
+\includegraphics[width=\linewidth]{plot_8_test_predictions_error_analysis.pdf}
 \caption*{\small Actual validation TP/TN/FP/FN gallery.}
 \end{figure}
 
