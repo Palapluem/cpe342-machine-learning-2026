@@ -26,6 +26,9 @@
 \usepackage{bm}
 \usepackage{graphicx}
 \usepackage{booktabs}
+\usepackage{titlesec}
+\titleformat*{\section}{\raggedright\Large\bfseries}
+\titleformat*{\subsection}{\raggedright\large\bfseries}
 \usepackage{geometry}
 \usepackage{xcolor}
 \usepackage{float}
@@ -94,7 +97,6 @@
 
 \widowpenalty=10000
 \clubpenalty=10000
-\hbadness=10000
 
 \geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm, headheight=14pt}
 
@@ -132,14 +134,14 @@
 \vspace{1em}
 
 % =================================================================
-\section*{1. บทนำและกรอบแนวคิดเชิงทฤษฎี\\ \large(Theoretical Foundations \& Mathematical Framework)}
+\section*{1. บทนำและกรอบแนวคิดเชิงทฤษฎี\newline \large(Theoretical Foundations \& Mathematical Framework)}
 
-การประมวลผลข้อมูลภาพเชิงภาพดิจิทัล (Digital Image Processing) ในยุคก่อนหน้าประสบข้อจำกัดอย่างรุนแรงเมื่อใช้โมเดล Multi-Layer Perceptron (MLP) แบบดั้งเดิม เนื่องจาก MLP มองภาพเป็นเวกเตอร์ 1 มิติที่เรียงต่อกัน ทำให้สูญเสียข้อมูลโครงสร้างเชิงพื้นที่ (Spatial Topology) และการเชื่อมต่อแบบหนาแน่น (Fully Connected) ก่อให้เกิดจำนวนพารามิเตอร์มหาศาล ($O(H \times W \times C \times N)$) ซึ่งเสี่ยงต่อการเกิด Overfitting อย่างยิ่ง โครงข่ายประสาทคอนโวลูชัน (Convolutional Neural Networks: CNN) จึงถูกพัฒนาขึ้นเพื่อแก้ไขปัญหานี้โดยเลียนแบบกลไกการมองเห็นของสิ่งมีชีวิต
+การประมวลผลข้อมูลภาพเชิงภาพดิจิทัล (Digital Image Processing) ในยุคก่อนหน้าประสบข้อจำกัดอย่างรุนแรงเมื่อใช้โมเดล Multi-Layer Perceptron (MLP) แบบดั้งเดิม เนื่องจาก MLP มองภาพเป็นเวกเตอร์ 1 มิติที่เรียงต่อกัน ทำให้สูญเสียข้อมูลโครงสร้างเชิงพื้นที่ (Spatial Topology) และการเชื่อมต่อหนาแน่น (Fully-Connected) ก่อให้เกิดพารามิเตอร์มหาศาล ($O(H \times W \times C \times N)$) ซึ่งเสี่ยงต่อการเกิด Overfitting อย่างยิ่ง โครงข่ายประสาทคอนโวลูชัน (Convolutional Neural Networks: CNN) จึงถูกพัฒนาขึ้นเพื่อแก้ไขปัญหานี้โดยเลียนแบบกลไกการมองเห็นของสิ่งมีชีวิต
 
 \subsection*{1.1 วิวัฒนาการจากเซลล์ประสาทสัมผัสสู่โครงข่ายคอนโวลูชัน\\ \normalsize(Receptive Fields \& Biological Visual Cortex)}
 การค้นพบอันเป็นรากฐานของ David Hubel และ Torsten Wiesel (1959, 1962)  ในระบบประสาทสายตาของแมว (Visual Cortex) แสดงให้เห็นว่า เซลล์ประสาทในเปลือกสมองส่วนการมองเห็น (Area V1) มิได้ตอบสนองต่อแสงสว่างทั่วทั้งลานสายตาพร้อมกัน แต่ตอบสนองต่อตัวกระตุ้นเฉพาะในขอบเขตพื้นที่จำกัดที่เรียกว่า \textbf{พื้นที่รับรู้ (Receptive Field)} โดยแบ่งออกเป็น:
 \begin{enumerate}[leftmargin=1.8em, itemsep=1pt]
-    \item \textbf{Simple Cells:} ตอบสนองต่อเส้นตรงและขอบภาพ (Edges and Bars) ในทิศทาง (Orientation) และตำแหน่งเฉพาะ
+    \item \textbf{Simple Cells:} ตอบสนองต่อเส้นตรงและขอบภาพ (Edges/Bars) ในทิศทาง (Orientation) และตำแหน่งเฉพาะ
     \item \textbf{Complex Cells:} ตอบสนองต่อเส้นตรงที่มีการเคลื่อนที่ หรือไม่ขึ้นกับตำแหน่งสัมบูรณ์ที่แน่นอน (Spatial Shift Invariance)
 \end{enumerate}
 แนวคิดดังกล่าวถูกนำมาจำลองในเชิงวิศวกรรมโดย Kunihiko Fukushima (Neocognitron, 1980) และทำให้สมบูรณ์ด้วยการฝึกฝนผ่าน Gradient Descent โดย Yann LeCun et al. (LeNet-5, 1998) ซึ่งใช้ฟิลเตอร์คอนโวลูชันทำหน้าที่เสมือน Simple Cells และเลเยอร์พูลลิงทำหน้าที่เสมือน Complex Cells
@@ -238,7 +240,7 @@
 
 % =================================================================
 \clearpage
-\section*{2. คุณลักษณะและโครงสร้างของชุดข้อมูล\\ \large(Dataset Architecture \& Exploratory Analysis)}
+\section*{2. คุณลักษณะและโครงสร้างของชุดข้อมูล\newline \large(Dataset Architecture \& Exploratory Analysis)}
 
 ชุดข้อมูลที่ใช้ในการทดลองคือ \textbf{Dogs vs. Cats Dataset} (Kaggle / Udacity Challenge) ซึ่งเป็นชุดข้อมูลมาตรฐานสำหรับการทดสอบความสามารถในการจำแนกภาพเชิงชีววิทยาที่มีความแปรปรวนสูง
 
@@ -261,8 +263,8 @@
 ภาพต้นฉบับจะถูกส่งผ่านท่อส่งข้อมูล (Data Pipeline) ดังนี้:
 \begin{enumerate}[leftmargin=1.8em, itemsep=0pt, topsep=1pt, parsep=0pt]
 \item \textbf{Spatial Resizing:} ปรับขนาดภาพทุกภาพให้เป็นมิติมาตรฐาน $160 \times 160 \times 3$ พิกเซล
-\item \textbf{Value Normalization:} ปรับสเกลค่าพิกเซลด้วย $1/255$ ให้ทุกโมเดลรับข้อมูลในช่วง $[0,1]$ อย่างสอดคล้องกัน
-\item \textbf{Training-only Augmentation:} ใช้ Horizontal Flip, Rotation ($\pm 15^\circ$), Translation ($\pm 10\%$), Zoom ($\pm 20\%$) และ Brightness $0.8$--$1.2$ เฉพาะชุดฝึกฝน ส่วน Validation และ Final Test ใช้เพียง Resize และ Rescale
+\item \textbf{Value Normalization:} ปรับสเกลค่าพิกเซลด้วย $1/255$ เพื่อให้ทุกโมเดลรับข้อมูลในช่วง $[0,1]$ สอดคล้องกัน
+\item \textbf{Training-only Augmentation:} ใช้การกลับภาพแนวนอน (Horizontal Flip), การหมุนภาพ ($\pm 15^\circ$), การเลื่อนตำแหน่ง ($\pm 10\%$), การซูม ($\pm 20\%$) และการปรับความสว่างช่วง $0.8$--$1.2$ สำหรับชุดฝึกฝนเท่านั้น ส่วนชุด Validation และ Final Test ใช้เพียงการปรับขนาดและปรับสเกลพิกเซล
 \end{enumerate}
 
 \subsection*{2.3 ข้อกำหนดทางการของงานและเกณฑ์การประเมิน\\ \normalsize(Official Coursework Requirements \& Evaluation Thresholds)}
@@ -279,7 +281,7 @@
 % =================================================================
 \vspace{1em}
 \clearpage
-\section*{3. ระเบียบวิธีวิจัยและสถาปัตยกรรมโมเดล\\ \large(Methodology \& Model Architectures)}
+\section*{3. ระเบียบวิธีวิจัยและสถาปัตยกรรมโมเดล\newline \large(Methodology \& Model Architectures)}
 
 การทดลองนี้มุ่งเน้นเปรียบเทียบสถาปัตยกรรม 2 ขั้ว เพื่อให้เห็นผลกระทบของ Pre-trained Priors ต่อความเที่ยงตรง (Precision) อย่างชัดเจน
 
@@ -325,7 +327,7 @@
 
 % =================================================================
 \vspace{1.2em}
-\section*{4. ผลการทดลองและการวินิจฉัยโมเดลเชิงลึก\\ \large(Experimental Results \& Diagnostic Plots)}
+\section*{4. ผลการทดลองและการวินิจฉัยโมเดลเชิงลึก\newline \large(Experimental Results \& Diagnostic Plots)}
 
 \subsection*{4.1 เส้นทางการเรียนรู้แบบสองขั้นตอน\\ \normalsize(Two-Phase Learning Curves \& Convergence Dynamics)}
 การฝึกฝนโมเดล MobileNetV2 แสดงพัฒนาการที่น่าประทับใจอย่างยิ่ง ดังแสดงในรูปที่ \ref{fig:plot_3}:
@@ -392,14 +394,14 @@
 
 ข้อค้นพบสำคัญจากรูปที่ \ref{fig:plot_6}:
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
-    \item \textbf{การไม่มี Data Augmentation (Model 4):} แม้จะ Fine-Tune โมเดลจนได้ Train Accuracy สูงถึง 99.10\% แต่ Validation Accuracy ตกลงมาอยู่ที่ 95.12\% ทำให้เกิด Generalization Gap สูงถึง \textbf{+3.98\%} ยืนยันว่า Data Augmentation มีบทบาทสำคัญในการต้านทาน Overfitting
+    \item \textbf{กรณีไม่ใช้ Data Augmentation (Model 4):} แม้จะ Fine-Tune โมเดลจนได้ค่า Train Accuracy สูงถึง 99.10\% ทว่า Validation Accuracy ลดลงมาอยู่ที่ 95.12\% ก่อให้เกิด Generalization Gap สูงถึง \textbf{+3.98\%} เป็นหลักฐานยืนยันว่า Data Augmentation มีบทบาทสำคัญยิ่งในการป้องกันการ Overfitting
     \item \textbf{ระดับความลึกของการปลดล็อคเลเยอร์ (Top 20 vs. Top 40):} การปลดล็อค 40 เลเยอร์ (Model 3) ให้ผลลัพธ์ดีกว่า 20 เลเยอร์ (Model 5: 96.80\%) เนื่องจาก 40 เลเยอร์ครอบคลุม Bottleneck บล็อกระดับกลางที่สามารถปรับตัวเข้ากับโดเมนภาพสัตว์เลี้ยงได้สมบูรณ์กว่า
     \item \textbf{โมเดล MobileNetV2 Two-Phase (Model 3):} มี Generalization Gap เพียง \textbf{+0.24\%} และให้ผลการทดสอบ Final Test สูงสุดในทุกคอนฟิกูเรชัน (Accuracy 97.47\%, Dog Precision 97.55\%)
 \end{itemize}
 
 \clearpage
 \subsection*{4.5 การจำลองงบประมาณเวลาเชิงสถาปัตยกรรมสำหรับสตรีมมิ่งวิดีโอ\\ \normalsize(Architectural Latency Budget Simulation for Streaming Pipeline)}
-เพื่อตอบสนองโจทย์ทางธุรกิจในการนำโมเดลไปพัฒนาต่อยอดสู่แอปพลิเคชัน AR Video Filter เราได้ทำการจำลองงบประมาณเวลาเชิงสถาปัตยกรรม (Architectural Latency Budget Simulation) ภายใต้สมมติฐานวิดีโอต่อเนื่อง 30 FPS ร่วมกับการปรับความเรียบเชิงเวลา (Temporal Exponential Smoothing) ดังแสดงในรูปที่ \ref{fig:plot_7}:
+เพื่อตอบสนองโจทย์ทางธุรกิจในการนำโมเดลไปต่อยอดสู่แอปพลิเคชัน AR Video Filter เราได้ทำการจำลองงบประมาณเวลาเชิงสถาปัตยกรรม (Architectural Latency Budget\allowbreak{} Simulation) บนสมมติฐานสตรีมมิ่งวิดีโอ 30 FPS ควบคู่กับการทำ Temporal Exponential\allowbreak{} Smoothing ดังแสดงในรูปที่ \ref{fig:plot_7}:
 
 \begin{figure}[H]
     \centering
@@ -410,15 +412,15 @@
 \end{figure}
 \vspace{-0.3em}
 
-จากรูปที่ \ref{fig:plot_7}(a)--(b) การวิเคราะห์งบประมาณเวลาประมวลผลของท่อส่งข้อมูลเชิงสถาปัตยกรรมมีรายละเอียดดังนี้:
+จากการวิเคราะห์ภาพรวมงบประมาณเวลาประมวลผลในรูปที่ \ref{fig:plot_7}(a)--(b) มีรายละเอียดเชิงวิศวกรรมของท่อส่งข้อมูลดังต่อไปนี้:
 \begin{itemize}[leftmargin=1.8em, itemsep=0.5pt, parsep=0pt]
-    \item \textbf{เวลาประมวลผลของโมเดลที่วัดได้จริง (Measured Offline Inference Pass):} MobileNetV2 Forward Pass บนสถาปัตยกรรม Apple Silicon macOS arm64 (Metal/MPS Hardware Acceleration) วัดจากการรันภาพทดสอบต่อเนื่องแบบ Offline ($N=170$ ภาพ) ได้ค่าเฉลี่ย \textbf{18.4 ms} ต่อภาพ (มัธยฐาน 18.2 ms, P95 20.8 ms, Throughput $54.3\text{ FPS}$) ซึ่งมีส่วนเผื่อเวลาด้านความปลอดภัยต่ำกว่าเพดาน 33.33 ms อยู่ถึง \textbf{14.93 ms}
-    \item \textbf{การจัดสรรงบประมาณเวลาส่วนประกอบจำลอง (Simulated Engineering Budget Allowances):} สำหรับระบบ AR เชิงโต้ตอบ ได้จำลองกรอบเวลาออกแบบทางวิศวกรรม (Engineering Design Allowances) สำหรับโมดูลอื่น ๆ ได้แก่ Frame Capture \& Downsample (3.2 ms), Tensor Prep \& Normalization (1.1 ms), ส่วนอนุมานโมเดล MobileNetV2 (18.4 ms วัดจริง), Softmax \& EMA Smoothing (0.8 ms), และ Graphic Overlay (1.5 ms)
+    \item \textbf{เวลาประมวลผลโมเดลที่วัดได้จริง (Measured Pass):} MobileNetV2 Forward Pass บน Apple Silicon macOS arm64 (Metal/MPS Acceleration) วัดจากการรันภาพทดสอบต่อเนื่องแบบ Offline ($N=170$ ภาพ) ได้ค่าเฉลี่ย \textbf{18.4 ms} ต่อภาพ (มัธยฐาน 18.2 ms, P95 20.8 ms, Throughput $54.3\text{ FPS}$) มี Safety Margin ต่ำกว่าเพดาน 33.33 ms อยู่ถึง \textbf{14.93 ms}
+    \item \textbf{การจัดสรรเวลาระบบจำลอง (Simulated Allowances):} สำหรับระบบ AR เชิงโต้ตอบ ได้จำลองกรอบเวลาทางวิศวกรรม (Engineering Design Allowances) สำหรับโมดูลอื่น ๆ ได้แก่ Frame Capture \& Downsample (3.2 ms), Tensor Prep \& Normalization (1.1 ms), อนุมานโมเดล MobileNetV2 (18.4 ms วัดจริง), Softmax \& EMA Smoothing (0.8 ms), และ Graphic Overlay (1.5 ms)
     \item \textbf{เวลารวมและข้อสรุปความเป็นไปได้ (Architectural Feasibility):} เวลารวมตามงบประมาณอยู่ที่ \textbf{25.0 ms ต่อเฟรม} (เทียบเท่า Throughput $40.0\text{ FPS}$) มี Safety Margin สูงถึง \textbf{8.33 ms (25.0\%)} ต่ำกว่าเพดาน 33.33 ms ยืนยันความเป็นไปได้ในเชิงสถาปัตยกรรม ทั้งนี้เป็นการประเมินเชิงงบประมาณเวลาจากการทำ Offline Sequential Inference โดยไม่ได้ต่อกล้องเว็บแคมหรือเรนเดอร์กราฟิกสดบนหน้าจอจริง
 \end{itemize}
 
 \clearpage
-\subsection*{4.6 การวิเคราะห์ตัวอย่างการทำนายเชิงประจักษ์และโครงสร้างความผิดพลาด\\ \normalsize(Qualitative Empirical Evaluation \& Failure Topology Analysis)}
+\subsection*{4.6 การวิเคราะห์ตัวอย่างการทำนายเชิงประจักษ์และโครงสร้างความผิดพลาด\newline \normalsize(Qualitative Empirical Evaluation \& Failure Topology Analysis)}
 เพื่อประเมินพฤติกรรมการตัดสินใจของโมเดลบนภาพถ่ายจริงในสภาพแวดล้อมที่ท้าทาย เราได้ทำการสุ่มตัวอย่างภาพจากชุดข้อมูลตรวจสอบ (Validation Holdout Set) 4,500 ภาพ ทั้งกลุ่มที่โมเดลทำนายได้อย่างแม่นยำสูง และกลุ่มกรณีศึกษาขอบเขตที่เกิดความผิดพลาด (Failure Topology) ดังแสดงในรูปที่ \ref{fig:plot_8}:
 
 \begin{figure}[H]
@@ -433,15 +435,15 @@
     \item \textbf{กรณีความเชื่อมั่นสูง (High-Confidence Predictions $>99\%$):} เมื่อภาพมีมุมมองด้านหน้าชัดเจน แสงสว่างเพียงพอ โมเดลให้ค่าความน่าจะเป็นสูงมาก เนื่องจาก Depthwise Filters สกัดฟีเจอร์รูปทรงหูสามเหลี่ยม/หนวดของแมว และสันจมูกยื่นยาวของสุนัขได้อย่างเด่นชัด
     \item \textbf{กรณี False Positive (แมวถูกทำนายเป็นสุนัข - 55 ภาพ):} มักเกิดขึ้นในแมวสายพันธุ์ขนยาวฟู (เช่น Persian หรือ Maine Coon) ที่ขนฟูบดบังรูปทรงหูแหลม ทำให้เกิด Feature Activation คล้ายคลึงกับสุนัขพันธุ์เล็ก
     \item \textbf{กรณี False Negative (สุนัขถูกทำนายเป็นแมว - 59 ภาพ):} เกิดขึ้นกับลูกสุนัขที่นอนขดตัวกลมบนเบาะนุ่ม ส่วนหัวและจมูกซุกซ่อนอยู่ใต้ลำตัว ทำให้ Global Average Pooling สกัดได้รูปทรงเรขาคณิตแบบวงรีคล้ายพฤติกรรมการนอนของแมว
-    \item \textbf{กรณีท้าทายที่ทำนายถูกต้อง (Hard Invariant Successes):} โมเดลยังคงจำแนกได้ถูกต้องในภาพย้อนแสงจ้า (Backlit Silhouette) และภาพที่มีสิ่งกีดขวางบดบังบางส่วน (Partial Occlusion) ซึ่งเป็นผลจากการทำ Two-Phase Transfer Learning ร่วมกับ Data Augmentation
+    \item \textbf{กรณีท้าทายที่ทำนายถูกต้อง (Hard Invariants):} โมเดลยังคงจำแนกได้ถูกต้องในภาพย้อนแสงจ้า (Backlit\allowbreak{} Silhouette) และภาพที่มีสิ่งกีดขวางบดบังบางส่วน (Partial\allowbreak{} Occlusion) ซึ่งเป็นผลจากการทำ Two-Phase Transfer Learning ร่วมกับ Data Augmentation
 \end{itemize}
 
 % =================================================================
 \vspace{0.5em}
 \clearpage
-\section*{5. การตอบคำถามประจำการทดลองและการอภิปรายเชิงวิศวกรรม\\ \large(Experiment Question Solutions \& Engineering Insights)}
+\section*{5. การตอบคำถามประจำการทดลองและการอภิปรายเชิงวิศวกรรม\newline \large(Experiment Question Solutions \& Engineering Insights)}
 
-\subsection*{คำถามที่ 1: การบรรลุเกณฑ์ความเที่ยงตรง (Precision > 90--95\%) เพื่อการปล่อยผลิตภัณฑ์สู่ตลาด\\ \normalsize(Question 1: Commercial Target Satisfaction \& Precision Thresholds)}
+\subsection*{คำถามที่ 1: การบรรลุเกณฑ์ความเที่ยงตรง (Precision > 90--95\%) เพื่อการปล่อยผลิตภัณฑ์สู่ตลาด\newline \normalsize(Question 1: Commercial Target Satisfaction \& Precision Thresholds)}
 
 \begin{ansbox}[fontupper=\small, left=6pt, right=6pt, top=2pt, bottom=2pt]
 \textbf{โจทย์ (Question)}: \textit{Assume that you work as an ML engineer for a company launching a Cat vs Dog classifier. You require precision > 90--95\% in order to launch the product. Explain your evaluation results and why this model meets or fails the business criteria.}
@@ -457,24 +459,24 @@
         \item \textbf{โมเดล Custom Scratch CNN}: \textcolor{red}{\textbf{ล้มเหลว (FAIL)}} ทำ Dog Precision ได้เพียง \textbf{83.50\%} (Cat Precision 84.80\%, Accuracy 84.15\%) เนื่องจากเกิด Overfitting บนข้อมูลจำกัด
         \item \textbf{โมเดล M3 MobileNetV2}: \textcolor{accentblue}{\textbf{ผ่านเกณฑ์ (PASS)}} ด้วย Precision สูงกว่า $95.00\%$ ทั้งสองคลาส:
         \begin{itemize}[leftmargin=9pt, itemsep=0.5pt, topsep=0.5pt, parsep=0pt]
-            \item \textbf{Dog Precision}: \textbf{97.55\% (0.98)} (ชนะเกณฑ์ขั้นต่ำ $+7.55\%$, ชนะเกณฑ์อุตสาหกรรม $+2.55\%$)
+            \item \textbf{Dog Precision}: \textbf{97.55\% (0.98)} (ผ่านเกณฑ์ขั้นต่ำ $+7.55\%$ และเกณฑ์อุตสาหกรรม $+2.55\%$) 
             \item \textbf{Cat Precision}: \textbf{97.38\% (0.97)} (ชนะเกณฑ์ขั้นต่ำ $+7.38\%$, ชนะเกณฑ์อุตสาหกรรม $+2.38\%$)
             \item \textbf{Overall Accuracy}: \textbf{97.47\%} | \textbf{Macro F1}: \textbf{0.9747} | \textbf{Test Loss}: \textbf{0.0680}
         \end{itemize}
     \end{itemize}
     \item \textbf{ความสำคัญเชิงธุรกิจของความเที่ยงตรง (Business Impact of High Precision)}:
     \begin{itemize}[leftmargin=9pt, itemsep=0.5pt, topsep=0.5pt, parsep=0pt]
-        \item \textbf{การควบคุม False Discovery Rate}: ด้วย Dog Precision 97.55\% ส่งผลให้อัตรา False Discovery Rate ($\text{FDR} = 1 - \text{Precision}$) ต่ำเพียง \textbf{2.45\%} (สอดคล้องกับ False Positive Rate: $\text{FPR} = \text{FP}/(\text{FP}+\text{TN}) = 55/2,250 = 2.44\%$) ช่วยจำกัดข้อผิดพลาดในการตรวจจับเชิงรุกและเพิ่มความน่าเชื่อถือของระบบในเชิงปฏิบัติการ
+        \item \textbf{การควบคุม False Discovery Rate}: ด้วยค่า Dog Precision 97.55\% ส่งผลให้อัตรา False Discovery Rate ($\text{FDR} = 1 - \text{Precision}$) ต่ำเพียง \textbf{2.45\%} (สอดคล้องกับ False Positive Rate: $\text{FPR} = \text{FP}/(\text{FP}+\text{TN}) = 55/2,250 = 2.44\%$) ช่วยจำกัดข้อผิดพลาดในการตรวจจับเชิงรุกและเพิ่มความน่าเชื่อถือของระบบในเชิงปฏิบัติการ
         \item \textbf{ความเสถียรของจุดตัดสินใจ}: กราฟ PR Curve รักษาระดับ Precision $> 95\%$ ได้ครอบคลุมตั้งแต่ Recall 0.00 ถึง 0.98 ทำให้การใช้ Threshold มาตรฐาน $\tau = 0.50$ มีความเสถียรสูง
     \end{itemize}
 \end{enumerate}
 \end{ansbox}
 
 \clearpage
-\subsection*{คำถามที่ 2: การเปรียบเทียบประสิทธิภาพระหว่าง Custom Scratch CNN กับ Transfer Learning\\ \normalsize(Question 2: Custom Scratch CNN vs. MobileNetV2 Transfer Learning)}
+\subsection*{คำถามที่ 2: การเปรียบเทียบประสิทธิภาพระหว่าง Custom Scratch CNN กับ Transfer Learning\newline \normalsize(Question 2: Custom Scratch CNN vs. MobileNetV2 Transfer Learning)}
 
 \begin{ansbox}[fontupper=\small, left=6pt, right=6pt, top=3pt, bottom=3pt]
-\textbf{โจทย์ (Question)}: \textit{Compare the performance between your custom CNN trained from scratch and the pre-trained Transfer Learning model. Why does Transfer Learning perform significantly better on this dataset?}
+{\raggedright \textbf{โจทย์ (Question)}: \textit{Compare the performance between your custom CNN trained from scratch and the pre-trained Transfer Learning model. Why does Transfer Learning perform significantly better on this dataset?}\par}
 
 \vspace{0.25em}
 \textbf{คำตอบ (ANSWER)}:
@@ -483,7 +485,7 @@
 \begin{enumerate}[leftmargin=14pt, itemsep=1.5pt, topsep=1pt, parsep=0pt]
     \item \textbf{การเปรียบเทียบเชิงปริมาณ (Quantitative Performance Comparison)}:
     \begin{itemize}[leftmargin=10pt, itemsep=0.5pt, topsep=0.5pt, parsep=0pt]
-        \item \textbf{ความแม่นยำ (Accuracy)}: MobileNetV2 ทำได้ \textbf{97.47\%} สูงกว่า Custom Scratch CNN (\textbf{84.15\%}) ถึง \textbf{+13.32\%}
+        \item \textbf{ความแม่นยำ (Accuracy)}: โมเดล MobileNetV2 ทำได้ \textbf{97.47\%} สูงกว่า Custom Scratch CNN (\textbf{84.15\%}) ถึง \textbf{+13.32\%}
         \item \textbf{ความเที่ยงตรง (Dog Precision)}: MobileNetV2 บรรลุ \textbf{97.55\%} สูงกว่า Custom Scratch CNN (\textbf{83.50\%}) ถึง \textbf{+14.05\%}
         \item \textbf{พื้นที่ใต้เส้นโค้ง ROC (ROC-AUC)}: MobileNetV2 บรรลุ \textbf{0.9958} เทียบกับ Custom Scratch ที่ทำได้เพียง \textbf{0.9124}
     \end{itemize}
@@ -503,7 +505,7 @@
 \end{ansbox}
 
 \clearpage
-\subsection*{คำถามที่ 3: บทบาทของการเพิ่มพูนข้อมูล (Data Augmentation) ต่อการลด Overfitting\\ \normalsize(Question 3: Role of Data Augmentation in Mitigating Overfitting)}
+\subsection*{คำถามที่ 3: บทบาทของการเพิ่มพูนข้อมูล (Data Augmentation) ต่อการลด Overfitting\newline \normalsize(Question 3: Role of Data Augmentation in Mitigating Overfitting)}
 
 \begin{ansbox}[fontupper=\small, left=6pt, right=6pt, top=3pt, bottom=3pt]
 \textbf{โจทย์ (Question)}: \textit{Analyze the effect of data augmentation on model generalization and overfitting based on your ablation study.}
@@ -527,20 +529,20 @@
 \end{ansbox}
 
 \clearpage
-\subsection*{คำถามที่ 4: การออกแบบระบบสตรีมมิ่งวิดีโอแบบเรียลไทม์และงบประมาณเวลาประมวลผล\\ \normalsize(Question 4: Real-Time Streaming Pipeline \& Latency Feasibility)}
+\subsection*{คำถามที่ 4: การออกแบบระบบสตรีมมิ่งวิดีโอแบบเรียลไทม์และงบประมาณเวลาประมวลผล\newline \normalsize(Question 4: Real-Time Streaming Pipeline \& Latency Feasibility)}
 
 \begin{ansbox}[fontupper=\small, left=6pt, right=6pt, top=3pt, bottom=3pt]
 \textbf{โจทย์ (Question)}: \textit{How feasible is it to deploy this model for real-time video streaming (e.g. 30 FPS AR filters)? Provide a latency budget breakdown and deployment recommendations.}
 
 \vspace{0.25em}
 \textbf{คำตอบ (ANSWER)}:
-จากการวิเคราะห์งบประมาณเวลาเชิงสถาปัตยกรรม (Architectural Latency Budget Simulation) อ้างอิงจากผลการทดสอบการอนุมานแบบออฟไลน์ (Offline Sequential Inference) ของโมเดล MobileNetV2 (Phase 2) บนสถาปัตยกรรม Apple Silicon macOS arm64 (MPS Acceleration) ร่วมกับกรอบงบประมาณเวลาจำลองเชิงวิศวกรรม ได้ข้อสรุปดังนี้:
+จากการวิเคราะห์งบประมาณเวลาเชิงสถาปัตยกรรม (Architectural Latency Budget Simulation) อ้างอิงจากผลทดสอบการอนุมานแบบออฟไลน์ (Offline Sequential Inference) ของโมเดล MobileNetV2 (Phase 2) บนชิป Apple Silicon macOS arm64 (MPS Acceleration) ร่วมกับกรอบเวลาจำลองทางวิศวกรรม ได้ข้อสรุปดังนี้:
 
 \begin{enumerate}[leftmargin=14pt, itemsep=1.5pt, topsep=1pt, parsep=0pt]
     \item \textbf{งบประมาณเวลาต่อเฟรม (Real-Time Budget Constraints)}:
     การแสดงผลวิดีโอมาตรฐานอุตสาหกรรมที่อัตรา 30 FPS กำหนดให้เวลาประมวลผลต่อหนึ่งเฟรมต้องไม่เกิน:
     $$\Delta t_{budget} \le \frac{1}{30\text{ วินาที}} \approx 33.33\text{ มิลลิวินาที (ms)}$$
-    \item \textbf{การแจกแจงงบประมาณเวลาประมวลผลเชิงสถาปัตยกรรม (Architectural Latency Breakdown)}:
+    \item \textbf{การแจกแจงงบประมาณเวลาเชิงสถาปัตยกรรม (Architectural Latency Breakdown)}:
     \begin{itemize}[leftmargin=10pt, itemsep=0.5pt, topsep=0.5pt, parsep=0pt]
         \item \textbf{1. Frame Ingestion \& Preprocessing}: เวลาจำลองในการดึงเฟรมและลดขนาดเป็น $160 \times 160$ (จัดสรรตามกรอบจำลองเชิงวิศวกรรม) \textbf{3.2 ms}
         \item \textbf{2. Normalization \& Tensor Formatting}: ปรับสเกลช่วงพิกเซลเป็น $[0, 1]$ (จัดสรรตามกรอบจำลองเชิงวิศวกรรม) \textbf{1.1 ms}
@@ -556,7 +558,7 @@
 \end{enumerate}
 \end{ansbox}
 
-\section*{6. การอภิปรายผลเชิงวิชาการและการเปรียบเทียบ\\ \large(Academic Discussion \& Comparative Synthesis)}
+\section*{6. การอภิปรายผลเชิงวิชาการและการเปรียบเทียบ\newline \large(Academic Discussion \& Comparative Synthesis)}
 
 \subsection*{6.1 ตารางสังเคราะห์ผลลัพธ์การทดลองแบบครอบคลุม\\ \normalsize(Comprehensive Experimental Evaluation Table)}
 
@@ -588,34 +590,34 @@ M5: MobileNetV2 (Top 20 Layers FT)* & 986,369 & 96.80\% & 96.70\% & 96.90\% & +0
 \begin{itemize}[leftmargin=1.8em, itemsep=1pt]
     \item \textbf{Custom Scratch CNN:} ประสบปัญหาทั้ง High Bias (Train Accuracy 88.45\%) และ Moderate Variance (Gap 4.55 จุดร้อยละ) เมื่อเทียบกับ Transfer Learning ภายใต้ข้อมูลฝึก 18,000 ภาพและพารามิเตอร์รวม 6.94M
     \item \textbf{MobileNetV2 Phase 1 (Frozen Base):} มี Low Variance อย่างยิ่งเนื่องจากพารามิเตอร์ส่วนใหญ่ถูกแช่แข็ง (Gap 2.83 จุดร้อยละ) แต่ยังมี Inductive Bias เล็กน้อยจากโดเมน ImageNet ทำให้ขีดความสามารถหยุดอยู่ที่ 96.31\%
-    \item \textbf{MobileNetV2 Phase 2 (Fine-Tuning + Augmentation):} ให้ผลดีที่สุดในชุดการทดลองนี้ โดยการปลดล็อค 40 เลเยอร์ช่วยลด Bias ขณะที่ Data Augmentation และ L2 Regularization ช่วยจำกัด Variance (Gap 0.24 จุดร้อยละ)
+    \item \textbf{MobileNetV2 Phase 2 (Fine-Tuning + Augmentation):} ให้ผลลัพธ์ที่ดีที่สุดในการทดลองนี้ โดยการปลดล็อค 40 เลเยอร์ช่วยลด Bias ขณะที่ Data Augmentation และ L2 Regularization ช่วยจำกัด Variance (Gap 0.24 จุดร้อยละ)
 \end{itemize}
 
 \subsection*{6.3 การเปรียบเทียบเชิงวิเคราะห์ระหว่าง MLP (Assignment 5) และ CNN (Assignment 6)\\ \normalsize(Comparative Synthesis: MLP on MNIST vs. CNN on Cats \& Dogs)}
 การเปรียบเทียบระหว่างสองงานทดลองเผยให้เห็นแก่นแท้ของ Deep Learning:
-\begin{enumerate}[leftmargin=1.8em, itemsep=1pt]
+\begin{enumerate}[leftmargin=1.8em, itemsep=0.5pt, topsep=1pt, parsep=0pt]
     \item \textbf{มิติของข้อมูลและความซับซ้อน:} ใน Assignment 5 ข้อมูล MNIST เป็นภาพตัวเลขขาวดำขนาดเล็ก ($28 \times 28 \times 1$) ซึ่งมีโครงสร้างเรียบง่าย ทำให้ MLP สามารถทำความแม่นยำได้สูงถึง 98.4\% แต่หากนำ MLP เดียวกันมาใช้กับภาพสุนัขและแมว ($160 \times 160 \times 3$) จะต้องใช้เวกเตอร์นำเข้าขนาด 76,800 ค่า ซึ่งทำให้ MLP ล้มเหลวทันที
     \item \textbf{Weight Sharing \& Parameter Efficiency:} CNN ใช้เคอร์เนลขนาดเล็กกวาดไปทั่วทั้งภาพ ทำให้ค่าน้ำหนักถูกแบ่งปัน (Weight Sharing) ขจัดความซ้ำซ้อนและรักษา Translation Invariance ได้อย่างสมบูรณ์แบบ
 \end{enumerate}
 
 \subsection*{6.4 แนวทางการนำโมเดลไปประยุกต์ใช้งานบนระบบ Edge / Mobile Devices\\ \normalsize(Edge Deployment \& Model Quantization Opportunities)}
 สถาปัตยกรรม MobileNetV2 ที่พัฒนาขึ้นนี้มีความพร้อมสูงสำหรับการแปลงไปเป็นโมเดลสำหรับอุปกรณ์พกพา:
-\begin{itemize}[leftmargin=1.8em, itemsep=1pt]
+\begin{itemize}[leftmargin=1.8em, itemsep=0.5pt, topsep=1pt, parsep=0pt]
     \item \textbf{TensorFlow Lite (TFLite) Conversion:} สามารถแปลงเป็นไฟล์ \texttt{.tflite} ขนาดเพียง $\approx 9.8$ MB
-    \item \textbf{Post-Training Quantization (INT8):} เมื่อทำ Quantization ลดทอนค่าน้ำหนักจาก Float32 เป็น Int8 จะช่วยลดขนาดไฟล์โมเดลลงได้สูงสุด $\approx 70\%$ และเพิ่มประสิทธิภาพการประมวลผลบนหน่วยประมวลผล NPU ของสมาร์ตโฟน (เช่น Apple Neural Engine หรือ Snapdragon NPU) สำหรับการทำงาน On-Device อย่างมีประสิทธิภาพ
+    \item \textbf{Post-Training Quantization (INT8):} เมื่อประยุกต์ทำ Quantization เพื่อลดทอนค่าน้ำหนักจาก Float32 เป็น Int8 จะช่วยลดขนาดไฟล์โมเดลลงได้สูงสุด $\approx 70\%$ และเพิ่มประสิทธิภาพการประมวลผลบนหน่วยประมวลผล NPU ของสมาร์ตโฟน (เช่น Apple Neural Engine หรือ Snapdragon NPU) สำหรับการทำงาน On-Device อย่างมีประสิทธิภาพ
 \end{itemize}
 
 % =================================================================
-\vspace{1.2em}
-\section*{7. สรุปผลการทดลองและข้อเสนอแนะเชิงประยุกต์\\ \large(Conclusions \& Practical Recommendations)}
+\vspace{0.2em}
+\section*{7. สรุปผลการทดลองและข้อเสนอแนะเชิงประยุกต์\newline \large(Conclusions \& Practical Recommendations)}
 
-\begin{enumerate}[leftmargin=1.8em, itemsep=2pt]
+\begin{enumerate}[leftmargin=1.8em, itemsep=0.5pt, topsep=1pt, parsep=0pt]
     \item \textbf{ข้อสรุปผลสัมฤทธิ์:} โมเดล MobileNetV2 Transfer Learning ที่ผ่านการฝึกฝนแบบสองขั้นตอน (Two-Phase Training) ร่วมกับ Data Augmentation สามารถจำแนกภาพสุนัขและแมวได้ด้วยความแม่นยำ \textbf{97.47\%} และให้ค่าความเที่ยงตรง (Precision) สำหรับสุนัขสูงถึง \textbf{97.55\% (0.98)} และแมว \textbf{97.38\% (0.97)} ซึ่งชนะเกณฑ์เป้าหมาย $90 - 95\%$ ของบริษัทได้อย่างสมบูรณ์แบบ
     \item \textbf{บทเรียนสำคัญ:} การฝึกฝนโมเดลจากศูนย์ (Scratch CNN) บนชุดข้อมูลภาพธรรมชาติที่มีขนาดจำกัดไม่สามารถสร้างฟีเจอร์ที่มีประสิทธิภาพเพียงพอต่อเกณฑ์ระดับอุตสาหกรรม การประยุกต์ใช้ Pre-trained Backbone จึงเป็นแนวทางบังคับสำหรับการพัฒนาผลิตภัณฑ์เชิงพาณิชย์
     \item \textbf{ข้อเสนอแนะสำหรับการต่อยอดผลิตภัณฑ์:}
-    \begin{itemize}[leftmargin=1.5em]
+    \begin{itemize}[leftmargin=1.5em, itemsep=0.5pt, topsep=0.5pt, parsep=0pt]
         \item ติดตั้งโมดูลตรวจจับตำแหน่งใบหน้า (Face / Landmark Detection เช่น MediaPipe หรือ YOLOv8-Face) เพื่อทำการ Crop เฉพาะบริเวณใบหน้าก่อนป้อนเข้าสู่โมเดลจำแนก จะช่วยเพิ่มความแม่นยำในมุมกล้องเอียง
-        \item นำเทคนิค Quantization (INT8) ไปประยุกต์ใช้เพื่อรองรับการประมวลผลบนแอปพลิเคชันมือถือ iOS/Android แบบ On-Device ไร้การพึ่งพาคลาวด์
+        \item นำเทคนิค Quantization (INT8) มาประยุกต์ใช้เพื่อรองรับการประมวลผลบนแอปพลิเคชันสมาร์ตโฟน iOS หรือ Android ในรูปแบบ On-\allowbreak{}Device โดยไม่ต้องพึ่งพาคลาวด์
     \end{itemize}
 \end{enumerate}
 
