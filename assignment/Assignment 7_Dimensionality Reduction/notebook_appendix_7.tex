@@ -449,7 +449,13 @@ Total Sample Variance: 417.8030
 \noindent\textbf{\small [In 10]:}
 \begin{lstlisting}[style=pycode]
 # Load dataset from sheet 'MTCARS'
-df = pd.read_excel('dimensionality-reduction.xlsx', sheet_name='MTCARS')
+import os
+data_file = 'dimensionality-reduction.xlsx'
+if os.path.exists(data_file):
+    df = pd.read_excel(data_file, sheet_name='MTCARS')
+else:
+    import statsmodels.api as sm
+    df = sm.datasets.get_rdataset('mtcars').data
 
 print("MTCARS Dataset Dimensions:", df.shape)
 print("Column Names:", list(df.columns))

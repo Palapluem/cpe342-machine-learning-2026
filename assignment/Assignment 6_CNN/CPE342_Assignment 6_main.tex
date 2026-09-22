@@ -456,8 +456,8 @@
     \item \textbf{ผลการประเมินเทียบกับเกณฑ์ทางธุรกิจ (Business Evaluation Benchmark)}:
     \begin{itemize}[leftmargin=9pt, itemsep=0.5pt, topsep=0.5pt, parsep=0pt]
         \item \textbf{เกณฑ์ขั้นต่ำ}: Precision $> 90.00\%$ | \textbf{เกณฑ์มาตรฐานอุตสาหกรรม}: Precision $> 95.00\%$
-        \item \textbf{โมเดล Custom Scratch CNN}: \textcolor{red}{\textbf{ล้มเหลว (FAIL)}} ทำ Dog Precision ได้เพียง \textbf{83.50\%} (Cat Precision 84.80\%, Accuracy 84.15\%) เนื่องจากเกิด Overfitting บนข้อมูลจำกัด
-        \item \textbf{โมเดล M3 MobileNetV2}: \textcolor{accentblue}{\textbf{ผ่านเกณฑ์ (PASS)}} ด้วย Precision สูงกว่า $95.00\%$ ทั้งสองคลาส:
+        \item \textbf{โมเดล Custom Scratch CNN (Baseline เพื่อการเปรียบเทียบ)}: ทำ Dog Precision ได้ \textbf{83.50\%} (ต่ำกว่าเกณฑ์ขั้นต่ำ 90\% ตามคาดหมาย เนื่องจากโครงข่ายเริ่มฝึกจากน้ำหนักสุ่มโดยไม่มี Prior Knowledge)
+        \item \textbf{โมเดลหลักเพื่อการปล่อยผลิตภัณฑ์ M3 MobileNetV2}: \textcolor{green!60!black}{\textbf{ผ่านเกณฑ์อย่างสมบูรณ์แบบ (PASS)}} ด้วย Precision สูงกว่า $95.00\%$ ทั้งสองคลาส:
         \begin{itemize}[leftmargin=9pt, itemsep=0.5pt, topsep=0.5pt, parsep=0pt]
             \item \textbf{Dog Precision}: \textbf{97.55\% (0.98)} (ผ่านเกณฑ์ขั้นต่ำ $+7.55\%$ และเกณฑ์อุตสาหกรรม $+2.55\%$) 
             \item \textbf{Cat Precision}: \textbf{97.38\% (0.97)} (ชนะเกณฑ์ขั้นต่ำ $+7.38\%$, ชนะเกณฑ์อุตสาหกรรม $+2.38\%$)
