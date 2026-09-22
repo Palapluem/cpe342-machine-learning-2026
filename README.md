@@ -212,7 +212,7 @@ cpe342-machine-learning-2026/
   * [`67_1027_1042.ipynb`](./assignment/Assignment%207_Dimensionality%20Reduction/67_1027_1042.ipynb) (Official Course Submission File)
   * [`[Lab] Dimensionality Reduction.ipynb`](./assignment/Assignment%207_Dimensionality%20Reduction/[Lab]%20Dimensionality%20Reduction.ipynb) (Original Lab Notebook)
   * [`dimensionality-reduction.xlsx`](./assignment/Assignment%207_Dimensionality%20Reduction/dimensionality-reduction.xlsx) (MTCARS Dataset)
-  * [`CPE342_Assignment 7_main.pdf`](./assignment/Assignment%207_Dimensionality%20Reduction/CPE342_Assignment%207_main.pdf) (Publication-Grade Academic Report, 40 pages)
+  * [`CPE342_Assignment 7_main.pdf`](./assignment/Assignment%207_Dimensionality%20Reduction/CPE342_Assignment%207_main.pdf) (Publication-Grade Academic Report, 41 pages)
   * [`benchmark_results.csv`](./assignment/Assignment%207_Dimensionality%20Reduction/benchmark_results.csv) & [`benchmark_results.json`](./assignment/Assignment%207_Dimensionality%20Reduction/benchmark_results.json)
   * [`plot_1_linear_pca_geometry.pdf`](./assignment/Assignment%207_Dimensionality%20Reduction/plot_1_linear_pca_geometry.pdf) to [`plot_7_reconstruction_error.pdf`](./assignment/Assignment%207_Dimensionality%20Reduction/plot_7_reconstruction_error.pdf) (7 High-Resolution Vector Figures)
 
