@@ -45,14 +45,24 @@ cpe342-machine-learning-2026/
 │   │   ├── 1027_1042_1067.ipynb               # Official course submission notebook
 │   │   └── CPE342_Assignment 5_main.pdf      # Publication-grade academic report
 │   │
-│   └── Assignment 6_CNN/
-│       ├── 67_1027_1042.ipynb            # Official course submission notebook
-│       ├── CNN_Homework.ipynb                 # Original assignment template
-│       ├── CPE342_Assignment 6_main.tex      # LaTeX source report
-│       ├── CPE342_Assignment 6_main.pdf      # Publication-grade academic report (61 pages)
-│       ├── notebook_appendix_6.tex           # LaTeX appendix with executed notebook cells
-│       ├── benchmark_results.csv & .json     # 5-model benchmark and ablation metrics
-│       └── plot_1_*.pdf to plot_8_*.pdf       # Publication-grade vector figures
+│   ├── Assignment 6_CNN/
+│   │   ├── 67_1027_1042.ipynb                 # Official course submission notebook
+│   │   ├── CNN_Homework.ipynb                 # Original assignment template
+│   │   ├── CPE342_Assignment 6_main.tex       # LaTeX source report
+│   │   ├── CPE342_Assignment 6_main.pdf       # Publication-grade academic report (61 pages)
+│   │   ├── notebook_appendix_6.tex            # LaTeX appendix with executed notebook cells
+│   │   ├── benchmark_results.csv & .json      # 5-model benchmark and ablation metrics
+│   │   └── plot_1_*.pdf to plot_8_*.pdf       # Publication-grade vector figures
+│   │
+│   └── Assignment 7_Dimensionality Reduction/
+│       ├── 67_1027_1042.ipynb                 # Official course submission notebook
+│       ├── [Lab] Dimensionality Reduction.ipynb # Original assignment template
+│       ├── dimensionality-reduction.xlsx       # MTCARS dataset (32 cars, 11 features)
+│       ├── CPE342_Assignment 7_main.tex       # LaTeX source report
+│       ├── CPE342_Assignment 7_main.pdf       # Publication-grade academic report (40 pages)
+│       ├── notebook_appendix_7.tex            # LaTeX appendix with executed notebook cells
+│       ├── benchmark_results.csv & .json      # PCA spectral benchmarks and PVE metrics
+│       └── plot_1_*.pdf to plot_7_*.pdf       # Publication-grade vector figures
 ├── lecture/                                   # Lecture slides and demo notebooks
 │   ├── Lecture 1–12 PDFs                      # Course slide decks
 │   ├── ML_2_Training_Models.ipynb             # Demo: Gradient Descent & Linear Regression
@@ -67,7 +77,10 @@ cpe342-machine-learning-2026/
 │   ├── ML_6_2_Keras_Tutorial.ipynb            # Tutorial: Comprehensive Keras Sequential & MNIST (Week 6)
 │   ├── ML_6_Keras_Tutorial_Quickstart.ipynb   # Quickstart: TensorFlow Keras Sequential Pipeline (Week 6)
 │   ├── ML_6_bank-data.csv                     # Dataset: Banking Marketing Tabular Data (Lecture 6, N = 45,211)
-│   └── ML_7_CNN_in-class.ipynb               # In-Class Lab: Convolutional Neural Networks on MNIST & Dogs vs Cats (Week 7)
+│   ├── ML_7_CNN_in-class.ipynb                # In-Class Lab: Convolutional Neural Networks on MNIST & Dogs vs Cats (Week 7)
+│   ├── ML_8_Dimensionality_Reduction.mp4      # Lecture Recording: Dimensionality Reduction & PCA (Week 8)
+│   ├── ML_8_dimensionality-reduction.xlsx      # Lecture Dataset: MTCARS Tabular Features (Week 8)
+│   └── ML_8_Tutorial_Dimensionality_Reduction.ipynb # Tutorial: PCA Implementation & Scree Analysis (Week 8)
 │
 └── textbook/                                  # Reference textbooks (ISLR / O'Reilly)
 ```
@@ -177,6 +190,31 @@ cpe342-machine-learning-2026/
   * [`67_1027_1042.ipynb`](./assignment/Assignment%206_CNN/67_1027_1042.ipynb) (Official Course Submission File)
   * [`CPE342_Assignment 6_main.pdf`](./assignment/Assignment%206_CNN/CPE342_Assignment%206_main.pdf) (Publication-Grade Academic Report)
   * [`benchmark_results.csv`](./assignment/Assignment%206_CNN/benchmark_results.csv) & [`benchmark_results.json`](./assignment/Assignment%206_CNN/benchmark_results.json)
+
+---
+
+### [Assignment 7: Dimensionality Reduction (PCA)](./assignment/Assignment%207_Dimensionality%20Reduction/)
+* **Topic:** Unsupervised Dimensionality Reduction via Principal Component Analysis (PCA), Spectral Theorem, Sample Covariance vs. Correlation Decomposition, Variance Scale Domination, and 2D Biplot Geometric Interpretation.
+* **Key Tasks:**
+  * Mathematical formulation of Data Centering ($\tilde{\mathbf{X}} = \mathbf{X} - \boldsymbol{\mu}$), Sample Covariance Matrix ($\boldsymbol{\Sigma} = \frac{1}{n-1}\tilde{\mathbf{X}}^T\tilde{\mathbf{X}}$), Eigenvalue Decomposition ($\boldsymbol{\Sigma}\mathbf{p}_j = \lambda_j \mathbf{p}_j$), Orthogonal Subspace Projection ($\mathbf{Z} = \tilde{\mathbf{X}}\mathbf{P}_r$), and Lossless/Truncated Reconstruction ($\hat{\mathbf{X}}_r = \mathbf{Z}\mathbf{P}_r^T + \boldsymbol{\mu}$).
+  * **Part I (2D Synthetic Toy Data, $N=12$):** Exact numerical derivation and verification of eigenpairs ($\lambda_1 = 411.6218$, $\lambda_2 = 6.1812$), variance preservation ($\text{PVE}_1 = 98.52\%$), orthogonal 1D subspace projection, and machine-precision lossless reconstruction ($\|\mathbf{X} - \hat{\mathbf{X}}\|_2 = 1.21 \times 10^{-14}$).
+  * **Part II (Motor Trend Car Road Tests - MTCARS, $N=32$, $p=11$):**
+    * Rigorous comparative analysis between **Unstandardized PCA** (Covariance Matrix $\boldsymbol{\Sigma}$) and **Standardized PCA** (Correlation Matrix $\mathbf{R}$).
+    * Mathematical proof of **Scale Domination**: In Unstandardized PCA, `disp` ($\sigma^2 = 15,360.80$, 75.15%) and `hp` ($\sigma^2 = 4,700.87$, 23.00%) account for **98.15%** of the total system variance ($20,440.40$), causing PC1 alone to explain **92.70%** of variance dominated solely by `disp` (loading $-0.900$) while masking the remaining 9 features ($|w| \le 0.038$).
+    * Standardized PCA equilibrium: Scaling features to unit variance ($\sigma^2 = 1.0$) eliminates scale distortion; requires **4 PCs** to achieve $\ge 90\%$ total variance ($92.32\%$), balancing power/displacement factors against fuel efficiency/drivetrain factors.
+  * **Section 5 (In-depth Q&A):**
+    * **Question 2.1 (Unstandardized PCA):** Mathematical proof that 1 PC explains $92.70\% \ge 90\%$ total variance, dominated by `disp` and `hp`.
+    * **Question 2.2 (Standardized PCA & Contrast):** Formal proof that 4 PCs are required for $92.32\% \ge 90\%$, with balanced loadings ($|w| \in [0.20, 0.37]$), and root-cause explanation of why standardization is mandatory for multi-scale engineering data.
+    * Both questions formatted strictly to **exactly 1 full page each** without spillover.
+  * **Geometric Interpretation via 2D PCA Biplot:** Clear projection of 32 car models onto the PC1-PC2 subspace with 11 loading vectors, revealing 3 semantic clusters: *Muscle & Luxury Heavyweights*, *Economy Compacts*, and *Agile Manual Sports Cars*.
+  * **Reconstruction Error Validation:** Empirical verification that relative reconstruction error $\frac{\|\mathbf{X} - \hat{\mathbf{X}}_r\|_F}{\|\mathbf{X}\|_F} \times 100\%$ monotonically decreases from $r=1$ to $0.00\%$ at $r=11$, confirming the Spectral Theorem.
+* **Deliverables:**
+  * [`67_1027_1042.ipynb`](./assignment/Assignment%207_Dimensionality%20Reduction/67_1027_1042.ipynb) (Official Course Submission File)
+  * [`[Lab] Dimensionality Reduction.ipynb`](./assignment/Assignment%207_Dimensionality%20Reduction/[Lab]%20Dimensionality%20Reduction.ipynb) (Original Lab Notebook)
+  * [`dimensionality-reduction.xlsx`](./assignment/Assignment%207_Dimensionality%20Reduction/dimensionality-reduction.xlsx) (MTCARS Dataset)
+  * [`CPE342_Assignment 7_main.pdf`](./assignment/Assignment%207_Dimensionality%20Reduction/CPE342_Assignment%207_main.pdf) (Publication-Grade Academic Report, 40 pages)
+  * [`benchmark_results.csv`](./assignment/Assignment%207_Dimensionality%20Reduction/benchmark_results.csv) & [`benchmark_results.json`](./assignment/Assignment%207_Dimensionality%20Reduction/benchmark_results.json)
+  * [`plot_1_linear_pca_geometry.pdf`](./assignment/Assignment%207_Dimensionality%20Reduction/plot_1_linear_pca_geometry.pdf) to [`plot_7_reconstruction_error.pdf`](./assignment/Assignment%207_Dimensionality%20Reduction/plot_7_reconstruction_error.pdf) (7 High-Resolution Vector Figures)
 
 ---
 

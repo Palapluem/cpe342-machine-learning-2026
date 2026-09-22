@@ -1,0 +1,464 @@
+% Compile: xelatex "CPE342_Assignment 7_main.tex" (รัน 2 รอบ)
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[no-math]{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{thai}
+\setotherlanguage{english}
+
+\setmainfont{Sarabun}[
+    BoldFont       = Sarabun-Bold,
+    ItalicFont     = Sarabun-Italic,
+    BoldItalicFont = Sarabun-BoldItalic,
+]
+\setmonofont{Consolas}[
+    Scale=0.92,
+    AutoFakeBold=1.5,
+    AutoFakeSlant=0.2
+]
+\newfontfamily\thaifonttt{Consolas}[
+    Scale=0.92,
+    AutoFakeBold=1.5,
+    AutoFakeSlant=0.2
+]
+
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{titlesec}
+\titleformat*{\section}{\raggedright\Large\bfseries}
+\titleformat*{\subsection}{\raggedright\large\bfseries}
+\titleformat*{\subsubsection}{\raggedright\normalsize\bfseries}
+\usepackage{geometry}
+\geometry{
+    a4paper,
+    top=2.2cm,
+    bottom=2.2cm,
+    left=2.3cm,
+    right=2.3cm
+}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\usepackage{needspace}
+\usepackage{caption}
+\usepackage{listings}
+\usepackage{upquote}
+\usepackage{hyperref}
+\tcbuselibrary{skins, breakable}
+
+\XeTeXlinebreaklocale "th"
+\XeTeXlinebreakskip = 0pt plus 1pt
+\sloppy
+
+\definecolor{captioncol}{RGB}{80, 80, 80}
+\definecolor{accentblue}{RGB}{37, 99, 235}
+\definecolor{codebg}{RGB}{248, 250, 252}
+\definecolor{codeframe}{RGB}{203, 213, 225}
+\definecolor{codeaccent}{HTML}{0969DA}
+\newcommand{\codevar}[1]{\textcolor{codeaccent}{\textbf{#1}}}
+\definecolor{keyword}{RGB}{124, 58, 237}
+\definecolor{string}{RGB}{22, 163, 74}
+\definecolor{comment}{RGB}{100, 116, 139}
+\definecolor{output}{RGB}{30, 58, 138}
+\captionsetup{font={small, color=captioncol}, justification=centering}
+
+\lstdefinestyle{pycode}{
+    language=Python,
+    backgroundcolor=\color{codebg},
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{keyword}\bfseries,
+    stringstyle=\color{string},
+    commentstyle=\color{comment}\itshape,
+    numberstyle=\tiny\color{comment},
+    numbers=left,
+    numbersep=8pt,
+    frame=single,
+    rulecolor=\color{codeframe},
+    breaklines=true,
+    breakatwhitespace=false,
+    showstringspaces=false,
+    tabsize=4,
+    xleftmargin=16pt,
+    xrightmargin=4pt,
+    columns=flexible,
+    keepspaces=true
+}
+
+\lstdefinestyle{output}{
+    basicstyle=\ttfamily\small\color{output},
+    backgroundcolor=\color{codebg},
+    frame=single,
+    rulecolor=\color{codeframe},
+    numbers=none,
+    xleftmargin=8pt,
+    xrightmargin=4pt,
+    breaklines=true,
+    breakatwhitespace=false,
+    columns=flexible,
+    keepspaces=true
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=accentblue,
+    citecolor=accentblue,
+    urlcolor=accentblue
+}
+
+\begin{document}
+
+% =========================================================================
+% COVER / HEADER BLOCK
+% =========================================================================
+\begin{center}
+    {\Large \textbf{รายงานวิชาการฉบับสมบูรณ์ (Comprehensive Academic Report)}}\\[0.3em]
+    {\LARGE \textbf{การลดมิติข้อมูลด้วยการวิเคราะห์องค์ประกอบหลัก}}\\[0.2em]
+    {\Large \textbf{(Dimensionality Reduction via Principal Component Analysis)}}\\[0.4em]
+    {\normalsize วิชา CPE 342 Machine Learning — ภาคการศึกษาที่ 1 ปีการศึกษา 2567 / 2569}\\[0.2em]
+    {\normalsize ภาควิชาวิศวกรรมคอมพิวเตอร์ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี}
+\end{center}
+
+\vspace{0.2em}
+\noindent\rule{\linewidth}{1.2pt}
+
+\vspace{0.3em}
+\noindent\textbf{ผู้จัดทำ (Group Members):}
+\begin{enumerate}[leftmargin=1.8em, itemsep=0pt]
+    \item \raggedright \textbf{นายวิศิษฐ์ สุวรรณเนาว์ (Wisit Suwannao)} — รหัสนักศึกษา: \codevar{67070501042}
+    \item \raggedright \textbf{นายนัธทวัฒน์ ปริมสิริคุณาวุฒิ (Natthawat Primsirikunawut)} — รหัสนักศึกษา: \codevar{67070501027}
+\end{enumerate}
+\noindent\textbf{อาจารย์ผู้สอน (Instructor):} ดร. บุณยฤทธิ์ ช่างไชยวัล (Dr. Boonyarit Changaival)\\[0.2em]
+\noindent\textbf{ไฟล์ส่งงานหลัก (Submission Artifacts):} \codevar{67\_1027\_1042.ipynb} (รันครบ $17$ Code Cells), \codevar{CPE342\_Assignment 7\_main.pdf}
+
+\vspace{0.2em}
+\noindent\rule{\linewidth}{0.6pt}
+
+% =========================================================================
+% SECTION 1
+% =========================================================================
+\section{บทนำและรากฐานทางคณิตศาสตร์ของการลดมิติข้อมูล}
+
+ในการเรียนรู้ของเครื่อง (Machine Learning) ชุดข้อมูลในโลกจริงมักประกอบด้วยคุณลักษณะ (Features) จำนวนมาก ซึ่งนำไปสู่ปัญหา \textbf{คำสาปแห่งมิติ (Curse of Dimensionality)} อันได้แก่ ความเบาบางเชิงเรขาคณิต (Geometric Sparsity), ปริมาตรของปริภูมิที่ขยายตัวแบบเอ็กซ์โพเนนเชียล ส่งผลให้การวัดระยะทาง (Euclidean Distance) สูญเสียความหมายเชิงสถิติ (Distance Concentration) ตลอดจนความเสี่ยงต่อการเกิด Overfitting และภาระการคำนวณที่สูง การลดมิติของข้อมูล (Dimensionality Reduction) จึงเป็นขั้นตอนหัวใจสำคัญ โดยเทคนิคเชิงเส้นที่ทรงพลังและเป็นที่นิยมสูงสุดคือ \textbf{Principal Component Analysis (PCA)}
+
+\subsection{การจัดกึ่งกลางข้อมูลและการสร้างเมทริกซ์ความแปรปรวนร่วม}
+กำหนดให้ชุดข้อมูลมี $n$ ตัวอย่างและ $d$ ตัวแปร จัดรูปเป็นเมทริกซ์ $\mathbf{D} \in \mathbb{R}^{n \times d}$ ขั้นตอนแรกคือการทำให้ข้อมูลมีค่าเฉลี่ยเป็นศูนย์ (Zero-Mean Centering):
+\begin{equation}
+    \boldsymbol{\mu} = \frac{1}{n} \sum_{i=1}^n \mathbf{x}_i, \quad \mathbf{X} = \mathbf{D} - \mathbf{1}\boldsymbol{\mu}^T
+\end{equation}
+จากนั้นคำนวณ \textbf{เมทริกซ์ความแปรปรวนร่วมตัวอย่าง (Sample Covariance Matrix)} $\boldsymbol{\Sigma} \in \mathbb{R}^{d \times d}$ โดยใช้ Bessel's Correction ($ddof=1$):
+\begin{equation}
+    \boldsymbol{\Sigma} = \frac{1}{n-1} \mathbf{X}^T \mathbf{X}
+\end{equation}
+โดยสมาชิกในแนวทแยง $\Sigma_{jj} = \text{Var}(X_j)$ คือความแปรปรวนของแต่ละตัวแปร และผลรวมแนวทแยง $\text{tr}(\boldsymbol{\Sigma}) = \sum_{j=1}^d \text{Var}(X_j)$ แสดงถึง \textbf{ความแปรปรวนรวมทั้งหมด (Total Sample Variance)}
+
+\subsection{การแยกสเปกตรัมและการฉายภาพเชิงตั้งฉาก}
+เนื่องจาก $\boldsymbol{\Sigma}$ เป็นเมทริกซ์สมมาตรและกึ่งบวกแน่นอน (Symmetric Positive Semi-Definite) ตามทฤษฎีบทสเปกตรัม (Spectral Theorem) ย่อมสามารถแยกตัวประกอบเฉพาะ (Eigen-decomposition) ได้เสมอ:
+\begin{equation}
+    \boldsymbol{\Sigma} \mathbf{p}_j = \lambda_j \mathbf{p}_j, \quad \boldsymbol{\Sigma} = \mathbf{P} \boldsymbol{\Lambda} \mathbf{P}^T
+\end{equation}
+โดยที่ $\lambda_1 \ge \lambda_2 \ge \dots \ge \lambda_d \ge 0$ คือค่าลักษณะเฉพาะ (Eigenvalues) ซึ่งเท่ากับความแปรปรวนของข้อมูลบนแกนองค์ประกอบหลักนั้น ๆ และ $\mathbf{p}_j \in \mathbb{R}^d$ คือเวกเตอร์ลักษณะเฉพาะหนึ่งหน่วย (Orthonormal Eigenvectors, $\|\mathbf{p}_j\| = 1, \mathbf{p}_i^T \mathbf{p}_j = 0$ สำหรับ $i \ne j$)
+
+การลดมิติข้อมูลสู่มิติย่อย $r < d$ ทำได้โดยเลือกเวกเตอร์ลักษณะเฉพาะ $r$ ตัวแรกมารวมเป็นเมทริกซ์การฉาย $\mathbf{P}_r = [\mathbf{p}_1, \mathbf{p}_2, \dots, \mathbf{p}_r] \in \mathbb{R}^{d \times r}$ และฉายข้อมูล $\mathbf{X}$ สู่พิกัดใหม่ $\mathbf{Z} \in \mathbb{R}^{n \times r}$:
+\begin{equation}
+    \mathbf{Z} = \mathbf{X} \mathbf{P}_r
+\end{equation}
+การฟื้นฟูข้อมูลย้อนกลับ (Reconstruction) สู่ปริภูมิตั้งต้นทำได้ผ่านการคูณด้วย $\mathbf{P}_r^T$ และบวกเวกเตอร์ค่าเฉลี่ยคืน:
+\begin{equation}
+    \hat{\mathbf{X}} = \mathbf{Z} \mathbf{P}_r^T, \quad \hat{\mathbf{D}} = \hat{\mathbf{X}} + \mathbf{1}\boldsymbol{\mu}^T
+\end{equation}
+หากเลือก $r = d$ ข้อมูลจะถูกฟื้นฟูได้อย่างสมบูรณ์ไร้การสูญเสีย ($\|\mathbf{X} - \hat{\mathbf{X}}\|_F = 0$) แต่หากเลือก $r < d$ ค่าความผิดพลาดในการฟื้นฟูจะเท่ากับผลรวมของค่าลักษณะเฉพาะที่ถูกตัดทิ้ง:
+\begin{equation}
+    \|\mathbf{X} - \hat{\mathbf{X}}\|_F^2 = (n-1) \sum_{j=r+1}^d \lambda_j
+\end{equation}
+
+\subsection{สัดส่วนความแปรปรวนที่อธิบายได้ (PVE)}
+สัดส่วนความแปรปรวนที่องค์ประกอบหลักที่ $j$ สามารถอธิบายได้เรียกว่า \textbf{Proportion of Variance Explained (PVE)}:
+\begin{equation}
+    \text{PVE}_j = \frac{\lambda_j}{\sum_{k=1}^d \lambda_k} = \frac{\lambda_j}{\text{tr}(\boldsymbol{\Sigma})}, \quad \text{Cumulative PVE}_r = \sum_{j=1}^r \text{PVE}_j
+\end{equation}
+
+% =========================================================================
+% SECTION 2
+% =========================================================================
+\section{การคำนวณและตรวจสอบ Linear PCA แบบทีละขั้นตอน (Part I)}
+
+ใน Part I เราศึกษาชุดข้อมูลเชิงสาธิตขนาด 12 ตัวอย่าง 2 มิติ ($x_1, x_2$) จากสไลด์บรรยายสัปดาห์ที่ 8:
+\begin{align*}
+    x_1 &= [9, 15, 25, 14, 10, 18, 0, 16, 5, 19, 16, 20]^T, \quad \bar{x}_1 = 14.00\\
+    x_2 &= [39, 56, 93, 61, 50, 75, 32, 85, 42, 70, 66, 80]^T, \quad \bar{x}_2 = 63.83
+\end{align*}
+
+\subsection{ผลการคำนวณเชิงตัวเลขที่ตรวจสอบความถูกต้อง 100\%}
+\begin{enumerate}[leftmargin=1.5em, itemsep=2pt]
+    \item \textbf{เมทริกซ์ความแปรปรวนร่วม $\mathbf{Z}$ (Sample Covariance with $ddof=1$):}
+    \begin{equation}
+        \mathbf{Z} = \begin{bmatrix} 48.0000 & 131.6364 \\ 131.6364 & 369.7879 \end{bmatrix}, \quad \text{Total Variance} = \text{tr}(\mathbf{Z}) = 417.7879
+    \end{equation}
+    \item \textbf{การหาคู่ลักษณะเฉพาะ (Eigenpairs):}
+    \begin{align}
+        \lambda_1 &= 411.6219 \quad (\text{PVE}_1 = 98.52\%), \quad \mathbf{p}_1 = [-0.3201, -0.9474]^T\\
+        \lambda_2 &= 6.1812 \quad (\text{PVE}_2 = 1.48\%), \quad \mathbf{p}_2 = [-0.9474, 0.3201]^T
+    \end{align}
+    \item \textbf{การแปลงลดมิติและการฟื้นฟูกลับแบบสมบูรณ์ ($r=2$):}
+    เมทริกซ์ $\mathbf{P}_r = [\mathbf{p}_1, \mathbf{p}_2]$ มีคุณสมบัติ Orthonormal ($\mathbf{P}_r^T \mathbf{P}_r = \mathbf{I}_2$) ข้อมูลที่แปลง $\mathbf{Z}_{\text{scores}} = \mathbf{X}\mathbf{P}_r$ มีความแปรปรวนบนแต่ละแกนเท่ากับ $\lambda_1$ และ $\lambda_2$ พอดี การฟื้นฟูกลับ $\hat{\mathbf{D}} = \mathbf{Z}_{\text{scores}}\mathbf{P}_r^T + \mathbf{1}\boldsymbol{\mu}^T$ ให้ค่าความผิดพลาด $\|\mathbf{D} - \hat{\mathbf{D}}\|_F = 0.0000$ (ต่ำกว่า $10^{-14}$)
+\end{enumerate}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.82\linewidth]{plot_1_linear_pca_geometry.pdf}
+\caption{การแจกแจงของข้อมูล 12 จุดและแกนองค์ประกอบหลัก $p_1, p_2$ ที่มีจุดกำเนิด ณ จุดเฉลี่ย $\boldsymbol{\mu}$}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.82\linewidth]{plot_2_projection_reconstruction.pdf}
+\caption{การฉายข้อมูลตั้งฉากลงบนปริภูมิย่อย 1 มิติ (PC1) และเส้นระยะตกค้าง (Residual Projection Lines)}
+\end{figure}
+
+% =========================================================================
+% SECTION 3
+% =========================================================================
+\section{การสำรวจและสถาปัตยกรรมชุดข้อมูล MTCARS (Part II)}
+
+ชุดข้อมูล \textbf{MTCARS} จากชีต \codevar{MTCARS} ในไฟล์ \codevar{dimensionality-reduction.xlsx} ประกอบด้วยข้อมูลรถยนต์จำนวน $32$ รุ่น และมีคุณลักษณะเชิงวิศวกรรม $11$ ตัวแปร ได้แก่:
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lllcc}
+\toprule
+\textbf{ตัวแปร} & \textbf{ความหมายเชิงกายภาพ} & \textbf{หน่วยการวัด} & \textbf{Mean} & \textbf{Variance ($\sigma^2$)} \\
+\midrule
+\codevar{mpg}  & อัตราสิ้นเปลืองน้ำมัน & ไมล์ต่อแกลลอน & 20.09 & 36.32 \\
+\codevar{cyl}  & จำนวนกระบอกสูบ & สูบ (4, 6, 8) & 6.19 & 3.19 \\
+\codevar{disp} & ปริมาตรกระบอกสูบ (Displacement) & ลูกบาศก์นิ้ว (cu.in.) & 230.72 & \textbf{15,360.80} \\
+\codevar{hp}   & แรงม้าสูงสุด (Gross Horsepower) & แรงม้า (hp) & 146.69 & \textbf{4,700.87} \\
+\codevar{drat} & อัตราทดเฟืองท้าย & อัตราส่วน & 3.60 & 0.29 \\
+\codevar{wt}   & น้ำหนักรถยนต์ & 1,000 ปอนด์ & 3.22 & 0.96 \\
+\codevar{qsec} & เวลาเร่งความเร็วระยะ 1/4 ไมล์ & วินาที & 17.85 & 3.19 \\
+\codevar{vs}   & การจัดวางกระบอกสูบ (0=V, 1=Straight) & ไบนารี & 0.44 & 0.25 \\
+\codevar{am}   & ระบบเกียร์ (0=Auto, 1=Manual) & ไบนารี & 0.41 & 0.25 \\
+\codevar{gear} & จำนวนเกียร์เดินหน้า & เกียร์ & 3.69 & 0.54 \\
+\codevar{carb} & จำนวนคาร์บูเรเตอร์ & ตัว & 2.81 & 2.61 \\
+\bottomrule
+\end{tabular}
+\caption{สถิติเชิงพรรณนาและสเกลความแปรปรวนของ 11 คุณลักษณะในชุดข้อมูล MTCARS}
+\end{table}
+
+ความแตกต่างอย่างมหาศาลของสเกลความแปรปรวนเห็นได้ชัดเจนในภาพ Figure 3: ตัวแปร \codevar{disp} ($\sigma^2 = 15,360.8$) และ \codevar{hp} ($\sigma^2 = 4,700.9$) มีขนาดใหญ่กว่า \codevar{wt}, \codevar{vs}, \codevar{am} กว่าหลายพันเท่า ซึ่งเป็นปัจจัยวิกฤตที่ส่งผลต่อพฤติกรรมของ PCA
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\linewidth]{plot_3_mtcars_eda_corrmat.pdf}
+\caption{การกระจายตัวของความแปรปรวน (Log Scale) และเมทริกซ์สหสัมพันธ์เพียร์สันของ MTCARS}
+\end{figure}
+
+% =========================================================================
+% SECTION 4
+% =========================================================================
+\section{การเปรียบเทียบเชิงวิเคราะห์ระหว่าง Unstandardized และ Standardized PCA}
+
+เมื่อทำการคำนวณ PCA บนข้อมูลดิบที่ไม่ผ่านการปรับมาตรฐาน เปรียบเทียบกับข้อมูลที่ผ่านการปรับมาตรฐานด้วย \codevar{StandardScaler()} ผลลัพธ์ที่ได้มีความแตกต่างกันอย่างมีนัยสำคัญอย่างยิ่ง:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lrrrrrr}
+\toprule
+& \multicolumn{3}{c}{\textbf{Unstandardized PCA}} & \multicolumn{3}{c}{\textbf{Standardized PCA}} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-7}
+\textbf{PC} & \textbf{Eigenvalue} & \textbf{PVE (\%)} & \textbf{Cum. PVE (\%)} & \textbf{Eigenvalue} & \textbf{PVE (\%)} & \textbf{Cum. PVE (\%)} \\
+\midrule
+PC1 & 18,946.06 & \textbf{92.70\%} & 92.70\% & 6.8216 & \textbf{60.08\%} & 60.08\% \\
+PC2 & 1,479.25  & 7.24\%  & \textbf{99.94\%} & 2.7360 & 24.10\% & 84.17\% \\
+PC3 & 10.74     & 0.05\%  & 99.98\% & 0.6474 & 5.70\%  & \textbf{89.87\%} \\
+PC4 & 2.65      & 0.01\%  & 99.99\% & 0.2783 & 2.45\%  & \textbf{92.32\%} \\
+PC5 & 1.09      & 0.01\%  & 100.00\% & 0.2307 & 2.03\%  & 94.36\% \\
+PC6 & 0.32      & 0.00\%  & 100.00\% & 0.2178 & 1.92\%  & 96.28\% \\
+PC7 & 0.17      & 0.00\%  & 100.00\% & 0.1394 & 1.23\%  & 97.51\% \\
+PC8 & 0.08      & 0.00\%  & 100.00\% & 0.1276 & 1.12\%  & 98.63\% \\
+PC9 & 0.03      & 0.00\%  & 100.00\% & 0.0792 & 0.70\%  & 99.33\% \\
+PC10& 0.01      & 0.00\%  & 100.00\% & 0.0538 & 0.47\%  & 99.80\% \\
+PC11& 0.00      & 0.00\%  & 100.00\% & 0.0230 & 0.20\%  & 100.00\% \\
+\midrule
+\textbf{Total} & \textbf{20,440.40} & \textbf{100.00\%} & — & \textbf{11.3548} & \textbf{100.00\%} & — \\
+\bottomrule
+\end{tabular}
+\caption{ตารางเปรียบเทียบสเปกตรัมของค่าลักษณะเฉพาะ สัดส่วน PVE และความแปรปรวนสะสม}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\linewidth]{plot_4_scree_pve_comparison.pdf}
+\caption{การเปรียบเทียบ Scree Plot และความแปรปรวนสะสมระหว่างสองระเบียบวิธี}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\linewidth]{plot_5_pc_loadings_barplot.pdf}
+\caption{การเปรียบเทียบค่าน้ำหนักตัวแปร (Loadings) ในแกน PC1}
+\end{figure}
+
+% =========================================================================
+% SECTION 5: QUESTIONS AND ANSWERS (EXACTLY 1 PAGE PER QUESTION)
+% =========================================================================
+\clearpage
+\section*{5. คำตอบคำถามเชิงลึกประจำการทดลอง (Questions and Answers)}
+\vspace{-0.8em}
+\subsection*{คำถามที่ 2.1: การวิเคราะห์ PCA บนข้อมูลไม่ปรับมาตรฐาน (Question 2.1)}
+\vspace{-0.5em}
+
+\begin{tcolorbox}[fontupper=\small, colback=gray!3!white, colframe=gray!45!black, left=6pt, right=6pt, top=3pt, bottom=3pt, boxrule=0.5pt, arc=2pt, boxsep=1pt]
+\textbf{โจทย์ (Question 2.1 Prompt)}:
+\begin{itemize}[leftmargin=1.2em, itemsep=0pt, topsep=0pt, parsep=0pt]
+    \item[(a)] \textit{How many PCs are sufficient to explain at least approximately 90\% of the total variation in the data?}
+    \item[(b)] \textit{Which of the original features get large weights (loadings) in PC1?}
+\end{itemize}
+
+\vspace{-0.2em}
+\noindent\rule{\linewidth}{0.4pt}
+\vspace{-0.2em}
+
+\noindent\textbf{\normalsize (a) จำนวน PCs ที่เพียงพอสำหรับอธิบายความแปรปรวนรวม $\ge 90\%$}\par\vspace{0.05em}
+\textbf{คำตอบ:} ใช้เพียง \textbf{1 PC (PC1 เพียงแกนเดียว)} ก็เพียงพออย่างสมบูรณ์\\[0.05em]
+\textbf{หลักฐานเชิงประจักษ์และการพิสูจน์เชิงคณิตศาสตร์ (Empirical Proof):}
+\begin{itemize}[leftmargin=1.3em, itemsep=0.5pt, topsep=0.5pt]
+    \item ความแปรปรวนรวมทั้งหมด: $\text{Total Variance} = \text{tr}(\boldsymbol{\Sigma}_{\text{unstd}}) = \sum_{j=1}^{11} \lambda_j = 20,440.4042$
+    \item ค่าลักษณะเฉพาะสูงสุดอันดับแรกมีค่าสูงถึง $\lambda_1 = 18,946.0620$
+    \item สัดส่วนความแปรปรวนที่อธิบายได้โดย $\text{PC1}$: $\text{PVE}_1 = \frac{\lambda_1}{\sum_{k=1}^{11} \lambda_k} = \frac{18,946.0620}{20,440.4042} = \mathbf{92.6893\% \approx 92.70\%}$
+    \item ค่า $\text{PVE}_1 = 92.70\% > 90\%$ ทำให้การคงไว้เพียง $r=1$ มิติ ครอบคลุมสารสนเทศเกินเกณฑ์ทันที และหากใช้ $r=2$ ($\text{PC1} + \text{PC2}$) จะอธิบายได้สูงถึง $\mathbf{99.94\%}$
+\end{itemize}
+
+\vspace{-0.1em}
+\noindent\textbf{\normalsize (b) ตัวแปรตั้งต้นที่ได้รับค่าน้ำหนัก (Loadings) สูงในแกน PC1}\par\vspace{0.05em}
+\textbf{คำตอบ:} ตัวแปรที่ได้รับค่าน้ำหนักสูงอย่างมีนัยสำคัญคือ \textbf{\codevar{disp} (Displacement)} และ \textbf{\codevar{hp} (Horsepower)}\\[0.05em]
+\textbf{ตารางแจกแจงค่าน้ำหนักของเวกเตอร์ $\mathbf{p}_1$ ใน Unstandardized PCA:}
+\vspace{-0.2em}
+
+\noindent\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{lrrrrrrrrrrr}
+\toprule
+\textbf{Feature} & \codevar{disp} & \codevar{hp} & \codevar{mpg} & \codevar{cyl} & \codevar{qsec} & \codevar{wt} & \codevar{carb} & \codevar{drat} & \codevar{vs} & \codevar{gear} & \codevar{am} \\
+\midrule
+\textbf{Loading} & \textbf{-0.8996} & \textbf{-0.4348} & 0.0381 & -0.0120 & 0.0067 & -0.0062 & -0.0058 & 0.0027 & 0.0027 & 0.0026 & 0.0020 \\
+\textbf{Abs (\%)} & \textbf{89.96\%} & \textbf{43.48\%} & 3.81\% & 1.20\% & 0.67\% & 0.62\% & 0.58\% & 0.27\% & 0.27\% & 0.26\% & 0.20\% \\
+\bottomrule
+\end{tabular}
+}
+\par\vspace{0.2em}
+\raggedright
+\textbf{คำอธิบายเหตุผลทางกายภาพและคณิตศาสตร์ (Root Cause Analysis):}
+\begin{enumerate}[leftmargin=1.3em, itemsep=0.5pt, topsep=0.5pt]
+    \item \textbf{การครอบงำของสเกลหน่วยวัด (Scale Domination):} ตัวแปร \codevar{disp} มีความแปรปรวน $\sigma^2 = 15,360.80$ คิดเป็น \textbf{75.15\%} ของความแปรปรวนทั้งระบบ และ \codevar{hp} มีความแปรปรวน $\sigma^2 = 4,700.87$ คิดเป็น \textbf{23.00\%} รวมสองตัวแปรครองความแปรปรวนไปถึง \textbf{98.15\%}
+    \item \textbf{การละเลยตัวแปรสเกลเล็ก:} ตัวแปรสำคัญอย่าง \codevar{wt} ($\sigma^2 = 0.96$), \codevar{am} ($\sigma^2 = 0.25$) หรือ \codevar{drat} ($\sigma^2 = 0.29$) มีความแปรปรวนต่ำกว่าหลักพันเท่า สมการจึงเลือกลำดับเวกเตอร์ที่ขนานกับแกน \codevar{disp} แทบทั้งหมด โดยที่ตัวแปรอื่นทั้ง 9 ตัวมีน้ำหนักใกล้ศูนย์ ($|w| \le 0.038$)
+    \item \textbf{ข้อสรุปทางระเบียบวิธี:} ใน Unstandardized PCA แกน $\text{PC1}$ ไม่ได้สะท้อนความสัมพันธ์พหุคูณของรถยนต์ แต่ทำหน้าที่เป็นเพียง ``ตัวแทนของตัวแปร \codevar{disp}'' เท่านั้น
+\end{enumerate}
+\end{tcolorbox}
+
+% =========================================================================
+% QUESTION 2.2 PAGE (EXACTLY 1 FULL PAGE)
+% =========================================================================
+\clearpage
+\subsection*{คำถามที่ 2.2: การวิเคราะห์ PCA แบบปรับมาตรฐานและเปรียบเทียบเชิงลึก (Question 2.2)}
+\vspace{-0.5em}
+
+\begin{tcolorbox}[fontupper=\small, colback=gray!3!white, colframe=gray!45!black, left=6pt, right=6pt, top=3pt, bottom=3pt, boxrule=0.5pt, arc=2pt, boxsep=1pt]
+\textbf{โจทย์ (Question 2.2 Prompt)}:
+\begin{itemize}[leftmargin=1.2em, itemsep=0pt, topsep=0pt, parsep=0pt]
+    \item[(a)] \textit{How many PCs are sufficient to explain at least approximately 90\% of the total variation in the data?}
+    \item[(b)] \textit{Which of the original features get large weights (loadings) in PC1?}
+    \item[(c)] \textit{Do the PCA outputs differ significantly between standardizing and not standardizing the dataset before applying PCA? Explain the results.}
+\end{itemize}
+
+\vspace{-0.2em}
+\noindent\rule{\linewidth}{0.4pt}
+\vspace{-0.2em}
+
+\noindent\textbf{\normalsize (a) จำนวน PCs ที่เพียงพอสำหรับอธิบายความแปรปรวนรวม $\ge 90\%$}\par\vspace{0.05em}
+\textbf{คำตอบ:} ต้องใช้ \textbf{4 PCs} เพื่อให้ครอบคลุมเกิน $90\%$ อย่างสมบูรณ์ ($\mathbf{92.32\%}$) หรืออนุโลมให้เป็น \textbf{3 PCs} หากยอมรับค่าประมาณใกล้เคียง ($\mathbf{89.87\% \approx 90\%}$)
+\begin{itemize}[leftmargin=1.3em, itemsep=0.5pt, topsep=0.5pt]
+    \item ความแปรปรวนสะสมใน Standardized PCA: $\text{PC1} = 60.08\%$, $\text{PC1-2} = 84.17\%$, $\text{PC1-3} = 89.87\%$, $\text{PC1-4} = \mathbf{92.32\%}$
+    \item เมื่อปรับมาตรฐานให้ทุกตัวแปรมีความแปรปรวนเท่ากันที่ $\sigma^2 = 1.0$ สารสนเทศจะไม่กระจุกตัวที่ตัวแปรเดี่ยว จึงต้องสะสมถึง 4 แกนเพื่อรวบรวมข้อมูลให้ครบตามเกณฑ์
+\end{itemize}
+
+\vspace{-0.1em}
+\noindent\textbf{\normalsize (b) ตัวแปรตั้งต้นที่ได้รับค่าน้ำหนัก (Loadings) สูงในแกน PC1}\par\vspace{0.05em}
+\textbf{คำตอบ:} ใน Standardized PCA \textbf{ทุกตัวแปรมีบทบาทร่วมกันอย่างสมดุล} ($|w_j| \in [0.20, 0.37]$) โดยแบ่งขั้วการกระจายตัวออกเป็น 2 กลุ่มตรงข้ามอย่างชัดเจน:
+\begin{enumerate}[leftmargin=1.3em, itemsep=0.5pt, topsep=0.5pt]
+    \item \textbf{กลุ่มค่าน้ำหนักลบ (Power, Size \& Weight Axis):} \codevar{cyl} ($-0.3739$), \codevar{disp} ($-0.3682$), \codevar{wt} ($-0.3461$), \codevar{hp} ($-0.3301$), \codevar{carb} ($-0.2140$)
+    \item \textbf{กลุ่มค่าน้ำหนักบวก (Fuel Efficiency \& Transmission Axis):} \codevar{mpg} ($+0.3625$), \codevar{vs} ($+0.3065$), \codevar{drat} ($+0.2942$), \codevar{am} ($+0.2349$), \codevar{gear} ($+0.2069$), \codevar{qsec} ($+0.2005$)
+\end{enumerate}
+\textbf{การตีความเชิงกายภาพ:} แกน $\text{PC1}$ แสดงถึงดัชนีวัดความประหยัดและความคล่องตัว ปะทะกับ ขนาดเครื่องยนต์ น้ำหนัก และกำลังขับเคลื่อน ซึ่งเป็น Trade-off หลักของวิศวกรรมยานยนต์
+
+\vspace{-0.1em}
+\noindent\textbf{\normalsize (c) การวิเคราะห์เปรียบเทียบว่าทำไมผลลัพธ์จึงแตกต่างกันอย่างมีนัยสำคัญยิ่ง}\par\vspace{0.05em}
+\textbf{คำตอบ:} แตกต่างกันอย่างมหาศาลและมีความสำคัญเชิงรากฐานทางสถิติ (Dramatically Different) ด้วยเหตุผล 3 ประการ:
+\begin{enumerate}[leftmargin=1.3em, itemsep=0.5pt, topsep=0.5pt]
+    \item \textbf{ความหมายของเมทริกซ์ที่นำมาคำนวณ (Covariance vs Correlation Matrix):} Unstandardized PCA คำนวณบน Covariance Matrix ($\boldsymbol{\Sigma}$) ซึ่งขึ้นกับหน่วยวัด ขณะที่ Standardized PCA ปรับ $z = (x - \mu)/\sigma$ ทำให้คำนวณบน \textbf{Pearson Correlation Matrix ($\mathbf{R}$)} ซึ่งคงที่ต่อสเกล (Scale-Invariant)
+    \item \textbf{การบิดเบือนทางเรขาคณิต (Geometric Distortion):} ใน Unstandardized PCA แกนข้อมูลถูกยืดออกตามหน่วยลูกบาศก์นิ้วของ \codevar{disp} ทำให้ทรงรีของข้อมูลชี้ไปในแนวแกน \codevar{disp} ตัวเดียว ขณะที่ Standardized PCA ปรับให้ความยาวข้อมูลทุกมิติมีสเกลเท่ากัน ทรงรีจึงหมุนตามสหสัมพันธ์ที่แท้จริง
+    \item \textbf{ข้อเสนอแนะเชิงวิศวกรรม (Engineering Recommendation):} เมื่อคุณลักษณะมีหน่วยการวัดคนละประเภท \textbf{จำเป็นอย่างยิ่งที่จะต้องทำ Data Standardization ก่อนประยุกต์ใช้ PCA เสมอ} มิฉะนั้นผลลัพธ์จะถูกบิดเบือน
+\end{enumerate}
+\end{tcolorbox}
+
+% =========================================================================
+% SECTION 6
+% =========================================================================
+\clearpage
+\section{การตีความทางเรขาคณิตและการวิเคราะห์ 2D Biplot}
+
+เพื่อทำความเข้าใจเชิงลึกเกี่ยวกับการจัดกลุ่มและการกระจายตัวของรถยนต์ทั้ง 32 รุ่น เราสร้างแผนภาพ \textbf{2D PCA Biplot} โดยฉายจุดพิกัดของรถยนต์ลงบนระนาบ $(\text{PC1}, \text{PC2})$ ควบคู่กับเวกเตอร์ค่าน้ำหนักของตัวแปรทั้ง 11 ตัว (Figure 6)
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.78\linewidth]{plot_6_pca_biplot_2d.pdf}
+\caption{แผนภาพ 2D PCA Biplot บนชุดข้อมูล MTCARS ที่ผ่านการปรับมาตรฐาน (Standardized)}
+\end{figure}
+
+\subsection{การวิเคราะห์กลุ่มยานยนต์เชิงความหมาย (Semantic Vehicle Clustering)}
+จากแผนภาพ Figure 6 สามารถจำแนกประชากรรถยนต์ออกเป็น 3 กลุ่มพฤติกรรมหลักอย่างชัดเจน:
+\begin{enumerate}[leftmargin=1.5em, itemsep=1.5pt, topsep=1.5pt]
+    \item \textbf{กลุ่มรถยนต์สมรรถนะสูงและตัวถังขนาดใหญ่ (Muscle \& Luxury Heavyweights):}
+    กระจุกตัวอยู่ในควอแดรนต์ซ้าย (ค่า $\text{PC1} < -2.0$) เช่น \textit{Lincoln Continental, Cadillac Fleetwood, Chrysler Imperial, Camaro Z28} รถยนต์กลุ่มนี้มีเวกเตอร์ชี้ไปในทิศทางเดียวกับ \codevar{disp}, \codevar{cyl}, \codevar{wt}, \codevar{hp} สะท้อนถึงเครื่องยนต์ V8 ขนาดใหญ่ กินน้ำมันสูง และมีน้ำหนักตัวถังมาก
+    \item \textbf{กลุ่มรถยนต์ประหยัดพลังงานและขนาดกะทัดรัด (Economy Compacts):}
+    กระจุกตัวอยู่ในควอแดรนต์ขวาบน (ค่า $\text{PC1} > +2.0, \text{PC2} > 0$) เช่น \textit{Toyota Corolla, Fiat 128, Honda Civic, Lotus Europa} อยู่ในทิศทางเดียวกับเวกเตอร์ \codevar{mpg}, \codevar{qsec}, \codevar{vs} แสดงถึงเครื่องยนต์ 4 สูบแถวเรียง ประหยัดน้ำมัน และน้ำหนักเบา
+    \item \textbf{กลุ่มรถสปอร์ตเกียร์ธรรมดาความเร็วสูง (Agile Manual Sports Cars):}
+    กระจุกตัวอยู่ในควอแดรนต์ขวาล่าง เช่น \textit{Porsche 914-2, Ferrari Dino, Ford Pantera L} สอดคล้องกับทิศทางของเวกเตอร์ \codevar{am}, \codevar{gear}, \codevar{drat} ซึ่งเน้นอัตราทดเกียร์ธรรมดาและความคล่องตัวสูง
+\end{enumerate}
+
+\subsection{การตรวจสอบข้อผิดพลาดในการฟื้นฟูข้อมูล (Reconstruction Error Curve)}
+Figure 7 แสดงกราฟข้อผิดพลาดสัมพัทธ์ในการฟื้นฟูข้อมูล $\frac{\|\mathbf{X} - \hat{\mathbf{X}}_r\|_F}{\|\mathbf{X}\|_F} \times 100\%$ เมื่อเพิ่มจำนวนมิติ $r$ จาก 1 ถึง 11 จะเห็นว่าค่าความผิดพลาดลดลงสู่ $0.00\%$ เมื่อ $r=11$ ยืนยันคุณสมบัติการแปลงย้อนกลับแบบไม่สูญเสียสารสนเทศ (Lossless Reconstruction) ตามทฤษฎี Spectral Theorem
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.72\linewidth]{plot_7_reconstruction_error.pdf}
+\caption{กราฟ Normalized Reconstruction Error เทียบกับจำนวนองค์ประกอบหลักที่คงไว้ ($r$)}
+\end{figure}
+
+% =========================================================================
+% SECTION 7
+% =========================================================================
+\section{บทสรุปและแนวปฏิบัติที่ดีที่สุดในงานวิศวกรรมข้อมูล}
+
+การทดลองใน Assignment 7 นี้ให้ข้อสรุปเชิงทฤษฎีและการประยุกต์ใช้ที่สำคัญยิ่ง 3 ประการ:
+\begin{enumerate}[leftmargin=1.5em, itemsep=1.5pt, topsep=1.5pt]
+    \item \textbf{ความสำคัญสูงสุดของการปรับมาตรฐานข้อมูล (Standardization is Mandatory):} การทำ PCA บนข้อมูลที่ยังไม่ได้ปรับมาตรฐานจะทำให้ตัวแปรที่มีหน่วยวัดสเกลใหญ่ครอบงำระบบโดยสิ้นเชิง การปรับมาตรฐานให้มี $\mu=0, \sigma^2=1$ จะแปลงปัญหาเป็นการแยกตัวประกอบเฉพาะบน Correlation Matrix ซึ่งรักษาความสัมพันธ์ที่แท้จริงของระบบ
+    \item \textbf{เกณฑ์การเลือกจำนวนมิติที่เหมาะสม ($r$ Selection Criteria):} ในการลดมิติข้อมูล ควรพิจารณาร่วมกันระหว่างเกณฑ์ความแปรปรวนสะสม ($\ge 90\%$), จุดหักศอกบน Scree Plot (Elbow Method), และค่าลักษณะเฉพาะที่มากกว่า $1.0$ (Kaiser Criterion) ซึ่งสำหรับ MTCARS การเลือก $r=4$ มิติสามารถลดมิติข้อมูลลงได้ถึง $63.6\%$ ขณะที่รักษาความแปรปรวนไว้ได้สูงถึง $92.32\%$
+    \item \textbf{บทบาทของ Biplot ในการวิเคราะห์เชิงสำรวจ:} 2D Biplot เป็นเครื่องมือทัศนวิเคราะห์ (Visual Analytics) ที่ทรงพลังในการทำความเข้าใจโครงสร้างประชากรข้อมูล การจัดกลุ่มธรรมชาติ และทิศทางของปัจจัยขับเคลื่อนพร้อมกันในแผนภาพเดียว
+\end{enumerate}
+
+% =========================================================================
+% APPENDIX: FULL JUPYTER NOTEBOOK CODE & OUTPUT
+% =========================================================================
+\clearpage
+\appendix
+\raggedbottom
+\section*{Appendix: Full Jupyter Notebook Code \& Output}
+
+รายละเอียดต่อไปนี้คือโค้ด Python ที่ใช้แก้ปัญหาและวิเคราะห์แบบจำลอง Dimensionality Reduction via PCA บนชุดข้อมูล MTCARS พร้อมผลลัพธ์และกราฟทั้งหมด ซึ่งได้รันจริงจาก Jupyter Notebook (\texttt{[Lab] Dimensionality Reduction.ipynb} หรือ \texttt{67\_1027\_1042.ipynb})
+
+\input{notebook_appendix_7.tex}
+
+\end{document}
