@@ -25,15 +25,18 @@ This document serves as the authoritative, comprehensive Workspace Rules and Sys
   - **Assignment 6 (Convolutional Neural Networks):** 2 Group Members
     - `67070501027` นัธทวัฒน์ ปริมสิริคุณาวุฒิ (Natthawat Primsirikunawut)
     - `67070501042` วิศิษฐ์ สุวรรณเนาว์ (Wisit Suwannao)
-  - **Assignment 7 (Dimensionality Reduction):** 2 Group Members
+  - **Assignment 7 (Dimensionality Reduction):** 5 Group Members
+    - `67070501003` กันต์ธีร์ ดวงมณี (Guntee Doungmanee)
     - `67070501027` นัธทวัฒน์ ปริมสิริคุณาวุฒิ (Natthawat Primsirikunawut)
     - `67070501042` วิศิษฐ์ สุวรรณเนาว์ (Wisit Suwannao)
+    - `67070501045` ศุภวิชญ์ มารยาท (Supawit Marayat)
+    - `67070501067` พลวริษฐ์ วัฒนเหมรัตน์ (Polwarit Watthanahemmarat)
 - **Official Submission Notebook File Naming:**
-  - Course convention: `(First 2 digits of ID)_(Last 4 digits of Member 1)_(Last 4 digits of Member 2)[_Member 3].ipynb`
+  - Course convention: `(First 2 digits of ID)_(Last 4 digits of Member 1)_(Last 4 digits of Member 2)[_Member 3...].ipynb`
   - Examples:
     - Assignment 5: `1027_1042_1067.ipynb`
     - Assignment 6: `67_1027_1042.ipynb`
-    - Assignment 7: `67_1027_1042.ipynb`
+    - Assignment 7: `67_1003_1027_1042_1045_1067.ipynb`
 
 ---
 
