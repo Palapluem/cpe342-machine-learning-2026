@@ -12,8 +12,6 @@ read_friend.py
 trim_tex.py
 make_notebook.py
 
-# Large media files (exceeding GitHub 100MB limit)
-*.mp4
 
 # macOS and Windows system files
 .DS_Store
