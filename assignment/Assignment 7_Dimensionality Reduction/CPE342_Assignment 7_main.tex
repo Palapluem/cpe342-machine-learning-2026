@@ -125,10 +125,10 @@
     {\Large\textbf{Assignment 7: Dimensionality Reduction (PCA)}}\\[4pt]
     {\large การลดมิติข้อมูลด้วยการวิเคราะห์องค์ประกอบหลัก (PCA), การพิสูจน์การครอบงำของสเกลความแปรปรวน และการตีความทางเรขาคณิตด้วย 2D Biplot}\\[2pt]
     {\normalsize (Unsupervised Dimensionality Reduction via Principal Component Analysis, Spectral Decomposition, Scale Domination Proof, and 2D Biplot Geometric Interpretation)}\\[8pt]
-    \begin{tabular}{c@{\hspace{3.5em}}c}
-        \textcolor{accentblue}{\textbf{67070501003} กันต์ธีร์ ดวงมณี} & \textcolor{accentblue}{\textbf{67070501027} นัธทวัฒน์ ปริมสิริคุณาวุฒิ} \\[4pt]
-        \textcolor{accentblue}{\textbf{67070501042} วิศิษฐ์ สุวรรณเนาว์} & \textcolor{accentblue}{\textbf{67070501045} ศุภวิชญ์ มารยาท} \\[4pt]
-        \multicolumn{2}{c}{\textcolor{accentblue}{\textbf{67070501067} พลวริษฐ์ วัฒนเหมรัตน์}}
+    \begin{tabular}{r@{\hspace{0.8em}}l@{\hspace{4em}}r@{\hspace{0.8em}}l}
+        \textcolor{accentblue}{\textbf{67070501003}} & \textcolor{accentblue}{กันต์ธีร์ ดวงมณี} & \textcolor{accentblue}{\textbf{67070501027}} & \textcolor{accentblue}{นัธทวัฒน์ ปริมสิริคุณาวุฒิ} \\[4pt]
+        \textcolor{accentblue}{\textbf{67070501042}} & \textcolor{accentblue}{วิศิษฐ์ สุวรรณเนาว์} & \textcolor{accentblue}{\textbf{67070501045}} & \textcolor{accentblue}{ศุภวิชญ์ มารยาท} \\[4pt]
+        \textcolor{accentblue}{\textbf{67070501067}} & \textcolor{accentblue}{พลวริษฐ์ วัฒนเหมรัตน์} & & \\[4pt]
     \end{tabular}
 \end{center}
 
@@ -180,6 +180,7 @@
     \text{PVE}_j = \frac{\lambda_j}{\sum_{k=1}^d \lambda_k} = \frac{\lambda_j}{\text{tr}(\boldsymbol{\Sigma})}, \quad \text{Cumulative PVE}_r = \sum_{j=1}^r \text{PVE}_j
 \end{equation}
 
+\clearpage
 % =========================================================================
 % SECTION 2
 % =========================================================================
@@ -192,7 +193,7 @@
 \end{align*}
 
 \subsection*{2.1 ผลการคำนวณเชิงตัวเลขที่ตรวจสอบความถูกต้อง 100\%\\ \normalsize(Empirical Step-by-Step Results \& Orthonormal Verification)}
-\begin{enumerate}[leftmargin=1.5em, itemsep=2pt]
+\begin{enumerate}[leftmargin=1.5em, itemsep=1.5pt]
     \item \textbf{เมทริกซ์ความแปรปรวนร่วม $\mathbf{Z}$ (Sample Covariance with $ddof=1$):}
     \begin{equation}
         \mathbf{Z} = \begin{bmatrix} 48.0000 & 131.6364 \\ 131.6364 & 369.7879 \end{bmatrix}, \quad \text{Total Variance} = \text{tr}(\mathbf{Z}) = 417.7879
@@ -208,16 +209,21 @@
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.82\linewidth]{plot_1_linear_pca_geometry.pdf}
-\caption{การแจกแจงของข้อมูล 12 จุดและแกนองค์ประกอบหลัก $p_1, p_2$ ที่มีจุดกำเนิด ณ จุดเฉลี่ย $\boldsymbol{\mu}$}
+\begin{minipage}[t]{0.485\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{plot_1_linear_pca_geometry.pdf}
+    \caption{การแจกแจงของข้อมูล 12 จุดและแกนองค์ประกอบหลัก $\mathbf{p}_1, \mathbf{p}_2$ ที่มีจุดกำเนิด ณ จุดเฉลี่ย $\boldsymbol{\mu}$}
+    \label{fig:linear_pca_geom}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.485\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{plot_2_projection_reconstruction.pdf}
+    \caption{การฉายข้อมูลตั้งฉากลงบนปริภูมิย่อย 1 มิติ (PC1) และเส้นระยะตกค้าง (Residual Projection Lines)}
+    \label{fig:proj_recon}
+\end{minipage}
 \end{figure}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.82\linewidth]{plot_2_projection_reconstruction.pdf}
-\caption{การฉายข้อมูลตั้งฉากลงบนปริภูมิย่อย 1 มิติ (PC1) และเส้นระยะตกค้าง (Residual Projection Lines)}
-\end{figure}
-
+\clearpage
 % =========================================================================
 % SECTION 3
 % =========================================================================
@@ -251,10 +257,11 @@
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.92\linewidth]{plot_3_mtcars_eda_corrmat.pdf}
+\includegraphics[width=0.86\linewidth]{plot_3_mtcars_eda_corrmat.pdf}
 \caption{การกระจายตัวของความแปรปรวน (Log Scale) และเมทริกซ์สหสัมพันธ์เพียร์สันของ MTCARS}
 \end{figure}
 
+\clearpage
 % =========================================================================
 % SECTION 4
 % =========================================================================
@@ -291,15 +298,26 @@ PC11& 0.00      & 0.00\%  & 100.00\% & 0.0230 & 0.20\%  & 100.00\% \\
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.92\linewidth]{plot_4_scree_pve_comparison.pdf}
+\includegraphics[width=0.86\linewidth]{plot_4_scree_pve_comparison.pdf}
 \caption{การเปรียบเทียบ Scree Plot และความแปรปรวนสะสมระหว่างสองระเบียบวิธี}
 \end{figure}
 
+จากตารางและแผนภาพ Scree Plot (Figure 4) แสดงให้เห็นอย่างเด่นชัดว่า ใน Unstandardized PCA เส้นกราฟ PVE ทอดดิ่งลงแทบเป็นศูนย์ทันทีหลัง PC1 ($\text{PVE}_1 = 92.70\%$) ขณะที่ Standardized PCA เส้น PVE มีการกระจายตัวอย่างราบรื่น โดยต้องสะสมถึง PC4 จึงจะก้าวข้ามเกณฑ์ $90\%$ ($\text{Cum. PVE}_4 = 92.32\%$)
+
+\clearpage
+\subsection*{4.1 การเปรียบเทียบการกระจายค่าน้ำหนักตัวแปรในแกนองค์ประกอบหลักที่ 1\newline \normalsize(PC1 Loadings Distribution \& Feature Scale Shift Analysis)}
+
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.92\linewidth]{plot_5_pc_loadings_barplot.pdf}
+\includegraphics[width=0.86\linewidth]{plot_5_pc_loadings_barplot.pdf}
 \caption{การเปรียบเทียบค่าน้ำหนักตัวแปร (Loadings) ในแกน PC1}
 \end{figure}
+
+จากแผนภูมิแท่งเปรียบเทียบ (Figure 5) ชี้ให้เห็นปรากฏการณ์สำคัญเชิงทฤษฎี:
+\begin{enumerate}[leftmargin=1.5em, itemsep=2pt, topsep=2pt]
+    \item \textbf{การผูกขาดของสองตัวแปรใน Unstandardized PC1:} แกน PC1 ก่อนการปรับมาตรฐานประกอบด้วยค่าน้ำหนักของ \codevar{disp} ($-0.8996$) และ \codevar{hp} ($-0.4348$) คิดเป็นพลังงานเวกเตอร์รวม $0.8996^2 + 0.4348^2 = 0.9983$ หรือ $99.83\%$ ของความยาวเวกเตอร์หนึ่งหน่วย ส่งผลให้ตัวแปรสำคัญอีก 9 ตัวแทบไม่มีผลต่อคะแนน PC1 เลย
+    \item \textbf{การกระจายตัวอย่างสมดุลใน Standardized PC1:} ภายหลังการปรับมาตรฐาน ตัวแปรทุกตัวมีสเกลความแปรปรวนเริ่มต้นเท่ากันที่ $1.0$ ค่าน้ำหนักจึงถูกจัดสรรอย่างยุติธรรม โดยตัวแปร \codevar{cyl} ($-0.3739$), \codevar{disp} ($-0.3682$), \codevar{mpg} ($+0.3625$), \codevar{wt} ($-0.3461$), \codevar{hp} ($-0.3301$) และ \codevar{vs} ($+0.3065$) ล้วนมีค่าน้ำหนักอยู่ในช่วง $|w_j| \in [0.30, 0.38]$ ซึ่งสะท้อนถึงการสังเคราะห์ความสัมพันธ์พหุคูณ (Multivariate Intercorrelations) ของยานยนต์ที่แท้จริง
+\end{enumerate}
 
 % =========================================================================
 % SECTION 5: QUESTIONS AND ANSWERS (EXACTLY 1 PAGE PER QUESTION)
@@ -413,7 +431,7 @@ PC11& 0.00      & 0.00\%  & 100.00\% & 0.0230 & 0.20\%  & 100.00\% \\
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.70\linewidth]{plot_6_pca_biplot_2d.pdf}
+\includegraphics[width=0.68\linewidth]{plot_6_pca_biplot_2d.pdf}
 \caption{แผนภาพ 2D PCA Biplot บนชุดข้อมูล MTCARS ที่ผ่านการปรับมาตรฐาน (Standardized)}
 \end{figure}
 
@@ -428,12 +446,13 @@ PC11& 0.00      & 0.00\%  & 100.00\% & 0.0230 & 0.20\%  & 100.00\% \\
     กระจุกตัวอยู่ในควอแดรนต์ขวาล่าง เช่น \textit{Porsche 914-2, Ferrari Dino, Ford Pantera L} สอดคล้องกับทิศทางของเวกเตอร์ \codevar{am}, \codevar{gear}, \codevar{drat} ซึ่งเน้นอัตราทดเกียร์ธรรมดาและความคล่องตัวสูง
 \end{enumerate}
 
+\clearpage
 \subsection*{6.2 การตรวจสอบข้อผิดพลาดในการฟื้นฟูข้อมูล\\ \normalsize(Reconstruction Error Curve Analysis)}
 Figure 7 แสดงกราฟข้อผิดพลาดสัมพัทธ์ในการฟื้นฟูข้อมูล $\frac{\|\mathbf{X} - \hat{\mathbf{X}}_r\|_F}{\|\mathbf{X}\|_F} \times 100\%$ เมื่อเพิ่มจำนวนมิติ $r$ จาก 1 ถึง 11 จะเห็นว่าค่าความผิดพลาดลดลงสู่ $0.00\%$ เมื่อ $r=11$ ยืนยันคุณสมบัติการแปลงย้อนกลับแบบไม่สูญเสียสารสนเทศ (Lossless Reconstruction) ตามทฤษฎี Spectral Theorem
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.58\linewidth]{plot_7_reconstruction_error.pdf}
+\includegraphics[width=0.55\linewidth]{plot_7_reconstruction_error.pdf}
 \caption{กราฟ Normalized Reconstruction Error เทียบกับจำนวนองค์ประกอบหลักที่คงไว้ ($r$)}
 \end{figure}
 
