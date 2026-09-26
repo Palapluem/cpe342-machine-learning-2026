@@ -11,6 +11,7 @@ exec_notebook.py
 read_friend.py
 trim_tex.py
 make_notebook.py
+*.zip
 
 
 # macOS and Windows system files
