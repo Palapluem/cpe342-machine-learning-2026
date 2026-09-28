@@ -17,3 +17,7 @@ make_notebook.py
 # macOS and Windows system files
 .DS_Store
 Thumbs.db
+
+# VS Code
+.vscode/*
+!.vscode/extensions.json
