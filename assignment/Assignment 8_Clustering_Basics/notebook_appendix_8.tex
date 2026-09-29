@@ -1114,21 +1114,6 @@ for c in range(3):
 
 print("=== Prototype Exemplar Records (Closest to Centroids) ===")
 print(pd.DataFrame(prototypes).round(2))
-
-print("""
-=== Domain Insights & Cultivar Synthesis ===
-1. Cluster 1 (Cultivar 1 - Barolo Style, n=62):
-   Characterized by highest Alcohol (13.74%), highest Proline (1115.65 mg/L), high Flavanoids (2.98),
-   and balanced color intensity (5.53). Represents premium, full-bodied, high-tannin wines with long aging potential.
-
-2. Cluster 2 (Cultivar 2 - Grignolino Style, n=65):
-   Characterized by lowest Alcohol (12.25%), lowest Color Intensity (3.09), highest Ash Alcalinity (21.45),
-   and moderate Flavanoids (2.05). Represents light, fresh, delicate wines with crisp acidity.
-
-3. Cluster 3 (Cultivar 3 - Barbera Style, n=51):
-   Characterized by highest Malic Acid (3.33), highest Color Intensity (7.40), lowest Flavanoids (0.78),
-   and lowest OD280 (1.68). Represents deep, darkly pigmented, high-acid, phenolic-depleted wines.
-""")
 \end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 28]:}
@@ -1140,17 +1125,17 @@ Alcohol              12.52      13.32      14.10
 Flavanoids            2.27       0.76       2.92
 Color Intensity       2.00       8.42       6.20
 Proline             325.00     650.00    1060.00
-
-=== Domain Insights & Cultivar Synthesis ===
-1. Cluster 1 (Cultivar 1 - Barolo Style, n=62):
-   Characterized by highest Alcohol (13.74%), highest Proline (1115.65 mg/L), high Flavanoids (2.98),
-   and balanced color intensity (5.53). Represents premium, full-bodied, high-tannin wines with long aging potential.
-
-2. Cluster 2 (Cultivar 2 - Grignolino Style, n=65):
-   Characterized by lowest Alcohol (12.25%), lowest Color Intensity (3.09), highest Ash Alcalinity (21.45),
-   and moderate Flavanoids (2.05). Represents light, fresh, delicate wines with crisp acidity.
-
-3. Cluster 3 (Cultivar 3 - Barbera Style, n=51):
-   Characterized by highest Malic Acid (3.33), highest Color Intensity (7.40), lowest Flavanoids (0.78),
-   and lowest OD280 (1.68). Represents deep, darkly pigmented, high-acid, phenolic-depleted wines.
 \end{lstlisting}
+
+\vspace{0.3em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
+{\small\bfseries Domain Insights \& Cultivar Synthesis
+1. Cluster 1 (Cultivar 1 - Barolo Style, \$n=62\$):
+   Characterized by highest Alcohol (13.74\%), highest Proline (1115.65 mg/L), high Flavanoids (2.98), and balanced color intensity (5.53). Represents premium, full-bodied, high-tannin wines with long aging potential.
+
+2. Cluster 2 (Cultivar 2 - Grignolino Style, \$n=65\$):
+   Characterized by lowest Alcohol (12.25\%), lowest Color Intensity (3.09), highest Ash Alcalinity (21.45), and moderate Flavanoids (2.05). Represents light, fresh, delicate wines with crisp acidity.
+
+3. Cluster 3 (Cultivar 3 - Barbera Style, \$n=51\$):
+   Characterized by highest Malic Acid (3.33), highest Color Intensity (7.40), lowest Flavanoids (0.78), and lowest OD280 (1.68). Represents deep, darkly pigmented, high-acid, phenolic-depleted wines.\par}
+\end{tcolorbox}

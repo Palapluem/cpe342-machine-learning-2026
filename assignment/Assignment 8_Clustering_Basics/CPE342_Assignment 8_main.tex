@@ -125,10 +125,10 @@
     {\Large\textbf{Assignment 8: Clustering Basics (K-Means \& Latent Subspace Pipeline)}}\\[4pt]
     {\large การจัดกลุ่มข้อมูลด้วย K-Means บนโครงสร้างเรขาคณิตที่หลากหลาย และการลดมิติข้อมูลด้วย PCA ร่วมกับการวิเคราะห์โปรไฟล์สารเคมีไวน์}\\[2pt]
     {\normalsize (Prototype-based Partitioning via K-Means, Non-Convex Manifold Limitations, and High-Dimensional Wine PCA-Clustering Pipeline)}\\[8pt]
-    \begin{tabular}{c@{\hspace{3.5em}}c}
-        \textcolor{accentblue}{\textbf{67070501003} กันต์ธีร์ ดวงมณี} & \textcolor{accentblue}{\textbf{67070501027} นัธทวัฒน์ ปริมสิริคุณาวุฒิ} \\[4pt]
-        \textcolor{accentblue}{\textbf{67070501042} วิศิษฐ์ สุวรรณเนาว์} & \textcolor{accentblue}{\textbf{67070501045} ศุภวิชญ์ มารยาท} \\[4pt]
-        \multicolumn{2}{c}{\textcolor{accentblue}{\textbf{67070501067} พลวริษฐ์ วัฒนเหมรัตน์}}
+    \begin{tabular}{r@{\hspace{0.8em}}l@{\hspace{4em}}r@{\hspace{0.8em}}l}
+        \textcolor{accentblue}{\textbf{67070501003}} & \textcolor{accentblue}{กันต์ธีร์ ดวงมณี} & \textcolor{accentblue}{\textbf{67070501027}} & \textcolor{accentblue}{นัธทวัฒน์ ปริมสิริคุณาวุฒิ} \\[4pt]
+        \textcolor{accentblue}{\textbf{67070501042}} & \textcolor{accentblue}{วิศิษฐ์ สุวรรณเนาว์} & \textcolor{accentblue}{\textbf{67070501045}} & \textcolor{accentblue}{ศุภวิชญ์ มารยาท} \\[4pt]
+        \textcolor{accentblue}{\textbf{67070501067}} & \textcolor{accentblue}{พลวริษฐ์ วัฒนเหมรัตน์} & & \\[4pt]
     \end{tabular}
 \end{center}
 
@@ -314,90 +314,112 @@ Dataset 4 & 1000 & 0.871 & 3 & 0.4889 & 1,089.4 & เสียรูปทรง
 % =========================================================================
 % SECTION 5: QUESTIONS AND ANSWERS (EXACTLY 1 PAGE PER QUESTION)
 % =========================================================================
-\section*{5. คำถามและบทวิเคราะห์เชิงลึก (In-depth Questions \& Comprehensive Solutions)}
+\section*{5. การตอบคำถามประจำการทดลองและการวินิจฉัยเชิงวิศวกรรม\newline \large(Experiment Question Solutions \& Engineering Insights)}
+\vspace{-0.6em}
 
 % -------------------------------------------------------------------------
 % QUESTION 1: EXACTLY 1 PAGE
 % -------------------------------------------------------------------------
-\subsection*{คำถามข้อที่ 1: การวินิจฉัยจุดผิดปกติและสาเหตุที่ K-Means เลือก $K=4$ บน Dataset 1\newline \normalsize(Outlier Diagnostics, Quadratic Loss Sensitivity, and Cluster Isolation Proof)}
+\subsection*{คำถามข้อที่ 1: การวินิจฉัยจุดผิดปกติและสาเหตุที่ K-Means เลือก $K=4$ บน Dataset 1\newline \normalsize(Question 1: Outlier Diagnostics, Quadratic Loss Sensitivity, and Cluster Isolation)}
+\vspace{-0.5em}
 
-\begin{infobox}
-\textbf{โจทย์คำถาม:} จากการทดลองบน Dataset 1 จงอธิบายว่าเหตุใดอัลกอริทึม K-Means จึงเลือก $K=4$ จากเกณฑ์ Silhouette Score และ Elbow Method ทั้งที่โดยธรรมชาติทางสายตาข้อมูลประกอบด้วย 3 กลุ่มหลัก และจงอธิบายผลกระทบของฟังก์ชันความสูญเสียระยะทางกำลังสอง (Squared Euclidean Loss) ต่อพฤติกรรมนี้
-\end{infobox}
+\begin{ansbox}[unbreakable, fontupper={\fontsize{9.8pt}{13.0pt}\selectfont}, left=6pt, right=6pt, top=3pt, bottom=3pt]
+\textbf{โจทย์ (Question 1 Prompt)}:
+\begin{itemize}[leftmargin=1.2em, itemsep=0pt, topsep=0pt, parsep=0pt]
+    \item[(a)] \textit{จากการทดลองบน Dataset 1 จงอธิบายว่าเหตุใดอัลกอริทึม K-Means จึงเลือก $K=4$ จากเกณฑ์ Silhouette Score และ Elbow Method ทั้งที่โดยธรรมชาติทางสายตาข้อมูลประกอบด้วย 3 กลุ่มหลัก}
+    \item[(b)] \textit{จงอธิบายผลกระทบของฟังก์ชันความสูญเสียระยะทางกำลังสอง (Squared Euclidean Loss) ต่อพฤติกรรมนี้}
+\end{itemize}
 
-\vspace{-0.3em}
-\begin{ansbox}
-{\fontsize{10pt}{13.2pt}\selectfont
-\textbf{1. โครงสร้างข้อมูลและจุดผิดปกติ (Data Distribution \& Anomalies):}
+\vspace{-0.2em}
+\noindent\rule{\linewidth}{0.4pt}
+\vspace{-0.2em}
+
+\noindent\textbf{\normalsize 1. โครงสร้างข้อมูลและจุดผิดปกติ (Data Distribution \& Anomalies)}\par\vspace{0.05em}
 จากการสำรวจข้อมูล Dataset 1 ($N=600$) พบว่าจุดข้อมูลส่วนใหญ่จำนวน 597 จุด กระจุกตัวเป็นกลุ่มเกาส์เซียนรูปทรงกลมที่มีความหนาแน่นสูง 3 คลัสเตอร์รอบตำแหน่ง $(1.0, -1.0)$, $(1.0, 1.0)$, และ $(-1.0, -1.0)$ คลัสเตอร์ละประมาณ 200 จุด แต่มีจุดข้อมูลจำนวน 3 จุดตั้งอยู่ที่พิกัด $(9.97, 4.07)$ ซึ่งอยู่ห่างไกลจากจุดศูนย์กลางมวลของประชากรหลักมากกว่า 9 เท่าของส่วนเบี่ยงเบนมาตรฐาน
 
-\textbf{2. ความไวต่อจุดผิดปกติของฟังก์ชันวัตถุประสงค์ (Sensitivity of Quadratic Loss):}
+\vspace{0.15em}
+\noindent\textbf{\normalsize 2. ความไวต่อจุดผิดปกติของฟังก์ชันวัตถุประสงค์ (Sensitivity of Quadratic Loss)}\par\vspace{0.05em}
 ฟังก์ชันวัตถุประสงค์ของ K-Means คือการลดทอน Inertia: $J = \sum_{k=1}^K \sum_{\mathbf{x}_i \in C_k} \|\mathbf{x}_i - \boldsymbol{\mu}_k\|_2^2$ ซึ่งการใช้ระยะทางยกกำลังสองส่งผลให้โทษทัณฑ์ (Penalty) ของจุดที่อยู่ห่างไกลพุ่งสูงขึ้นแบบพาราโบลา:
-\begin{itemize}[leftmargin=1.2em, itemsep=1pt, topsep=1pt]
+\begin{itemize}[leftmargin=1.2em, itemsep=0.5pt, topsep=0.5pt]
     \item \textbf{กรณี $K=3$:} หากบังคับให้แบ่งเป็น 3 คลัสเตอร์ จุด Outlier ทั้ง 3 จุดจะถูกดึงเข้าไปรวมกับคลัสเตอร์หลักที่อยู่ใกล้ที่สุด ($C_2$ บริเวณ $(1, 1)$) ส่งผลให้จุดศูนย์กลาง $\boldsymbol{\mu}_2$ ถูกดึงเอียงไปทางขวาบนจาก $(1.00, 1.01)$ ไปอยู่ที่ $(1.14, 1.06)$ ระยะทางจาก Outlier ถึง $\boldsymbol{\mu}_2$ คือ $\approx 9.35$ หน่วย ก่อให้เกิด Inertia เฉพาะจากจุด Outlier 3 จุดนี้สูงถึง $3 \times (9.35)^2 \approx 262.3$ คิดเป็นกว่า $58.3\%$ ของ Inertia รวมทั้งระบบ ($449.6$) ทำให้ค่า Silhouette Score ลดลงเหลือ $0.6254$
     \item \textbf{กรณี $K=4$:} เมื่อเพิ่มคลัสเตอร์เป็น 4 กลุ่ม อัลกอริทึมค้นพบว่าการสร้างคลัสเตอร์เอกเทศ $C_4$ เพื่อกักกันจุด Outlier 3 จุดไว้ด้วยกัน ($\boldsymbol{\mu}_4 \approx (9.97, 4.07)$) จะทำให้ Inertia ของจุด Outlier ดิ่งลงเกือบเป็นศูนย์ ($\approx 0.05$) และปลดปล่อยคลัสเตอร์หลักทั้ง 3 คลัสเตอร์ให้กลับมามีจุดศูนย์กลางที่แท้จริง ส่งผลให้ Inertia รวมดิ่งลงจาก $449.6$ เหลือเพียง $184.3$ (ลดลงถึง $59.0\%$)
 \end{itemize}
 
-\textbf{3. พฤติกรรมของดัชนีชี้วัด (Silhouette Peak at $K=4$):}
+\vspace{0.15em}
+\noindent\textbf{\normalsize 3. พฤติกรรมของดัชนีชี้วัด (Silhouette Peak at $K=4$)}\par\vspace{0.05em}
 การที่ K-Means แยกคลัสเตอร์ที่ 4 สำหรับ Outlier ทำให้ค่าความกระชับภายในกลุ่ม $a_i$ ของคลัสเตอร์หลักทั้งสามลดลงอย่างมาก ขณะที่ระยะห่างระหว่างกลุ่ม $b_i$ สูงขึ้นอย่างชัดเจน ส่งผลให้ค่า Silhouette Coefficient พุ่งขึ้นแตะจุดสูงสุดที่ \textbf{$0.6468$} และค่า Calinski-Harabasz พุ่งขึ้นสูงสุดที่ \textbf{$1,545.9$}
 
-\textbf{4. ข้อสรุปเชิงวิศวกรรมข้อมูล (Engineering Recommendation):}
+\vspace{0.15em}
+\noindent\textbf{\normalsize 4. ข้อสรุปเชิงวิศวกรรมข้อมูล (Engineering Recommendation)}\par\vspace{0.05em}
 K-Means ไม่มีความทนทานต่อจุดผิดปกติ (Not Robust to Outliers) ในทางปฏิบัติควรตรวจจับและตัด Outlier ออกก่อน (เช่น ใช้ DBSCAN หรือ Isolation Forest) หรือปรับไปใช้ \textbf{K-Medoids (PAM)} ซึ่งใช้ระยะทางแบบแมนแฮตตัน ($L_1$-norm) เพื่อไม่ให้ค่าผิดปกติเบี่ยงเบนจุดศูนย์กลาง
-\par}
 \end{ansbox}
 
 \clearpage
 % -------------------------------------------------------------------------
 % QUESTION 2: EXACTLY 1 PAGE
 % -------------------------------------------------------------------------
-\subsection*{คำถามข้อที่ 2: การวิเคราะห์ความล้มเหลวของ K-Means บนข้อมูลที่ไม่เป็นรูปทรงนูน\newline \normalsize(Non-Convex Geometries, Voronoi Tessellation, and Non-Linear Clustering Solutions)}
+\subsection*{คำถามข้อที่ 2: การวิเคราะห์ความล้มเหลวของ K-Means บนข้อมูลที่ไม่เป็นรูปทรงนูน\newline \normalsize(Question 2: Non-Convex Geometries, Voronoi Tessellation, and Non-Linear Solutions)}
+\vspace{-0.5em}
 
-\begin{infobox}
-\textbf{โจทย์คำถาม:} จงอธิบายเหตุผลทางเรขาคณิตและคณิตศาสตร์ว่าเหตุใด K-Means จึงล้มเหลวในการจัดกลุ่ม Dataset 2 (Concentric Circles) และ Dataset 3 (Two Moons) พร้อมระบุว่าขอบเขต Voronoi Tessellation มีบทบาทอย่างไร และเสนอแนะขั้นตอนวิธีทางเลือกที่สามารถแก้ปัญหานี้ได้อย่างสมบูรณ์
-\end{infobox}
+\begin{ansbox}[unbreakable, fontupper={\fontsize{9.6pt}{12.6pt}\selectfont}, left=6pt, right=6pt, top=3pt, bottom=3pt]
+\textbf{โจทย์ (Question 2 Prompt)}:
+\begin{itemize}[leftmargin=1.2em, itemsep=0pt, topsep=0pt, parsep=0pt]
+    \item[(a)] \textit{จงอธิบายเหตุผลทางเรขาคณิตและคณิตศาสตร์ว่าเหตุใด K-Means จึงล้มเหลวในการจัดกลุ่ม Dataset 2 (Concentric Circles) และ Dataset 3 (Two Moons) พร้อมระบุว่าขอบเขต Voronoi Tessellation มีบทบาทอย่างไร}
+    \item[(b)] \textit{เสนอแนะขั้นตอนวิธีทางเลือกที่สามารถแก้ปัญหานี้ได้อย่างสมบูรณ์}
+\end{itemize}
 
-\vspace{-0.3em}
-\begin{ansbox}
-{\fontsize{10pt}{13.2pt}\selectfont
-\textbf{1. สมมติฐานรูปทรงนูนและระนาบ Voronoi (Voronoi Convexity Constraint):}
+\vspace{-0.2em}
+\noindent\rule{\linewidth}{0.4pt}
+\vspace{-0.2em}
+
+\noindent\textbf{\normalsize 1. สมมติฐานรูปทรงนูนและระนาบ Voronoi (Voronoi Convexity Constraint)}\par\vspace{0.05em}
 ในขั้นตอน Assignment Step ของ K-Means ขอบเขตการตัดสินใจระหว่างคลัสเตอร์ $C_j$ และ $C_k$ คือเซตของจุดที่มีระยะทางไปยังจุดศูนย์กลางทั้งสองเท่ากัน:
 \begin{equation*}
     \{\mathbf{x} \in \mathbb{R}^d \mid \|\mathbf{x} - \boldsymbol{\mu}_j\|_2^2 = \|\mathbf{x} - \boldsymbol{\mu}_k\|_2^2\} \iff 2(\boldsymbol{\mu}_k - \boldsymbol{\mu}_j)^T\mathbf{x} + \|\boldsymbol{\mu}_j\|^2 - \|\boldsymbol{\mu}_k\|^2 = 0
 \end{equation*}
 สมการข้างต้นคือ \textbf{ไฮเปอร์เพลนเชิงเส้น (Linear Hyperplane)} ส่งผลให้เซลล์ Voronoi ของแต่ละคลัสเตอร์มีคุณสมบัติเป็น \textbf{เซตนูน (Convex Set)} เสมอ นั่นคือ หากจุดสองจุด $\mathbf{x}_a, \mathbf{x}_b$ อยู่ในคลัสเตอร์เดียวกัน ส่วนของเส้นตรงที่เชื่อมระหว่างสองจุดนี้จะต้องอยู่ในคลัสเตอร์เดิมด้วย
 
-\textbf{2. การวิเคราะห์ความล้มเหลวบน Dataset 2 (Concentric Circles):}
+\vspace{0.15em}
+\noindent\textbf{\normalsize 2. การวิเคราะห์ความล้มเหลวบน Dataset 2 (Concentric Circles)}\par\vspace{0.05em}
 Dataset 2 ประกอบด้วยวงใน ($r \approx 0.2$) และวงนอก ($r \approx 1.0$) จุดศูนย์กลางเฉลี่ยของทั้งสองวงซ้อนทับกันอยู่ที่พิกัดเดียวกันคือ $\approx (0, 0)$ เมื่อ K-Means พยายามหาจุดศูนย์กลาง 2 จุด ($\boldsymbol{\mu}_1, \boldsymbol{\mu}_2$) ไฮเปอร์เพลนเชิงเส้นที่ตั้งฉากกับเส้นเชื่อม $\boldsymbol{\mu}_1 - \boldsymbol{\mu}_2$ จะทำหน้าที่ผ่าครึ่งวงกลมเป็นสองฝั่ง (เช่น ซ้าย-ขวา ดัง Figure 2(c)) ทำให้แต่ละคลัสเตอร์มีทั้งข้อมูลวงในและวงนอกปะปนกัน และแม้ว่าจะเพิ่มเป็น $K=6$ ไฮเปอร์เพลนเชิงเส้นก็ทำได้เพียงหั่นวงกลมออกเป็นรูปชิ้นพิซซ่า 6 ชิ้น ซึ่งไม่สามารถสร้างขอบเขตวงแหวนปิดล้อมวงในได้เลย
 
-\textbf{3. การวิเคราะห์ความล้มเหลวบน Dataset 3 (Two Moons):}
+\vspace{0.15em}
+\noindent\textbf{\normalsize 3. การวิเคราะห์ความล้มเหลวบน Dataset 3 (Two Moons)}\par\vspace{0.05em}
 Dataset 3 ประกอบด้วยรูปพระจันทร์เสี้ยวสองเสี้ยวที่โค้งโอบล้อมกัน ซึ่งเป็นรูปทรงที่มีความเว้า (Concave) เส้นตรงที่เชื่อมระหว่างปลายทั้งสองข้างของพระจันทร์เสี้ยวอันเดียวกันจะวิ่งตัดผ่านพื้นที่ว่างเปล่าและพื้นที่ของพระจันทร์เสี้ยวอีกอันหนึ่ง ทำให้ระนาบเชิงเส้นของ K-Means ตัดผ่าขวางในแนวนอน $y \approx 0.25$ ส่งผลให้ปลายของทั้งสองเสี้ยวถูกยุบรวมผิดกลุ่ม
 
-\textbf{4. ขั้นตอนวิธีทางเลือกที่เหมาะสม (Alternative Modern Clustering Solutions):}
-\begin{itemize}[leftmargin=1.2em, itemsep=1pt, topsep=1pt]
+\vspace{0.15em}
+\noindent\textbf{\normalsize 4. ขั้นตอนวิธีทางเลือกที่เหมาะสม (Alternative Modern Clustering Solutions)}\par\vspace{0.05em}
+\begin{itemize}[leftmargin=1.2em, itemsep=0.5pt, topsep=0.5pt]
     \item \textbf{DBSCAN (Density-Based Spatial Clustering):} อาศัยการเชื่อมต่อกันของจุดข้อมูลที่มีความหนาแน่นเกินเกณฑ์ ($\epsilon, \text{MinPts}$) สามารถติดตามเส้นโค้งและรูปทรงอิสระใดๆ ได้สมบูรณ์แบบ
     \item \textbf{Spectral Clustering (Graph Laplacian):} สร้างกราฟความคล้ายคลึง (Affinity Matrix $W_{ij} = e^{-\gamma \|\mathbf{x}_i - \mathbf{x}_j\|^2}$) และฉายข้อมูลลงบนปริภูมิไอเกนเวกเตอร์ของ Graph Laplacian ทำให้ข้อมูลรูปวงแหวนหรือพระจันทร์เสี้ยวคลี่ตัวออกเป็นกลุ่มนูนเชิงเส้นก่อนทำ K-Means
     \item \textbf{Coordinate Transformation (Polar Coordinates):} สำหรับ Dataset 2 การแปลงพิกัดคาร์ทีเซียน $(X_1, X_2)$ เป็นพิกัดเชิงขั้ว $(r, \theta)$ โดยที่ $r = \sqrt{X_1^2 + X_2^2}$ จะเปลี่ยนวงกลมซ้อนสองชั้นให้กลายเป็นกลุ่มข้อมูลเชิงเส้น 2 กลุ่มที่แยกขาดจากกันด้วยค่ารัศมี $r$ อย่างง่ายดาย
 \end{itemize}
-\par}
 \end{ansbox}
 
 \clearpage
 % -------------------------------------------------------------------------
 % QUESTION 3: EXACTLY 1 PAGE
 % -------------------------------------------------------------------------
-\subsection*{คำถามข้อที่ 3: ความจำเป็นของการปรับมาตรฐานและการทำ PCA ก่อนจัดกลุ่มไวน์\newline \normalsize(Standardization Mandate, Dimensionality Reduction Proof, and Latent Space Benefits)}
+\subsection*{คำถามข้อที่ 3: ความจำเป็นของการปรับมาตรฐานและการทำ PCA ก่อนจัดกลุ่มไวน์\newline \normalsize(Question 3: Standardization Mandate, Dimensionality Reduction Proof, and Latent Benefits)}
+\vspace{-0.5em}
 
-\begin{infobox}
-\textbf{โจทย์คำถาม:} ในการจัดกลุ่มข้อมูลไวน์ (Wine Dataset) จงอธิบายความสำคัญของการทำ Standardization ก่อนการประมวลผล และพิสูจน์ทางคณิตศาสตร์ว่าเหตุใดการทำ PCA จึงสามารถลดมิติข้อมูลเหลือ 5 มิติได้โดยรักษาความแปรปรวนไว้ได้เกิน $80\%$ พร้อมทั้งอธิบายข้อได้เปรียบของการทำ K-Means บนคะแนน PC แทนข้อมูลดิบ
-\end{infobox}
+\begin{ansbox}[unbreakable, fontupper={\fontsize{9.6pt}{12.6pt}\selectfont}, left=6pt, right=6pt, top=3pt, bottom=3pt]
+\textbf{โจทย์ (Question 3 Prompt)}:
+\begin{itemize}[leftmargin=1.2em, itemsep=0pt, topsep=0pt, parsep=0pt]
+    \item[(a)] \textit{ในชุดข้อมูลไวน์ (Wine Dataset) จงอธิบายความสำคัญของการทำ Standardization ก่อนการประมวลผล}
+    \item[(b)] \textit{พิสูจน์ทางคณิตศาสตร์ว่าเหตุใดการทำ PCA จึงสามารถลดมิติข้อมูลเหลือ 5 มิติได้โดยรักษาความแปรปรวนไว้ได้เกิน 80\%}
+    \item[(c)] \textit{อธิบายข้อได้เปรียบของการทำ K-Means บนคะแนน PC แทนข้อมูลดิบ}
+\end{itemize}
 
-\vspace{-0.3em}
-\begin{ansbox}
-{\fontsize{10pt}{13.0pt}\selectfont
-\textbf{1. ความจำเป็นอย่างยิ่งยวดของการปรับมาตรฐานข้อมูล (The Standardization Mandate):}
+\vspace{-0.2em}
+\noindent\rule{\linewidth}{0.4pt}
+\vspace{-0.2em}
+
+\noindent\textbf{\normalsize 1. ความจำเป็นอย่างยิ่งยวดของการปรับมาตรฐานข้อมูล (The Standardization Mandate)}\par\vspace{0.05em}
 ในชุดข้อมูลไวน์ ตัวแปรทั้ง 13 ตัวแปรมีหน่วยวัดทางกายภาพและมาตราส่วนความแปรปรวนต่างกันอย่างมหาศาล เช่น \codevar{Proline} มีความแปรปรวน $\sigma^2 = 99,166.7$ ขณะที่ \codevar{Nonflavanoid\_Phenols} มีความแปรปรวนเพียง $\sigma^2 = 0.0155$ หากนำข้อมูลดิบไปคำนวณระยะทางยุคลิด $d(\mathbf{x}_i, \mathbf{x}_j)^2 = \sum_{k=1}^{13} (x_{ik} - x_{jk})^2$ ความแตกต่างของตัวแปร \codevar{Proline} เพียงตัวแปรเดียวจะส่งผลต่อค่าระยะทางรวมมากกว่า $99.7\%$ ทำให้ตัวแปรอื่นที่มีความสำคัญยิ่งต่อการจำแนกคุณภาพไวน์กลายเป็นศูนย์ การทำ Z-Score Standardization $\tilde{x}_{ij} = \frac{x_{ij} - \bar{x}_j}{s_j}$ บังคับให้ทุกตัวแปรมีความแปรปรวนเริ่มต้นเท่ากันที่ $1.0$ ซึ่งแปลงปัญหา PCA จากการแยกตัวประกอบบน Covariance Matrix $\boldsymbol{\Sigma}$ ให้เป็นการแยกตัวประกอบบน \textbf{Correlation Matrix $\mathbf{R}$} ทำให้ทุกตัวแปรมีสิทธิ์ร่วมกำหนดทิศทางอย่างเท่าเทียม
 
-\textbf{2. การพิสูจน์การรักษาสารสนเทศ $\ge 80\%$ ด้วย 5 แกนองค์ประกอบหลัก ($r=5$ PCs Proof):}
+\vspace{0.15em}
+\noindent\textbf{\normalsize 2. การพิสูจน์การรักษาสารสนเทศ $\ge 80\%$ ด้วย 5 แกนองค์ประกอบหลัก ($r=5$ PCs Proof)}\par\vspace{0.05em}
 ผลการสลายค่าลักษณะเฉพาะของ Correlation Matrix ได้ค่าลักษณะเฉพาะ $\lambda_j$ และ PVE:
 \begin{equation*}
     \resizebox{0.95\linewidth}{!}{$\lambda_1 = 4.706 \ (36.20\%), \ \lambda_2 = 2.497 \ (19.21\%), \ \lambda_3 = 1.446 \ (11.12\%), \ \lambda_4 = 0.919 \ (7.07\%), \ \lambda_5 = 0.853 \ (6.56\%)$}
@@ -408,36 +430,44 @@ Dataset 3 ประกอบด้วยรูปพระจันทร์เ�
 \end{equation*}
 แสดงให้เห็นว่าแกนองค์ประกอบหลักเพียง 5 แกนแรกสามารถรักษาสารสนเทศหลักของระบบไว้ได้ถึง $80.16\%$ ขณะที่ตัดตัวแปรรบกวนออกไปได้ถึง $8$ มิติ (ลดทอนมิติข้อมูลลงได้ $61.5\%$)
 
-\textbf{3. ข้อได้เปรียบของการทำ K-Means บนคะแนน PC (Clustering on Latent PC Scores):}
-\begin{enumerate}[leftmargin=1.2em, itemsep=1pt, topsep=1pt]
+\vspace{0.15em}
+\noindent\textbf{\normalsize 3. ข้อได้เปรียบของการทำ K-Means บนคะแนน PC (Clustering on Latent PC Scores)}\par\vspace{0.05em}
+\begin{enumerate}[leftmargin=1.2em, itemsep=0.5pt, topsep=0.5pt]
     \item \textbf{การขจัดปัญหาความสัมพันธ์พหุคูณ (Orthogonal Decorrelation):} ตัวแปรเดิมมีความสัมพันธ์กันสูง (เช่น Flavanoids สัมพันธ์กับ Total Phenols สูงถึง $r=0.86$) แต่คะแนน PC แต่ละแกนตั้งฉากกันอย่างสมบูรณ์ ($\text{Cov}(\mathbf{z}_j, \mathbf{z}_k) = 0, \forall j \neq k$) ทำให้ระยะทางยุคลิดใน K-Means ปราศจากความเอนเอียงจากการนับคุณลักษณะซ้ำซ้อน
     \item \textbf{การกรองสัญญาณรบกวน (Noise Reduction):} มิติลำดับที่ 6 ถึง 13 มีค่าลักษณะเฉพาะต่ำมาก ($\lambda_j < 0.6$) ซึ่งเป็นตัวแทนของสัญญาณรบกวน การตัดมิติเหล่านี้ออกช่วยเพิ่มความคมชัดในการจำแนกคลัสเตอร์
     \item \textbf{ประสิทธิภาพการประมวลผลและการแสดงผล (Computational Efficiency \& Visual Analytics):} ประหยัดเวลาและหน่วยความจำ และสามารถนำแกน PC1 และ PC2 มาพล็อต Biplot 2 มิติเพื่อตรวจสอบการกระจายตัวของกลุ่มตัวอย่างได้อย่างชัดเจน
 \end{enumerate}
-\par}
 \end{ansbox}
 
 \clearpage
 % -------------------------------------------------------------------------
 % QUESTION 4: EXACTLY 1 PAGE
 % -------------------------------------------------------------------------
-\subsection*{คำถามข้อที่ 4: การตีความทางวิทยาศาสตร์ไวน์และการจัดกลุ่ม 3 สายพันธุ์\newline \normalsize(Enological Interpretation, Italian Cultivar Alignment, and Radar Chemical Signatures)}
+\subsection*{คำถามข้อที่ 4: การตีความทางวิทยาศาสตร์ไวน์และการจัดกลุ่ม 3 สายพันธุ์\newline \normalsize(Question 4: Enological Interpretation, Italian Cultivar Alignment, and Radar Signatures)}
+\vspace{-0.5em}
 
-\begin{infobox}
-\textbf{โจทย์คำถาม:} จากผลการจัดกลุ่มไวน์เป็น 3 กลุ่ม ($K=3$) บนคะแนน PC จงอธิบายว่าผลลัพธ์ที่ได้สอดคล้องกับสายพันธุ์องุ่นดั้งเดิมของอิตาลี (Barolo, Grignolino, Barbera) อย่างไร และจงวิเคราะห์เอกลักษณ์ทางเคมีของแต่ละคลัสเตอร์โดยละเอียดจากค่าน้ำหนักตัวแปรและแผนภูมิเรดาร์
-\end{infobox}
+\begin{ansbox}[unbreakable, fontupper={\fontsize{9.1pt}{11.8pt}\selectfont}, left=6pt, right=6pt, top=3pt, bottom=3pt]
+\textbf{โจทย์ (Question 4 Prompt)}:
+\begin{itemize}[leftmargin=1.2em, itemsep=0pt, topsep=0pt, parsep=0pt]
+    \item[(a)] \textit{จากผลการจัดกลุ่มไวน์เป็น 3 กลุ่ม ($K=3$) บนคะแนน PC จงอธิบายว่าผลลัพธ์ที่ได้สอดคล้องกับสายพันธุ์องุ่นดั้งเดิมของอิตาลี (Barolo, Grignolino, Barbera) อย่างไร}
+    \item[(b)] \textit{จงวิเคราะห์เอกลักษณ์ทางเคมีของแต่ละคลัสเตอร์โดยละเอียดจากค่าน้ำหนักตัวแปรและแผนภูมิเรดาร์}
+\end{itemize}
 
-\vspace{-0.3em}
-\begin{ansbox}
-{\fontsize{9.6pt}{12.5pt}\selectfont
-\textbf{1. ความสอดคล้องทางประวัติศาสตร์และพันธุกรรม (Authentic Cultivar Alignment):}
+\vspace{-0.2em}
+\noindent\rule{\linewidth}{0.4pt}
+\vspace{-0.2em}
+
+\noindent\textbf{\normalsize 1. ความสอดคล้องทางประวัติศาสตร์และพันธุกรรม (Authentic Cultivar Alignment)}\par\vspace{0.04em}
 ชุดข้อมูล Wine Dataset ถูกเก็บรวบรวมจากแคว้นพีดมอนต์ (Piedmont) ทางตอนเหนือของอิตาลี ซึ่งในความเป็นจริงประกอบด้วยองุ่น 3 สายพันธุ์ ผลการจัดกลุ่มด้วย K-Means ที่ $K=3$ บนคะแนน 5D PC Scores สามารถค้นพบโครงสร้าง 3 สายพันธุ์นี้ได้อย่างแม่นยำสูง:
 \textbf{Cluster 1 ($n=62$):} บาร์โรโล (Barolo), \textbf{Cluster 2 ($n=65$):} กริญโญลิโน (Grignolino), \textbf{Cluster 3 ($n=51$):} บาร์เบอรา (Barbera)
 
-\textbf{2. การวิเคราะห์เอกลักษณ์ทางเคมีของแต่ละคลัสเตอร์ (Chemical Signatures):}
-
+\vspace{0.1em}
+\noindent\textbf{\normalsize 2. การวิเคราะห์เอกลักษณ์ทางเคมีของแต่ละคลัสเตอร์ (Chemical Signatures)}\par\vspace{0.04em}
 \begin{table}[H]
 \centering
+\small
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{0.92}
 \resizebox{\linewidth}{!}{
 \begin{tabular}{lcccc}
 \toprule
@@ -453,18 +483,20 @@ Proline (mg/L) & \textbf{1,115.65} (สูงสุด) & 510.17 & 629.88 & ก�
 \bottomrule
 \end{tabular}
 }
+\vspace{-0.2em}
 \caption{ตารางเปรียบเทียบค่าเฉลี่ยตัวแปรทางเคมีที่สำคัญของไวน์ทั้ง 3 คลัสเตอร์}
 \end{table}
 
-\textbf{3. บทสรุปทางประสาทสัมผัสและวิทยาศาสตร์การหมัก (Enological Synthesis):}
-\begin{enumerate}[leftmargin=1.2em, itemsep=1pt, topsep=1pt]
+\vspace{-0.3em}
+\noindent\textbf{\normalsize 3. บทสรุปทางประสาทสัมผัสและวิทยาศาสตร์การหมัก (Enological Synthesis)}\par\vspace{0.04em}
+\begin{enumerate}[leftmargin=1.2em, itemsep=0.3pt, topsep=0.3pt]
     \item \textbf{Cluster 1 (Barolo):} เป็นไวน์แดงระดับพรีเมียม (The King of Wines) มีแอลกอฮอล์สูง โพรลีนและฟลาโวนอยด์สูงมาก สะท้อนถึงการเก็บเกี่ยวจากองุ่นที่สุกงอมเต็มที่ มีแทนนินแน่นหนาและซับซ้อน เหมาะสำหรับการเก็บบ่มในถังไม้โอ๊คระยะยาว
     \item \textbf{Cluster 2 (Grignolino):} เป็นไวน์แดงสไตล์เบา (Light-bodied) มีแอลกอฮอล์และสีสันที่อ่อนที่สุด มีความเป็นด่างของเถ้าสูง รสสัมผัสสดชื่น ดื่มง่าย นิยมดื่มขณะยังใหม่อยู่โดยไม่ต้องบ่มนาน
     \item \textbf{Cluster 3 (Barbera):} มีเอกลักษณ์โดดเด่นคือ \textbf{สีเข้มจัดแต่แทนนินต่ำ} โดยมี Color Intensity สูงสุด ($7.40$) และ Malic Acid สูงสุด ($3.33$) แต่มีฟลาโวนอยด์ต่ำสุด ($0.78$) ให้รสเปรี้ยวนำฉ่ำคอและมีสีม่วงทึบ
 \end{enumerate}
 
-\textbf{4. ตัวแทนโปรโตไทป์ (Prototype Exemplars):} ตัวอย่างไวน์ที่มีระยะทางใกล้จุดศูนย์กลางที่สุดในแต่ละกลุ่ม ได้แก่ ตัวอย่างหมายเลข \#14 สำหรับ Barolo, ตัวอย่างหมายเลข \#122 สำหรับ Grignolino, และตัวอย่างหมายเลข \#159 สำหรับ Barbera ซึ่งทำหน้าที่เป็นตัวแทนมาตรฐานสำหรับการควบคุมคุณภาพการผลิต
-\par}
+\vspace{0.08em}
+\noindent\textbf{\normalsize 4. ตัวแทนโปรโตไทป์ (Prototype Exemplars):} ตัวอย่างไวน์ที่มีระยะทางใกล้จุดศูนย์กลางที่สุดในแต่ละกลุ่ม ได้แก่ ตัวอย่างหมายเลข \#111 สำหรับ Barolo, ตัวอย่างหมายเลข \#148 สำหรับ Grignolino, และตัวอย่างหมายเลข \#48 สำหรับ Barbera ซึ่งทำหน้าที่เป็นตัวแทนมาตรฐานสำหรับการควบคุมคุณภาพการผลิต
 \end{ansbox}
 
 \clearpage

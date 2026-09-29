@@ -69,7 +69,7 @@ cpe342-machine-learning-2026/
 │       ├── [Lab] Clustering Basics.ipynb      # Original assignment template
 │       ├── clustering-basics.xlsx             # Course dataset (4 synthetic sheets + Wine)
 │       ├── CPE342_Assignment 8_main.tex       # LaTeX source report
-│       ├── CPE342_Assignment 8_main.pdf       # Publication-grade academic report (39 pages)
+│       ├── CPE342_Assignment 8_main.pdf       # Publication-grade academic report (38 pages)
 │       ├── notebook_appendix_8.tex            # LaTeX appendix with executed notebook cells
 │       ├── benchmark_results.csv & .json      # Clustering metrics across geometries & Wine
 │       └── plot_1_*.pdf to plot_8_*.pdf       # Publication-grade vector figures
@@ -255,7 +255,7 @@ cpe342-machine-learning-2026/
   * [`67_1003_1027_1042_1045_1067.ipynb`](./assignment/Assignment%208_Clustering_Basics/67_1003_1027_1042_1045_1067.ipynb) (Official Course Submission File)
   * [`[Lab] Clustering Basics.ipynb`](./assignment/Assignment%208_Clustering_Basics/[Lab]%20Clustering%20Basics.ipynb) (Original Lab Notebook)
   * [`clustering-basics.xlsx`](./assignment/Assignment%208_Clustering_Basics/clustering-basics.xlsx) (Course Dataset)
-  * [`CPE342_Assignment 8_main.pdf`](./assignment/Assignment%208_Clustering_Basics/CPE342_Assignment%208_main.pdf) (Publication-Grade Academic Report, 39 pages)
+  * [`CPE342_Assignment 8_main.pdf`](./assignment/Assignment%208_Clustering_Basics/CPE342_Assignment%208_main.pdf) (Publication-Grade Academic Report, 38 pages)
   * [`benchmark_results.csv`](./assignment/Assignment%208_Clustering_Basics/benchmark_results.csv) & [`benchmark_results.json`](./assignment/Assignment%208_Clustering_Basics/benchmark_results.json)
   * [`plot_1_dataset1_kmeans_elbow_silhouette.pdf`](./assignment/Assignment%208_Clustering_Basics/plot_1_dataset1_kmeans_elbow_silhouette.pdf) to [`plot_8_wine_cluster_biplot_radar_profiling.pdf`](./assignment/Assignment%208_Clustering_Basics/plot_8_wine_cluster_biplot_radar_profiling.pdf) (8 High-Resolution Vector Figures)
 
