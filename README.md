@@ -54,15 +54,25 @@ cpe342-machine-learning-2026/
 │   │   ├── benchmark_results.csv & .json      # 5-model benchmark and ablation metrics
 │   │   └── plot_1_*.pdf to plot_8_*.pdf       # Publication-grade vector figures
 │   │
-│   └── Assignment 7_Dimensionality Reduction/
+│   ├── Assignment 7_Dimensionality Reduction/
+│   │   ├── 67_1003_1027_1042_1045_1067.ipynb # Official course submission notebook
+│   │   ├── [Lab] Dimensionality Reduction.ipynb # Original assignment template
+│   │   ├── dimensionality-reduction.xlsx       # MTCARS dataset (32 cars, 11 features)
+│   │   ├── CPE342_Assignment 7_main.tex       # LaTeX source report
+│   │   ├── CPE342_Assignment 7_main.pdf       # Publication-grade academic report (41 pages)
+│   │   ├── notebook_appendix_7.tex            # LaTeX appendix with executed notebook cells
+│   │   ├── benchmark_results.csv & .json      # PCA spectral benchmarks and PVE metrics
+│   │   └── plot_1_*.pdf to plot_7_*.pdf       # Publication-grade vector figures
+│   │
+│   └── Assignment 8_Clustering_Basics/
 │       ├── 67_1003_1027_1042_1045_1067.ipynb # Official course submission notebook
-│       ├── [Lab] Dimensionality Reduction.ipynb # Original assignment template
-│       ├── dimensionality-reduction.xlsx       # MTCARS dataset (32 cars, 11 features)
-│       ├── CPE342_Assignment 7_main.tex       # LaTeX source report
-│       ├── CPE342_Assignment 7_main.pdf       # Publication-grade academic report (41 pages)
-│       ├── notebook_appendix_7.tex            # LaTeX appendix with executed notebook cells
-│       ├── benchmark_results.csv & .json      # PCA spectral benchmarks and PVE metrics
-│       └── plot_1_*.pdf to plot_7_*.pdf       # Publication-grade vector figures
+│       ├── [Lab] Clustering Basics.ipynb      # Original assignment template
+│       ├── clustering-basics.xlsx             # Course dataset (4 synthetic sheets + Wine)
+│       ├── CPE342_Assignment 8_main.tex       # LaTeX source report
+│       ├── CPE342_Assignment 8_main.pdf       # Publication-grade academic report (39 pages)
+│       ├── notebook_appendix_8.tex            # LaTeX appendix with executed notebook cells
+│       ├── benchmark_results.csv & .json      # Clustering metrics across geometries & Wine
+│       └── plot_1_*.pdf to plot_8_*.pdf       # Publication-grade vector figures
 ├── lecture/                                   # Lecture slides and demo notebooks
 │   ├── Lecture 1–12 PDFs                      # Course slide decks
 │   ├── ML_2_Training_Models.ipynb             # Demo: Gradient Descent & Linear Regression
@@ -80,7 +90,10 @@ cpe342-machine-learning-2026/
 │   ├── ML_7_CNN_in-class.ipynb                # In-Class Lab: Convolutional Neural Networks on MNIST & Dogs vs Cats (Week 7)
 │   ├── ML_8_Dimensionality_Reduction.mp4      # Lecture Recording: Dimensionality Reduction & PCA (Week 8)
 │   ├── ML_8_dimensionality-reduction.xlsx      # Lecture Dataset: MTCARS Tabular Features (Week 8)
-│   └── ML_8_Tutorial_Dimensionality_Reduction.ipynb # Tutorial: PCA Implementation & Scree Analysis (Week 8)
+│   ├── ML_8_Tutorial_Dimensionality_Reduction.ipynb # Tutorial: PCA Implementation & Scree Analysis (Week 8)
+│   ├── ML_9_Clustering_Basics.mp4             # Compressed Lecture Recording (27.9 MB, Week 9)
+│   ├── ML_9_clustering-basics.xlsx            # Lecture Dataset: Clustering Basics (Week 9)
+│   └── ML_9_Tutorial_Clustering_Basics.ipynb  # Tutorial: Clustering Basics & K-Means (Week 9)
 │
 └── textbook/                                  # Reference textbooks (ISLR / O'Reilly)
 ```
@@ -215,6 +228,36 @@ cpe342-machine-learning-2026/
   * [`CPE342_Assignment 7_main.pdf`](./assignment/Assignment%207_Dimensionality%20Reduction/CPE342_Assignment%207_main.pdf) (Publication-Grade Academic Report, 41 pages)
   * [`benchmark_results.csv`](./assignment/Assignment%207_Dimensionality%20Reduction/benchmark_results.csv) & [`benchmark_results.json`](./assignment/Assignment%207_Dimensionality%20Reduction/benchmark_results.json)
   * [`plot_1_linear_pca_geometry.pdf`](./assignment/Assignment%207_Dimensionality%20Reduction/plot_1_linear_pca_geometry.pdf) to [`plot_7_reconstruction_error.pdf`](./assignment/Assignment%207_Dimensionality%20Reduction/plot_7_reconstruction_error.pdf) (7 High-Resolution Vector Figures)
+
+---
+
+### [Assignment 8: Clustering Basics & Latent Subspace Pipeline](./assignment/Assignment%208_Clustering_Basics/)
+* **Topic:** Unsupervised Partitioning via K-Means Clustering, Voronoi Tessellation Geometry, Lloyd's Heuristic Algorithm, Failure Modes on Non-Convex Geometries, Cluster Tendency (Hopkins Statistic), and High-Dimensional Latent Subspace Clustering on Chemical Wine Profiling.
+* **Key Tasks:**
+  * Mathematical formulation of K-Means optimization objective (Inertia/WCSS), Voronoi cell boundaries, and step-by-step Lloyd's convergence.
+  * **Part I (4 Synthetic Geometries, $N=600\text{--}800$):**
+    * **Dataset 1 (Gaussian Blobs with Extreme Outliers):** Quantifying outlier leverage effect on centroid drift ($K=3$ vs $K=4$). Proving that allocating a dedicated outlier cluster isolates anomalies at $(9.97, 4.07)$, restoring cluster cohesion ($s=0.6468$, $\text{CH}=1545.9$).
+    * **Dataset 2 (Concentric Rings) & Dataset 3 (Two Interlocking Moons):** Geometric proof that Voronoi tessellation is constrained to convex polyhedra bounded by linear hyperplanes, causing transverse bisection across manifold structures; contrasting with density-based (DBSCAN) and graph spectral clustering paradigms.
+    * **Dataset 4 (Anisotropic Blobs):** Analyzing cluster boundary distortion caused by unequal variance and density disparities under the isotropic Euclidean distance metric.
+    * Multi-metric comparative benchmarking: Silhouette Width, Calinski-Harabasz Index, Davies-Bouldin Index, and Hopkins Statistic ($H$).
+  * **Part II (Italian Wine Chemical Profiling, $N=178$, $p=13$):**
+    * Mathematical justification for Z-Score Standardization (variance disparity $\sigma^2=99,166.7$ vs $0.0155$) and Correlation Matrix PCA.
+    * Information preservation proof: $r=5$ Principal Components capture **$80.16\% \ge 80.00\%$** total system variance.
+    * K-Means on 5D Latent PC Subspace: Global optimal $K=3$ verified via Elbow inflection and Silhouette peak ($s=0.3691$, $\text{CH}=109.2$).
+    * Enological chemical profiling: Perfect semantic alignment with Piedmont Italian cultivars — *Barolo* ($n=62$), *Grignolino* ($n=65$), and *Barbera* ($n=51$), mapped onto 2D PCA Biplot with 13 chemical loading vectors and Polar Radar Charts.
+  * **Section 5 (In-depth Q&A):**
+    * **Question 1 (Outlier Diagnostics & Centroid Drift):** Analytical proof of outlier leverage and $K=4$ partition mechanics.
+    * **Question 2 (Non-Convex Manifolds & Voronoi Hyperplane Failure):** Formal geometry of linear Voronoi boundaries and alternative paradigms.
+    * **Question 3 (Standardization Mandate & PCA Latent Subspace):** Proof that 5 PCs achieve $80.16\% \ge 80\%$ and why PC clustering eliminates multicollinearity.
+    * **Question 4 (Enological Interpretation & Italian Cultivar Alignment):** Chemical characterization across Barolo, Grignolino, and Barbera.
+    * All 4 questions formatted strictly to **exactly 1 full page each** without spillover.
+* **Deliverables:**
+  * [`67_1003_1027_1042_1045_1067.ipynb`](./assignment/Assignment%208_Clustering_Basics/67_1003_1027_1042_1045_1067.ipynb) (Official Course Submission File)
+  * [`[Lab] Clustering Basics.ipynb`](./assignment/Assignment%208_Clustering_Basics/[Lab]%20Clustering%20Basics.ipynb) (Original Lab Notebook)
+  * [`clustering-basics.xlsx`](./assignment/Assignment%208_Clustering_Basics/clustering-basics.xlsx) (Course Dataset)
+  * [`CPE342_Assignment 8_main.pdf`](./assignment/Assignment%208_Clustering_Basics/CPE342_Assignment%208_main.pdf) (Publication-Grade Academic Report, 39 pages)
+  * [`benchmark_results.csv`](./assignment/Assignment%208_Clustering_Basics/benchmark_results.csv) & [`benchmark_results.json`](./assignment/Assignment%208_Clustering_Basics/benchmark_results.json)
+  * [`plot_1_dataset1_kmeans_elbow_silhouette.pdf`](./assignment/Assignment%208_Clustering_Basics/plot_1_dataset1_kmeans_elbow_silhouette.pdf) to [`plot_8_wine_cluster_biplot_radar_profiling.pdf`](./assignment/Assignment%208_Clustering_Basics/plot_8_wine_cluster_biplot_radar_profiling.pdf) (8 High-Resolution Vector Figures)
 
 ---
 

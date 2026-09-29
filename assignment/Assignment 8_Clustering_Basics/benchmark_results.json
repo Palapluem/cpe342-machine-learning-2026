@@ -1,0 +1,161 @@
+{
+  "Dataset1": {
+    "n_samples": 600,
+    "optimal_k": 4,
+    "hopkins_stat": 0.9675,
+    "sse_k4": 184.32,
+    "sil_k4": 0.6468,
+    "ch_k4": 1545.89,
+    "db_k4": 0.3803,
+    "sil_k3": 0.6254,
+    "outlier_count": 3
+  },
+  "Dataset2": {
+    "n_samples": 1000,
+    "geometry": "Concentric Circles (r~0.2 & r~1.0)",
+    "hopkins_stat": 0.7985,
+    "sil_k2": 0.2656,
+    "sil_k6": 0.5375,
+    "failure_mode": "Linear Voronoi hyperplanes cut non-convex circular rings"
+  },
+  "Dataset3": {
+    "n_samples": 500,
+    "geometry": "Interlocking Two Moons",
+    "hopkins_stat": 0.8621,
+    "sil_k2": 0.4888,
+    "failure_mode": "K-Means cuts horizontally across both curved moons"
+  },
+  "Dataset4": {
+    "n_samples": 1000,
+    "geometry": "Anisotropic Multi-Density Blobs",
+    "hopkins_stat": 0.9483,
+    "sil_k3": 0.4889,
+    "sil_k4": 0.4679,
+    "failure_mode": "Unequal variance causes spherical K-Means to misallocate boundary points"
+  },
+  "Wine_PCA": {
+    "n_samples": 178,
+    "n_features": 13,
+    "eigenvalues": [
+      4.7324,
+      2.5111,
+      1.4542,
+      0.9242,
+      0.858,
+      0.6453,
+      0.5541,
+      0.3505,
+      0.2905,
+      0.2523,
+      0.2271,
+      0.1697,
+      0.104
+    ],
+    "pve": [
+      36.2,
+      19.21,
+      11.12,
+      7.07,
+      6.56,
+      4.94,
+      4.24,
+      2.68,
+      2.22,
+      1.93,
+      1.74,
+      1.3,
+      0.8
+    ],
+    "cum_pve": [
+      36.2,
+      55.41,
+      66.53,
+      73.6,
+      80.16,
+      85.1,
+      89.34,
+      92.02,
+      94.24,
+      96.17,
+      97.91,
+      99.2,
+      100.0
+    ],
+    "pc_threshold_80_rank": 5,
+    "pc_threshold_80_pve": 80.16
+  },
+  "Wine_Clustering": {
+    "optimal_k": 3,
+    "pc_dimensions": 5,
+    "sse_k3": 825.02,
+    "sil_k3": 0.3691,
+    "ch_k3": 109.23,
+    "db_k3": 1.0933,
+    "cluster_counts": [
+      65,
+      51,
+      62
+    ],
+    "metrics_table": {
+      "k_2": {
+        "inertia": 1201.16,
+        "silhouette": 0.3239,
+        "calinski_harabasz": 95.8,
+        "davies_bouldin": 1.2748
+      },
+      "k_3": {
+        "inertia": 825.02,
+        "silhouette": 0.3691,
+        "calinski_harabasz": 109.23,
+        "davies_bouldin": 1.0933
+      },
+      "k_4": {
+        "inertia": 723.94,
+        "silhouette": 0.3256,
+        "calinski_harabasz": 90.61,
+        "davies_bouldin": 1.4194
+      },
+      "k_5": {
+        "inertia": 663.99,
+        "silhouette": 0.2645,
+        "calinski_harabasz": 77.58,
+        "davies_bouldin": 1.4342
+      },
+      "k_6": {
+        "inertia": 605.38,
+        "silhouette": 0.2728,
+        "calinski_harabasz": 71.01,
+        "davies_bouldin": 1.3372
+      },
+      "k_7": {
+        "inertia": 558.11,
+        "silhouette": 0.2756,
+        "calinski_harabasz": 66.22,
+        "davies_bouldin": 1.3601
+      },
+      "k_8": {
+        "inertia": 524.52,
+        "silhouette": 0.2257,
+        "calinski_harabasz": 61.6,
+        "davies_bouldin": 1.3903
+      }
+    }
+  },
+  "Wine_Prototypes": {
+    "Cluster_1_Barolo": {
+      "sample_idx": 111,
+      "alcohol": 12.52,
+      "proline": 325.0
+    },
+    "Cluster_2_Grignolino": {
+      "sample_idx": 148,
+      "alcohol": 13.32,
+      "proline": 650.0
+    },
+    "Cluster_3_Barbera": {
+      "sample_idx": 48,
+      "alcohol": 14.1,
+      "proline": 1060.0
+    }
+  }
+}
