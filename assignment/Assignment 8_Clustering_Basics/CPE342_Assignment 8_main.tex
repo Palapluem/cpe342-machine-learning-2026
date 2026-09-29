@@ -55,6 +55,8 @@
 
 \definecolor{captioncol}{RGB}{80, 80, 80}
 \definecolor{accentblue}{RGB}{37, 99, 235}
+\definecolor{partorange}{HTML}{EA580C}
+\definecolor{partdarkorange}{HTML}{C2410C}
 \definecolor{codebg}{RGB}{248, 250, 252}
 \definecolor{codeframe}{RGB}{203, 213, 225}
 \definecolor{codeaccent}{HTML}{0969DA}
@@ -63,7 +65,7 @@
 \definecolor{string}{RGB}{22, 163, 74}
 \definecolor{comment}{RGB}{100, 116, 139}
 \definecolor{output}{RGB}{30, 58, 138}
-\captionsetup{font={small, color=captioncol}, justification=centering}
+\captionsetup{font={small, color=captioncol}, justification=centering, skip=4pt}
 
 \lstdefinestyle{pycode}{
     language=Python,
@@ -170,7 +172,7 @@
 % =========================================================================
 % SECTION 2
 % =========================================================================
-\section*{2. การทดลอง Part I — การวิเคราะห์ K-Means บนชุดข้อมูลสังเคราะห์ 4 รูปทรง\newline \large(Part I: K-Means on Synthetic Geometries)}
+\section*{2. การทดลอง \textcolor{partorange}{Part I: K-means Clustering} — การวิเคราะห์บนชุดข้อมูลสังเคราะห์ 4 รูปทรง\newline \large(\textcolor{partorange}{Part I: K-Means on Synthetic Geometries})}
 
 การทดลองในส่วนแรกมุ่งเน้นการตรวจสอบพฤติกรรม ข้อดี และข้อจำกัดทางเรขาคณิตของ K-Means บนชุดข้อมูลสังเคราะห์ 4 ลักษณะที่สะท้อนถึงความท้าทายจริงในงานวิศวกรรมข้อมูล
 
@@ -179,7 +181,7 @@ Dataset 1 ($N=600$) ประกอบด้วย 3 คลัสเตอร์
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.96\linewidth]{plot_1_dataset1_kmeans_elbow_silhouette.pdf}
+\includegraphics[width=0.98\linewidth]{plot_1_dataset1_kmeans_elbow_silhouette.pdf}
 \caption{การวิเคราะห์ Dataset 1: (a) แผนภาพการกระจายและจุด Outlier, (b) กราฟ Elbow และ Silhouette, (c) ผลลัพธ์ K-Means ที่ $K=4$}
 \end{figure}
 
@@ -190,7 +192,7 @@ Dataset 2 ($N=1000$) ประกอบด้วยวงแหวนวงใ�
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.90\linewidth]{plot_2_dataset2_concentric_circles.pdf}
+\includegraphics[width=0.98\linewidth]{plot_2_dataset2_concentric_circles.pdf}
 \caption{การวิเคราะห์ Dataset 2: (a) วงกลมซ้อนสองชั้น, (b) กราฟ Elbow และ Silhouette, (c) ความล้มเหลวของ K-Means จากระนาบ Voronoi}
 \end{figure}
 
@@ -201,7 +203,7 @@ Dataset 3 ($N=500$) เป็นรูปพระจันทร์เสี้
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.90\linewidth]{plot_3_dataset3_two_moons.pdf}
+\includegraphics[width=0.98\linewidth]{plot_3_dataset3_two_moons.pdf}
 \caption{การวิเคราะห์ Dataset 3: (a) ข้อมูลพระจันทร์เสี้ยวสองเสี้ยว, (b) กราฟดัชนี, (c) การตัดขวางสองกลุ่มของ K-Means}
 \end{figure}
 
@@ -212,7 +214,7 @@ Dataset 4 ($N=1000$) ประกอบด้วยกลุ่มข้อม�
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.90\linewidth]{plot_4_dataset4_anisotropic_blobs.pdf}
+\includegraphics[width=0.98\linewidth]{plot_4_dataset4_anisotropic_blobs.pdf}
 \caption{การวิเคราะห์ Dataset 4: (a) ข้อมูลความหนาแน่นไม่เท่ากัน, (b) กราฟดัชนี, (c) ผลลัพธ์ K-Means ที่ $K=3$}
 \end{figure}
 
@@ -222,7 +224,7 @@ K-Means มีสมมติฐานแฝงว่าคลัสเตอร
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.90\linewidth]{plot_5_synthetic_clustering_diagnostics.pdf}
+\includegraphics[width=0.98\linewidth]{plot_5_synthetic_clustering_diagnostics.pdf}
 \caption{การเปรียบเทียบเชิงปริมาณข้าม 4 ชุดข้อมูล: (a) Silhouette Score, (b) Calinski-Harabasz Index, (c) Davies-Bouldin Index}
 \end{figure}
 
@@ -247,7 +249,7 @@ Dataset 4 & 1000 & 0.871 & 3 & 0.4889 & 1,089.4 & เสียรูปทรง
 % =========================================================================
 % SECTION 3
 % =========================================================================
-\section*{3. การทดลอง Part II — การลดมิติข้อมูลและจัดกลุ่มข้อมูลสารเคมีไวน์\newline \large(Part II: High-Dimensional Latent Subspace Clustering on Wine Data)}
+\section*{3. การทดลอง \textcolor{partdarkorange}{Part II: Clustering Wine Data} — การลดมิติข้อมูลและจัดกลุ่มข้อมูลสารเคมีไวน์\newline \large(\textcolor{partdarkorange}{Part II: High-Dimensional Latent Subspace Clustering on Wine Data})}
 
 ชุดข้อมูลไวน์ (Wine Dataset) ประกอบด้วยตัวอย่างไวน์จากแคว้นพีดมอนต์ ประเทศอิตาลี จำนวน $N=178$ ตัวอย่าง พร้อมคุณสมบัติทางเคมี $p=13$ ตัวแปร
 
@@ -259,7 +261,7 @@ Dataset 4 & 1000 & 0.871 & 3 & 0.4889 & 1,089.4 & เสียรูปทรง
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.90\linewidth]{plot_6_wine_pca_loadings_scree.pdf}
+\includegraphics[width=0.98\linewidth]{plot_6_wine_pca_loadings_scree.pdf}
 \caption{การวิเคราะห์ PCA บนข้อมูลไวน์: (a) Scree Plot และความแปรปรวนสะสม ($\ge 80\%$), (b) ค่าน้ำหนักตัวแปรบนแกน PC1 และ PC2}
 \end{figure}
 
@@ -287,7 +289,7 @@ Dataset 4 & 1000 & 0.871 & 3 & 0.4889 & 1,089.4 & เสียรูปทรง
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.92\linewidth]{plot_7_wine_pc_clustering_elbow_silhouette.pdf}
+\includegraphics[width=0.98\linewidth]{plot_7_wine_pc_clustering_elbow_silhouette.pdf}
 \caption{การประเมินจำนวนคลัสเตอร์บนข้อมูลไวน์ 5D PC: (a) กราฟ Elbow Method, (b) กราฟ Silhouette Score}
 \end{figure}
 
@@ -297,7 +299,7 @@ Dataset 4 & 1000 & 0.871 & 3 & 0.4889 & 1,089.4 & เสียรูปทรง
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.96\linewidth]{plot_8_wine_cluster_biplot_radar_profiling.pdf}
+\includegraphics[width=0.98\linewidth]{plot_8_wine_cluster_biplot_radar_profiling.pdf}
 \caption{ผลลัพธ์การจัดกลุ่มไวน์: (a) แผนภาพ 2D PCA Biplot และจุดศูนย์กลาง, (b) เรดาร์ชาร์ตเปรียบเทียบโปรไฟล์ทางเคมี (Z-Scores)}
 \end{figure}
 
