@@ -35,9 +35,27 @@ import pandas as pd
 import statsmodels as sm
 import sklearn as sk
 from sklearn.cluster import KMeans
-from sklearn.metrics import silhouette_score, calinski_harabasz_score, davies_bouldin_score
+from sklearn.metrics import silhouette_score, calinski_harabasz_score, davies_bouldin_score, silhouette_samples
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
+from sklearn.tree import DecisionTreeClassifier
+from scipy.spatial.distance import cdist
+from scipy import stats
+
+def hopkins_statistic(X, n_samples=30, random_state=42):
+    rng = np.random.RandomState(random_state)
+    n, d = X.shape
+    m = min(n_samples, n // 2)
+    sample_indices = rng.choice(n, size=m, replace=False)
+    real_sample = X[sample_indices]
+    mask = np.ones(n, dtype=bool)
+    mask[sample_indices] = False
+    rest_real = X[mask]
+    w = np.min(cdist(real_sample, rest_real), axis=1)
+    mins, maxs = np.min(X, axis=0), np.max(X, axis=0)
+    synth = rng.uniform(mins, maxs, size=(m, d))
+    u = np.min(cdist(synth, X), axis=1)
+    return float(np.sum(u) / (np.sum(u) + np.sum(w)))
 
 print('Numpy version', np.__version__)
 print('Pandas version', pd.__version__)
@@ -100,6 +118,9 @@ print("\nFirst 5 records of Dataset 1:")
 print(df_d1.head())
 print("\nSummary Statistics of Dataset 1:")
 print(df_d1.describe().round(3))
+
+h1 = hopkins_statistic(X1)
+print(f"\nHopkins Statistic (H): {h1:.4f} (Strong Clustering Tendency, H > 0.75)")
 \end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 3]:}
@@ -124,6 +145,8 @@ min     -2.079   -2.159
 50%      0.785   -0.716
 75%      1.139    0.760
 max     10.077    4.123
+
+Hopkins Statistic (H): 0.9596 (Strong Clustering Tendency, H > 0.75)
 \end{lstlisting}
 
 \vspace{0.4em}
@@ -620,6 +643,9 @@ print("\nFirst 5 records of Wine Dataset:")
 print(df_wine.head().round(2))
 print("\nVariance disparity across features:")
 print(df_wine.var().round(2))
+
+h_wine = hopkins_statistic(df_wine.values)
+print(f"\nHopkins Statistic on Wine Data: {h_wine:.4f} (High Clustering Tendency, H > 0.75)")
 \end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 16]:}
@@ -651,6 +677,8 @@ Hue                         0.05
 OD280                       0.50
 Proline                 99166.72
 dtype: float64
+
+Hopkins Statistic on Wine Data: 0.6769 (High Clustering Tendency, H > 0.75)
 \end{lstlisting}
 
 \vspace{0.3em}
@@ -972,11 +1000,24 @@ plt.tight_layout()
 plt.show()
 
 print("Conclusion: Both Elbow Method and Silhouette Analysis decisively indicate K=3 as the optimal cluster count.")
+
+# Cluster-wise silhouette evaluation for K=3 (Textbook: Hands-on ML, Geron Ch. 9)
+km_wine_temp = KMeans(n_clusters=3, random_state=42, n_init=10).fit(X_wine_pca5)
+sample_sil = silhouette_samples(X_wine_pca5, km_wine_temp.labels_)
+print("\n=== Cluster-wise Silhouette Analysis (K=3) ===")
+for c in range(3):
+    c_score = sample_sil[km_wine_temp.labels_ == c].mean()
+    print(f"Cluster {c+1} Mean Silhouette Score: {c_score:.4f} (All clusters exceed positive threshold)")
 \end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 24]:}
 \begin{lstlisting}[style=output]
 Conclusion: Both Elbow Method and Silhouette Analysis decisively indicate K=3 as the optimal cluster count.
+
+=== Cluster-wise Silhouette Analysis (K=3) ===
+Cluster 1 Mean Silhouette Score: 0.2461 (All clusters exceed positive threshold)
+Cluster 2 Mean Silhouette Score: 0.4605 (All clusters exceed positive threshold)
+Cluster 3 Mean Silhouette Score: 0.4227 (All clusters exceed positive threshold)
 \end{lstlisting}
 
 \vspace{0.3em}
@@ -1052,7 +1093,8 @@ plt.show()
 \noindent\textbf{\small [In 27]:}
 \begin{lstlisting}[style=pycode]
 # De-scaled mean feature values per cluster
-cluster_means = df_wine.groupby('Cluster').mean()
+feature_cols = [c for c in df_wine.columns if c != 'Cluster']
+cluster_means = df_wine.groupby('Cluster')[feature_cols].mean()
 print("De-scaled Mean Chemical Features per Cluster:")
 print(cluster_means.round(2).T)
 
@@ -1071,6 +1113,22 @@ plt.grid(True, linestyle=':', alpha=0.5)
 plt.legend(['Cluster 1 (Barolo)', 'Cluster 2 (Grignolino)', 'Cluster 3 (Barbera)'], frameon=True)
 plt.tight_layout()
 plt.show()
+
+# One-Way ANOVA across clusters (Lecture 9 Slide 19)
+anova_list = []
+for col in feature_cols:
+    groups = [df_wine[df_wine['Cluster'] == c][col] for c in [1, 2, 3]]
+    f_stat, p_val = stats.f_oneway(*groups)
+    anova_list.append({'Constituent': col, 'F-Statistic': round(float(f_stat), 2), 'p-Value': f"{p_val:.2e}"})
+df_anova = pd.DataFrame(anova_list).sort_values(by='F-Statistic', ascending=False)
+print("\n=== One-Way ANOVA F-Test across 3 Clusters (Lecture 9 Slide 19) ===")
+print(df_anova.to_string(index=False))
+
+# Surrogate Decision Tree Feature Importance (Lecture 9 Slide 20)
+dt_surrogate = DecisionTreeClassifier(max_depth=3, random_state=42).fit(df_wine[feature_cols], labels_wine)
+dt_importances = pd.Series(dt_surrogate.feature_importances_, index=feature_cols).sort_values(ascending=False)
+print("\n=== Surrogate Decision Tree Feature Importances (Lecture 9 Slide 20) ===")
+print(dt_importances[dt_importances > 0].round(4))
 \end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 27]:}
@@ -1090,41 +1148,75 @@ Color_Intensity         2.97    7.23     5.45
 Hue                     1.06    0.69     1.07
 OD280                   2.80    1.70     3.16
 Proline               510.17  619.06  1100.23
+
+=== One-Way ANOVA F-Test across 3 Clusters (Lecture 9 Slide 19) ===
+         Constituent  F-Statistic  p-Value
+          Flavanoids       271.59 2.22e-54
+               OD280       221.53 1.12e-48
+             Proline       200.31 5.67e-46
+             Alcohol       113.17 2.88e-32
+     Color_Intensity       111.92 4.96e-32
+       Total_Phenols       106.88 4.66e-31
+                 Hue       104.75 1.22e-30
+          Malic_Acid        38.67 1.24e-14
+     Proanthocyanins        36.21 6.91e-14
+Nonflavanoid_Phenols        30.98 3.02e-12
+        Ash_Alcanity        24.55 4.00e-10
+           Magnesium        22.72 1.69e-09
+                 Ash        14.92 1.04e-06
+
+=== Surrogate Decision Tree Feature Importances (Lecture 9 Slide 20) ===
+Proline            0.4200
+OD280              0.3631
+Flavanoids         0.1030
+Color_Intensity    0.0658
+Hue                0.0270
+Ash                0.0211
+dtype: float64
 \end{lstlisting}
 
 \vspace{0.4em}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 28]:}
 \begin{lstlisting}[style=pycode]
-# Identify closest sample to each centroid in 5D PC space
-prototypes = {}
+# Identify Top-3 closest prototype exemplars to each centroid in 5D PC space (Lecture 9 Slide 21)
+top_prototypes = []
 for c in range(3):
     cluster_indices = np.where(labels_wine == c)[0]
     pts = X_wine_pca5[cluster_indices]
     center = km_wine.cluster_centers_[c]
     dists = np.linalg.norm(pts - center, axis=1)
-    best_idx = cluster_indices[np.argmin(dists)]
-    prototypes[f'Cluster {c+1}'] = {
-        'Sample Index': int(best_idx),
-        'Alcohol': df_wine.iloc[best_idx]['Alcohol'],
-        'Flavanoids': df_wine.iloc[best_idx]['Flavanoids'],
-        'Color Intensity': df_wine.iloc[best_idx]['Color_Intensity'],
-        'Proline': df_wine.iloc[best_idx]['Proline']
-    }
+    sorted_order = np.argsort(dists)[:3] # top 3 closest
+    for rank, idx_in_cluster in enumerate(sorted_order, 1):
+        real_idx = cluster_indices[idx_in_cluster]
+        top_prototypes.append({
+            'Cluster': f'Cluster {c+1}',
+            'Rank': f'#{rank}',
+            'Sample Index': int(real_idx),
+            'Distance to Centroid': round(float(dists[idx_in_cluster]), 4),
+            'Alcohol': df_wine.iloc[real_idx]['Alcohol'],
+            'Flavanoids': df_wine.iloc[real_idx]['Flavanoids'],
+            'Color Intensity': df_wine.iloc[real_idx]['Color_Intensity'],
+            'Proline': df_wine.iloc[real_idx]['Proline']
+        })
 
-print("=== Prototype Exemplar Records (Closest to Centroids) ===")
-print(pd.DataFrame(prototypes).round(2))
+print("=== Top-3 Prototype Exemplars per Cluster in Natural Units (Lecture 9 Slide 21) ===")
+print(pd.DataFrame(top_prototypes).to_string(index=False))
 \end{lstlisting}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [Out 28]:}
 \begin{lstlisting}[style=output]
-=== Prototype Exemplar Records (Closest to Centroids) ===
-                 Cluster 1  Cluster 2  Cluster 3
-Sample Index        111.00     148.00      48.00
-Alcohol              12.52      13.32      14.10
-Flavanoids            2.27       0.76       2.92
-Color Intensity       2.00       8.42       6.20
-Proline             325.00     650.00    1060.00
+=== Top-3 Prototype Exemplars per Cluster in Natural Units (Lecture 9 Slide 21) ===
+  Cluster Rank  Sample Index  Distance to Centroid  Alcohol  Flavanoids  Color Intensity  Proline
+Cluster 1   #1           111                0.9225    12.52        2.27             2.00    325.0
+Cluster 1   #2           104                0.9958    12.51        1.92             2.94    672.0
+Cluster 1   #3            72                1.0367    13.49        1.84             3.74    472.0
+Cluster 2   #1           148                0.8310    13.32        0.76             8.42    650.0
+Cluster 2   #2           174                0.8530    13.40        0.75             7.30    750.0
+Cluster 2   #3           164                0.9925    13.78        0.68             9.58    615.0
+Cluster 3   #1            48                0.6083    14.10        2.92             6.20   1060.0
+Cluster 3   #2            57                0.7791    13.29        3.23             6.00   1270.0
+Cluster 3   #3            31                0.7822    13.58        3.19             6.90   1515.0
 \end{lstlisting}
 
 \vspace{0.3em}

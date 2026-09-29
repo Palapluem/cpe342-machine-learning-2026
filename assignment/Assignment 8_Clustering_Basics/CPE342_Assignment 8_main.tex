@@ -185,13 +185,12 @@ Dataset 1 ($N=600$) ประกอบด้วย 3 คลัสเตอร์
 
 จาก Figure 1(b) พบว่าค่า Silhouette Score สูงสุดเด่นชัดที่ \textbf{$K=4$ ($s=0.6468$)} และ Calinski-Harabasz สูงสุดที่ \textbf{$1,545.9$} ขณะที่ $K=3$ มีค่า Silhouette เพียง $0.6254$ เนื่องจาก K-Means ใช้ระยะทางกำลังสอง $\|\mathbf{x} - \boldsymbol{\mu}\|^2$ จุด Outlier ที่อยู่ห่างไกลจึงส่งผลต่อค่าปรับอย่างมหาศาล ทำให้ที่ $K=4$ อัลกอริทึมเลือกที่จะแยกจุด Outlier 3 จุดออกเป็นคลัสเตอร์เอกเทศ ($C_4$) เพื่อป้องกันไม่ให้ไปดึงจุดศูนย์กลางของคลัสเตอร์หลักอื่น
 
-\clearpage
 \subsection*{2.2 Dataset 2: วงกลมซ้อนสองชั้นและข้อจำกัดของเส้นขอบ Voronoi (Concentric Rings \& Manifold Failure)}
 Dataset 2 ($N=1000$) ประกอบด้วยวงแหวนวงในหนาแน่น ($r \approx 0.2$) และวงแหวนวงนอก ($r \approx 1.0$) ซึ่งมีโครงสร้างแบบไม่เป็นรูปทรงนูน (Non-Convex Manifold)
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.96\linewidth]{plot_2_dataset2_concentric_circles.pdf}
+\includegraphics[width=0.90\linewidth]{plot_2_dataset2_concentric_circles.pdf}
 \caption{การวิเคราะห์ Dataset 2: (a) วงกลมซ้อนสองชั้น, (b) กราฟ Elbow และ Silhouette, (c) ความล้มเหลวของ K-Means จากระนาบ Voronoi}
 \end{figure}
 
@@ -202,19 +201,18 @@ Dataset 3 ($N=500$) เป็นรูปพระจันทร์เสี้
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.96\linewidth]{plot_3_dataset3_two_moons.pdf}
+\includegraphics[width=0.90\linewidth]{plot_3_dataset3_two_moons.pdf}
 \caption{การวิเคราะห์ Dataset 3: (a) ข้อมูลพระจันทร์เสี้ยวสองเสี้ยว, (b) กราฟดัชนี, (c) การตัดขวางสองกลุ่มของ K-Means}
 \end{figure}
 
 จาก Figure 3(c) K-Means ที่ $K=2$ ล้มเหลวในการติดตามความโค้งของพระจันทร์เสี้ยว โดยอัลกอริทึมทำการตัดระนาบในแนวนอน ($y \approx 0.25$) ส่งผลให้ครึ่งบนของทั้งสองเสี้ยวถูกยุบรวมเป็นกลุ่มเดียวกัน และครึ่งล่างถูกจัดเป็นอีกกลุ่มหนึ่ง แสดงให้เห็นว่า K-Means ไม่เหมาะสมกับข้อมูลที่เชื่อมโยงกันด้วยความหนาแน่นหรือความต่อเนื่องเชิงเส้นโค้ง (Connectivity-based clusters)
 
-\clearpage
 \subsection*{2.4 Dataset 4: กลุ่มข้อมูลที่มีความแปรปรวนและความหนาแน่นไม่เท่ากัน (Anisotropic Multi-Density Blobs)}
 Dataset 4 ($N=1000$) ประกอบด้วยกลุ่มข้อมูลที่มีความแปรปรวนในแต่ละแกนไม่เท่ากัน (Anisotropic Covariance) และมีระดับความหนาแน่นที่แตกต่างกัน
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.96\linewidth]{plot_4_dataset4_anisotropic_blobs.pdf}
+\includegraphics[width=0.90\linewidth]{plot_4_dataset4_anisotropic_blobs.pdf}
 \caption{การวิเคราะห์ Dataset 4: (a) ข้อมูลความหนาแน่นไม่เท่ากัน, (b) กราฟดัชนี, (c) ผลลัพธ์ K-Means ที่ $K=3$}
 \end{figure}
 
@@ -224,12 +222,13 @@ K-Means มีสมมติฐานแฝงว่าคลัสเตอร
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.96\linewidth]{plot_5_synthetic_clustering_diagnostics.pdf}
+\includegraphics[width=0.90\linewidth]{plot_5_synthetic_clustering_diagnostics.pdf}
 \caption{การเปรียบเทียบเชิงปริมาณข้าม 4 ชุดข้อมูล: (a) Silhouette Score, (b) Calinski-Harabasz Index, (c) Davies-Bouldin Index}
 \end{figure}
 
 \begin{table}[H]
 \centering
+\small
 \resizebox{\linewidth}{!}{
 \begin{tabular}{lcccccl}
 \toprule
@@ -260,7 +259,7 @@ Dataset 4 & 1000 & 0.871 & 3 & 0.4889 & 1,089.4 & เสียรูปทรง
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.96\linewidth]{plot_6_wine_pca_loadings_scree.pdf}
+\includegraphics[width=0.90\linewidth]{plot_6_wine_pca_loadings_scree.pdf}
 \caption{การวิเคราะห์ PCA บนข้อมูลไวน์: (a) Scree Plot และความแปรปรวนสะสม ($\ge 80\%$), (b) ค่าน้ำหนักตัวแปรบนแกน PC1 และ PC2}
 \end{figure}
 
@@ -277,7 +276,6 @@ Dataset 4 & 1000 & 0.871 & 3 & 0.4889 & 1,089.4 & เสียรูปทรง
     \item \textbf{แกน PC2 (Color Intensity \& Body Factor):} ได้รับค่าน้ำหนักสูงจาก \codevar{Color\_Intensity} ($-0.530$), \codevar{Alcohol} ($-0.484$), \codevar{Ash\_Alcanity} ($+0.310$), และ \codevar{Hue} ($+0.279$) แกนนี้ทำหน้าที่จำแนกระดับความเข้มของสีและบอดี้ความหนักแน่นของแอลกอฮอล์
 \end{enumerate}
 
-\clearpage
 % =========================================================================
 % SECTION 4
 % =========================================================================
@@ -505,16 +503,21 @@ Proline (mg/L) & \textbf{1,115.65} (สูงสุด) & 510.17 & 629.88 & ก�
 % =========================================================================
 \section*{6. สรุปผลการทดลองและแนวทางปฏิบัติทางวิศวกรรมข้อมูล\newline \large(Conclusions \& Practical Engineering Recommendations)}
 
-การทดลองใน Assignment 8 ให้ข้อค้นพบเชิงทฤษฎีและการประยุกต์ใช้งาน 3 ประการหลัก:
-\begin{enumerate}[leftmargin=1.5em, itemsep=2.5pt]
-    \item \textbf{ขอบเขตและข้อจำกัดของ K-Means:} K-Means ทรงประสิทธิภาพอย่างยิ่งสำหรับข้อมูลที่มีรูปทรงนูน (Convex) และมีความแปรปรวนใกล้เคียงกัน แต่จะล้มเหลวทันทีเมื่อพบกับรูปทรงเชิงท่อ วงแหวน หรือพระจันทร์เสี้ยว เนื่องจากข้อจำกัดของระนาบ Voronoi เชิงเส้น และมีความไวต่อจุด Outlier เป็นอย่างมาก
-    \item \textbf{บทบาทของการเตรียมข้อมูล (Data Preprocessing):} การทำ Standardization มีความสำคัญอย่างยิ่งยวดต่อขั้นตอนวิธีที่ใช้ระยะทางเป็นฐาน หากไม่ปรับมาตรฐาน ตัวแปรที่มีค่าตัวเลขสเกลใหญ่จะครอบงำผลลัพธ์ทั้งหมด
-    \item \textbf{ประสิทธิภาพของไปป์ไลน์ PCA + K-Means:} การฉายข้อมูลลงบน Latent PC Space ช่วยลดมิติข้อมูลลงได้มากกว่า $60\%$ ขจัดปัญหาความสัมพันธ์ซ้ำซ้อน และตัดสัญญาณรบกวน ทำให้ K-Means สามารถค้นพบคลัสเตอร์ที่สอดคล้องกับความจริงตามธรรมชาติได้อย่างสมบูรณ์แบบ
+การทดลองใน Assignment 8 ให้ข้อค้นพบเชิงทฤษฎีและการประยุกต์ใช้งาน 4 ประการหลัก:
+\begin{enumerate}[leftmargin=1.5em, itemsep=2.0pt]
+    \item \textbf{ข้อค้นพบเชิงทฤษฎีและข้อจำกัดทางเรขาคณิต (Theoretical Constraints):} K-Means ทรงประสิทธิภาพอย่างยิ่งสำหรับข้อมูลที่มีรูปทรงนูน (Convex) และมีความแปรปรวนใกล้เคียงกัน แต่มีข้อจำกัดทางรากฐาน 2 ประการ ได้แก่ (1) \textit{Voronoi Convexity Constraint} ขอบเขตการตัดสินใจที่เป็นไฮเปอร์เพลนเชิงเส้นทำให้ล้มเหลวในการจัดกลุ่มรูปทรงวงแหวนซ้อนและพระจันทร์เสี้ยว (2) \textit{Quadratic Loss Penalty} ฟังก์ชันวัตถุประสงค์ WCSS มีความไวต่อจุดผิดปกติอย่างรุนแรง ส่งผลให้อัลกอริทึมเลือกแยก Outlier ออกเป็นคลัสเตอร์เอกเทศที่ $K=4$ เพื่อลดโทษทัณฑ์ระยะทางยกกำลังสอง
+    \item \textbf{ไปป์ไลน์การจัดกลุ่มข้อมูลขั้นสูงแบบครบวงจร (The CPE 342 ML Pipeline):} การประยุกต์ใช้งาน Unsupervised Learning ที่สมบูรณ์แบบควรดำเนินตามลำดับขั้นตอน: (1) ตรวจสอบแนวโน้มการจัดกลุ่มด้วย \textbf{Hopkins Statistic ($H > 0.75$)} เพื่อป้องกันการจัดกลุ่มบนข้อมูลสุ่ม (2) ทำ \textbf{Standardization} ทุกครั้งเมื่อคุณลักษณะมีหน่วยวัดต่างกัน (3) ประยุกต์ใช้ \textbf{PCA Subspace Projection} เพื่อตัดสัญญาณรบกวนและขจัดปัญหาความสัมพันธ์พหุคูณ และ (4) ประเมินผลร่วมกันระหว่าง \textbf{Elbow Method, Silhouette Analysis, และ CH Index}
+    \item \textbf{การต่อยอดสู่งานวิศวกรรมข้อมูลและการเรียนรู้กึ่งมีผู้สอน (Downstream Applications):} ผลการจัดกลุ่มสามารถนำไปต่อยอดได้โดยตรงตามหลักการใน Lecture 9:
+    \begin{itemize}[leftmargin=1.2em, itemsep=1.0pt, topsep=1.0pt]
+        \item \textit{Feature Augmentation (Slide 22):} นำระยะทางจากจุดข้อมูลไปยังจุดศูนย์กลาง ($1/\|\mathbf{x} - \boldsymbol{\mu}_k\|$) หรือ Cluster One-Hot Encoding ไปใช้เป็นฟีเจอร์เสริมสำหรับโมเดล Supervised Learning ในการทำนายเกรดราคาไวน์
+        \item \textit{Semi-Supervised Label Propagation (Slide 23):} ใช้ตัวแทนโปรโตไทป์ (Top Prototypes) ในการติดป้ายกำกับตัวอย่างทดสอบจำนวนมากในห้องปฏิบัติการเพื่อลดต้นทุนการวิเคราะห์ทางเคมี
+    \end{itemize}
+    \item \textbf{การกำกับดูแลโมเดลในสายการผลิตจริง (Model Governance \& Best Practices):} ในการนำไปใช้งานจริง (Production Deployment) วิศวกรข้อมูลควรเฝ้าระวังปรากฏการณ์ \textbf{Centroid Drift} ที่เกิดจากการเปลี่ยนแปลงสภาพภูมิอากาศในแต่ละฤดูกาลเพาะปลูก และควรใช้ขั้นตอนวิธีตรวจจับจุดผิดปกติ (เช่น Isolation Forest หรือ DBSCAN) เพื่อคัดกรองขวดไวน์ที่ปนเปื้อนก่อนนำเข้าสู่กระบวนการจัดกลุ่มมาตรฐาน
 \end{enumerate}
 
-\vspace{1.5em}
+\vspace{0.8em}
 \hrule
-\vspace{1em}
+\vspace{0.8em}
 
 % =========================================================================
 % APPENDIX
