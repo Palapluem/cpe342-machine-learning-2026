@@ -109,6 +109,20 @@ plt.rcParams.update(params)
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 3]:}
 \begin{lstlisting}[style=pycode]
+import os
+from pathlib import Path
+
+candidates = [
+    Path("clustering-basics.xlsx"),
+    Path("data/clustering-basics.xlsx"),
+    Path("assignment/Assignment 8_Clustering_Basics/clustering-basics.xlsx"),
+    Path("../clustering-basics.xlsx"),
+    Path.cwd() / "clustering-basics.xlsx",
+    Path.cwd() / "data/clustering-basics.xlsx",
+    Path.cwd() / "assignment/Assignment 8_Clustering_Basics/clustering-basics.xlsx",
+]
+EXCEL_PATH = next((str(p) for p in candidates if p.is_file()), "clustering-basics.xlsx")
+
 xl = pd.ExcelFile(EXCEL_PATH)
 df_d1 = xl.parse('Dataset1')
 X1 = df_d1[['X1', 'X2']].values
