@@ -59,7 +59,7 @@ cpe342-machine-learning-2026/
 │       ├── [Lab] Dimensionality Reduction.ipynb # Original assignment template
 │       ├── dimensionality-reduction.xlsx       # MTCARS dataset (32 cars, 11 features)
 │       ├── CPE342_Assignment 7_main.tex       # LaTeX source report
-│       ├── CPE342_Assignment 7_main.pdf       # Publication-grade academic report (42 pages)
+│       ├── CPE342_Assignment 7_main.pdf       # Publication-grade academic report (41 pages)
 │       ├── notebook_appendix_7.tex            # LaTeX appendix with executed notebook cells
 │       ├── benchmark_results.csv & .json      # PCA spectral benchmarks and PVE metrics
 │       └── plot_1_*.pdf to plot_7_*.pdf       # Publication-grade vector figures
@@ -212,7 +212,7 @@ cpe342-machine-learning-2026/
   * [`67_1003_1027_1042_1045_1067.ipynb`](./assignment/Assignment%207_Dimensionality%20Reduction/67_1003_1027_1042_1045_1067.ipynb) (Official Course Submission File)
   * [`[Lab] Dimensionality Reduction.ipynb`](./assignment/Assignment%207_Dimensionality%20Reduction/[Lab]%20Dimensionality%20Reduction.ipynb) (Original Lab Notebook)
   * [`dimensionality-reduction.xlsx`](./assignment/Assignment%207_Dimensionality%20Reduction/dimensionality-reduction.xlsx) (MTCARS Dataset)
-  * [`CPE342_Assignment 7_main.pdf`](./assignment/Assignment%207_Dimensionality%20Reduction/CPE342_Assignment%207_main.pdf) (Publication-Grade Academic Report, 42 pages)
+  * [`CPE342_Assignment 7_main.pdf`](./assignment/Assignment%207_Dimensionality%20Reduction/CPE342_Assignment%207_main.pdf) (Publication-Grade Academic Report, 41 pages)
   * [`benchmark_results.csv`](./assignment/Assignment%207_Dimensionality%20Reduction/benchmark_results.csv) & [`benchmark_results.json`](./assignment/Assignment%207_Dimensionality%20Reduction/benchmark_results.json)
   * [`plot_1_linear_pca_geometry.pdf`](./assignment/Assignment%207_Dimensionality%20Reduction/plot_1_linear_pca_geometry.pdf) to [`plot_7_reconstruction_error.pdf`](./assignment/Assignment%207_Dimensionality%20Reduction/plot_7_reconstruction_error.pdf) (7 High-Resolution Vector Figures)
 
