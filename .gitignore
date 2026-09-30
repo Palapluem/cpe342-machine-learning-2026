@@ -12,6 +12,7 @@ read_friend.py
 trim_tex.py
 make_notebook.py
 *.zip
+*.h5
 
 
 # macOS and Windows system files
