@@ -1,0 +1,2 @@
+Temporary check file for verification of git tracking and sync.
+To be removed in the following cleanup commit.

@@ -47,6 +47,8 @@ cpe342-machine-learning-2026/
 │   │
 │   ├── Assignment 6_CNN/
 │   │   ├── 67_1027_1042.ipynb                 # Official course submission notebook
+│   │   ├── ML_7_CNN_in-class.ipynb            # In-Class Lab: Evaluation, activations & discussions
+│   │   ├── test_01.png                        # Sample 28x28 grayscale test digit
 │   │   ├── CNN_Homework.ipynb                 # Original assignment template
 │   │   ├── CPE342_Assignment 6_main.tex       # LaTeX source report
 │   │   ├── CPE342_Assignment 6_main.pdf       # Publication-grade academic report (61 pages)
@@ -69,7 +71,7 @@ cpe342-machine-learning-2026/
 │       ├── [Lab] Clustering Basics.ipynb      # Original assignment template
 │       ├── clustering-basics.xlsx             # Course dataset (4 synthetic sheets + Wine)
 │       ├── CPE342_Assignment 8_main.tex       # LaTeX source report
-│       ├── CPE342_Assignment 8_main.pdf       # Publication-grade academic report (38 pages)
+│       ├── CPE342_Assignment 8_main.pdf       # Publication-grade academic report (39 pages)
 │       ├── notebook_appendix_8.tex            # LaTeX appendix with executed notebook cells
 │       ├── benchmark_results.csv & .json      # Clustering metrics across geometries & Wine
 │       └── plot_1_*.pdf to plot_8_*.pdf       # Publication-grade vector figures
@@ -88,6 +90,7 @@ cpe342-machine-learning-2026/
 │   ├── ML_6_Keras_Tutorial_Quickstart.ipynb   # Quickstart: TensorFlow Keras Sequential Pipeline (Week 6)
 │   ├── ML_6_bank-data.csv                     # Dataset: Banking Marketing Tabular Data (Lecture 6, N = 45,211)
 │   ├── ML_7_CNN_in-class.ipynb                # In-Class Lab: Convolutional Neural Networks on MNIST & Dogs vs Cats (Week 7)
+│   ├── test_01.png                            # Test image for digit evaluation (28x28)
 │   ├── ML_8_Dimensionality_Reduction.mp4      # Lecture Recording: Dimensionality Reduction & PCA (Week 8)
 │   ├── ML_8_dimensionality-reduction.xlsx      # Lecture Dataset: MTCARS Tabular Features (Week 8)
 │   ├── ML_8_Tutorial_Dimensionality_Reduction.ipynb # Tutorial: PCA Implementation & Scree Analysis (Week 8)
