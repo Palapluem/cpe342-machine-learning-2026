@@ -97,6 +97,10 @@ cpe342-machine-learning-2026/
 │   ├── ML_9_Clustering_Basics.mp4             # Compressed Lecture Recording (27.9 MB, Week 9)
 │   ├── ML_9_clustering-basics.xlsx            # Lecture Dataset: Clustering Basics (Week 9)
 │   └── ML_9_Tutorial_Clustering_Basics.ipynb  # Tutorial: Clustering Basics & K-Means (Week 9)
+├── project/                                   # CPE 342 Term Project (Karena Player Intelligence System)
+│   ├── CPE342_Project_Instruction.pdf         # Term project guidelines & specification
+│   ├── CPE342_Project_Instruction (Ver. 2025).pdf # Full project challenge slide deck (40 pages)
+│   └── README.md                              # Term project overview, 5 tasks & system specifications
 │
 └── textbook/                                  # Reference textbooks (ISLR / O'Reilly)
 ```
@@ -264,11 +268,33 @@ cpe342-machine-learning-2026/
 
 ---
 
+## 🏆 [Term Project: Karena Player Intelligence System](./project/)
+
+* **Industrial Setting:** Karena Thailand online gaming platform (publisher of *PUBE Mobile*, *Free Fried*, *7-11 Knights*, *Roblock*, *FiveN*).
+* **System Mission:** Build an integrated end-to-end Machine Learning pipeline across 5 core operational tasks that feed into a central Player Lifetime Value (LTV) Prediction System.
+* **The 5 Core Machine Learning Tasks:**
+  1. **Task 1: Anti-Cheat Pre-Filter** (Binary Classification, Target: `is_cheater`, Metric: **$F_2$ Score** prioritizing recall, 32 tabular features).
+  2. **Task 2: Player Segment Classification** (Multi-class Classification, Target: `segment` across Casual, Grinder, Social, Whale, Metric: **$F_1$ Score**, 44 tabular features).
+  3. **Task 3: Player Monthly Spending Prediction** (Zero-Inflated Continuous Regression, Target: `spending_30d` in THB, Metric: **Normalized MAE**).
+  4. **Task 4: Game Title Detection** (Deep Multi-Class Image Classification, Target: 5 game titles from $230\times 120$ centered-crop gameplay screenshots, Metric: **Macro $F_1$**, Pretrained CNN/ViT/Swin permitted).
+  5. **Task 5: Account Security Monitoring** (Unsupervised Anomaly Detection, Target: `is_anomaly` across 4 time periods, Metric: **$F_3$ Score** heavily penalizing missed account takeovers/bot rings).
+* **Grading & Competition Structure:**
+  * **Kaggle Leaderboard:** 70% (Ground Baseline = $0.68$, Challenge Baseline = $0.75$, evaluated on consolidated 25,889-row `sample_submission.csv`).
+  * **Technical Academic Report:** 20% (Methodology, EDA, Error Analysis, Business Impact).
+  * **Source Code & Reproduction Quality:** 10% (LEB2 & GitHub repository).
+* **Deliverables & Documentation:**
+  * [`project/README.md`](./project/README.md) (Complete technical specifications & metric derivations)
+  * [`CPE342_Project_Instruction (Ver. 2025).pdf`](./project/CPE342_Project_Instruction%20(Ver.%202025).pdf) (Official 40-page project challenge slide deck)
+  * [`CPE342_Project_Instruction.pdf`](./project/CPE342_Project_Instruction.pdf) (Project guidelines & specification document)
+
+---
+
 ## 🛠️ Environment & Prerequisites
 
 * **Python:** 3.10+
-* **Deep Learning Frameworks:** `tensorflow` (2.21+), `keras` (3.15+)
-* **Core Machine Learning Libraries:** `numpy`, `pandas`, `scikit-learn`, `xgboost`, `matplotlib`, `scipy`, `lifelines`, `statsmodels`, `seaborn`, `jupyter`, `nbclient`, `nbformat`
+* **Deep Learning Frameworks:** `tensorflow` (2.21+), `keras` (3.15+), `torch`, `torchvision`, `timm`
+* **Core Machine Learning & GBDT:** `numpy`, `pandas`, `scikit-learn`, `xgboost`, `lightgbm`, `catboost`, `scipy`, `lifelines`, `statsmodels`, `optuna`
+* **Visualization & Data Exploration:** `matplotlib`, `seaborn`, `jupyter`, `nbclient`, `nbformat`
 * **Typography:** TH Sarabun New / Sarabun font support for Matplotlib charts
 * **Report Compilation:** XeLaTeX / TeX Live / MiKTeX (Polyglossia + Sarabun font)
 
