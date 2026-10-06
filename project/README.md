@@ -198,8 +198,21 @@ project/
 
 ---
 
-## 📅 Milestones & Deadlines
+## 🔗 Official Registration & Competition Setup
 
-* **Project & Competition Launch:** November 7, 2024
-* **Kaggle Leaderboard Closes:** November 28, 2024
-* **Technical Report & Source Code Due Date:** November 26, 2024 (via LEB2)
+1. **Step 1: Team Registration (KMUTT Excel):**
+   * Register your 5-member team on the [KMUTT Team Registration Sheet](https://mailkmuttacth-my.sharepoint.com/:x:/g/personal/papit_vieng_kmutt_ac_th/IQBIaRtyJYJjSYWtXEWlJHD2AXW2ozmqp-ezObm8h420ibo?e=UHRoIh)
+   * This entry generates your official **Team ID** (e.g. `ML001`). Use this Team ID consistently across all reports and submissions.
+2. **Step 2: Join the Kaggle Competition:**
+   * Log in to Kaggle and join via the official competition link: [Kaggle Competition Invitation](https://www.kaggle.com/t/3028c241ac9244d0bf0e95e165c858fd)
+3. **Step 3: Kaggle Team Setup:**
+   * Name your Kaggle team **exactly as your official Team ID** (e.g. `ML001`).
+   * Invite all 5 teammates into the Kaggle team.
+
+---
+
+## 📅 Milestones & Deadlines (Official Timeline)
+
+* **Kaggle Opens:** November 2, 2026 (Dataset release & leaderboard opens)
+* **Kaggle Closes:** November 24, 2026 (Final leaderboard freeze)
+* **Technical Report & Source Code Due Date:** November 30, 2026 (Submission via LEB2)

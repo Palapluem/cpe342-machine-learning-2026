@@ -283,9 +283,13 @@ cpe342-machine-learning-2026/
   * **Technical Academic Report:** 20% (Methodology, EDA, Error Analysis, Business Impact).
   * **Source Code & Reproduction Quality:** 10% (LEB2 & GitHub repository).
 * **Deliverables & Documentation:**
-  * [`project/README.md`](./project/README.md) (Complete technical specifications & metric derivations)
+  * [`project/README.md`](./project/README.md) (Complete technical specifications, links & metric derivations)
   * [`CPE342_Project_Instruction (Ver. 2025).pdf`](./project/CPE342_Project_Instruction%20(Ver.%202025).pdf) (Official 40-page project challenge slide deck)
   * [`CPE342_Project_Instruction.pdf`](./project/CPE342_Project_Instruction.pdf) (Project guidelines & specification document)
+* **Official Timeline:**
+  * **Kaggle Opens:** November 2, 2026
+  * **Kaggle Closes:** November 24, 2026
+  * **Technical Report & Source Code Due:** November 30, 2026 (LEB2)
 
 ---
 
