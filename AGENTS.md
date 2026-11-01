@@ -37,12 +37,9 @@ This document serves as the authoritative, comprehensive Workspace Rules and Sys
     - `67070501042` วิศิษฐ์ สุวรรณเนาว์ (Wisit Suwannao)
     - `67070501045` ศุภวิชญ์ มารยาท (Supawit Marayat)
     - `67070501067` พลวริษฐ์ วัฒนเหมรัตน์ (Polwarit Watthanahemmarat)
-  - **Term Project (Karena Player Intelligence System):** 5 Group Members
-    - `67070501003` กันต์ธีร์ ดวงมณี (Guntee Doungmanee)
-    - `67070501027` นัธทวัฒน์ ปริมสิริคุณาวุฒิ (Natthawat Primsirikunawut)
-    - `67070501042` วิศิษฐ์ สุวรรณเนาว์ (Wisit Suwannao)
-    - `67070501045` ศุภวิชญ์ มารยาท (Supawit Marayat)
-    - `67070501067` พลวริษฐ์ วัฒนเหมรัตน์ (Polwarit Watthanahemmarat)
+  - **Term Project (Karena Player Intelligence System):**
+    - **Team Identifier:** Strictly use **`Team: ML004`** across all Term Project notebooks (`project/task1..5/*.ipynb`, `project/merge_submission.ipynb`) and `project/README.md` (do not list individual student names/IDs in Term Project headers).
+    - **Primary Module Ownership:** **Task 3 (`project/task3/task3_monthly_spending.ipynb`)** is the primary focus module in this workspace, developed in parallel with the central team repository (`https://github.com/beambeambeam/ml00x` on branch `task3`).
 - **Official Submission Notebook File Naming:**
   - Course convention: `(First 2 digits of ID)_(Last 4 digits of Member 1)_(Last 4 digits of Member 2)[_Member 3...].ipynb`
   - Examples:
@@ -50,15 +47,15 @@ This document serves as the authoritative, comprehensive Workspace Rules and Sys
     - Assignment 6: `67_1027_1042.ipynb`
     - Assignment 7: `67_1003_1027_1042_1045_1067.ipynb`
     - Assignment 8: `67_1003_1027_1042_1045_1067.ipynb`
-    - Term Project: Follows Kaggle submission format (`sample_submission.csv`) & team convention.
+    - Term Project: Follows Kaggle submission format (`sample_submission.csv` / `submission.csv`) & `Team: ML004` convention.
 
 ---
 
 ## 2. Directory Hygiene & File Management Rules
 
-### 2.1 The Zero-Script Rule for Python (`*.py`) in Coursework Assignments
-- **STRICT PROHIBITION (Root & Assignments):** Never save any `.py` script files directly in the repository root or inside any assignment directory (`assignment/Assignment *`).
-- **Term Project Exception (`project/task1..5/`):** The `project/` directory mirrors the team's `uv`-based multi-task repository (`https://github.com/beambeambeam/ml00x`), where each `project/taskX/` folder is an isolated `uv` project containing `main.py`, `pyproject.toml`, and `uv.lock` per `project/AGENTS.md`.
+### 2.1 The Zero-Script Rule for Python (`*.py`) in Coursework Assignments & Term Project
+- **STRICT PROHIBITION (Root, Assignments & Project):** Never save standalone `.py` script files or combined multi-task runner notebooks directly in the repository root, inside any assignment directory (`assignment/Assignment *`), or inside `project/`.
+- **Term Project Structure (`project/task1..5/`):** Each `project/taskX/` folder must remain strictly self-contained with its own pure-English `.ipynb` notebook, `data/` directory, and `predictions/test_predictions.csv`. Parallel `uv` / branch development with the central team repository (`https://github.com/beambeambeam/ml00x`) lives in `/Users/wisitsuwannao/Documents/Workspace/ml00x` (branch `task3`).
 - **Allowed Location for Temporary Helper Scripts:** All one-off helper scripts, migration tools, figure verification scripts, or LaTeX processors MUST be created and executed exclusively inside the assistant's temporary scratch directory:
   `<appDataDir>/brain/<conversation-id>/scratch/`
 - **Pre-Commit Verification:** Verify zero stray `.py` files exist in the repository root or `assignment/` tree before staging (`git status`, `find assignment -name "*.py"`).

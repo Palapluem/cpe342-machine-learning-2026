@@ -203,9 +203,9 @@ This competition is part of CPE342 coursework and will be evaluated on:
 
 ---
 
-## 📁 Repository Directory Architecture
+## 📁 Repository Directory Architecture & Team Workflow
 
-Each task (`task1`–`task5`) is cleanly organized with its portable Jupyter Notebook (`.ipynb`) and dedicated `data/`, `models/`, `predictions/`, and `assets/` folders aligned with [`beambeambeam/ml00x`](https://github.com/beambeambeam/ml00x):
+Each task (`task1`–`task5`) is strictly isolated in its own directory with a self-contained, 100% academic English Jupyter Notebook (`.ipynb`), official dataset (`data/`), and validated test set predictions (`predictions/test_predictions.csv`), synchronized with our central team repository [`beambeambeam/ml00x`](https://github.com/beambeambeam/ml00x) (where **Task 3** is actively developed on the dedicated `task3` branch):
 
 ```text
 project/
@@ -213,57 +213,57 @@ project/
 ├── CPE342_Project_Instruction (Ver. 2025).pdf # Reference 2025 challenge slide deck (40 pages)
 ├── README.md                                  # This authoritative technical specification guide
 ├── sample_submission.csv                      # Official Kaggle submission template (25,889 rows × 6 cols)
+├── submission.csv                             # Validated 5-task consolidated submission (25,889 rows × 6 cols)
 ├── merge_submission.ipynb                     # Master Submission Merger & Quality Gate Notebook
 │
 ├── task1/                                     # Task 1: Anti-Cheat Pre-Filter (Binary Classification, F2)
 │   ├── task1_anti_cheat.ipynb                 # Portable Colab/Kaggle/Local Notebook (EDA + FE + GBDT + F2 Opt)
 │   ├── data/                                  # train.csv (104k×33), test.csv (25,889×32), datacard.txt
-│   ├── models/                                # Saved model checkpoints
-│   ├── predictions/                           # Generated out-of-fold & test predictions
-│   └── assets/                                # Report figures (300 dpi kebab-case PNG) & tables (CSV/MD)
+│   └── predictions/                           # test_predictions.csv (25,889 rows: id, task1)
 │
 ├── task2/                                     # Task 2: Player Segment Classification (Multi-Class, Macro F1)
 │   ├── task2_player_segment.ipynb             # Portable Notebook (Noise Filtering + Behavioral FE + Logit Tuning)
-│   └── data/, models/, predictions/, assets/  # train.csv (104k×46), test.csv (25,889×45), datacard.txt
+│   ├── data/                                  # train.csv (104k×46), test.csv (25,889×45), datacard.txt
+│   └── predictions/                           # test_predictions.csv (25,889 rows: id, task2)
 │
-├── task3/                                     # Task 3: Player Monthly Spending (Zero-Inflated Regression, NMAE)
-│   ├── task3_monthly_spending.ipynb           # Portable Notebook (Two-Stage Hurdle + L1 GBDT Ensemble)
-│   └── data/, models/, predictions/, assets/  # train.csv (104k×34), test.csv (25,889×33), datacard.txt
+├── task3/                                     # Task 3 [PRIMARY FOCUS]: Player Monthly Spending (Zero-Inflated Regression, NMAE)
+│   ├── task3_monthly_spending.ipynb           # Portable Notebook (Two-Stage Hurdle + L1 GBDT Ensemble + Power Scaling)
+│   ├── data/                                  # train.csv (104k×34), test.csv (25,889×33), datacard.txt
+│   └── predictions/                           # test_predictions.csv (25,889 rows: id, task3)
 │
 ├── task4/                                     # Task 4: Game Title Screenshot Detection (Image Classification, Macro F1)
 │   ├── task4_game_title_detection.ipynb       # Portable GPU Notebook (Auto Google Drive Download + ConvNeXt/Swin + TTA)
-│   └── data/, models/, predictions/, assets/  # datacard.txt, README.md (Google Drive archive link)
+│   ├── data/                                  # train.csv, test.csv, datacard.txt, README.md (Google Drive archive link)
+│   └── predictions/                           # test_predictions.csv (25,889 rows: id, task4)
 │
 └── task5/                                     # Task 5: Account Security Monitoring (Unsupervised Anomaly, F3)
     ├── task5_account_security.ipynb           # Portable Notebook (Haversine Geo-Velocity + iForest/ECOD/LOF/AE Ensemble)
-    └── data/, models/, predictions/, assets/  # test.csv (25,889×123), datacard.txt
+    ├── data/                                  # test.csv (25,889×123), datacard.txt
+    └── predictions/                           # test_predictions.csv (25,889 rows: id, task5)
 ```
 
 ---
 
-## 👥 Project Team Members
+## 👥 Project Team & Module Ownership
 
-| Student ID | Full Name (Thai) | Full Name (English) | Role / Core Responsibilities |
-| :---: | :--- | :--- | :--- |
-| `67070501042` | นายวิศิษฐ์ สุวรรณเนาว์ | Wisit Suwannao | **Team Lead**, Pipeline Architecture, Technical Report & Benchmarking |
-| `67070501003` | นายกันต์ธีร์ ดวงมณี | Guntee Doungmanee | ML Engineering, Feature Engineering & Validation |
-| `67070501027` | นายนัธทวัฒน์ ปริมสิริคุณาวุฒิ | Natthawat Primsirikunawut | ML Engineering, Model Optimization & Diagnostics |
-| `67070501045` | นายศุภวิชญ์ มารยาท | Supawit Marayat | Data Preprocessing, Ensembling & Hyperparameter Search |
-| `67070501067` | นายพลวริษฐ์ วัฒนเหมรัตน์ | Polwarit Watthanahemmarat | Deep Learning Architectures & Anomaly Detection Pipelines |
+* **Official Team Identifier:** **ML004**
+* **Central Team GitHub Repository:** [`https://github.com/beambeambeam/ml00x`](https://github.com/beambeambeam/ml00x)
+* **Module Allocation Across Team ML004:**
+  * **Task 3 (`task3` — Primary Responsibility in this Workspace):** *Player Monthly Spending Prediction* (Zero-Inflated Hurdle Regression & Direct L1/Tweedie Optimization under Normalized MAE, developed on branch `task3` of `beambeambeam/ml00x`).
+  * **Tasks 1, 2, 4, 5 (`task1`, `task2`, `task4`, `task5`):** Developed collaboratively by Team ML004 members on their respective task branches (`task1`, `task2`, `task4`, `task5`) and integrated via `merge_submission.ipynb`.
 
 ---
 
 ## 🔗 Official Registration & Competition Setup
 
 1. **Step 1: Team Registration (KMUTT Excel):**
-   * Register your 5-member team on the [KMUTT Team Registration Sheet](https://mailkmuttacth-my.sharepoint.com/:x:/g/personal/papit_vieng_kmutt_ac_th/IQBIaRtyJYJjSYWtXEWlJHD2AXW2ozmqp-ezObm8h420ibo?e=UHRoIh)
-   * This entry generates your official **Team ID** (e.g. `ML001`). Use this Team ID consistently across all reports and submissions.
+   * Register the 5-member team on the [KMUTT Team Registration Sheet](https://mailkmuttacth-my.sharepoint.com/:x:/g/personal/papit_vieng_kmutt_ac_th/IQBIaRtyJYJjSYWtXEWlJHD2AXW2ozmqp-ezObm8h420ibo?e=UHRoIh) under **Team ID: `ML004`**.
 2. **Step 2: Join the Kaggle Competition:**
    * Invitation Link: [Kaggle Competition Invitation](https://www.kaggle.com/t/3028c241ac9244d0bf0e95e165c858fd)
    * Competition Dashboard & Data Download: [`player-intelligence-system-cpe-342-ml`](https://www.kaggle.com/competitions/player-intelligence-system-cpe-342-ml/)
-3. **Step 3: Kaggle Team & GitHub Collaboration Setup:**
-   * Name your Kaggle team **exactly as your official Team ID** (e.g. `ML001`) and invite all 5 teammates.
-   * Central Team Repository: [`https://github.com/beambeambeam/ml00x`](https://github.com/beambeambeam/ml00x) (each member forks and develops their assigned `taskX/` module using `uv`).
+3. **Step 3: Kaggle Team & GitHub Branch Workflow:**
+   * Kaggle Team Name: **`ML004`**
+   * Central Team Repository: [`https://github.com/beambeambeam/ml00x`](https://github.com/beambeambeam/ml00x) (each member develops their assigned `taskX/` module on branch `taskX` and merges validated `predictions/test_predictions.csv` into `sample_submission.csv`).
 
 ---
 
