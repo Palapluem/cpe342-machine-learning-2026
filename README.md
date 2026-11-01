@@ -99,9 +99,12 @@ cpe342-machine-learning-2026/
 │   ├── ML_9_Tutorial_Clustering_Basics.ipynb  # Tutorial: Clustering Basics & K-Means (Week 9)
 │   ├── CPE342_ML_Midterm_StudyNotes.pdf       # Comprehensive Midterm Study Book (Lectures 1–8, 140 pages)
 ├── project/                                   # CPE 342 Term Project (Karena Player Intelligence System)
-│   ├── CPE342_Project_Instruction.pdf         # Term project guidelines & specification
-│   ├── CPE342_Project_Instruction (Ver. 2025).pdf # Full project challenge slide deck (40 pages)
-│   └── README.md                              # Term project overview, 5 tasks & system specifications
+│   ├── CPE342_Project_Instruction.pdf         # Official 2026 project specification (28 pages)
+│   ├── CPE342_Project_Instruction (Ver. 2025).pdf # Reference 2025 project challenge slide deck (40 pages)
+│   ├── README.md                              # Term project overview, 5 tasks & system specifications
+│   ├── AGENTS.md & CLAUDE.md                  # Team agent guardrails & uv workflow rules (from ml00x)
+│   ├── docs/project-instruction.md            # Markdown transcription of project instructions
+│   └── task1/ to task5/                       # 5 self-contained uv projects (data, models, predictions, assets)
 │
 └── textbook/                                  # Reference textbooks (ISLR / O'Reilly)
 ```
@@ -276,17 +279,19 @@ cpe342-machine-learning-2026/
 * **The 5 Core Machine Learning Tasks:**
   1. **Task 1: Anti-Cheat Pre-Filter** (Binary Classification, Target: `is_cheater`, Metric: **$F_2$ Score** prioritizing recall, 32 tabular features).
   2. **Task 2: Player Segment Classification** (Multi-class Classification, Target: `segment` across Casual, Grinder, Social, Whale, Metric: **$F_1$ Score**, 44 tabular features).
-  3. **Task 3: Player Monthly Spending Prediction** (Zero-Inflated Continuous Regression, Target: `spending_30d` in THB, Metric: **Normalized MAE**).
+  3. **Task 3: Player Monthly Spending Prediction** (Zero-Inflated Continuous Regression, Target: `spending_30d` in THB, Metric: **Normalized MAE** $\text{NMAE} = \frac{1}{1 + \sum|y-\hat{y}|/\sum y}$).
   4. **Task 4: Game Title Detection** (Deep Multi-Class Image Classification, Target: 5 game titles from $230\times 120$ centered-crop gameplay screenshots, Metric: **Macro $F_1$**, Pretrained CNN/ViT/Swin permitted).
   5. **Task 5: Account Security Monitoring** (Unsupervised Anomaly Detection, Target: `is_anomaly` across 4 time periods, Metric: **$F_3$ Score** heavily penalizing missed account takeovers/bot rings).
 * **Grading & Competition Structure:**
   * **Kaggle Leaderboard:** 70% (Ground Baseline = $0.68$, Challenge Baseline = $0.75$, evaluated on consolidated 25,889-row `sample_submission.csv`).
   * **Technical Academic Report:** 20% (Methodology, EDA, Error Analysis, Business Impact).
   * **Source Code & Reproduction Quality:** 10% (LEB2 & GitHub repository).
-* **Deliverables & Documentation:**
-  * [`project/README.md`](./project/README.md) (Complete technical specifications, links & metric derivations)
-  * [`CPE342_Project_Instruction (Ver. 2025).pdf`](./project/CPE342_Project_Instruction%20(Ver.%202025).pdf) (Official 40-page project challenge slide deck)
-  * [`CPE342_Project_Instruction.pdf`](./project/CPE342_Project_Instruction.pdf) (Project guidelines & specification document)
+* **Deliverables, Links & Documentation:**
+  * [Kaggle Competition Page (`player-intelligence-system-cpe-342-ml`)](https://www.kaggle.com/competitions/player-intelligence-system-cpe-342-ml/)
+  * [Central Team GitHub Repository (`beambeambeam/ml00x`)](https://github.com/beambeambeam/ml00x)
+  * [`project/README.md`](./project/README.md) & [`project/docs/project-instruction.md`](./project/docs/project-instruction.md) (Complete technical specifications, links & metric derivations)
+  * [`CPE342_Project_Instruction.pdf`](./project/CPE342_Project_Instruction.pdf) (Official 2026 project specification, 28 pages)
+  * [`CPE342_Project_Instruction (Ver. 2025).pdf`](./project/CPE342_Project_Instruction%20(Ver.%202025).pdf) (Reference 2025 project challenge slide deck, 40 pages)
 * **Official Timeline:**
   * **Kaggle Opens:** November 2, 2026
   * **Kaggle Closes:** November 24, 2026

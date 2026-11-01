@@ -1,9 +1,11 @@
 # CPE 342 Term Project: Karena Player Intelligence System
 
-**Course:** CPE 342 Machine Learning (Semester 1/2024 / 2025–2026 Cohort)  
+**Course:** CPE 342 Machine Learning (Semester 1/2026 Cohort)  
 **Department:** Department of Computer Engineering, Faculty of Engineering, King Mongkut's University of Technology Thonburi (KMUTT)  
 **Team Structure:** Group of 5 Machine Learning Engineers  
-**Instructor & TAs:** Dr. Boonyarit Changaival, P’ Chokun (chotanansub.soph@kmutt.ac.th), P’ Noina (phanita.siri@kmutt.ac.th)
+**Instructor & TAs:** Dr. Boonyarit Changaival, P’ Sun (papit.vieng@kmutt.ac.th), P’ Noinar (phanita.siri@kmutt.ac.th), P’ Chokun (chotanansub.soph@kmutt.ac.th)  
+**Central Team GitHub Repository:** [`https://github.com/beambeambeam/ml00x`](https://github.com/beambeambeam/ml00x)  
+**Kaggle Competition Page:** [`player-intelligence-system-cpe-342-ml`](https://www.kaggle.com/competitions/player-intelligence-system-cpe-342-ml/)
 
 ---
 
@@ -79,7 +81,7 @@ graph TD
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Task 1** | **Anti-Cheat Pre-Filter**<br/>Detect suspicious gameplay and high-probability aimbot/wallhack exploiters for priority manual review. | Binary Classification | `is_cheater`<br/>(0 = Legitimate, 1 = Cheater) | **$F_2$ Score**<br/>(Prioritizes Recall) | 33 features (32 predictors + label): `kill_death_ratio`, `headshot_percentage`, `reaction_time_ms`, etc. |
 | **Task 2** | **Player Segment Classification**<br/>Classify player personas into 4 distinct behavioral segments for personalized marketing. | Multi-Class Classification | `segment`<br/>(0 = Casual, 1 = Grinder, 2 = Social, 3 = Whale) | **$F_1$ Score**<br/>(Macro/Micro Balance) | 45 features (44 predictors + label): `play_frequency`, `avg_session_duration`, `total_spending_thb`, etc. |
-| **Task 3** | **Player Monthly Spending Prediction**<br/>Predict monetary in-game expenditure (THB) in the next 30 days. | Zero-Inflated Regression | `spending_30d`<br/>(Continuous, THB $\ge 0$) | **Normalized MAE**<br/>($\text{NMAE} = \frac{\text{MAE}}{\bar{y}}$) | 33 features (32 predictors + label): `historical_spending`, `friend_count`, `event_participation_rate`, etc. |
+| **Task 3** | **Player Monthly Spending Prediction**<br/>Predict monetary in-game expenditure (THB) in the next 30 days. | Zero-Inflated Regression | `spending_30d`<br/>(Continuous, THB $\ge 0$) | **Normalized MAE**<br/>($\text{NMAE} = \frac{1}{1 + \sum|y-\hat{y}|/\sum y}$) | 33 features (32 predictors + label): `historical_spending`, `friend_count`, `event_participation_rate`, etc. |
 | **Task 4** | **Game Title Detection**<br/>Classify which Karena title is depicted in low-resolution gameplay screenshots. | Multi-Class Image Classification | `game_title`<br/>(`7-11K`, `fiveN`, `freefried`, `pube`, `roblock`) | **Macro $F_1$**<br/>(Equal class penalty) | Images centered-crop to $230 \times 120$ pixels (144p). Sourced from streams, player submissions, and UI states. |
 | **Task 5** | **Account Security Monitoring**<br/>Flag abnormal account behavioral trajectories without ground-truth labels. | Unsupervised Anomaly Detection | `is_anomaly`<br/>(0 = Normal, 1 = Anomalous) | **$F_3$ Score**<br/>(Heavily penalizes False Negatives) | 33 features across 4 consecutive time periods (`_1`, `_2`, `_3`, `_4`): `login_count`, `login_lat`, `device_count`, etc. |
 
@@ -100,9 +102,10 @@ For multi-class classification across $C$ classes ($C=4$ for Task 2, $C=5$ for T
 $$F_{1, c} = 2 \cdot \frac{\text{Precision}_c \cdot \text{Recall}_c}{\text{Precision}_c + \text{Recall}_c}, \qquad \text{Macro } F_1 = \frac{1}{C}\sum_{c=1}^C F_{1, c}$$
 Ensures performance is evaluated uniformly across rare segments (e.g. Whales) and low-sample screenshot classes.
 
-### 3. Normalized Mean Absolute Error (Task 3)
-$$\text{MAE} = \frac{1}{N}\sum_{i=1}^N |y_i - \hat{y}_i|, \qquad \text{NMAE} = \frac{\text{MAE}}{\bar{y}} = \frac{\sum_{i=1}^N |y_i - \hat{y}_i|}{\sum_{i=1}^N y_i}$$
-Normalizes the absolute financial forecasting error relative to average baseline spending.
+### 3. Normalized Mean Absolute Error Score (Task 3)
+$$\text{Relative MAE} = \frac{\sum_{i=1}^N |y_i - \hat{y}_i|}{\sum_{i=1}^N y_i} = \frac{\text{MAE}}{\bar{y}}, \qquad \text{NMAE Score} = \frac{1}{1 + \dfrac{\sum_{i=1}^N |y_i - \hat{y}_i|}{\sum_{i=1}^N y_i}} \in [0, 1]$$
+Normalizes the absolute financial forecasting error relative to total baseline spending and maps it into $[0, 1]$ (where $1.0$ represents zero error) so it combines seamlessly into the Kaggle Weighted Leaderboard Score:
+$$\text{Weighted Score} = \frac{w_1 S_1 + w_2 S_2 + w_3 S_3 + w_4 S_4 + w_5 S_5}{\sum_{i=1}^5 w_i} \in [0, 1]$$
 
 ---
 
@@ -167,21 +170,32 @@ where $\Phi(t)$ is the standard normal cumulative distribution function ($\mu, \
 
 ---
 
-## 📁 Repository Directory Architecture
+## 📁 Repository Directory Architecture (Synced with `ml00x`)
+
+Each task (`task1`–`task5`) is structured as a self-contained `uv` Python project (`Python >= 3.12`) aligned with our central team repository ([`beambeambeam/ml00x`](https://github.com/beambeambeam/ml00x)):
 
 ```text
 project/
-├── CPE342_Project_Instruction.pdf         # Official project specification document
-├── CPE342_Project_Instruction (Ver. 2025).pdf # Complete 40-page competition challenge slide deck
-├── README.md                              # This authoritative technical specification guide
+├── CPE342_Project_Instruction.pdf             # Official 2026 project specification (28 pages)
+├── CPE342_Project_Instruction (Ver. 2025).pdf # Reference 2025 challenge slide deck (40 pages)
+├── README.md                                  # This authoritative technical specification guide
+├── AGENTS.md / CLAUDE.md                      # Team agent guardrails & uv workflow rules
+├── docs/
+│   └── project-instruction.md                 # Markdown transcription of project instructions
 │
-├── task1/                                 # Task 1: Anti-Cheat Pre-Filter (Binary Classification)
-├── task2/                                 # Task 2: Player Segment Classification (Multi-Class)
-├── task3/                                 # Task 3: Player Monthly Spending (Zero-Inflated Regression)
-├── task4/                                 # Task 4: Game Title Screenshot Detection (Image Classification)
-├── task5/                                 # Task 5: Account Security Monitoring (Unsupervised Anomaly Detection)
+├── task1/                                     # Task 1: Anti-Cheat Pre-Filter (Binary Classification, F2)
+│   ├── pyproject.toml & uv.lock               # Task-isolated uv dependencies
+│   ├── .python-version & .gitignore           # Python 3.12+ & env ignore rules
+│   ├── main.py                                # Task entry point / training pipeline
+│   ├── data/                                  # Kaggle dataset files (train.csv, test.csv, datacard.txt)
+│   ├── models/                                # Saved model checkpoints
+│   ├── predictions/                           # Generated out-of-fold & test predictions
+│   └── assets/                                # Report figures (300 dpi kebab-case PNG) & tables (CSV/MD)
 │
-└── report/                                # Publication-Grade Academic Technical Report (XeLaTeX)
+├── task2/                                     # Task 2: Player Segment Classification (Multi-Class, F1)
+├── task3/                                     # Task 3: Player Monthly Spending (Zero-Inflated Regression, NMAE)
+├── task4/                                     # Task 4: Game Title Screenshot Detection (Image Classification, Macro F1)
+└── task5/                                     # Task 5: Account Security Monitoring (Unsupervised Anomaly, F3)
 ```
 
 ---
@@ -204,10 +218,11 @@ project/
    * Register your 5-member team on the [KMUTT Team Registration Sheet](https://mailkmuttacth-my.sharepoint.com/:x:/g/personal/papit_vieng_kmutt_ac_th/IQBIaRtyJYJjSYWtXEWlJHD2AXW2ozmqp-ezObm8h420ibo?e=UHRoIh)
    * This entry generates your official **Team ID** (e.g. `ML001`). Use this Team ID consistently across all reports and submissions.
 2. **Step 2: Join the Kaggle Competition:**
-   * Log in to Kaggle and join via the official competition link: [Kaggle Competition Invitation](https://www.kaggle.com/t/3028c241ac9244d0bf0e95e165c858fd)
-3. **Step 3: Kaggle Team Setup:**
-   * Name your Kaggle team **exactly as your official Team ID** (e.g. `ML001`).
-   * Invite all 5 teammates into the Kaggle team.
+   * Invitation Link: [Kaggle Competition Invitation](https://www.kaggle.com/t/3028c241ac9244d0bf0e95e165c858fd)
+   * Competition Dashboard & Data Download: [`player-intelligence-system-cpe-342-ml`](https://www.kaggle.com/competitions/player-intelligence-system-cpe-342-ml/)
+3. **Step 3: Kaggle Team & GitHub Collaboration Setup:**
+   * Name your Kaggle team **exactly as your official Team ID** (e.g. `ML001`) and invite all 5 teammates.
+   * Central Team Repository: [`https://github.com/beambeambeam/ml00x`](https://github.com/beambeambeam/ml00x) (each member forks and develops their assigned `taskX/` module using `uv`).
 
 ---
 

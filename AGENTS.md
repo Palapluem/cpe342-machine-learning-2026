@@ -56,11 +56,12 @@ This document serves as the authoritative, comprehensive Workspace Rules and Sys
 
 ## 2. Directory Hygiene & File Management Rules
 
-### 2.1 The Zero-Script Rule for Python (`*.py`)
-- **STRICT PROHIBITION:** Never save any `.py` script files directly in the repository root or inside any assignment directory (`assignment/Assignment *`).
-- **Allowed Location for Scripts:** All helper scripts, migration tools, figure verification scripts, or LaTeX processors MUST be created and executed exclusively inside the assistant's temporary scratch directory:
+### 2.1 The Zero-Script Rule for Python (`*.py`) in Coursework Assignments
+- **STRICT PROHIBITION (Root & Assignments):** Never save any `.py` script files directly in the repository root or inside any assignment directory (`assignment/Assignment *`).
+- **Term Project Exception (`project/task1..5/`):** The `project/` directory mirrors the team's `uv`-based multi-task repository (`https://github.com/beambeambeam/ml00x`), where each `project/taskX/` folder is an isolated `uv` project containing `main.py`, `pyproject.toml`, and `uv.lock` per `project/AGENTS.md`.
+- **Allowed Location for Temporary Helper Scripts:** All one-off helper scripts, migration tools, figure verification scripts, or LaTeX processors MUST be created and executed exclusively inside the assistant's temporary scratch directory:
   `<appDataDir>/brain/<conversation-id>/scratch/`
-- **Pre-Commit Verification:** Verify zero `.py` files exist in the repository tree before staging (`git status`, `find . -name "*.py"` or `Get-ChildItem -Recurse -Filter *.py`). If any `.py` files exist in the repository tree, delete them immediately.
+- **Pre-Commit Verification:** Verify zero stray `.py` files exist in the repository root or `assignment/` tree before staging (`git status`, `find assignment -name "*.py"`).
 - **Strict Dataset / Artifact Cleanliness:** Never commit raw dataset folders (e.g. `Cat_Dog_data/`, `__MACOSX/`), uncompressed batches, or intermediate archive zip files to git.
 
 ### 2.2 Git Commit & Synchronization
