@@ -22,3 +22,7 @@ Thumbs.db
 # VS Code
 .vscode/*
 !.vscode/extensions.json
+
+# Large dataset zips and extracted images
+project/task4/data/task4_image_classification/
+project/task4/data/*.zip
