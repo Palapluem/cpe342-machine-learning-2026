@@ -154,19 +154,52 @@ where $\Phi(t)$ is the standard normal cumulative distribution function ($\mu, \
 
 ---
 
-## 📜 Official Competition Rules
+## 📜 Official Competition Rules (Kaggle & Course Policy)
 
-1. **Dataset Integrity:**
-   * ✅ Use strictly the provided datasets for training and validation.
-   * ✅ Training and validation sets may be merged for final production model training.
-   * ❌ **Strict Prohibition:** Never use the test set for pseudo-labeling, transductive learning, or unsupervised pre-training.
-2. **Model Training Guidelines:**
-   * **Task 4 (Image Classification):** Pretrained weights and transfer learning architectures are **explicitly allowed** (e.g., MobileNetV2, ResNet, EfficientNet, Vision Transformers, Swin Transformers).
-   * **Tasks 1, 2, 3, 5:** Must be trained **strictly from scratch**. Pretrained tabular representations are prohibited.
-   * **AutoML Policy:** Commercial/black-box AutoML frameworks (e.g. AutoKeras, AutoGluon, TPOT) are strictly **prohibited**. Hyperparameter optimization libraries (e.g. Optuna, Hyperopt, Ray Tune) are **encouraged**.
-3. **Collaboration & Academic Honesty:**
-   * All work must be conducted exclusively within the registered 5-member team.
-   * Conceptual discussions across teams are permitted; sharing code, features, or predictions is strictly forbidden.
+### 1. Team Composition
+* **Maximum team size:** 5 members per team.
+
+### 2. Data Usage Policy
+* **Provided datasets only:** Use exclusively the datasets provided for this competition.
+* **No external data:** Additional datasets, web scraping, or supplementary data sources are strictly prohibited.
+* **Data augmentation:** Permitted using techniques applied to the provided training data.
+* **Training data usage:** Only the Train and Validation sets may be used for model training or validation.
+  * ✅ **Allowed:** Combining Train and Validation sets for final model training after all validation is complete.
+  * ❌ **Prohibited:** Using or executing any part of the Test set for training-related purposes (e.g., pseudo-labeling or fine-tuning). *(Note: Task 5 is an unsupervised anomaly detection task where only `test.csv` is provided).*
+
+### 3. Model Development
+* **Pre-trained models:**
+  * **Task 4 (Image Classification):** Pre-trained models allowed (e.g., `ResNet`, `EfficientNet`, `ViT`, `ConvNeXt`, `Swin`).
+  * **Tasks 1, 2, 3, 5:** Must train **from scratch** using provided data only.
+* **Model ensembling:** Allowed within the above constraints.
+* **Feature engineering:** Encouraged.
+* **Automated ML tools:**
+  * ❌ **Prohibited:** AutoML frameworks such as `AutoGluon`, `PyCaret`, `H2O AutoML`, `FLAML`, `TPOT`, `Auto-sklearn`, etc.
+  * ✅ **Allowed:** Hyperparameter optimization tools such as `GridSearchCV`, `RandomizedSearchCV`, `Optuna`, or similar libraries.
+
+### 4. Collaboration & Sharing
+* **During competition:**
+  * Collaboration is strictly limited to team members only.
+  * **Discussion forum:** ✅ Conceptual discussions welcome; ❌ solution-specific code or predictions prohibited.
+* **After competition:**
+  * Code and methodology sharing with classmates is encouraged.
+
+### 5. Academic Integrity
+* **No test set probing:** Do not attempt to reverse-engineer or obtain test set labels.
+* **Daily submission limits:** Follow submission limits to prevent leaderboard overfitting.
+* **Meaningful contribution:** All team members must contribute substantially.
+
+### 6. Evaluation Criteria
+This competition is part of CPE342 coursework and will be evaluated on:
+1. **Leaderboard performance** (70%)
+2. **Methodology quality and creativity** (20% Report)
+3. **Understanding demonstrated in final report and provided source code** (10% Code)
+
+### 7. Violations
+* Rule violations may result in academic penalties per course policy.
+
+### 8. Questions
+* Create a discussion post or contact TAs for rule clarifications, technical issues, or permission for uncertain practices.
 
 ---
 
