@@ -2,7 +2,7 @@
 
 **Course:** CPE 342 Machine Learning (Semester 1/2026 Cohort)  
 **Department:** Department of Computer Engineering, Faculty of Engineering, King Mongkut's University of Technology Thonburi (KMUTT)  
-**Team Structure:** Group of 5 Machine Learning Engineers  
+**Team:** ML004  
 **Instructor & TAs:** Dr. Boonyarit Changaival, P’ Sun (papit.vieng@kmutt.ac.th), P’ Noinar (phanita.siri@kmutt.ac.th), P’ Chokun (chotanansub.soph@kmutt.ac.th)  
 **Central Team GitHub Repository:** [`https://github.com/beambeambeam/ml00x`](https://github.com/beambeambeam/ml00x)  
 **Kaggle Competition Page:** [`player-intelligence-system-cpe-342-ml`](https://www.kaggle.com/competitions/player-intelligence-system-cpe-342-ml/)
