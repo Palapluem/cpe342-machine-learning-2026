@@ -203,25 +203,20 @@ This competition is part of CPE342 coursework and will be evaluated on:
 
 ---
 
-## 📁 Repository Directory Architecture (Synced with `ml00x`)
+## 📁 Repository Directory Architecture
 
-Each task (`task1`–`task5`) is structured as a self-contained `uv` Python project (`Python >= 3.12`) aligned with our central team repository ([`beambeambeam/ml00x`](https://github.com/beambeambeam/ml00x)):
+Each task (`task1`–`task5`) is cleanly organized with its portable Jupyter Notebook (`.ipynb`) and dedicated `data/`, `models/`, `predictions/`, and `assets/` folders aligned with [`beambeambeam/ml00x`](https://github.com/beambeambeam/ml00x):
 
 ```text
 project/
 ├── CPE342_Project_Instruction.pdf             # Official 2026 project specification (28 pages)
 ├── CPE342_Project_Instruction (Ver. 2025).pdf # Reference 2025 challenge slide deck (40 pages)
 ├── README.md                                  # This authoritative technical specification guide
-├── AGENTS.md / CLAUDE.md                      # Team agent guardrails & uv workflow rules
 ├── sample_submission.csv                      # Official Kaggle submission template (25,889 rows × 6 cols)
 ├── merge_submission.ipynb                     # Master Submission Merger & Quality Gate Notebook
-├── docs/
-│   └── project-instruction.md                 # Markdown transcription of project instructions
 │
 ├── task1/                                     # Task 1: Anti-Cheat Pre-Filter (Binary Classification, F2)
 │   ├── task1_anti_cheat.ipynb                 # Portable Colab/Kaggle/Local Notebook (EDA + FE + GBDT + F2 Opt)
-│   ├── pyproject.toml & uv.lock               # Task-isolated uv dependencies
-│   ├── main.py                                # Task CLI entry point
 │   ├── data/                                  # train.csv (104k×33), test.csv (25,889×32), datacard.txt
 │   ├── models/                                # Saved model checkpoints
 │   ├── predictions/                           # Generated out-of-fold & test predictions
