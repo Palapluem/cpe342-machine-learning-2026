@@ -77,13 +77,13 @@ graph TD
 
 ## 🛠️ The 5 Core Machine Learning Tasks
 
-| Task | Problem Description | ML Paradigm | Target Variable | Primary Metric | Data / Modality |
+| Task | Problem Description | ML Paradigm | Target Variable | Primary Metric | Actual Dataset Schema (`data/`) |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Task 1** | **Anti-Cheat Pre-Filter**<br/>Detect suspicious gameplay and high-probability aimbot/wallhack exploiters for priority manual review. | Binary Classification | `is_cheater`<br/>(0 = Legitimate, 1 = Cheater) | **$F_2$ Score**<br/>(Prioritizes Recall) | 33 features (32 predictors + label): `kill_death_ratio`, `headshot_percentage`, `reaction_time_ms`, etc. |
-| **Task 2** | **Player Segment Classification**<br/>Classify player personas into 4 distinct behavioral segments for personalized marketing. | Multi-Class Classification | `segment`<br/>(0 = Casual, 1 = Grinder, 2 = Social, 3 = Whale) | **$F_1$ Score**<br/>(Macro/Micro Balance) | 45 features (44 predictors + label): `play_frequency`, `avg_session_duration`, `total_spending_thb`, etc. |
-| **Task 3** | **Player Monthly Spending Prediction**<br/>Predict monetary in-game expenditure (THB) in the next 30 days. | Zero-Inflated Regression | `spending_30d`<br/>(Continuous, THB $\ge 0$) | **Normalized MAE**<br/>($\text{NMAE} = \frac{1}{1 + \sum|y-\hat{y}|/\sum y}$) | 33 features (32 predictors + label): `historical_spending`, `friend_count`, `event_participation_rate`, etc. |
-| **Task 4** | **Game Title Detection**<br/>Classify which Karena title is depicted in low-resolution gameplay screenshots. | Multi-Class Image Classification | `game_title`<br/>(`7-11K`, `fiveN`, `freefried`, `pube`, `roblock`) | **Macro $F_1$**<br/>(Equal class penalty) | Images centered-crop to $230 \times 120$ pixels (144p). Sourced from streams, player submissions, and UI states. |
-| **Task 5** | **Account Security Monitoring**<br/>Flag abnormal account behavioral trajectories without ground-truth labels. | Unsupervised Anomaly Detection | `is_anomaly`<br/>(0 = Normal, 1 = Anomalous) | **$F_3$ Score**<br/>(Heavily penalizes False Negatives) | 33 features across 4 consecutive time periods (`_1`, `_2`, `_3`, `_4`): `login_count`, `login_lat`, `device_count`, etc. |
+| **Task 1** | **Anti-Cheat Pre-Filter**<br/>Separate true cheaters (aimbot/wallhack) from false positives among flagged accounts. | Binary Classification | `is_cheater`<br/>(`0` = Legit, `1` = Cheater) | **$F_2$ Score**<br/>($F_2 = \frac{5PR}{4P+R}$, Macro & Binary) | `train.csv` ($104,000 \times 33$; $90,816$ labeled, $13,184$ `NaN` target), `test.csv` ($25,889 \times 32$), 31 float features. |
+| **Task 2** | **Player Segment Classification**<br/>Classify players into 4 behavioral personas for targeted marketing. | Multi-Class Classification | `segment`<br/>(`0`=Casual, `1`=Grinder, `2`=Social, `3`=Whale) | **Macro $F_1$**<br/>($\frac{1}{4}\sum_{c=0}^3 F_{1,c}$) | `train.csv` ($104,000 \times 46$), `test.csv` ($25,889 \times 45$), 44 features (31 valid float + 3 explicit noise `random_metric_1..3` + 10 categorical). |
+| **Task 3** | **Player Monthly Spending Prediction**<br/>Predict monetary expenditure (THB) over the next 30 days. | Zero-Inflated Regression | `spending_30d`<br/>(Continuous THB $\ge 0$; $48.12\%$ zeros) | **Normalized MAE**<br/>($\text{NMAE} = \frac{1}{1 + \sum|y-\hat{y}|/\sum y}$) | `train.csv` ($104,000 \times 34$), `test.csv` ($25,889 \times 33$), 32 float features (includes `segment` from Task 2). |
+| **Task 4** | **Game Title Detection**<br/>Identify which Karena game is played from single screenshots. | Multi-Class Image Classification | `class` / `game_title`<br/>(5 games: `0`–`4`) | **Macro $F_1$**<br/>(Pre-trained allowed) | RGB screenshots ($230 \times 120$ / $200 \times 100$ px) via official Google Drive archive (`1C8csylbBo3Oab24ODGKPVom3_SDUJ_Qw`, 579 MB). |
+| **Task 5** | **Account Security Monitoring**<br/>Flag account theft, bot farms, and VPN abuse without labeled data. | Unsupervised Anomaly Detection | `is_anomaly`<br/>(`0` = Normal, `1` = Anomalous) | **$F_3$ Score**<br/>($F_3 = \frac{10PR}{9P+R}$) | `test.csv` only ($25,889 \times 123$): **122 features** (29 longitudinal metrics across 4 periods `_1.._4` + 6 security flags). |
 
 ---
 
@@ -180,22 +180,35 @@ project/
 ├── CPE342_Project_Instruction (Ver. 2025).pdf # Reference 2025 challenge slide deck (40 pages)
 ├── README.md                                  # This authoritative technical specification guide
 ├── AGENTS.md / CLAUDE.md                      # Team agent guardrails & uv workflow rules
+├── sample_submission.csv                      # Official Kaggle submission template (25,889 rows × 6 cols)
+├── merge_submission.ipynb                     # Master Submission Merger & Quality Gate Notebook
 ├── docs/
 │   └── project-instruction.md                 # Markdown transcription of project instructions
 │
 ├── task1/                                     # Task 1: Anti-Cheat Pre-Filter (Binary Classification, F2)
+│   ├── task1_anti_cheat.ipynb                 # Portable Colab/Kaggle/Local Notebook (EDA + FE + GBDT + F2 Opt)
 │   ├── pyproject.toml & uv.lock               # Task-isolated uv dependencies
-│   ├── .python-version & .gitignore           # Python 3.12+ & env ignore rules
-│   ├── main.py                                # Task entry point / training pipeline
-│   ├── data/                                  # Kaggle dataset files (train.csv, test.csv, datacard.txt)
+│   ├── main.py                                # Task CLI entry point
+│   ├── data/                                  # train.csv (104k×33), test.csv (25,889×32), datacard.txt
 │   ├── models/                                # Saved model checkpoints
 │   ├── predictions/                           # Generated out-of-fold & test predictions
 │   └── assets/                                # Report figures (300 dpi kebab-case PNG) & tables (CSV/MD)
 │
-├── task2/                                     # Task 2: Player Segment Classification (Multi-Class, F1)
+├── task2/                                     # Task 2: Player Segment Classification (Multi-Class, Macro F1)
+│   ├── task2_player_segment.ipynb             # Portable Notebook (Noise Filtering + Behavioral FE + Logit Tuning)
+│   └── data/, models/, predictions/, assets/  # train.csv (104k×46), test.csv (25,889×45), datacard.txt
+│
 ├── task3/                                     # Task 3: Player Monthly Spending (Zero-Inflated Regression, NMAE)
+│   ├── task3_monthly_spending.ipynb           # Portable Notebook (Two-Stage Hurdle + L1 GBDT Ensemble)
+│   └── data/, models/, predictions/, assets/  # train.csv (104k×34), test.csv (25,889×33), datacard.txt
+│
 ├── task4/                                     # Task 4: Game Title Screenshot Detection (Image Classification, Macro F1)
+│   ├── task4_game_title_detection.ipynb       # Portable GPU Notebook (Auto Google Drive Download + ConvNeXt/Swin + TTA)
+│   └── data/, models/, predictions/, assets/  # datacard.txt, README.md (Google Drive archive link)
+│
 └── task5/                                     # Task 5: Account Security Monitoring (Unsupervised Anomaly, F3)
+    ├── task5_account_security.ipynb           # Portable Notebook (Haversine Geo-Velocity + iForest/ECOD/LOF/AE Ensemble)
+    └── data/, models/, predictions/, assets/  # test.csv (25,889×123), datacard.txt
 ```
 
 ---

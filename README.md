@@ -103,8 +103,10 @@ cpe342-machine-learning-2026/
 │   ├── CPE342_Project_Instruction (Ver. 2025).pdf # Reference 2025 project challenge slide deck (40 pages)
 │   ├── README.md                              # Term project overview, 5 tasks & system specifications
 │   ├── AGENTS.md & CLAUDE.md                  # Team agent guardrails & uv workflow rules (from ml00x)
+│   ├── sample_submission.csv                  # Official Kaggle submission template (25,889 rows × 6 cols)
+│   ├── merge_submission.ipynb                 # Master Submission Merger & Quality Gate Notebook
 │   ├── docs/project-instruction.md            # Markdown transcription of project instructions
-│   └── task1/ to task5/                       # 5 self-contained uv projects (data, models, predictions, assets)
+│   └── task1/ to task5/                       # 5 self-contained uv projects + portable Colab/Kaggle Notebooks (.ipynb)
 │
 └── textbook/                                  # Reference textbooks (ISLR / O'Reilly)
 ```
