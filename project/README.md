@@ -81,7 +81,7 @@ graph TD
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Task 1** | **Anti-Cheat Pre-Filter**<br/>Separate true cheaters (aimbot/wallhack) from false positives among flagged accounts. | Binary Classification | `is_cheater`<br/>(`0` = Legit, `1` = Cheater) | **$F_2$ Score**<br/>($F_2 = \frac{5PR}{4P+R}$, Macro & Binary) | `train.csv` ($104,000 \times 33$; $90,816$ labeled, $13,184$ `NaN` target), `test.csv` ($25,889 \times 32$), 31 float features. |
 | **Task 2** | **Player Segment Classification**<br/>Classify players into 4 behavioral personas for targeted marketing. | Multi-Class Classification | `segment`<br/>(`0`=Casual, `1`=Grinder, `2`=Social, `3`=Whale) | **Macro $F_1$**<br/>($\frac{1}{4}\sum_{c=0}^3 F_{1,c}$) | `train.csv` ($104,000 \times 46$), `test.csv` ($25,889 \times 45$), 44 features (31 valid float + 3 explicit noise `random_metric_1..3` + 10 categorical). |
-| **Task 3** | **Player Monthly Spending Prediction**<br/>Predict monetary expenditure (THB) over the next 30 days. | Zero-Inflated Regression | `spending_30d`<br/>(Continuous THB $\ge 0$; $48.12\%$ zeros) | **Normalized MAE**<br/>($\text{NMAE} = \frac{1}{1 + \sum|y-\hat{y}|/\sum y}$) | `train.csv` ($104,000 \times 34$), `test.csv` ($25,889 \times 33$), 32 float features (includes `segment` from Task 2). |
+| **Task 3** | **Player Monthly Spending Prediction**<br/>Predict monetary expenditure (THB) over the next 30 days. | Zero-Inflated Regression | `spending_30d`<br/>(Continuous THB $\ge 0$; $48.12\%$ zeros) | **Normalized MAE**<br/>($\text{NMAE} = \frac{1}{1 + \sum \vert y-\hat{y} \vert / \sum y}$) | `train.csv` ($104,000 \times 34$), `test.csv` ($25,889 \times 33$), 32 float features (includes `segment` from Task 2). |
 | **Task 4** | **Game Title Detection**<br/>Identify which Karena game is played from single screenshots. | Multi-Class Image Classification | `class` / `game_title`<br/>(5 games: `0`–`4`) | **Macro $F_1$**<br/>(Pre-trained allowed) | RGB screenshots ($230 \times 120$ / $200 \times 100$ px) via official Google Drive archive (`1C8csylbBo3Oab24ODGKPVom3_SDUJ_Qw`, 579 MB). |
 | **Task 5** | **Account Security Monitoring**<br/>Flag account theft, bot farms, and VPN abuse without labeled data. | Unsupervised Anomaly Detection | `is_anomaly`<br/>(`0` = Normal, `1` = Anomalous) | **$F_3$ Score**<br/>($F_3 = \frac{10PR}{9P+R}$) | `test.csv` only ($25,889 \times 123$): **122 features** (29 longitudinal metrics across 4 periods `_1.._4` + 6 security flags). |
 
@@ -90,29 +90,50 @@ graph TD
 ## 📐 Mathematical Formulation of Evaluation Metrics
 
 ### 1. General $F_\beta$ Measure (Tasks 1 & 5)
-$$F_\beta = (1 + \beta^2) \frac{\text{Precision} \times \text{Recall}}{(\beta^2 \times \text{Precision}) + \text{Recall}} = \frac{(1 + \beta^2)\text{TP}}{(1 + \beta^2)\text{TP} + \beta^2 \text{FN} + \text{FP}}$$
 
-* **Task 1 ($F_2$ Score, $\beta = 2$):** Recall is weighted **twice as important** as Precision. Catching real cheaters ($\text{FN} \to 0$) is prioritized over occasional false alarms passed to human verifiers.
-  $$F_2 = 5 \cdot \frac{\text{Precision} \cdot \text{Recall}}{4\text{Precision} + \text{Recall}}$$
-* **Task 5 ($F_3$ Score, $\beta = 3$):** Recall is weighted **three times as important** as Precision. Missing an account takeover or coordinated bot ring ($\text{FN}$) causes catastrophic economic loss, so high sensitivity is paramount.
-  $$F_3 = 10 \cdot \frac{\text{Precision} \cdot \text{Recall}}{9\text{Precision} + \text{Recall}}$$
+$$
+F_\beta = (1 + \beta^2) \frac{\text{Precision} \times \text{Recall}}{(\beta^2 \times \text{Precision}) + \text{Recall}} = \frac{(1 + \beta^2)\text{TP}}{(1 + \beta^2)\text{TP} + \beta^2 \text{FN} + \text{FP}}
+$$
+
+* **Task 1 ($F_2$ Score, $\beta = 2$):** Recall is weighted **twice as important** as Precision. Catching real cheaters ($\text{FN} \to 0$) is prioritized over occasional false alarms passed to human verifiers:
+
+$$
+F_2 = 5 \cdot \frac{\text{Precision} \cdot \text{Recall}}{4\text{Precision} + \text{Recall}}
+$$
+
+* **Task 5 ($F_3$ Score, $\beta = 3$):** Recall is weighted **three times as important** as Precision. Missing an account takeover or coordinated bot ring ($\text{FN}$) causes catastrophic economic loss, so high sensitivity is paramount:
+
+$$
+F_3 = 10 \cdot \frac{\text{Precision} \cdot \text{Recall}}{9\text{Precision} + \text{Recall}}
+$$
 
 ### 2. Macro $F_1$ Measure (Tasks 2 & 4)
 For multi-class classification across $C$ classes ($C=4$ for Task 2, $C=5$ for Task 4):
-$$F_{1, c} = 2 \cdot \frac{\text{Precision}_c \cdot \text{Recall}_c}{\text{Precision}_c + \text{Recall}_c}, \qquad \text{Macro } F_1 = \frac{1}{C}\sum_{c=1}^C F_{1, c}$$
+
+$$
+F_{1, c} = 2 \cdot \frac{\text{Precision}_c \cdot \text{Recall}_c}{\text{Precision}_c + \text{Recall}_c}, \qquad \text{Macro } F_1 = \frac{1}{C}\sum_{c=1}^C F_{1, c}
+$$
+
 Ensures performance is evaluated uniformly across rare segments (e.g. Whales) and low-sample screenshot classes.
 
 ### 3. Normalized Mean Absolute Error Score (Task 3)
-$$\text{Relative MAE} = \frac{\sum_{i=1}^N |y_i - \hat{y}_i|}{\sum_{i=1}^N y_i} = \frac{\text{MAE}}{\bar{y}}, \qquad \text{NMAE Score} = \frac{1}{1 + \dfrac{\sum_{i=1}^N |y_i - \hat{y}_i|}{\sum_{i=1}^N y_i}} \in [0, 1]$$
+
+$$
+\text{Relative MAE} = \frac{\sum_{i=1}^N |y_i - \hat{y}_i|}{\sum_{i=1}^N y_i} = \frac{\text{MAE}}{\bar{y}}, \qquad \text{NMAE Score} = \frac{1}{1 + \dfrac{\sum_{i=1}^N |y_i - \hat{y}_i|}{\sum_{i=1}^N y_i}} \in [0, 1]
+$$
+
 Normalizes the absolute financial forecasting error relative to total baseline spending and maps it into $[0, 1]$ (where $1.0$ represents zero error) so it combines seamlessly into the Kaggle Weighted Leaderboard Score:
-$$\text{Weighted Score} = \frac{w_1 S_1 + w_2 S_2 + w_3 S_3 + w_4 S_4 + w_5 S_5}{\sum_{i=1}^5 w_i} \in [0, 1]$$
+
+$$
+\text{Weighted Score} = \frac{w_1 S_1 + w_2 S_2 + w_3 S_3 + w_4 S_4 + w_5 S_5}{\sum_{i=1}^5 w_i} \in [0, 1]
+$$
 
 ---
 
 ## 🏆 Kaggle Competition Submission Protocol
 
 ### Unified Submission Format
-The final Kaggle submission requires a single consolidated file named `sample_submission.csv` containing **$25,889$ test rows** and **6 columns**:
+The final Kaggle submission requires a single consolidated file named `sample_submission.csv` containing **25,889 test rows** and **6 columns**:
 
 ```csv
 id,task1,task2,task3,task4,task5
@@ -140,16 +161,20 @@ Final Project Grade (100%)
 ```
 
 #### Leaderboard Scoring Benchmarks:
-* **Ground Baseline (Classroom Models):** Weighted Score (Public) = **$0.68$**  
+* **Ground Baseline (Classroom Models):** Weighted Score (Public) = **0.68**  
   *Models: Logistic Regression, Random Forest, Vanilla CNN, Basic Isolation Forest.*
-* **Challenge Baseline (Advanced Techniques):** Weighted Score (Public) = **$0.75$**  
+* **Challenge Baseline (Advanced Techniques):** Weighted Score (Public) = **0.75**  
   *Models: LightGBM / XGBoost / CatBoost Stacking, Hurdle Two-Stage Regression, Pretrained Transfer Learning (ViT / Swin / EfficientNet), Multi-model Voting Ensembles.*
 
 #### T-Score Grade Conversion Formula:
-$$\text{Grade \%} = \begin{cases} 
+
+$$
+\text{Grade} = \begin{cases} 
 \alpha \cdot \left(\dfrac{\text{Your Score}}{\text{Baseline}}\right) & \text{if Score} < \text{Baseline} \\ 
-\alpha + \left[(100\% - \alpha) \cdot \Phi(t)\right] & \text{if Score} \ge \text{Baseline} 
-\end{cases}$$
+\alpha + (100 - \alpha) \cdot \Phi(t) & \text{if Score} \ge \text{Baseline} 
+\end{cases}
+$$
+
 where $\Phi(t)$ is the standard normal cumulative distribution function ($\mu, \sigma$ computed across groups above baseline), guaranteeing $\ge \alpha\%$ (typically $60\%$) for beating the baseline.
 
 ---

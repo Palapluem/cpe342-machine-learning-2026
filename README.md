@@ -225,11 +225,11 @@ cpe342-machine-learning-2026/
   * **Part I (2D Synthetic Toy Data, $N=12$):** Exact numerical derivation and verification of eigenpairs ($\lambda_1 = 411.6218$, $\lambda_2 = 6.1812$), variance preservation ($\text{PVE}_1 = 98.52\%$), orthogonal 1D subspace projection, and machine-precision lossless reconstruction ($\|\mathbf{X} - \hat{\mathbf{X}}\|_2 = 1.21 \times 10^{-14}$).
   * **Part II (Motor Trend Car Road Tests - MTCARS, $N=32$, $p=11$):**
     * Rigorous comparative analysis between **Unstandardized PCA** (Covariance Matrix $\boldsymbol{\Sigma}$) and **Standardized PCA** (Correlation Matrix $\mathbf{R}$).
-    * Mathematical proof of **Scale Domination**: In Unstandardized PCA, `disp` ($\sigma^2 = 15,360.80$, 75.15%) and `hp` ($\sigma^2 = 4,700.87$, 23.00%) account for **98.15%** of the total system variance ($20,440.40$), causing PC1 alone to explain **92.70%** of variance dominated solely by `disp` (loading $-0.900$) while masking the remaining 9 features ($|w| \le 0.038$).
+    * Mathematical proof of **Scale Domination**: In Unstandardized PCA, `disp` ($\sigma^2 = 15,360.80$, 75.15%) and `hp` ($\sigma^2 = 4,700.87$, 23.00%) account for **98.15%** of the total system variance ($20,440.40$), causing PC1 alone to explain **92.70%** of variance dominated solely by `disp` (loading $-0.900$) while masking the remaining 9 features ($\vert w \vert \le 0.038$).
     * Standardized PCA equilibrium: Scaling features to unit variance ($\sigma^2 = 1.0$) eliminates scale distortion; requires **4 PCs** to achieve $\ge 90\%$ total variance ($92.32\%$), balancing power/displacement factors against fuel efficiency/drivetrain factors.
   * **Section 5 (In-depth Q&A):**
     * **Question 2.1 (Unstandardized PCA):** Mathematical proof that 1 PC explains $92.70\% \ge 90\%$ total variance, dominated by `disp` and `hp`.
-    * **Question 2.2 (Standardized PCA & Contrast):** Formal proof that 4 PCs are required for $92.32\% \ge 90\%$, with balanced loadings ($|w| \in [0.20, 0.37]$), and root-cause explanation of why standardization is mandatory for multi-scale engineering data.
+    * **Question 2.2 (Standardized PCA & Contrast):** Formal proof that 4 PCs are required for $92.32\% \ge 90\%$, with balanced loadings ($\vert w \vert \in [0.20, 0.37]$), and root-cause explanation of why standardization is mandatory for multi-scale engineering data.
     * Both questions formatted strictly to **exactly 1 full page each** without spillover.
   * **Geometric Interpretation via 2D PCA Biplot:** Clear projection of 32 car models onto the PC1-PC2 subspace with 11 loading vectors, revealing 3 semantic clusters: *Muscle & Luxury Heavyweights*, *Economy Compacts*, and *Agile Manual Sports Cars*.
   * **Reconstruction Error Validation:** Empirical verification that relative reconstruction error $\frac{\|\mathbf{X} - \hat{\mathbf{X}}_r\|_F}{\|\mathbf{X}\|_F} \times 100\%$ monotonically decreases from $r=1$ to $0.00\%$ at $r=11$, confirming the Spectral Theorem.
@@ -281,7 +281,7 @@ cpe342-machine-learning-2026/
 * **The 5 Core Machine Learning Tasks:**
   1. **Task 1: Anti-Cheat Pre-Filter** (Binary Classification, Target: `is_cheater`, Metric: **$F_2$ Score** prioritizing recall, 31 tabular features).
   2. **Task 2: Player Segment Classification** (Multi-class Classification, Target: `segment` across Casual, Grinder, Social, Whale, Metric: **Macro $F_1$ Score**, 44 tabular features).
-  3. **Task 3: Player Monthly Spending Prediction (Primary Focus)** (Zero-Inflated Continuous Regression, Target: `spending_30d` in THB, Metric: **Normalized MAE** $\text{NMAE} = \frac{1}{1 + \sum|y-\hat{y}|/\sum y}$, 32 tabular features).
+  3. **Task 3: Player Monthly Spending Prediction (Primary Focus)** (Zero-Inflated Continuous Regression, Target: `spending_30d` in THB, Metric: **Normalized MAE** $\text{NMAE} = \frac{1}{1 + \sum \vert y-\hat{y} \vert / \sum y}$, 32 tabular features).
   4. **Task 4: Game Title Detection** (Deep Multi-Class Image Classification, Target: 5 game titles from $230\times 120$ gameplay screenshots, Metric: **Macro $F_1$**, Pretrained CNN/ViT/Swin permitted).
   5. **Task 5: Account Security Monitoring** (Unsupervised Anomaly Detection, Target: `is_anomaly` across 4 time periods, Metric: **$F_3$ Score** heavily penalizing missed account takeovers/bot rings, 122 features).
 * **Grading & Competition Structure:**
