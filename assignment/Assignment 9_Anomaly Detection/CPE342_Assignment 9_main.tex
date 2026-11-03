@@ -1,4 +1,4 @@
-% Compile: xelatex "CPE342_Assignment 9_main.tex" (run twice)
+% Compile: xelatex "CPE342_Assignment 9_main.tex" (รัน 2 รอบ)
 \documentclass[12pt,a4paper]{article}
 
 \usepackage[no-math]{fontspec}
@@ -12,12 +12,12 @@
     BoldItalicFont = Sarabun-BoldItalic,
 ]
 \setmonofont{Consolas}[
-    Scale=0.90,
+    Scale=0.92,
     AutoFakeBold=1.5,
     AutoFakeSlant=0.2
 ]
 \newfontfamily\thaifonttt{Consolas}[
-    Scale=0.90,
+    Scale=0.92,
     AutoFakeBold=1.5,
     AutoFakeSlant=0.2
 ]
@@ -33,10 +33,10 @@
 \usepackage{geometry}
 \geometry{
     a4paper,
-    top=1.5cm,
-    bottom=1.5cm,
-    left=2.0cm,
-    right=2.0cm
+    top=2.2cm,
+    bottom=2.2cm,
+    left=2.3cm,
+    right=2.3cm
 }
 \usepackage{xcolor}
 \usepackage{float}
@@ -49,37 +49,24 @@
 \usepackage{hyperref}
 \tcbuselibrary{skins, breakable}
 
-\captionsetup{
-    font=small,
-    labelfont=bf,
-    labelsep=colon,
-    skip=3pt
-}
+\XeTeXlinebreaklocale "th"
+\XeTeXlinebreakskip = 0pt plus 1pt
+\sloppy
 
-% Color Palette matching Assignment 6-8
-\definecolor{headerblue}{RGB}{24, 43, 73}
-\definecolor{accentblue}{RGB}{0, 102, 204}
-\definecolor{tableheader}{RGB}{230, 240, 250}
-\definecolor{ansborder}{RGB}{180, 205, 230}
-\definecolor{ansbg}{RGB}{245, 249, 253}
-\definecolor{partorange}{RGB}{217, 83, 79}
-\definecolor{partdarkorange}{RGB}{180, 40, 40}
+\definecolor{captioncol}{RGB}{80, 80, 80}
+\definecolor{accentblue}{RGB}{37, 99, 235}
+\definecolor{partorange}{HTML}{EA580C}
+\definecolor{partdarkorange}{HTML}{C2410C}
 \definecolor{codebg}{RGB}{248, 250, 252}
 \definecolor{codeframe}{RGB}{203, 213, 225}
 \definecolor{codeaccent}{HTML}{0969DA}
+\newcommand{\codevar}[1]{\textcolor{codeaccent}{\textbf{#1}}}
 \definecolor{keyword}{RGB}{124, 58, 237}
 \definecolor{string}{RGB}{22, 163, 74}
 \definecolor{comment}{RGB}{100, 116, 139}
 \definecolor{output}{RGB}{30, 58, 138}
+\captionsetup{font={small, color=captioncol}, justification=centering, skip=4pt}
 
-\hypersetup{
-    colorlinks=true,
-    linkcolor=accentblue,
-    citecolor=accentblue,
-    urlcolor=accentblue
-}
-
-% Code Listing Styles
 \lstdefinestyle{pycode}{
     language=Python,
     backgroundcolor=\color{codebg},
@@ -116,68 +103,47 @@
     keepspaces=true
 }
 
-% Answer Box Environment matching Assignment 8
 \newtcolorbox{ansbox}[1][]{
-    enhanced,
-    colback=ansbg,
-    colframe=ansborder,
-    coltitle=headerblue,
-    fonttitle=\bfseries\normalsize,
-    title={#1},
-    arc=2.5mm,
-    boxrule=0.9pt,
-    left=7pt, right=7pt, top=3pt, bottom=3pt,
-    unbreakable,
-    before skip=2pt, after skip=2pt
+    colback=green!5!white, colframe=green!50!black,
+    boxrule=0.5pt, arc=4pt, left=7pt, right=7pt, top=4pt, bottom=4pt, #1
 }
 
-\newtcolorbox{summarybox}[1][]{
-    enhanced,
-    colback=white,
-    colframe=accentblue,
-    coltitle=white,
-    fonttitle=\bfseries\normalsize,
-    title={#1},
-    arc=2mm,
-    boxrule=1.1pt,
-    left=8pt, right=8pt, top=5pt, bottom=5pt,
-    before skip=4pt, after skip=4pt
+\newtcolorbox{infobox}[1][]{
+    colback=blue!5!white, colframe=blue!60!black,
+    boxrule=0.5pt, arc=4pt, left=7pt, right=7pt, top=4pt, bottom=4pt, #1
 }
 
-\newcommand{\codevar}[1]{\texttt{\small #1}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=accentblue,
+    citecolor=accentblue,
+    urlcolor=accentblue
+}
 
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{3.5pt}
-\renewcommand{\baselinestretch}{1.08}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
 \begin{document}
-
-% =========================================================================
-% PAGE 1: TITLE, AUTHORS, & SECTION 1.1
-% =========================================================================
-\begin{center}
-    {\fontsize{15}{18}\selectfont \textbf{CPE 342 Machine Learning}}\\[2pt]
-    {\fontsize{13}{16}\selectfont \textbf{Assignment 9: Anomaly Detection (Multivariate MHD \& Latent PCA)}}\\[2pt]
-    {\fontsize{11}{13}\selectfont \textbf{การตรวจจับจุดผิดปกติหลายตัวแปรด้วยระยะทางมาฮาลาโนบิส และการตรวจจับความผิดปกติของตลับลูกปืนด้วยตัวแปรแฝง PCA}}\\[1pt]
-    {\footnotesize (Multivariate Outlier Detection via Mahalanobis Distance and Latent-Variable PCA Diagnostics on IMS Bearing Telemetry)}
-    \vspace{2pt}
-\end{center}
+\enlargethispage{2\baselineskip}
 
 \begin{center}
-\small
-\begin{tabular}{ll}
-67070501003 กันต์ธีร์ ดวงมณี & 67070501027 นัธทวัฒน์ ปริมสิริคุณาวุฒิ \\
-67070501042 วิศิษฐ์ สุวรรณเนาว์ & 67070501045 ศุภวิชญ์ มารยาท \\
-67070501067 พลวริษฐ์ วัฒนเหมรัตน์ & \\
-\end{tabular}
+    {\Large\textbf{CPE 342 Machine Learning}}\\[2pt]
+    {\Large\textbf{Assignment 9: Anomaly Detection (Multivariate MHD \& Latent PCA Pipeline)}}\\[3pt]
+    {\large การตรวจจับจุดผิดปกติหลายตัวแปรด้วยระยะทางมาฮาลาโนบิส และการตรวจจับความผิดปกติของตลับลูกปืนด้วยตัวแปรแฝง PCA}\\[2pt]
+    {\normalsize (Multivariate Outlier Detection via Mahalanobis Distance and Latent-Variable PCA Diagnostics on IMS Bearing Telemetry)}\\[6pt]
+    \begin{tabular}{r@{\hspace{0.8em}}l@{\hspace{4em}}r@{\hspace{0.8em}}l}
+        \textcolor{accentblue}{\textbf{67070501003}} & \textcolor{accentblue}{กันต์ธีร์ ดวงมณี} & \textcolor{accentblue}{\textbf{67070501027}} & \textcolor{accentblue}{นัธทวัฒน์ ปริมสิริคุณาวุฒิ} \\[2.5pt]
+        \textcolor{accentblue}{\textbf{67070501042}} & \textcolor{accentblue}{วิศิษฐ์ สุวรรณเนาว์} & \textcolor{accentblue}{\textbf{67070501045}} & \textcolor{accentblue}{ศุภวิชญ์ มารยาท} \\[2.5pt]
+        \textcolor{accentblue}{\textbf{67070501067}} & \textcolor{accentblue}{พลวริษฐ์ วัฒนเหมรัตน์} & & \\[2.5pt]
+    \end{tabular}
 \end{center}
-\vspace{-8pt}
+
+\vspace{-0.2em}
 \hrule
-\vspace{4pt}
+\vspace{0.6em}
 
+% =========================================================================
+% SECTION 1
+% =========================================================================
 \section*{1. บทนำและทฤษฎีพื้นฐานของการตรวจจับความผิดปกติ\newline \large(Introduction \& Theoretical Foundations of Anomaly Detection)}
 
 การตรวจจับความผิดปกติ (Anomaly Detection) คือกระบวนการจำแนกข้อมูลที่มีพฤติกรรมเบี่ยงเบนอย่างมีนัยสำคัญจากประชากรส่วนใหญ่ ในระบบอุตสาหกรรมและวิศวกรรมข้อมูล ข้อมูลมักมีมิติสูง มีความสัมพันธ์ระหว่างตัวแปร (Correlated Features) และมีสเกลการวัดที่แตกต่างกันอย่างมาก การใช้เทคนิคตัวแปรเดี่ยว เช่น Z-Score หรือ Box Plot บนแต่ละฟีเจอร์แยกจากกัน จึงล้มเหลวในการตรวจจับจุดผิดปกติหลายตัวแปร (Multivariate Outliers)
@@ -190,7 +156,7 @@
 D_M(\mathbf{x}) = \sqrt{(\mathbf{x} - \boldsymbol{\mu})^\top \mathbf{\Sigma}^{-1} (\mathbf{x} - \boldsymbol{\mu})}
 \end{equation}
 โดยที่ $\boldsymbol{\mu} \in \mathbb{R}^p$ คือเวกเตอร์ค่าเฉลี่ยประชากร (Centroid Vector) และ $\mathbf{\Sigma} \in \mathbb{R}^{p \times p}$ คือเมทริกซ์ความแปรปรวนร่วม (Covariance Matrix) การคูณด้วยอินเวอร์สของเมทริกซ์ความแปรปรวนร่วม $\mathbf{\Sigma}^{-1}$ ทำหน้าที่สำคัญ 2 ประการ:
-\begin{enumerate}[leftmargin=1.8em, itemsep=0.5pt]
+\begin{enumerate}[leftmargin=1.8em, itemsep=0pt, topsep=1pt]
     \item \textbf{Decorrelation (การขจัดสหสัมพันธ์):} ปรับแกนการวัดให้หมุนตามแกนไอเกนเวกเตอร์ของข้อมูล
     \item \textbf{Variance Normalization (การปรับมาตรฐานความแปรปรวน):} ปรับสเกลตามทิศทางความแปรปรวน ทำให้วงรีระยะทาง (Ellipsoidal Equidistant Contours) ยุบตัวลงเป็นมาตรฐาน
 \end{enumerate}
@@ -201,27 +167,29 @@ D_M^2(\mathbf{x}) = (\mathbf{x} - \boldsymbol{\mu})^\top \mathbf{\Sigma}^{-1} (\
 \end{equation}
 คุณสมบัตินี้เปิดโอกาสให้สามารถกำหนดเกณฑ์ตัดสินใจทางสถิติ (Critical Decision Cutoff) ที่ระดับนัยสำคัญ $\alpha$ (เช่น $\alpha = 0.01$ หรือ $0.001$) ได้อย่างเป็นรูปธรรม
 
-\clearpage
-% =========================================================================
-% PAGE 2: SECTION 1.2 & 1.3
-% =========================================================================
 \subsection*{1.2 การลดมิติข้อมูลแบบตัวแปรแฝงสำหรับการตรวจจับความผิดปกติ (Latent-Variable PCA Diagnostics)}
+\enlargethispage{3.5\baselineskip}
+\vspace{-4pt}
 
 ในระบบตรวจวัดทางอุตสาหกรรมที่มีมิติข้อมูลและอัตราการสุ่มสัญญาณสูง เช่น สัญญาณการสั่นสะเทือนจากเซนเซอร์ความเร่ง 4 ทิศทาง การคำนวณ Covariance Inversion บนข้อมูลดิบโดยตรงอาจประสบปัญหาภาวะเอกฐานหรือความคลาดเคลื่อนสะสม การสร้างแบบจำลองตัวแปรแฝงด้วยการวิเคราะห์องค์ประกอบหลัก (Principal Component Analysis: PCA) จะทำการสลายเมทริกซ์ความแปรปรวนร่วมของช่วงการทำงานปกติ (Healthy Baseline) ออกเป็น $k$ องค์ประกอบหลักที่ตั้งฉากกัน:
+\vspace{-2pt}
 \begin{equation}
 \mathbf{z} = (\mathbf{x} - \boldsymbol{\mu}) \mathbf{W}_k, \quad \hat{\mathbf{x}} = \boldsymbol{\mu} + \mathbf{z} \mathbf{W}_k^\top
 \end{equation}
+\vspace{-2pt}
 โดยที่ $\mathbf{W}_k \in \mathbb{R}^{p \times k}$ คือเมทริกซ์ไอเกนเวกเตอร์หลัก และ $\mathbf{z} \in \mathbb{R}^k$ คือพิกัดในปริภูมิแฝง (Latent Coordinates) สถาปัตยกรรมนี้แบ่งการเฝ้าระวังความผิดปกติออกเป็น 2 มิติเสริมกัน (Dual-Space Monitoring Paradigm):
-\begin{enumerate}[leftmargin=1.8em, itemsep=1.5pt]
+\begin{enumerate}[leftmargin=1.8em, itemsep=0pt, topsep=1pt, parsep=0pt]
     \item \textbf{Latent Subspace Distance ($T^2$ Statistic):} วัดระยะทางมาฮาลาโนบิสบนคะแนนตัวแปรแฝง $T^2 = \mathbf{z} \mathbf{\Lambda}_k^{-1} \mathbf{z}^\top \sim \chi^2(k)$ เพื่อตรวจสอบการเลื่อนตัวของจุดทำงานภายในระนาบความสัมพันธ์ปกติ (In-Plane Operating Shift)
     \item \textbf{Residual Reconstruction Error (SPE / MAE):} วัดความคลาดเคลื่อนในการสร้างสัญญาณซ้ำ $\mathbf{e} = \mathbf{x} - \hat{\mathbf{x}}$ โดยคำนวณ $\text{MAE} = \frac{1}{p} \sum_{j=1}^p |x_j - \hat{x}_j|$ เพื่อตรวจสอบพฤติกรรมใหม่ที่ตั้งฉากกับระนาบปกติ (Out-of-Plane Orthogonal Deviations) ซึ่งเกิดจากความเสียหายทางกลไกเฉียบพลัน
 \end{enumerate}
 
+\vspace{-4pt}
 \begin{table}[H]
 \centering
-\small
-\setlength{\tabcolsep}{5pt}
-\renewcommand{\arraystretch}{0.95}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{0.80}
+\resizebox{\linewidth}{!}{
 \begin{tabular}{lcccc}
 \toprule
 \textbf{ระเบียบวิธี (Method)} & \textbf{มิติที่เฝ้าระวัง} & \textbf{สมมติฐานทางสถิติ} & \textbf{ข้อเด่นเชิงระบบ} & \textbf{ข้อจำกัดหลัก} \\
@@ -233,17 +201,22 @@ Isolation Forest & Tree Partitioning & ไม่จำกัดการแจ�
 One-Class SVM & Kernel Hypersphere & ไม่จำกัดการแจกแจง & ยืดหยุ่นสูงในมิติสูง & ปรับ Hyperparameter ยาก \\
 \bottomrule
 \end{tabular}
+}
+\vspace{-4pt}
 \caption{การสังเคราะห์เชิงเปรียบเทียบของระเบียบวิธีตรวจจับความผิดปกติที่ครอบคลุมในการบรรยาย Lecture 11}
 \end{table}
+\vspace{-4pt}
 
 \subsection*{1.3 หลักการแบ่งช่วงเวลาข้อมูลตามหลักวิศวกรรม (Zero Data Leakage Principle)}
+\vspace{-2pt}
 ในการตรวจจับความผิดปกติแบบ Unsupervised การประเมินค่าพารามิเตอร์ของแบบจำลอง ($\boldsymbol{\mu}$, $\mathbf{\Sigma}$, ตัวแปรปรับมาตรฐาน $\text{Scaler}$, และเมทริกซ์แปลงมิติ $\mathbf{W}_k$) จะต้องกระทำบนช่วงเวลาที่ระบบทำงานอย่างปกติ (Healthy Baseline) เท่านั้น ห้ามนำข้อมูลในช่วงเวลาที่มีความเสียหายหรือช่วงทดสอบมาร่วมประเมินโดยเด็ดขาด เพื่อป้องกันไม่ให้แบบจำลองเรียนรู้และยอมรับสภาวะความผิดปกติเป็นส่วนหนึ่งของพฤติกรรมปกติ
 
 \clearpage
 % =========================================================================
-% PAGE 3: SECTION 2: PART I DIAMOND - SKEWNESS & COVARIANCE CONDITIONING
+% SECTION 2
 % =========================================================================
 \section*{2. การทดลอง \textcolor{partorange}{Part I: MHD for multivariate outlier detection} — การวิเคราะห์บนชุดข้อมูลเพชร\newline \large(\textcolor{partorange}{Part I: Multivariate Outlier Detection on Diamond Dataset})}
+\enlargethispage{1.5\baselineskip}
 
 การทดลองส่วนแรกประยุกต์ใช้ระเบียบวิธีระยะทางมาฮาลาโนบิสและการทดสอบสมมติฐานไคสแควร์บนชุดข้อมูลเพชร ($N = 53,940$ รายการ) เพื่อจำแนกเพชรที่มีสัดส่วนทางกายภาพหรือโครงสร้างราคาผิดปกติอย่างเป็นระบบ
 
@@ -252,7 +225,7 @@ One-Class SVM & Kernel Hypersphere & ไม่จำกัดการแจก�
 
 \begin{figure}[H]
 \centering
-\includegraphics[height=6.0cm, width=0.92\linewidth, keepaspectratio]{plot_1_diamond_distributions_skewness.pdf}
+\includegraphics[width=0.98\linewidth]{plot_1_diamond_distributions_skewness.pdf}
 \caption{การตรวจสอบการกระจายตัวของฟีเจอร์เพชรและการแปลงสเกลลอการิทึมเพื่อลดความเบ้ ($N = 53,940$)}
 \end{figure}
 
@@ -260,9 +233,6 @@ One-Class SVM & Kernel Hypersphere & ไม่จำกัดการแจก�
 เมทริกซ์ความแปรปรวนร่วมของตัวแปรที่แปลงแล้ว $[\ln(\text{carat}), \text{depth}, \ln(\text{price})]$ มีค่า Condition Number เท่ากับ $4.87$ ซึ่งแสดงถึงความเสถียรเชิงตัวเลขสูง ปราศจากปัญหา Multicollinearity เอกฐาน ทำให้สามารถคำนวณอินเวอร์ส $\mathbf{\Sigma}^{-1}$ ได้อย่างแม่นยำ
 
 \clearpage
-% =========================================================================
-% PAGE 4: PART I DIAMOND - MHD COMPUTATION & BIVARIATE ELLIPSES
-% =========================================================================
 \subsection*{2.3 ผลการคำนวณระยะทางมาฮาลาโนบิสและการตั้งเกณฑ์ตัดสินใจไคสแควร์}
 เมื่อคำนวณกำลังสองของระยะทางมาฮาลาโนบิส $D_M^2$ สำหรับเพชรทั้ง $53,940$ เม็ด แล้วเปรียบเทียบกับค่าวิกฤตไคสแควร์ที่ระดับองศาเสรี $p=3$ พบว่า:
 \begin{itemize}[leftmargin=1.5em, itemsep=1pt]
@@ -272,7 +242,7 @@ One-Class SVM & Kernel Hypersphere & ไม่จำกัดการแจก�
 
 \begin{figure}[H]
 \centering
-\includegraphics[height=5.2cm, width=0.88\linewidth, keepaspectratio]{plot_2_diamond_mhd_histogram_chi2.pdf}
+\includegraphics[width=0.92\linewidth]{plot_2_diamond_mhd_histogram_chi2.pdf}
 \caption{ฮิสโตแกรมของระยะทางมาฮาลาโนบิสยกกำลังสองเปรียบเทียบกับการแจกแจงไคสแควร์ตามทฤษฎี $df = 3$}
 \end{figure}
 
@@ -281,14 +251,10 @@ One-Class SVM & Kernel Hypersphere & ไม่จำกัดการแจก�
 
 \begin{figure}[H]
 \centering
-\includegraphics[height=4.8cm, width=0.92\linewidth, keepaspectratio]{plot_3_diamond_bivariate_ellipses.pdf}
+\includegraphics[width=0.98\linewidth]{plot_3_diamond_bivariate_ellipses.pdf}
 \caption{ภาพฉาย 2 มิติและขอบเขตวงรีความเชื่อมั่น 99\% ของระยะทางมาฮาลาโนบิสจำแนก Inliers และ Outliers}
 \end{figure}
 
-\clearpage
-% =========================================================================
-% PAGE 5: PART I DIAMOND - OUTLIER PROFILING & PHYSICAL ANALYSIS
-% =========================================================================
 \subsection*{2.5 การวิเคราะห์คุณลักษณะทางกายภาพและเศรษฐศาสตร์ของจุดผิดปกติรุนแรง}
 การจัดอันดับเพชรที่มีค่าระยะทางมาฮาลาโนบิสสูงสุดทำให้เราสามารถถอดรหัสพฤติกรรมความผิดปกติในเชิงวิศวกรรมอัญมณีและกลไกราคาในตลาดได้อย่างชัดเจน ดังแสดงในตารางที่ 1:
 
@@ -315,17 +281,17 @@ One-Class SVM & Kernel Hypersphere & ไม่จำกัดการแจก�
 \caption{ตัวอย่างเพชรที่มีค่าระยะทางมาฮาลาโนบิสสูงสุดและจำแนกลักษณะความผิดปกติ}
 \end{table}
 
-\begin{summarybox}[ข้อค้นพบสำคัญจากการทดลอง Part I]
+\begin{infobox}[title=\textbf{ข้อค้นพบสำคัญจากการทดลอง Part I (Key Findings \& Physical Insights)}]
 \begin{enumerate}[leftmargin=1.5em, itemsep=1.5pt]
     \item \textbf{Geometric Distortion (ความผิดปกติทางรูปทรงเรขาคณิต):} จุดผิดปกติอันดับต้นๆ เกิดจากค่า \codevar{depth} ที่หลุดออกนอกช่วงมาตรฐานอุตสาหกรรม ($59\% - 63\%$) อย่างรุนแรง เช่น Index 11182 (Depth $43.0\%$) และ Index 11963 (Depth $79.0\%$) ซึ่งเกิดจากข้อผิดพลาดในการเจียระไน ทำให้การสะท้อนแสงภายในสูญเสียความแวววาว
     \item \textbf{Economic Valuation Mismatch (ความผิดปกติทางมูลค่า):} เพชรบางรายการมีน้ำหนักกะรัตสูงแต่ราคาต่ำกว่าแนวโน้มตลาดอย่างมาก เนื่องจากเกรดความสะอาดต่ำสุด (I1) หรือเกรดสีตก (J) ทำให้ความสัมพันธ์ระหว่างกะรัตกับราคาฉีกออกจากกลุ่มปกติ
     \item \textbf{Leptokurtic Fat-Tail Rationale:} สาเหตุที่สัดส่วนจุดผิดปกติที่ตรวจพบจริง ($2.00\%$) สูงกว่าระดับนัยสำคัญเชิงทฤษฎี ($\alpha = 1.00\%$) มาจากลักษณะหางหนา (Fat Tails / Leptokurtosis) ของข้อมูลเพชรในโลกความเป็นจริง ซึ่งประกอบด้วยตลาดเฉพาะกลุ่ม (Niche Markets เช่น เพชรดิบหรือเพชรเจียระไนผิดสเปกเพื่อประหยัดน้ำหนัก)
 \end{enumerate}
-\end{summarybox}
+\end{infobox}
 
 \clearpage
 % =========================================================================
-% PAGE 6: SECTION 3: PART II BEARING - BASELINE & PCA MODELING
+% SECTION 3
 % =========================================================================
 \section*{3. การทดลอง \textcolor{partdarkorange}{Part II: Latent-variable based Anomaly detection} — การวินิจฉัยความผิดปกติของตลับลูกปืน\newline \large(\textcolor{partdarkorange}{Part II: Latent-Variable PCA on IMS Bearing Vibration Telemetry})}
 
@@ -336,48 +302,56 @@ One-Class SVM & Kernel Hypersphere & ไม่จำกัดการแจก�
 
 \begin{figure}[H]
 \centering
-\includegraphics[height=5.2cm, width=0.92\linewidth, keepaspectratio]{plot_4_bearing_raw_sensor_timeseries.pdf}
+\includegraphics[width=0.98\linewidth]{plot_4_bearing_raw_sensor_timeseries.pdf}
 \caption{สัญญาณการสั่นสะเทือนแบบอนุกรมเวลาจากเซนเซอร์ความเร่ง 4 จุดตลอดช่วงทดสอบ Run-to-Failure}
 \end{figure}
 
+การตรวจสอบสัญญาณดิบพบว่าตลอดช่วงการทำงานปกติ ($t \le 200$) ค่าแอมพลิจูดความเร่งมีระดับต่ำและคงที่ในทุกแชนเนล ($\approx 0.05\text{g}$ ถึง $0.08\text{g}$) จนกระทั่งเข้าสู่ช่วงทดสอบ ($t > 200$) จึงเริ่มสังเกตเห็นการผันผวนของพลังงานการสั่นสะเทือน โดยเฉพาะสัญญาณจากแชนเนล Bearing 1 ซึ่งสะท้อนการสะสมความเค้นและการเสื่อมสภาพของพื้นผิวทางกลก่อนที่จะเกิดการกะเทาะตัวหลุดร่อน (Flaking/Spalling) ในขั้นรุนแรง
+
+\clearpage
 \subsection*{3.2 การสร้างแบบจำลองตัวแปรแฝงด้วย PCA ($k=2$)}
 การสลายค่าลักษณะเฉพาะของข้อมูล Baseline เผยว่า PC1 อธิบายความแปรปรวนได้ $46.85\%$ และ PC2 อธิบายได้ $23.00\%$ รวมกัน $k=2$ องค์ประกอบหลักสามารถอธิบายความแปรปรวนรวมได้สูงถึง \textbf{$69.85\%$} โดย PC1 สะท้อนแรงสั่นสะเทือนร่วมของระบบ และ PC2 สะท้อนความไม่สมดุลของแรงทางกลระหว่างเพลา ดังแสดงใน Figure 5
 
 \begin{figure}[H]
 \centering
-\includegraphics[height=5.0cm, width=0.92\linewidth, keepaspectratio]{plot_5_bearing_pca_variance_loadings.pdf}
+\includegraphics[width=0.98\linewidth]{plot_5_bearing_pca_variance_loadings.pdf}
 \caption{กราฟ Scree Plot และแผนภาพน้ำหนักตัวแปร (Loadings) ของ Principal Component 2 แกนหลัก}
 \end{figure}
 
-\clearpage
-% =========================================================================
-% PAGE 7: PART II BEARING - LATENT T^2 & RESIDUAL RECONSTRUCTION MAE
-% =========================================================================
 \subsection*{3.3 การตรวจจับด้วยระยะทางมาฮาลาโนบิสบนคะแนนตัวแปรแฝง ($T^2$ Statistic)}
 คำนวณ $T^2 = \mathbf{z} \mathbf{\Lambda}_k^{-1} \mathbf{z}^\top$ บนปริภูมิ 2 มิติ และใช้เกณฑ์วิกฤต $\chi^2_{0.001}(2) = 13.816$ พบว่าสัญญาณแจ้งเตือนครั้งแรกเกิดขึ้นที่เวลา \textbf{2004-02-15 05:42:39} (ดัชนีทดสอบที่ 211 / ดัชนีรวม 411) ให้ระยะเวลาเตือนภัยล่วงหน้าถึง \textbf{96.67 ชั่วโมง (4.03 วัน)} ก่อนการพังทลาย
 
 \begin{figure}[H]
 \centering
-\includegraphics[height=5.2cm, width=0.92\linewidth, keepaspectratio]{plot_6_bearing_mhd_latent_scores.pdf}
+\includegraphics[width=0.98\linewidth]{plot_6_bearing_mhd_latent_scores.pdf}
 \caption{เส้นทางเวลาของค่าสถิติระยะทางมาฮาลาโนบิสบนปริภูมิแฝง ($T^2$) เทียบกับเกณฑ์วิกฤตไคสแควร์}
 \end{figure}
 
+\clearpage
 \subsection*{3.4 การตรวจจับด้วยความคลาดเคลื่อนในการสร้างภาพข้อมูลซ้ำ (Reconstruction MAE)}
-คำนวณความคลาดเคลื่อนในการฟื้นฟูสัญญาณ $\hat{\mathbf{x}} = \mathbf{z} \mathbf{W}_k^\top$ จากสถิติ MAE พบว่าค่าสูงสุดในสภาวะปกติคือ $\text{MAE}_{\max} = 1.1736$:
-\begin{itemize}[leftmargin=1.5em, itemsep=1pt]
-    \item เกณฑ์ $105\%$ ($1.2322$): แจ้งเตือนเวลา \textbf{2004-02-14 07:52:39} (ล่วงหน้า \textbf{118.50 ชั่วโมง} หรือ $4.94$ วัน)
-    \item เกณฑ์ $110\%$ ($1.2909$): แจ้งเตือนเวลา \textbf{2004-02-14 07:52:39} (ล่วงหน้า \textbf{118.50 ชั่วโมง} หรือ $4.94$ วัน)
+การฟื้นฟูสัญญาณพิกัดเดิมจากคะแนนตัวแปรแฝง $\hat{\mathbf{x}} = \mathbf{z} \mathbf{W}_k^\top$ ทำหน้าที่เสมือนตัวกรองพฤติกรรมปกติ (Subspace Filter) โดยเวกเตอร์ความคลาดเคลื่อนส่วนเหลือ $\mathbf{e} = \mathbf{x} - \hat{\mathbf{x}}$ จะตรวจจับพลังงานสัญญาณที่อยู่นอกเหนือการอธิบายของ $k=2$ แกนหลัก จากการวัดด้วยสถิติ Mean Absolute Error ($\text{MAE} = \frac{1}{p} \sum_{j=1}^p |e_j|$) พบว่าค่าสูงสุดในช่วงการทำงานปกติคือ $\text{MAE}_{\max} = 1.1736$:
+\begin{itemize}[leftmargin=1.5em, itemsep=1.5pt]
+    \item \textbf{เกณฑ์ $105\%$ ($1.2322$):} แจ้งเตือนเวลา \textbf{2004-02-14 07:52:39} (ล่วงหน้า \textbf{118.50 ชั่วโมง} หรือ $4.94$ วัน)
+    \item \textbf{เกณฑ์ $110\%$ ($1.2909$):} แจ้งเตือนเวลา \textbf{2004-02-14 07:52:39} (ล่วงหน้า \textbf{118.50 ชั่วโมง} หรือ $4.94$ วัน)
 \end{itemize}
 
 \begin{figure}[H]
 \centering
-\includegraphics[height=5.2cm, width=0.92\linewidth, keepaspectratio]{plot_7_bearing_reconstruction_mae_timeseries.pdf}
+\includegraphics[width=0.98\linewidth]{plot_7_bearing_reconstruction_mae_timeseries.pdf}
 \caption{เส้นทางเวลาของความคลาดเคลื่อนในการสร้างภาพข้อมูลซ้ำ (Reconstruction MAE) และการเตือนภัยก่อนการพังทลาย}
 \end{figure}
 
+\vspace{-3pt}
+\begin{infobox}{การวิเคราะห์เชิงลึก: ทำไม Reconstruction MAE จึงแจ้งเตือนได้รวดเร็วกว่า Latent $T^2$}
+\begin{enumerate}[leftmargin=1.8em, itemsep=1.5pt]
+    \item \textbf{Orthogonal Impact Energy Projection:} ความเสียหายเริ่มต้นของการกะเทาะตัว (Micro-Spalling) ก่อให้เกิดคลื่นกระแทกความถี่สูงแบบชั่วขณะ (Transient Impact Bursts) ซึ่งไม่สอดคล้องกับพฤติกรรมการแกว่งปกติในระนาบ 2 แกนหลัก จึงถูกผลักเข้าสู่ Residual Subspace ($p-k$) โดยตรง ทำให้ค่า MAE ขยับตัวข้ามเกณฑ์วิกฤตเร็วกว่า $T^2$ ถึง 21.83 ชั่วโมง
+    \item \textbf{Zero False Alarms in Baseline:} ทั้งเกณฑ์ $105\%$ และ $110\%$ มี False Alarm Rate เท่ากับ $0.0\%$ ในช่วงทดสอบ 200 จุดแรก ยืนยันถึงความแม่นยำสูงและพร้อมใช้งานจริงในระบบ Predictive Maintenance
+\end{enumerate}
+\end{infobox}
+
 \clearpage
 % =========================================================================
-% PAGE 8: SECTION 4: COMPARATIVE ANALYSIS & EARLY WARNING PROGNOSTICS
+% SECTION 4
 % =========================================================================
 \section*{4. การวิเคราะห์เชิงเปรียบเทียบและการประเมินเวลาเตือนภัยล่วงหน้า\newline \large(Comparative Diagnostic Matrix \& Early Warning Prognostics)}
 
@@ -386,7 +360,7 @@ One-Class SVM & Kernel Hypersphere & ไม่จำกัดการแจก�
 
 \begin{figure}[H]
 \centering
-\includegraphics[height=4.8cm, width=0.92\linewidth, keepaspectratio]{plot_8_anomaly_detection_comparative_summary.pdf}
+\includegraphics[width=0.98\linewidth]{plot_8_anomaly_detection_comparative_summary.pdf}
 \caption{การวิเคราะห์เปรียบเทียบระหว่างสถิติ Latent Space ($T^2$) และ Residual Space (MAE) และช่วงเริ่มต้นความเสียหาย}
 \end{figure}
 
@@ -413,27 +387,40 @@ Raw RMS ($>0.20$g) & Original Physical & เกณฑ์ระดับการ
 
 \clearpage
 % =========================================================================
-% PAGE 9: QUESTION 1 (EXACTLY 1 FULL PAGE)
+% SECTION 5: QUESTIONS AND ANSWERS (EXACTLY 1 PAGE PER QUESTION)
 % =========================================================================
 \section*{5. การตอบคำถามประจำการทดลองและการวินิจฉัยเชิงวิศวกรรม\newline \large(Experiment Question Solutions \& Engineering Insights)}
-\vspace{-0.9em}
+\vspace{-0.6em}
 
+% -------------------------------------------------------------------------
+% QUESTION 1: EXACTLY 1 PAGE
+% -------------------------------------------------------------------------
 \subsection*{คำถามข้อที่ 1: การแก้ไขปัญหาความเบ้ของฟีเจอร์และการตรวจสอบเมทริกซ์ความแปรปรวนร่วม\newline \normalsize(Question 1: Skewness Rectification, Log Transformation, and Covariance Conditioning)}
+\vspace{-0.5em}
 
-\begin{ansbox}[คำตอบสำหรับคำถามประจำการทดลองข้อที่ 1 (Full Engineering Solution)]
-\small
-\textbf{โจทย์ (Question 1 Prompt):} (a) จงอธิบายเหตุผลว่าทำไมเทคนิคตัวแปรเดี่ยวจึงล้มเหลว (b) วิเคราะห์ความเบ้ของ \codevar{carat}, \codevar{depth}, \codevar{price} พร้อมอธิบายเหตุผลของการแปลงสเกลด้วยลอการิทึม (c) เมทริกซ์ความแปรปรวนร่วมมีสภาวะเงื่อนไขอย่างไร มีปัญหา Singularity หรือไม่
+\begin{ansbox}[unbreakable, fontupper={\fontsize{9.6pt}{12.6pt}\selectfont}, left=6pt, right=6pt, top=3pt, bottom=3pt]
+\textbf{โจทย์ (Question 1 Prompt)}:
+\begin{itemize}[leftmargin=1.2em, itemsep=0pt, topsep=0pt, parsep=0pt]
+    \item[(a)] \textit{จงอธิบายเหตุผลว่าทำไมเทคนิคตัวแปรเดี่ยว (Univariate Outlier Detection) เช่น Z-Score หรือ Box Plot จึงล้มเหลวในการตรวจจับจุดผิดปกติหลายตัวแปร}
+    \item[(b)] \textit{วิเคราะห์ความเบ้ของ \codevar{carat}, \codevar{depth}, \codevar{price} พร้อมอธิบายเหตุผลทางสถิติและเศรษฐศาสตร์ของการแปลงสเกลด้วยลอการิทึม}
+    \item[(c)] \textit{เมทริกซ์ความแปรปรวนร่วมมีสภาวะเงื่อนไขอย่างไร และมีปัญหา Singularity หรือไม่}
+\end{itemize}
 
-\vspace{1pt}\hrule\vspace{3pt}
+\vspace{-0.2em}
+\noindent\rule{\linewidth}{0.4pt}
+\vspace{-0.2em}
 
-\textbf{1. ข้อจำกัดของเทคนิคตัวแปรเดี่ยว (Univariate Outlier Limitations):}
+\noindent\textbf{\normalsize 1. ข้อจำกัดของเทคนิคตัวแปรเดี่ยว (Univariate Outlier Limitations)}\par\vspace{0.05em}
 เทคนิคตัวแปรเดี่ยว เช่น Z-Score พิจารณาฟีเจอร์แต่ละมิติแยกจากกันเป็นอิสระ โดยถือว่าขอบเขตความปกติเป็นรูปทรงสี่เหลี่ยมหลายมิติที่ขนานกับแกนพิกัด อย่างไรก็ตาม ตัวแปร \codevar{carat} และ \codevar{price} มีความสัมพันธ์เชิงบวกที่แข็งแกร่งอย่างยิ่ง เพชรที่มีขนาด $1.0$ กะรัตแต่มีราคาต่ำผิดปกติเพียง $\$1,000$ จะไม่ถูก Z-Score ตรวจจับ เพราะค่าทั้งสองต่างอยู่ในช่วงปกติของแต่ละตัวแปรเดี่ยว แต่ระยะทางมาฮาลาโนบิสสามารถตรวจจับได้อย่างแม่นยำเนื่องจากคิดทิศทางความแปรปรวนร่วม
 
-\textbf{2. การวิเคราะห์ความเบ้และการแปลงสเกลลอการิทึม (Skewness \& Log Transformation):}
+\vspace{0.15em}
+\noindent\textbf{\normalsize 2. การวิเคราะห์ความเบ้และการแปลงสเกลลอการิทึม (Skewness \& Log Transformation)}\par\vspace{0.05em}
 ผลการคำนวณสัมประสิทธิ์ความเบ้แบบ Fisher-Pearson ก่อนและหลังการแปลงสเกล:
 \begin{center}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{0.92}
+\resizebox{\linewidth}{!}{
 \begin{tabular}{lcccc}
 \toprule
 \textbf{ฟีเจอร์ (Feature)} & \textbf{ความเบ้ดิบ (Raw)} & \textbf{ความเบ้หลังแปลง $\ln(\cdot)$} & \textbf{ผลลัพธ์} & \textbf{ลักษณะการกระจายตัว} \\
@@ -443,77 +430,101 @@ Raw RMS ($>0.20$g) & Original Physical & เกณฑ์ระดับการ
 \codevar{depth} & $-0.082$ & $-0.082$ (ไม่แปลง) & สมมาตรเดิม & มีการกระจายตัวเป็นเกาส์เซียนอยู่แล้ว \\
 \bottomrule
 \end{tabular}
+}
 \end{center}
+\vspace{-0.3em}
 \textbf{เหตุผลเชิงทฤษฎีและกายภาพ:}
-(1) \textit{ทางสถิติ:} ทฤษฎีระยะทางมาฮาลาโนบิสอิงกับการแจกแจงปรกติหลายตัวแปร การกระจายตัวที่เบ้ขวารุนแรงจะดึง Centroid ไปทางขวาและทำให้ Covariance Matrix ถูกครอบงำด้วยข้อมูลส่วนน้อย การแปลงด้วย $\ln(x)$ ช่วยบีบอัดหางยาวด้านขวาให้กลับมาสมมาตร (2) \textit{ทางเศรษฐศาสตร์:} ความสัมพันธ์ระหว่างขนาดกะรัตกับราคาเพชรเป็นไปตามกฎกำลัง (Power Law: $\text{Price} \propto \text{Carat}^\beta$) การใส่ลอการิทึมจะเปลี่ยนความสัมพันธ์แบบไม่เป็นเชิงเส้นให้กลายเป็นสมการเชิงเส้น $\ln(\text{Price}) = \alpha + \beta \ln(\text{Carat})$ ทำให้เมทริกซ์ความแปรปรวนร่วมสะท้อนโครงสร้างความสัมพันธ์ที่แท้จริง
+\begin{enumerate}[leftmargin=1.2em, itemsep=0.3pt, topsep=0.3pt]
+    \item \textit{ทางสถิติ (Statistical Normalization):} ทฤษฎีระยะทางมาฮาลาโนบิสอิงกับการแจกแจงปรกติหลายตัวแปร การกระจายตัวที่เบ้ขวารุนแรงจะดึง Centroid ไปทางขวาและทำให้ Covariance Matrix ถูกครอบงำด้วยข้อมูลส่วนน้อย การแปลงด้วย $\ln(x)$ ช่วยบีบอัดหางยาวด้านขวาให้กลับมาสมมาตร
+    \item \textit{ทางเศรษฐศาสตร์ (Economic Power Law):} ความสัมพันธ์ระหว่างขนาดกะรัตกับราคาเพชรเป็นไปตามกฎกำลัง ($\text{Price} \propto \text{Carat}^\beta$) การใส่ลอการิทึมจะเปลี่ยนความสัมพันธ์แบบไม่เป็นเชิงเส้นให้กลายเป็นสมการเชิงเส้น $\ln(\text{Price}) = \alpha + \beta \ln(\text{Carat})$ ทำให้เมทริกซ์ความแปรปรวนร่วมสะท้อนโครงสร้างความสัมพันธ์ที่แท้จริง
+\end{enumerate}
 
-\textbf{3. สภาวะเงื่อนไขของเมทริกซ์ความแปรปรวนร่วม (Covariance Conditioning):}
+\vspace{0.15em}
+\noindent\textbf{\normalsize 3. สภาวะเงื่อนไขของเมทริกซ์ความแปรปรวนร่วม (Covariance Conditioning)}\par\vspace{0.05em}
 เมทริกซ์ความแปรปรวนร่วมของตัวแปรที่แปลงแล้ว $\mathbf{\Sigma} \in \mathbb{R}^{3 \times 3}$ มีค่าไอเกนแวลูทั้งหมดเป็นบวกอย่างเคร่งครัด ($\lambda_1 = 2.052, \lambda_2 = 1.346, \lambda_3 = 0.421 > 0$) ซึ่งพิสูจน์ว่าเป็นเมทริกซ์บวกแน่นอน (Positive Definite Matrix) ค่า Condition Number เท่ากับ $\kappa(\mathbf{\Sigma}) = \lambda_{\max} / \lambda_{\min} = 4.87 \ll 1000$ ยืนยันว่าไม่มีภาวะเอกฐานหรือ Multicollinearity ทำให้การคำนวณ $\mathbf{\Sigma}^{-1}$ มีความเสถียรเชิงตัวเลขสูง ปราศจากความผิดพลาดจากการปัดเศษ
 \end{ansbox}
 
 \clearpage
-% =========================================================================
-% PAGE 10: QUESTION 2 (EXACTLY 1 FULL PAGE)
-% =========================================================================
+% -------------------------------------------------------------------------
+% QUESTION 2: EXACTLY 1 PAGE
+% -------------------------------------------------------------------------
 \subsection*{คำถามข้อที่ 2: การตั้งเกณฑ์วิกฤตไคสแควร์และการจำแนกจุดผิดปกติของเพชร\newline \normalsize(Question 2: Chi-Square Thresholding, Empirical Outlier Gating, and Diamond Profiling)}
+\vspace{-0.5em}
 
-\begin{ansbox}[คำตอบสำหรับคำถามประจำการทดลองข้อที่ 2 (Full Engineering Solution)]
-\small
-\textbf{โจทย์ (Question 2 Prompt):} (a) กำหนดเกณฑ์วิกฤต $\chi^2$ ที่ $\alpha = 0.01$ และ $0.001$ พร้อมแสดงจำนวนและร้อยละของ Outliers (b) วิเคราะห์โปรไฟล์ของเพชรที่ผิดปกติสูงสุด (c) เหตุใดสัดส่วนจุดผิดปกติที่ตรวจพบจริง ($2.00\%$) จึงสูงกว่า $\alpha = 1.00\%$
+\begin{ansbox}[unbreakable, fontupper={\fontsize{9.6pt}{12.6pt}\selectfont}, left=6pt, right=6pt, top=3pt, bottom=3pt]
+\textbf{โจทย์ (Question 2 Prompt)}:
+\begin{itemize}[leftmargin=1.2em, itemsep=0pt, topsep=0pt, parsep=0pt]
+    \item[(a)] \textit{กำหนดเกณฑ์วิกฤต $\chi^2$ ที่ $\alpha = 0.01$ และ $0.001$ พร้อมแสดงจำนวนและร้อยละของจุดผิดปกติที่ตรวจพบ}
+    \item[(b)] \textit{วิเคราะห์โปรไฟล์ของเพชรที่ผิดปกติสูงสุดในเชิงอัญมณีศาสตร์และมูลค่าทางการค้า}
+    \item[(c)] \textit{อธิบายเหตุผลว่าเหตุใดสัดส่วนจุดผิดปกติที่ตรวจพบจริง ($2.00\%$) จึงสูงกว่าเกณฑ์ $\alpha = 1.00\%$ เชิงทฤษฎี}
+\end{itemize}
 
-\vspace{1pt}\hrule\vspace{3pt}
+\vspace{-0.2em}
+\noindent\rule{\linewidth}{0.4pt}
+\vspace{-0.2em}
 
-\textbf{1. ผลลัพธ์การคัดกรองด้วยเกณฑ์ไคสแควร์ (Empirical Outlier Gating):}
+\noindent\textbf{\normalsize 1. ผลลัพธ์การคัดกรองด้วยเกณฑ์ไคสแควร์ (Empirical Outlier Gating)}\par\vspace{0.05em}
 สำหรับชุดตัวแปร 3 มิติ $[\ln(\text{carat}), \text{depth}, \ln(\text{price})]$ กำหนดองศาเสรี $p = 3$ โดยคำนวณค่าวิกฤตจากฟังก์ชันส่วนกลับของการแจกแจงสะสมไคสแควร์ (Percent Point Function):
-\begin{itemize}[leftmargin=1.5em, itemsep=0.5pt]
+\begin{itemize}[leftmargin=1.2em, itemsep=1.0pt, topsep=1.0pt]
     \item \textbf{เกณฑ์ $\alpha = 0.01$ ($\chi^2_{0.01}(3) = 11.3449$):} ตรวจพบจุดผิดปกติจำนวน \textbf{$1,079$ รายการ} คิดเป็น \textbf{$2.000\%$} ของข้อมูลทั้งหมด ($53,940$ รายการ)
     \item \textbf{เกณฑ์ $\alpha = 0.001$ ($\chi^2_{0.001}(3) = 16.2662$):} ตรวจพบจุดผิดปกติขั้นรุนแรงจำนวน \textbf{$446$ รายการ} คิดเป็น \textbf{$0.827\%$} ของข้อมูลทั้งหมด
 \end{itemize}
 
-\textbf{2. การวิเคราะห์โปรไฟล์ของเพชรที่ผิดปกติสูงสุด (Physical \& Commercial Profiling):}
+\vspace{0.15em}
+\noindent\textbf{\normalsize 2. การวิเคราะห์โปรไฟล์ของเพชรที่ผิดปกติสูงสุด (Physical \& Commercial Profiling)}\par\vspace{0.05em}
 จากการสกัดเพชรที่มีค่า $D_M^2$ สูงสุด พบว่าสามารถแบ่งกลุ่มความผิดปกติออกเป็น 2 ประเภทหลัก:
-\begin{enumerate}[leftmargin=1.5em, itemsep=0.5pt]
+\begin{enumerate}[leftmargin=1.2em, itemsep=1.0pt, topsep=1.0pt]
     \item \textit{ความผิดปกติของสัดส่วนทางเรขาคณิต (Geometric Proportion Anomalies):}
-    \begin{itemize}[leftmargin=1.2em, itemsep=0.2pt]
-        \item \textbf{Index 11182 ($D_M^2 = 92.15$):} น้ำหนัก $1.07$ กะรัต สัดส่วนความลึกเพียง \textbf{$43.0\%$} (มาตรฐานคือ $59-63\%$) เกิดข้อบกพร่องจากการเจียระไนแบบแบนราบเกินไป แสงทะลุออกด้านล่างโดยไม่สะท้อนกลับ
+    \begin{itemize}[leftmargin=1.0em, itemsep=0.5pt]
+        \item \textbf{Index 11182 ($D_M^2 = 92.15$):} น้ำหนัก $1.07$ กะรัต สัดส่วนความลึกเพียง \textbf{$43.0\%$} (มาตรฐาน $59-63\%$) เกิดข้อบกพร่องจากการเจียระไนแบบแบนราบเกินไป แสงทะลุออกด้านล่างโดยไม่สะท้อนกลับ
         \item \textbf{Index 11963 ($D_M^2 = 88.64$):} น้ำหนัก $1.00$ กะรัต สัดส่วนความลึกสูงถึง \textbf{$79.0\%$} เจียระไนหนาเกินไปจนเกิดปรากฏการณ์มืดตรงกลาง (Nailhead Effect)
     \end{itemize}
     \item \textit{ความผิดปกติของโครงสร้างราคาต่อคุณภาพ (Valuation Disconnect Anomalies):}
-    \begin{itemize}[leftmargin=1.2em, itemsep=0.2pt]
+    \begin{itemize}[leftmargin=1.0em, itemsep=0.5pt]
         \item \textbf{Index 41918 ($D_M^2 = 147.43$):} น้ำหนัก $1.03$ กะรัต ความลึก $78.2\%$ มีราคาเพียง $\$1,262$ ซึ่งต่ำกว่าค่าเฉลี่ยของเพชร 1 กะรัตในเกรดสี E (\$5,000+) อย่างมาก เนื่องจากมีเกรดความสะอาดต่ำสุด (I1)
         \item \textbf{Index 49189 ($D_M^2 = 108.43$):} ขนาดกะรัต $0.51$ กะรัต แต่มีราคา $\$2,075$ สูงกว่าเพชรขนาดเดียวกันกว่าเท่าตัว เนื่องจากมีเกรดการเจียระไน Ideal และเกรดสี E
     \end{itemize}
 \end{enumerate}
 
-\textbf{3. คำอธิบายเชิงสถิติว่าเหตุใด Outlier Rate จึงสูงกว่า $\alpha$ เชิงทฤษฎี:}
+\vspace{0.15em}
+\noindent\textbf{\normalsize 3. คำอธิบายเชิงสถิติว่าเหตุใด Outlier Rate จึงสูงกว่า $\alpha$ เชิงทฤษฎี}\par\vspace{0.05em}
 ระดับนัยสำคัญ $\alpha = 0.01$ กำหนดทางทฤษฎีว่าจะพบจุดผิดปกติ $1\%$ ภายใต้สมมติฐาน Multivariate Normal อย่างสมบูรณ์ อย่างไรก็ตาม ข้อมูลเพชรในเชิงพาณิชย์มีลักษณะ Leptokurtic (หางหนา) จากความไม่สมบูรณ์ของตลาด เช่น เพชรที่มีตำหนิเกรดต่ำ หรือเพชรเจียระไนผิดสัดส่วนเพื่อรักษาน้ำหนักกะรัต การพบ Outlier จริง $2.00\%$ จึงสะท้อนการกระจุกตัวของกรณีพิเศษตามแนวขอบของการค้า
 \end{ansbox}
 
 \clearpage
-% =========================================================================
-% PAGE 11: QUESTION 3 (EXACTLY 1 FULL PAGE)
-% =========================================================================
+% -------------------------------------------------------------------------
+% QUESTION 3: EXACTLY 1 PAGE
+% -------------------------------------------------------------------------
 \subsection*{คำถามข้อที่ 3: การสร้างแบบจำลองตัวแปรแฝง PCA และการตรวจจับด้วยสถิติ Hotelling's $T^2$\newline \normalsize(Question 3: Latent Subspace Modeling, Loadings Matrix, and $T^2$ Failure Onset)}
+\vspace{-0.5em}
 
-\begin{ansbox}[คำตอบสำหรับคำถามประจำการทดลองข้อที่ 3 (Full Engineering Solution)]
-\small
-\textbf{โจทย์ (Question 3 Prompt):} (a) พิสูจน์ว่าแบบจำลอง PCA 2 องค์ประกอบหลัก ($k=2$) รักษารูปแบบความแปรปรวนได้เพียงพอ (b) วิเคราะห์ความหมายทางกายภาพของ Loadings PC1 และ PC2 (c) ระบุเวลาที่สถิติ $T^2$ แจ้งเตือนและคำนวณ Lead Time
+\begin{ansbox}[unbreakable, fontupper={\fontsize{9.6pt}{12.6pt}\selectfont}, left=6pt, right=6pt, top=3pt, bottom=3pt]
+\textbf{โจทย์ (Question 3 Prompt)}:
+\begin{itemize}[leftmargin=1.2em, itemsep=0pt, topsep=0pt, parsep=0pt]
+    \item[(a)] \textit{พิสูจน์ว่าแบบจำลอง PCA 2 องค์ประกอบหลัก ($k=2$) รักษารูปแบบความแปรปรวนของระบบได้อย่างเพียงพอ}
+    \item[(b)] \textit{วิเคราะห์ความหมายทางกายภาพของค่าน้ำหนักตัวแปร (Loadings) บน PC1 และ PC2 ในเชิงกลศาสตร์}
+    \item[(c)] \textit{ระบุเวลาที่สถิติ $T^2$ แจ้งเตือนความผิดปกติครั้งแรกและคำนวณระยะเวลาเตือนภัยล่วงหน้า (Lead Time)}
+\end{itemize}
 
-\vspace{1pt}\hrule\vspace{2pt}
+\vspace{-0.2em}
+\noindent\rule{\linewidth}{0.4pt}
+\vspace{-0.2em}
 
-\textbf{1. การพิสูจน์การรักษาความแปรปรวนของแบบจำลอง ($k=2$ PCs Proof):}
+\noindent\textbf{\normalsize 1. การพิสูจน์การรักษาความแปรปรวนของแบบจำลอง ($k=2$ PCs Proof)}\par\vspace{0.05em}
 การสลายค่าลักษณะเฉพาะบนช่วงปกติ ($N_{\text{train}} = 200$) ได้ค่า $\lambda_1 = 1.8834$ และ $\lambda_2 = 0.9245$:
-\begin{itemize}[leftmargin=1.2em, itemsep=0pt]
+\begin{itemize}[leftmargin=1.2em, itemsep=0.5pt, topsep=0.5pt]
     \item \textbf{PC1:} อธิบายความแปรปรวนได้ \textbf{$46.85\%$} | \textbf{PC2:} อธิบายความแปรปรวนได้ \textbf{$23.00\%$}
     \item \textbf{Cumulative PVE ($k=2$):} อธิบายความแปรปรวนสะสมรวมได้ \textbf{$69.85\%$}
 \end{itemize}
 ขณะที่ PC3 ($17.38\%$) และ PC4 ($12.77\%$) มีค่าต่ำ การเลือก $k=2$ รักษารูปแบบความสัมพันธ์หลักของระบบไว้ได้เกือบ $70\%$ โดยตัดสัญญาณรบกวนความถี่สูงทิ้งไป
 
-\textbf{2. การถอดรหัสความหมายทางกายภาพของ Loadings (Physical Interpretation):}
+\vspace{0.15em}
+\noindent\textbf{\normalsize 2. การถอดรหัสความหมายทางกายภาพของ Loadings (Physical Interpretation)}\par\vspace{0.05em}
 \begin{center}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{0.9}
+\resizebox{\linewidth}{!}{
 \begin{tabular}{lccc}
 \toprule
 \textbf{เซนเซอร์} & \textbf{PC1 Loading} & \textbf{PC2 Loading} & \textbf{บทบาทเชิงกลไกในระบบ (Physical Role)} \\
@@ -524,15 +535,18 @@ Bearing 3 & $+0.4334$ & $+0.7446$ & แรงสั่นสะเทือน�
 Bearing 4 & $+0.5050$ & $-0.0876$ & แรงสั่นสะเทือนร่วม / รองรับเพลาฝั่งตรงข้าม \\
 \bottomrule
 \end{tabular}
+}
 \end{center}
-\begin{itemize}[leftmargin=1.2em, itemsep=0pt]
+\vspace{-0.3em}
+\begin{itemize}[leftmargin=1.2em, itemsep=0.5pt, topsep=0.5pt]
     \item \textbf{PC1 (Synchronous Energy Mode):} น้ำหนักเป็นบวกใกล้เคียงกันทุกแชนเนล ($+0.43$ ถึง $+0.59$) วัดพลังงานจลน์และการสั่นสะเทือนร่วมของเพลาหมุนรอบ
     \item \textbf{PC2 (Torsional Dipole Contrast):} มีค่าน้ำหนักตรงข้ามกันระหว่าง Bearing 3 ($+0.7446$) กับ Bearing 2 ($-0.6604$) สะท้อนความไม่สมดุลของแรงบิดและการถ่ายเทน้ำหนักระหว่างสองฝั่งเพลา
 \end{itemize}
 
-\textbf{3. การแจ้งเตือนของสถิติ Hotelling's $T^2$ และเวลาเตือนภัยล่วงหน้า:}
+\vspace{0.15em}
+\noindent\textbf{\normalsize 3. การแจ้งเตือนของสถิติ Hotelling's $T^2$ และเวลาเตือนภัยล่วงหน้า}\par\vspace{0.05em}
 คำนวณระยะทางมาฮาลาโนบิสบนระนาบแฝง $T^2 = \mathbf{z} \mathbf{\Lambda}_k^{-1} \mathbf{z}^\top$ เทียบกับเกณฑ์ $\chi^2_{0.001}(2) = 13.8155$:
-\begin{itemize}[leftmargin=1.2em, itemsep=0pt]
+\begin{itemize}[leftmargin=1.2em, itemsep=0.5pt, topsep=0.5pt]
     \item \textbf{เวลาแจ้งเตือนครั้งแรก:} \textbf{2004-02-15 05:42:39} (ดัชนีทดสอบ 211 / ดัชนีรวม 411)
     \item \textbf{เวลาเกิดความเสียหายร้ายแรง:} \textbf{2004-02-19 06:22:39} (ดัชนีสุดท้าย 983)
     \item \textbf{ระยะเวลาเตือนภัยล่วงหน้า (Lead Time):} เท่ากับ \textbf{96.67 ชั่วโมง (4.03 วัน)} ให้เวลาเตรียมการเกือบ 100 ชั่วโมง
@@ -540,35 +554,44 @@ Bearing 4 & $+0.5050$ & $-0.0876$ & แรงสั่นสะเทือน�
 \end{ansbox}
 
 \clearpage
-% =========================================================================
-% PAGE 12: QUESTION 4 (EXACTLY 1 FULL PAGE)
-% =========================================================================
+% -------------------------------------------------------------------------
+% QUESTION 4: EXACTLY 1 PAGE
+% -------------------------------------------------------------------------
 \subsection*{คำถามข้อที่ 4: การตรวจจับด้วยความคลาดเคลื่อนในการสร้างภาพข้อมูลซ้ำ (Reconstruction Error MAE)\newline \normalsize(Question 4: Residual Reconstruction MAE, Early Warning Lead Time, and Prognostics)}
+\vspace{-0.5em}
 
-\begin{ansbox}[คำตอบสำหรับคำถามประจำการทดลองข้อที่ 4 (Full Engineering Solution)]
-\small
-\textbf{โจทย์ (Question 4 Prompt):} (a) เปรียบเทียบ Lead Time ระหว่าง Latent $T^2$ กับ Reconstruction MAE 105\% และ 110\% (b) ระบุตลับลูกปืนที่ชำรุดพร้อมหลักฐานยืนยัน (c) อธิบายบทบาทเสริมซึ่งกันและกันระหว่าง Latent Space กับ Residual Space
+\begin{ansbox}[unbreakable, fontupper={\fontsize{9.3pt}{12.0pt}\selectfont}, left=6pt, right=6pt, top=3pt, bottom=3pt]
+\textbf{โจทย์ (Question 4 Prompt)}:
+\begin{itemize}[leftmargin=1.2em, itemsep=0pt, topsep=0pt, parsep=0pt]
+    \item[(a)] \textit{เปรียบเทียบระยะเวลาเตือนภัยล่วงหน้าระหว่าง Latent $T^2$ กับ Reconstruction MAE เกณฑ์ 105\% และ 110\%}
+    \item[(b)] \textit{ระบุตลับลูกปืนที่ชำรุดพร้อมแสดงหลักฐานเชิงประจักษ์จากข้อมูลโทรมาตรการสั่นสะเทือน}
+    \item[(c)] \textit{อธิบายบทบาทเสริมซึ่งกันและกันระหว่าง Latent Space ($T^2$) กับ Residual Space (MAE) ในงานบำรุงรักษาเชิงพยากรณ์}
+\end{itemize}
 
-\vspace{1pt}\hrule\vspace{2pt}
+\vspace{-0.2em}
+\noindent\rule{\linewidth}{0.4pt}
+\vspace{-0.2em}
 
-\textbf{1. การเปรียบเทียบระยะเวลาเตือนภัยล่วงหน้า (Lead Time Comparison):}
+\noindent\textbf{\normalsize 1. การเปรียบเทียบระยะเวลาเตือนภัยล่วงหน้า (Lead Time Comparison)}\par\vspace{0.05em}
 กำหนดความคลาดเคลื่อนสูงสุดในสภาวะปกติ $\text{MAE}_{\max} = 1.1736$ และคำนวณเกณฑ์ตัดสินใจ:
-\begin{itemize}[leftmargin=1.2em, itemsep=0pt]
+\begin{itemize}[leftmargin=1.2em, itemsep=0.5pt, topsep=0.5pt]
     \item \textbf{Reconstruction MAE (105\% $= 1.2322$ \& 110\% $= 1.2909$):} แจ้งเตือนเวลา \textbf{2004-02-14 07:52:39} (ดัชนีรวม 280) ให้เวลาเตือนล่วงหน้า \textbf{118.50 ชั่วโมง (4.94 วัน)} โดยเกณฑ์ 110\% ตัดสัญญาณเตือนหลอกได้อย่างเด็ดขาด
     \item \textbf{Hotelling's $T^2$ ($\chi^2_{0.001}(2) = 13.816$):} แจ้งเตือนเวลา \textbf{2004-02-15 05:42:39} ให้เวลาเตือนล่วงหน้า \textbf{96.67 ชั่วโมง (4.03 วัน)}
     \item \textbf{ความได้เปรียบของ MAE:} ตรวจพบความผิดปกติได้เร็วกว่า Latent $T^2$ ถึง \textbf{21.83 ชั่วโมง (เกือบ 1 วันเต็ม)}
 \end{itemize}
 
-\textbf{2. การระบุชิ้นส่วนที่ชำรุดและการยืนยันด้วยข้อมูล (Root Cause Isolation):}
-\begin{itemize}[leftmargin=1.2em, itemsep=0pt]
+\vspace{0.15em}
+\noindent\textbf{\normalsize 2. การระบุชิ้นส่วนที่ชำรุดและการยืนยันด้วยข้อมูล (Root Cause Isolation)}\par\vspace{0.05em}
+\begin{itemize}[leftmargin=1.2em, itemsep=0.5pt, topsep=0.5pt]
     \item \textbf{ชิ้นส่วนที่เกิดความเสียหาย:} \textbf{ตลับลูกปืนหมายเลข 1 (Bearing 1)} เกิด Outer Race Micro-Spalling
     \item \textbf{หลักฐานเชิงประจักษ์จากข้อมูลโทรมาตร:}
     (1) \textit{แอมพลิจูดความเร่งดิบ:} Bearing 1 พุ่งจาก $0.06$g สู่ $0.20$g ในวันที่ 16 ก.พ. และทะลุ $1.42$g ในวันที่ 19 ก.พ. ขณะที่ Bearing 2, 3, 4 คงที่ระดับต่ำ ($0.05$g - $0.25$g) ตลอดการทดลอง
     (2) \textit{Residual Error Concentration:} เมื่อวิเคราะห์ความคลาดเคลื่อนแยกแชนเนล พบว่า Bearing 1 ครองสัดส่วนสูงกว่า \textbf{$85\%$} ของค่า Residual รวมในระบบ
 \end{itemize}
 
-\textbf{3. บทบาทเสริมซึ่งกันและกันระหว่าง Latent Space กับ Residual Space (Complementary Roles):}
-\begin{itemize}[leftmargin=1.2em, itemsep=0pt]
+\vspace{0.15em}
+\noindent\textbf{\normalsize 3. บทบาทเสริมซึ่งกันและกันระหว่าง Latent Space กับ Residual Space}\par\vspace{0.05em}
+\begin{itemize}[leftmargin=1.2em, itemsep=0.5pt, topsep=0.5pt]
     \item \textbf{Residual Space (MAE / SPE):} ตรวจสอบการเบี่ยงเบนในทิศทางตั้งฉากกับระนาบหลัก (Orthogonal Space) ไวสูงมากต่อรูปแบบการสั่นสะเทือนใหม่ๆ จากแรงกระแทก จึงส่งสัญญาณเตือนได้เร็วที่สุด
     \item \textbf{Latent Space ($T^2$):} ตรวจสอบการเคลื่อนตัวภายในระนาบหลัก (In-Plane Variance) ทำหน้าที่ยืนยันว่าโครงสร้างทางกลไกของเครื่องจักรเกิดการเปลี่ยนแปลงอย่างถาวร
     \item \textbf{สถาปัตยกรรมทางวิศวกรรมที่ดีที่สุด:} ใช้ Reconstruction MAE เป็นด่านหน้าในการเฝ้าระวังเบื้องต้น (Screening) และใช้ Hotelling's $T^2$ เป็นด่านยืนยันความเสียหายร้ายแรง (Confirmation)
@@ -577,38 +600,40 @@ Bearing 4 & $+0.5050$ & $-0.0876$ & แรงสั่นสะเทือน�
 
 \clearpage
 % =========================================================================
-% PAGE 13: SECTION 6: CONCLUSIONS & PRACTICAL BEST PRACTICES
+% SECTION 6
 % =========================================================================
-\section*{6. สรุปผลการทดลองและแนวทางปฏิบัติทางวิศวกรรมข้อมูล\newline \large(Conclusions \& Practical Best Practices)}
+\section*{6. สรุปผลการทดลองและแนวทางปฏิบัติทางวิศวกรรมข้อมูล\newline \large(Conclusions \& Practical Engineering Recommendations)}
 
-การทดลองใน Assignment 9 ได้สาธิตถึงประสิทธิภาพ ข้อดี และข้อควรระวังในการประยุกต์ใช้ระเบียบวิธีตรวจจับความผิดปกติทั้งเชิงสถิติ (MHD) และเชิงตัวแปรแฝง (Latent PCA) ซึ่งสรุปบทเรียนสำคัญได้ดังนี้:
-
-\begin{enumerate}[leftmargin=2.0em, itemsep=2.5pt]
-    \item \textbf{ความสำคัญของการแปลงข้อมูลเพื่อแก้ไขความเบ้ (Skewness Rectification):} การใช้ระยะทางมาฮาลาโนบิสและการทดสอบสมมติฐานไคสแควร์ขึ้นอยู่กับสมมติฐานการแจกแจงปรกติหลายตัวแปรอย่างยิ่งยวด การแปลงสเกลด้วยลอการิทึมเป็นขั้นตอนสำคัญที่ขาดไม่ได้ในการปรับความเบ้ให้สมมาตรและป้องกันการบิดเบี้ยวของเมทริกซ์ความแปรปรวนร่วม
-    \item \textbf{การแบ่งช่วงเวลาข้อมูลตามหลักการวิศวกรรม (Zero Data Leakage):} ในการสร้างแบบจำลองตรวจจับความผิดปกติสำหรับระบบอุตสาหกรรม การปรับมาตรฐาน (Standardization) และการสกัดคุณลักษณะแฝง (PCA) จะต้องคำนวณพารามิเตอร์จากช่วงการทำงานปกติ ($N_{\text{train}} = 200$) เท่านั้น ห้ามนำข้อมูลช่วงทดสอบมาปะปน
-    \item \textbf{สถาปัตยกรรมการเฝ้าระวังแบบสองมิติ (Dual-Space Monitoring Paradigm):} การผสานระหว่างสถิติบนปริภูมิแฝง (Hotelling's $T^2$) และสถิติบนปริภูมิความคลาดเคลื่อน (Reconstruction MAE) ให้ความสามารถในการตรวจจับที่ครอบคลุม โดย MAE ให้การเตือนล่วงหน้าเร็วที่สุด ($118.50$ ชั่วโมง หรือ $4.94$ วัน) ขณะที่ $T^2$ ให้การเตือนที่แม่นยำและปราศจากข้อผิดพลาด ($96.67$ ชั่วโมง หรือ $4.03$ วัน) ป้องกันความเสียหายร้ายแรงต่อเครื่องจักรได้อย่างสิ้นเชิง
-    \item \textbf{การตรวจวินิจฉัยและระบุชิ้นส่วนที่ชำรุด (Root Cause Isolation):} นอกจากการตรวจจับว่าเกิดความผิดปกติขึ้นในระบบแล้ว การวิเคราะห์ความคลาดเคลื่อนแยกรายแชนเนลยังช่วยให้สามารถระบุเจาะจงได้ว่าชิ้นส่วนใดเกิดความเสียหาย (ตลับลูกปืนหมายเลข 1) ช่วยลดเวลาและค่าใช้จ่ายในการซ่อมบำรุง
+การทดลองใน Assignment 9 ได้สาธิตถึงประสิทธิภาพ ข้อดี และข้อควรระวังในการประยุกต์ใช้ระเบียบวิธีตรวจจับความผิดปกติทั้งเชิงสถิติ (Multivariate MHD) และเชิงตัวแปรแฝง (Latent PCA Pipeline) ซึ่งสรุปบทเรียนสำคัญได้ 4 ประการหลัก:
+\begin{enumerate}[leftmargin=1.5em, itemsep=2.0pt]
+    \item \textbf{ข้อค้นพบเชิงทฤษฎีและความสำคัญของการปรับสภาพข้อมูล (Theoretical Foundations):} การใช้ระยะทางมาฮาลาโนบิสและการทดสอบสมมติฐานไคสแควร์ $\chi^2(p)$ วางอยู่บนสมมติฐานการแจกแจงแบบปรกติหลายตัวแปรอย่างยิ่งยวด การแปลงสเกลด้วยลอการิทึม $\ln(x)$ เป็นขั้นตอนสำคัญทางวิศวกรรมข้อมูลที่ขาดไม่ได้ในการลดความเบ้ (Skewness Reduction $> 90\%$) เพื่อไม่ให้จุดกึ่งกลางและเมทริกซ์ความแปรปรวนร่วมถูกบิดเบือนโดยข้อมูลกลุ่มน้อย
+    \item \textbf{ไปป์ไลน์การเรียนรู้แบบไม่มีผู้สอนที่ปราศจากการรั่วไหลของข้อมูล (Zero Data Leakage Pipeline):} ในการสร้างระบบเฝ้าระวังทางอุตสาหกรรม การคำนวณพารามิเตอร์ของแบบจำลอง ทั้งเวกเตอร์ค่าเฉลี่ย $\boldsymbol{\mu}$, เมทริกซ์ความแปรปรวนร่วม $\mathbf{\Sigma}$, ตัวแปรปรับมาตรฐาน StandardScaler, และเมทริกซ์การฉายตัวแปรแฝง $\mathbf{W}_k$ จะต้องกระทำบนช่วงเวลาสภาวะปกติ (Healthy Baseline $N_{\text{train}} = 200$) เท่านั้น เพื่อไม่ให้แบบจำลองดูดซับสัญญาณความผิดปกติเข้าไปในเกณฑ์ปกติ
+    \item \textbf{สถาปัตยกรรมการเฝ้าระวังแบบสองมิติเสริมแรง (Dual-Space Monitoring Paradigm):} การรวมกันระหว่างสถิติบนปริภูมิความคลาดเคลื่อน (Residual Space: Reconstruction MAE) และสถิติบนปริภูมิแฝง (Latent Space: Hotelling's $T^2$) เป็นแนวทางปฏิบัติที่ดีที่สุดในระบบสายการผลิต:
+    \begin{itemize}[leftmargin=1.2em, itemsep=1.0pt, topsep=1.0pt]
+        \item \textit{Early Screening (MAE 105\%/110\%):} ให้เวลาเตือนภัยล่วงหน้าเร็วที่สุดถึง \textbf{118.50 ชั่วโมง (4.94 วัน)} โดยไวต่อสัญญาณแรงกระแทกความถี่สูงจากการกะเทาะผิวในระยะเริ่มต้น
+        \item \textit{Confirmation Gating ($T^2$ $\chi^2_{0.001}$):} ยืนยันการเปลี่ยนแปลงเชิงโครงสร้างอย่างถาวรล่วงหน้า \textbf{96.67 ชั่วโมง (4.03 วัน)} โดยปราศจากการแจ้งเตือนหลอก (Zero False Alarms)
+    \end{itemize}
+    \item \textbf{การตรวจวินิจฉัยและระบุชิ้นส่วนที่ชำรุดในระดับปฏิบัติการ (Root Cause Isolation \& Industrial Deployment):} การตรวจจับความผิดปกติไม่เพียงแต่ตอบว่าเกิดเหตุผิดปกติหรือไม่ แต่ยังสามารถชี้ชัดสาเหตุที่แท้จริงได้:
+    \begin{itemize}[leftmargin=1.2em, itemsep=1.0pt, topsep=1.0pt]
+        \item \textit{Root Cause Isolation:} การแยกคำนวณ Residual Error รายเซนเซอร์ระบุได้ชัดเจนว่าตลับลูกปืนหมายเลข 1 เป็นต้นตอของความเสียหาย (ครองสัดส่วน $>85\%$ ของ Error รวม)
+        \item \textit{Condition Number Check:} ตรวจสอบค่า $\kappa(\mathbf{\Sigma}) < 1000$ เสมอก่อนคำนวณอินเวอร์สเพื่อป้องกัน Matrix Singularity
+        \item \textit{Sensor Fault Tolerance:} เฝ้าระวังสัญญาณเซนเซอร์ขาดหรือหลุด เพื่อแยกแยะความผิดปกติของอุปกรณ์วัดออกจากความล้มเหลวเชิงกลไกจริง
+    \end{itemize}
 \end{enumerate}
 
-\vspace{4pt}
-\begin{summarybox}[Checklist สำหรับการนำระบบ Anomaly Detection ไปใช้งานจริงในภาคอุตสาหกรรม]
-\small
-\begin{itemize}[leftmargin=1.5em, itemsep=1.5pt]
-    \item[$\square$] \textbf{Baseline Validation:} ตรวจสอบว่าช่วงเวลาฝึกฝนเป็นสภาวะปกติจริง ปราศจากการปนเปื้อนของสัญญาณผิดปกติ
-    \item[$\square$] \textbf{Condition Number Check:} ตรวจสอบค่า $\kappa(\mathbf{\Sigma}) < 1000$ เพื่อป้องกันปัญหา Matrix Singularity
-    \item[$\square$] \textbf{Dual Gating Thresholds:} ติดตั้งระบบแจ้งเตือน 2 ระดับ: MAE 105\% สำหรับระดับเฝ้าระวัง (Warning) และ $T^2$ $\chi^2_{0.001}$ สำหรับระดับหยุดเดินเครื่อง (Trip / Emergency Shutdown)
-    \item[$\square$] \textbf{Sensor Health Monitoring:} เฝ้าระวังเซนเซอร์ขาด/หลุด เพื่อแยกแยะความผิดปกติของตัววัดออกจากความผิดปกติของเครื่องจักร
-\end{itemize}
-\end{summarybox}
+\vspace{0.8em}
+\hrule
+\vspace{0.8em}
 
+% =========================================================================
+% APPENDIX
+% =========================================================================
 \clearpage
-% =========================================================================
-% PAGE 14+: APPENDIX: FULL JUPYTER NOTEBOOK CODE & OUTPUT
-% =========================================================================
+\appendix
+\raggedbottom
 \section*{Appendix: Full Jupyter Notebook Code \& Output}
-\vspace{-0.5em}
-{\footnotesize \textbf{Jupyter Notebook:} \codevar{67\_1003\_1027\_1042\_1045\_1067.ipynb} \quad | \quad \textbf{Course:} CPE 342 Machine Learning}
-\vspace{6pt}
+
+รายละเอียดต่อไปนี้คือโค้ด Python ที่ใช้แก้ปัญหาและวิเคราะห์แบบจำลอง Multivariate Mahalanobis Distance (MHD) และ Latent-Variable PCA Anomaly Detection บนชุดข้อมูล Diamonds และ NASA IMS Bearing Telemetry พร้อมผลลัพธ์และกราฟทั้งหมด ซึ่งได้รันจริงจาก Jupyter Notebook (\texttt{[Lab] Anomaly Detection.ipynb} หรือ \texttt{67\_1003\_1027\_1042\_1045\_1067.ipynb})
 
 \selectlanguage{english}
 \input{notebook_appendix_9.tex}

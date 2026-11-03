@@ -1,5 +1,5 @@
-\begin{tcolorbox}[colback=blue!5!white,colframe=headerblue,arc=3pt,boxrule=0.8pt,halign=left,before upper={\sloppy\raggedright},title=\textbf{Jupyter Notebook Execution Artifact: \texttt{67\_1003\_1027\_1042\_1045\_1067.ipynb}}]
-{\small This appendix contains the complete, unabridged execution transcript of the experimental Jupyter Notebook for Assignment 9 (\textit{Multivariate Mahalanobis Distance \& Latent-Variable Anomaly Detection}). All analytical narratives, mathematical formulations, executable Python code, empirical printouts, and publication-grade diagnostic plots are transcribed below in English in exact notebook sequence.}
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,halign=left,before upper={\sloppy\raggedright},title=\textbf{Jupyter Notebook: [Lab] Anomaly Detection.ipynb\\ (ไฟล์ส่งงานหลัก: 67\_1003\_1027\_1042\_1045\_1067.ipynb)}]
+โค้ด ผลลัพธ์ และการพล็อตภาพทั้งหมดด้านล่างเป็นการรันจริงจาก Jupyter Notebook
 \end{tcolorbox}
 \vspace{0.4em}
 \vspace{0.3em}
@@ -271,12 +271,12 @@ Log-transformed Skewness: log_carat = 0.0961, log_price = 0.1153
 \end{lstlisting}
 \vspace{0.3em}
 \begin{center}
-\includegraphics[width=0.96\linewidth,height=0.36\textheight,keepaspectratio]{plot_1_diamond_distributions_skewness.pdf}
+\includegraphics[width=0.98\linewidth]{plot_1_diamond_distributions_skewness.pdf}
 \end{center}
 \vspace{0.2em}
 \vspace{0.4em}
 \needspace{6\baselineskip}
-\begin{tcolorbox}[colback=ansbg,colframe=ansborder,boxrule=0.8pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,unbreakable,before upper={\sloppy\raggedright},title=\textbf{\small Assignment Prompt: Question 1.1}]
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!60!black,boxrule=0.8pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,unbreakable,before upper={\sloppy\raggedright},title=\textbf{\small Assignment Prompt: Question 1.1}]
 \textbf{Question 1.1} - (a) Which features in the Diamond dataset exhibit substantial right-skewness? - (b) Why is log transformation necessary prior to computing Mahalanobis Distance? - (c) What is the mathematical impact of extreme skewness on the sample covariance matrix \(\mathbf{\Sigma}\) and centroid \(\boldsymbol{\mu}\)?
 \end{tcolorbox}
 \vspace{0.3em}
@@ -434,12 +434,12 @@ Chi-Square Critical Value (df=3, alpha=0.001): 16.266 -> Outliers: 446 (0.83%)
 \end{lstlisting}
 \vspace{0.3em}
 \begin{center}
-\includegraphics[width=0.96\linewidth,height=0.36\textheight,keepaspectratio]{plot_2_diamond_mhd_histogram_chi2.pdf}
+\includegraphics[width=0.98\linewidth]{plot_2_diamond_mhd_histogram_chi2.pdf}
 \end{center}
 \vspace{0.2em}
 \vspace{0.4em}
 \needspace{6\baselineskip}
-\begin{tcolorbox}[colback=ansbg,colframe=ansborder,boxrule=0.8pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,unbreakable,before upper={\sloppy\raggedright},title=\textbf{\small Assignment Prompt: Question 1.2}]
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!60!black,boxrule=0.8pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,unbreakable,before upper={\sloppy\raggedright},title=\textbf{\small Assignment Prompt: Question 1.2}]
 \textbf{Question 1.2} - (a) How many outliers are identified at \(\alpha = 0.01\) and \(\alpha = 0.001\)? - (b) What are the characteristic anomalies found among the top outliers? - (c) Explain why the empirical outlier rate (2.00\%) exceeds the theoretical \(\alpha\) level (1.00\%).
 \end{tcolorbox}
 \vspace{0.3em}
@@ -568,7 +568,7 @@ plt.show()
 \end{lstlisting}
 \vspace{0.3em}
 \begin{center}
-\includegraphics[width=0.96\linewidth,height=0.36\textheight,keepaspectratio]{plot_3_diamond_bivariate_ellipses.pdf}
+\includegraphics[width=0.98\linewidth]{plot_3_diamond_bivariate_ellipses.pdf}
 \end{center}
 \vspace{0.2em}
 \vspace{0.8em}
@@ -669,7 +669,7 @@ plt.show()
 \end{lstlisting}
 \vspace{0.3em}
 \begin{center}
-\includegraphics[width=0.96\linewidth,height=0.36\textheight,keepaspectratio]{plot_4_bearing_raw_sensor_timeseries.pdf}
+\includegraphics[width=0.98\linewidth]{plot_4_bearing_raw_sensor_timeseries.pdf}
 \end{center}
 \vspace{0.2em}
 \vspace{0.3em}
@@ -792,7 +792,7 @@ plt.show()
 \end{lstlisting}
 \vspace{0.3em}
 \begin{center}
-\includegraphics[width=0.96\linewidth,height=0.36\textheight,keepaspectratio]{plot_5_bearing_pca_variance_loadings.pdf}
+\includegraphics[width=0.98\linewidth]{plot_5_bearing_pca_variance_loadings.pdf}
 \end{center}
 \vspace{0.2em}
 \vspace{0.5em}
@@ -853,7 +853,7 @@ First T^2 Anomaly Timestamp: 2004-02-15 05:42:39
 \end{lstlisting}
 \vspace{0.3em}
 \begin{center}
-\includegraphics[width=0.96\linewidth,height=0.36\textheight,keepaspectratio]{plot_6_bearing_mhd_latent_scores.pdf}
+\includegraphics[width=0.98\linewidth]{plot_6_bearing_mhd_latent_scores.pdf}
 \end{center}
 \vspace{0.2em}
 \vspace{0.5em}
@@ -923,12 +923,12 @@ Threshold 110% (1.2909) -> First Alarm: 2004-02-14 07:52:39
 \end{lstlisting}
 \vspace{0.3em}
 \begin{center}
-\includegraphics[width=0.96\linewidth,height=0.36\textheight,keepaspectratio]{plot_7_bearing_reconstruction_mae_timeseries.pdf}
+\includegraphics[width=0.98\linewidth]{plot_7_bearing_reconstruction_mae_timeseries.pdf}
 \end{center}
 \vspace{0.2em}
 \vspace{0.4em}
 \needspace{6\baselineskip}
-\begin{tcolorbox}[colback=ansbg,colframe=ansborder,boxrule=0.8pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,unbreakable,before upper={\sloppy\raggedright},title=\textbf{\small Assignment Prompt: Question 2.1}]
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!60!black,boxrule=0.8pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,unbreakable,before upper={\sloppy\raggedright},title=\textbf{\small Assignment Prompt: Question 2.1}]
 \textbf{Question 2.1} - (a) How much total variance is captured by \(k=2\) principal components in the training baseline? - (b) Which bearing features have the strongest loadings on PC1 and PC2? - (c) At what timestamp does Hotelling's \(T^2\) first signal an anomalous condition?
 \end{tcolorbox}
 \vspace{0.3em}
@@ -984,7 +984,7 @@ Threshold 110% (1.2909) -> First Alarm: 2004-02-14 07:52:39
 \vspace{0.3em}
 \vspace{0.4em}
 \needspace{6\baselineskip}
-\begin{tcolorbox}[colback=ansbg,colframe=ansborder,boxrule=0.8pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,unbreakable,before upper={\sloppy\raggedright},title=\textbf{\small Assignment Prompt: Question 2.2}]
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!60!black,boxrule=0.8pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,unbreakable,before upper={\sloppy\raggedright},title=\textbf{\small Assignment Prompt: Question 2.2}]
 \textbf{Question 2.2} - (a) Compare the early warning lead times of Latent \(T^2\) versus Reconstruction MAE (105\% and 110\%). - (b) Which specific bearing experienced mechanical failure, and how does the vibration telemetry corroborate this? - (c) Explain the complementary physical roles of Latent Subspace (\(T^2\)) and Residual Subspace (MAE) in predictive maintenance.
 \end{tcolorbox}
 \vspace{0.3em}
@@ -1074,7 +1074,7 @@ plt.show()
 \end{lstlisting}
 \vspace{0.3em}
 \begin{center}
-\includegraphics[width=0.96\linewidth,height=0.36\textheight,keepaspectratio]{plot_8_anomaly_detection_comparative_summary.pdf}
+\includegraphics[width=0.98\linewidth]{plot_8_anomaly_detection_comparative_summary.pdf}
 \end{center}
 \vspace{0.2em}
 \vspace{0.3em}
@@ -1134,7 +1134,7 @@ Comprehensive Predictive Maintenance Benchmark Summary:
 \end{lstlisting}
 \vspace{0.4em}
 \needspace{5\baselineskip}
-\begin{tcolorbox}[colback=headerblue!5!white,colframe=headerblue,boxrule=0.8pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,breakable,before upper={\sloppy\raggedright},title=\textbf{\small Domain Synthesis \& Practical Maintenance Takeaways}]
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,boxrule=0.8pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,breakable,before upper={\sloppy\raggedright},title=\textbf{\small Domain Synthesis \& Practical Maintenance Takeaways}]
 \subsubsection{Domain Synthesis \& Practical Maintenance Takeaways}
 
 \begin{enumerate}
