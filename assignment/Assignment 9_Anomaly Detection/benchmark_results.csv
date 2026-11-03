@@ -1,0 +1,25 @@
+Domain,Metric,Value
+Part I: Diamond Outliers,Total Samples (N),"53,940"
+Part I: Diamond Outliers,Analyzed Features (p),"carat, depth, price (p=3)"
+Part I: Diamond Outliers,Pre-Transform Skewness,"carat: +1.117, depth: -0.082, price: +1.618"
+Part I: Diamond Outliers,Post-Log Skewness,"ln(carat): +0.096, depth: -0.082, ln(price): +0.115"
+Part I: Diamond Outliers,Covariance Condition Number,119.38
+Part I: Diamond Outliers,"Chi2 Cutoff (alpha=0.01, df=3)",11.3449
+Part I: Diamond Outliers,Outliers at alpha=0.01 (1%),1079 (2.00%)
+Part I: Diamond Outliers,"Chi2 Cutoff (alpha=0.001, df=3)",16.2662
+Part I: Diamond Outliers,Outliers at alpha=0.001 (0.1%),446 (0.83%)
+Part II: Bearing Vibration,Total Observations,984 timesteps (10-min cadence)
+Part II: Bearing Vibration,Train / Test Observations,"Train: 222 (Nominal), Test: 759 (Run-to-failure)"
+Part II: Bearing Vibration,PCA Retained Variance (2 PCs),"PC1: 49.86%, PC2: 19.51%, Total: 69.37%"
+Part II: Bearing Vibration,"Latent MHD Threshold (df=2, a=0.001)",13.8155
+Part II: Bearing Vibration,Latent MHD Failure Onset,2004-02-15 04:52:39
+Part II: Bearing Vibration,Max Train MAE,1.55557
+Part II: Bearing Vibration,Reconstruction Threshold (105%),1.63335
+Part II: Bearing Vibration,MAE 105% Failure Onset,2004-02-14 19:52:39
+Part II: Bearing Vibration,Reconstruction Threshold (110%),1.71113
+Part II: Bearing Vibration,MAE 110% Failure Onset,2004-02-15 07:22:39
+Part II: Bearing Vibration,Catastrophic Failure Peak,2004-02-19 05:42:39 (MAE=129.88)
+Part II: Bearing Vibration,Warning Lead Time (MAE 105%),105.8 hours (~4.4 days)
+Part II: Bearing Vibration,Warning Lead Time (MAE 110%),94.3 hours (~3.9 days)
+Part II: Bearing Vibration,Warning Lead Time (Latent MHD),96.8 hours (~4.0 days)
+Part II: Bearing Vibration,Latent vs. Residual Spearman rho,0.9127

@@ -66,14 +66,26 @@ cpe342-machine-learning-2026/
 │   │   ├── benchmark_results.csv & .json      # PCA spectral benchmarks and PVE metrics
 │   │   └── plot_1_*.pdf to plot_7_*.pdf       # Publication-grade vector figures
 │   │
-│   └── Assignment 8_Clustering_Basics/
+│   ├── Assignment 8_Clustering_Basics/
+│   │   ├── 67_1003_1027_1042_1045_1067.ipynb # Official course submission notebook
+│   │   ├── [Lab] Clustering Basics.ipynb      # Original assignment template
+│   │   ├── clustering-basics.xlsx             # Course dataset (4 synthetic sheets + Wine)
+│   │   ├── CPE342_Assignment 8_main.tex       # LaTeX source report
+│   │   ├── CPE342_Assignment 8_main.pdf       # Publication-grade academic report (39 pages)
+│   │   ├── notebook_appendix_8.tex            # LaTeX appendix with executed notebook cells
+│   │   ├── benchmark_results.csv & .json      # Clustering metrics across geometries & Wine
+│   │   └── plot_1_*.pdf to plot_8_*.pdf       # Publication-grade vector figures
+│   │
+│   └── Assignment 9_Anomaly Detection/
 │       ├── 67_1003_1027_1042_1045_1067.ipynb # Official course submission notebook
-│       ├── [Lab] Clustering Basics.ipynb      # Original assignment template
-│       ├── clustering-basics.xlsx             # Course dataset (4 synthetic sheets + Wine)
-│       ├── CPE342_Assignment 8_main.tex       # LaTeX source report
-│       ├── CPE342_Assignment 8_main.pdf       # Publication-grade academic report (39 pages)
-│       ├── notebook_appendix_8.tex            # LaTeX appendix with executed notebook cells
-│       ├── benchmark_results.csv & .json      # Clustering metrics across geometries & Wine
+│       ├── 67_1003_1027_1042_1045_1067.pdf   # Exported notebook PDF report (27 pages)
+│       ├── [Lab] Anomaly Detection.ipynb      # Original assignment template
+│       ├── anomaly-detection.xlsx             # Course dataset (Diamond sheet)
+│       ├── BearingTest.csv                    # NASA IMS bearing vibration telemetry
+│       ├── CPE342_Assignment 9_main.tex       # LaTeX source report
+│       ├── CPE342_Assignment 9_main.pdf       # Publication-grade academic report (45 pages)
+│       ├── notebook_appendix_9.tex            # LaTeX appendix with executed notebook cells
+│       ├── benchmark_results.csv & .json      # Anomaly detection cutoffs and prognostic metrics
 │       └── plot_1_*.pdf to plot_8_*.pdf       # Publication-grade vector figures
 ├── lecture/                                   # Lecture slides and demo notebooks
 │   ├── Lecture 1–12 PDFs                      # Course slide decks
@@ -271,6 +283,40 @@ cpe342-machine-learning-2026/
   * [`CPE342_Assignment 8_main.pdf`](./assignment/Assignment%208_Clustering_Basics/CPE342_Assignment%208_main.pdf) (Publication-Grade Academic Report, 39 pages)
   * [`benchmark_results.csv`](./assignment/Assignment%208_Clustering_Basics/benchmark_results.csv) & [`benchmark_results.json`](./assignment/Assignment%208_Clustering_Basics/benchmark_results.json)
   * [`plot_1_dataset1_kmeans_elbow_silhouette.pdf`](./assignment/Assignment%208_Clustering_Basics/plot_1_dataset1_kmeans_elbow_silhouette.pdf) to [`plot_8_wine_cluster_biplot_radar_profiling.pdf`](./assignment/Assignment%208_Clustering_Basics/plot_8_wine_cluster_biplot_radar_profiling.pdf) (8 High-Resolution Vector Figures)
+
+---
+
+### [Assignment 9: Anomaly Detection (Statistical MHD & Latent PCA Diagnostics)](./assignment/Assignment%209_Anomaly%20Detection/)
+* **Topic:** Multivariate Outlier Detection using Mahalanobis Distance (MHD), Covariance Matrix Inversion, Theoretical Chi-Square ($\chi^2$) Hypothesis Testing, and Latent-Variable Dimensionality Reduction via Principal Component Analysis (PCA) for Industrial Prognostics and Health Management (PHM).
+* **Key Tasks:**
+  * **Part I: Mahalanobis Distance for Multivariate Outlier Detection (Diamond Dataset, $N = 53,940$):**
+    * Mathematical definition and vectorized implementation of `MHD(x, mu, cov_mat, return_squared=False)`.
+    * Statistical skewness audit across `carat` (+1.117), `depth` (-0.082), and `price` (+1.618).
+    * Natural logarithmic normalization $\ln(\text{carat})$ and $\ln(\text{price})$ to stabilize variance and restore multivariate normality ($\text{skewness} < 0.12$).
+    * Centroid vector $\boldsymbol{\mu}$ and sample covariance matrix $\boldsymbol{\Sigma}$ estimation ($\text{condition number} = 119.38 \ll 10^{12}$).
+    * Calculation of squared Mahalanobis distance $D_M^2(\mathbf{x}) \sim \chi^2(3)$ with empirical mean $2.9999$ matching theoretical expectation $3.000$.
+    * Statistical gating thresholds:
+      * **1% Threshold ($\alpha = 0.01, \chi^2_{0.01}(3) = 11.3449$):** Identifies **1,079 outlier diamonds** (2.00%).
+      * **0.1% Threshold ($\alpha = 0.001, \chi^2_{0.001}(3) = 16.2662$):** Identifies **446 outlier diamonds** (0.83%).
+    * In-depth profiling of extreme anomalies: shallow/steep depth outliers ($\text{depth} = 43.0\%$ or $79.0\%$) and severe price-carat mismatches.
+  * **Part II: Latent-Variable Anomaly Detection (NASA IMS Bearing Vibration Telemetry, $N = 984$ timesteps):**
+    * Chronological train/test temporal partition: healthy baseline period (222 timesteps) vs operational degradation to failure (759 timesteps).
+    * Zero-leakage standardization using `StandardScaler` fitted strictly on healthy baseline data.
+    * 2-component PCA latent subspace construction retaining **69.37%** cumulative variance ($\text{PC}_1 = 49.86\%, \text{PC}_2 = 19.51\%$).
+    * **Method 1 (Latent Space Hotelling's $T^2$ Statistic, $\text{df} = 2$):** Critical cutoff $\chi^2_{0.001}(2) = 13.8155$ flags incipient failure onset at **2004-02-15 04:52:39** ($D_M^2 = 18.06$).
+    * **Method 2 (Residual Space Reconstruction Error MAE / SPE):** Maximum baseline training $\text{MAE} = 1.55557$.
+      * **105% Threshold ($1.63335$):** Flags initial anomaly at **2004-02-14 19:52:39** ($\text{MAE} = 1.6375$), yielding **105.8 hours (~4.4 days)** of early warning lead time.
+      * **110% Threshold ($1.71113$):** Flags sustained degradation at **2004-02-15 07:22:39** ($\text{MAE} = 1.8315$), yielding **94.3 hours (~3.9 days)** of early warning lead time before catastrophic breakdown on February 19, 2004.
+    * Comparative reliability analysis demonstrating strong monotonic concordance (Spearman $\rho = 0.8122$) between model-space $T^2$ and residual-space SPE/MAE.
+* **Deliverables:**
+  * [`67_1003_1027_1042_1045_1067.ipynb`](./assignment/Assignment%209_Anomaly%20Detection/67_1003_1027_1042_1045_1067.ipynb) (Official Course Submission Notebook)
+  * [`67_1003_1027_1042_1045_1067.pdf`](./assignment/Assignment%209_Anomaly%20Detection/67_1003_1027_1042_1045_1067.pdf) (Exported Notebook PDF Report, 27 pages)
+  * [`[Lab] Anomaly Detection.ipynb`](./assignment/Assignment%209_Anomaly%20Detection/[Lab]%20Anomaly%20Detection.ipynb) (Completed Assignment Template)
+  * [`anomaly-detection.xlsx`](./assignment/Assignment%209_Anomaly%20Detection/anomaly-detection.xlsx) & [`BearingTest.csv`](./assignment/Assignment%209_Anomaly%20Detection/BearingTest.csv) (Course Datasets)
+  * [`CPE342_Assignment 9_main.pdf`](./assignment/Assignment%209_Anomaly%20Detection/CPE342_Assignment%209_main.pdf) (Publication-Grade Academic LaTeX Report, 45 pages)
+  * [`CPE342_Assignment 9_main.tex`](./assignment/Assignment%209_Anomaly%20Detection/CPE342_Assignment%209_main.tex) & [`notebook_appendix_9.tex`](./assignment/Assignment%209_Anomaly%20Detection/notebook_appendix_9.tex)
+  * [`benchmark_results.csv`](./assignment/Assignment%209_Anomaly%20Detection/benchmark_results.csv) & [`benchmark_results.json`](./assignment/Assignment%209_Anomaly%20Detection/benchmark_results.json)
+  * [`plot_1_diamond_distributions_skewness.pdf`](./assignment/Assignment%209_Anomaly%20Detection/plot_1_diamond_distributions_skewness.pdf) to [`plot_8_anomaly_detection_comparative_summary.pdf`](./assignment/Assignment%209_Anomaly%20Detection/plot_8_anomaly_detection_comparative_summary.pdf) (8 High-Resolution Vector Figures)
 
 ---
 

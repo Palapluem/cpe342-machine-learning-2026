@@ -37,6 +37,12 @@ This document serves as the authoritative, comprehensive Workspace Rules and Sys
     - `67070501042` วิศิษฐ์ สุวรรณเนาว์ (Wisit Suwannao)
     - `67070501045` ศุภวิชญ์ มารยาท (Supawit Marayat)
     - `67070501067` พลวริษฐ์ วัฒนเหมรัตน์ (Polwarit Watthanahemmarat)
+  - **Assignment 9 (Anomaly Detection):** 5 Group Members
+    - `67070501003` กันต์ธีร์ ดวงมณี (Guntee Doungmanee)
+    - `67070501027` นัธทวัฒน์ ปริมสิริคุณาวุฒิ (Natthawat Primsirikunawut)
+    - `67070501042` วิศิษฐ์ สุวรรณเนาว์ (Wisit Suwannao)
+    - `67070501045` ศุภวิชญ์ มารยาท (Supawit Marayat)
+    - `67070501067` พลวริษฐ์ วัฒนเหมรัตน์ (Polwarit Watthanahemmarat)
   - **Term Project (Karena Player Intelligence System):**
     - **Team Identifier:** Strictly use **`Team: ML004`** across all Term Project notebooks (`project/task1..5/*.ipynb`, `project/merge_submission.ipynb`) and `project/README.md` (do not list individual student names/IDs in Term Project headers).
     - **Primary Module Ownership:** **Task 3 (`project/task3/task3_monthly_spending.ipynb`)** is the primary focus module in this workspace, developed in parallel with the central team repository (`https://github.com/beambeambeam/ml00x` on branch `task3`).
@@ -218,5 +224,6 @@ This document serves as the authoritative, comprehensive Workspace Rules and Sys
 | **Assignment 6** | Convolutional Neural Networks | Dogs vs. Cats ($N=25,000$) | MobileNetV2, Inverted Residuals, Two-Phase Fine-Tuning, Real-Time Streaming |
 | **Assignment 7** | Dimensionality Reduction (PCA) | MTCARS ($N=32, p=11$) \& Synthetic 2D ($N=12$) | Linear PCA, Spectral Decomposition, Standardization vs Covariance, Scree / PVE ($\ge 90\%$), 2D Biplot |
 | **Assignment 8** | Clustering Basics & PCA Subspace | Synthetic 2D Geometries ($N=600\text{--}800$) \& Wine ($N=178, p=13$) | K-Means (Lloyd's Alg, Voronoi Tessellation, Inertia), PCA Subspace ($r=5$ PCs, $80.16\%$ PVE), Silhouette, CH, DB, Hopkins |
+| **Assignment 9** | Anomaly Detection (MHD & Latent PCA) | Diamond ($N=53,940$) \& Bearing Vibration ($N=984$) | Mahalanobis Distance, $\chi^2$ Distribution Gating, Latent PC Scores ($T^2$), Reconstruction Error (MAE / SPE / $Q$-statistic), Prognostics Early Warning |
 | **Term Project** | End-to-End Player Intelligence & LTV System | Karena Gaming Ecosystem (5 Tasks: Tabular Telemetry, Gameplay Screenshots, Multi-Period Logs) | Anti-Cheat Pre-Filter ($F_2$), Segment Classification ($F_1$), Monthly Spending (NMAE), Screenshot Classifier (Macro $F_1$), Account Anomaly Detector ($F_3$) |
 
