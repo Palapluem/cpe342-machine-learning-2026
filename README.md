@@ -77,16 +77,15 @@ cpe342-machine-learning-2026/
 │   │   └── plot_1_*.pdf to plot_8_*.pdf       # Publication-grade vector figures
 │   │
 │   └── Assignment 9_Anomaly Detection/
-│       ├── 67_1003_1027_1042_1045_1067.ipynb # Official course submission notebook
-│       ├── 67_1003_1027_1042_1045_1067.pdf   # Exported notebook PDF report (27 pages)
+│       ├── 67_1003_1027_1042_1045_1067.ipynb # Official course submission notebook (MHD & Latent PCA)
 │       ├── [Lab] Anomaly Detection.ipynb      # Original assignment template
-│       ├── anomaly-detection.xlsx             # Course dataset (Diamond sheet)
-│       ├── BearingTest.csv                    # NASA IMS bearing vibration telemetry
+│       ├── anomaly-detection.xlsx             # Course dataset (Diamond sheet, N=53,940)
+│       ├── BearingTest.csv                    # NASA IMS Bearing vibration telemetry (N=984)
 │       ├── CPE342_Assignment 9_main.tex       # LaTeX source report
-│       ├── CPE342_Assignment 9_main.pdf       # Publication-grade academic report (45 pages)
+│       ├── CPE342_Assignment 9_main.pdf       # Publication-grade academic report (35 pages)
 │       ├── notebook_appendix_9.tex            # LaTeX appendix with executed notebook cells
-│       ├── benchmark_results.csv & .json      # Anomaly detection cutoffs and prognostic metrics
-│       └── plot_1_*.pdf to plot_8_*.pdf       # Publication-grade vector figures
+│       ├── benchmark_results.csv & .json      # Outlier counts, critical values, and lead time metrics
+│       └── plot_1_*.pdf to plot_8_*.pdf       # Publication-grade vector figures (Sarabun typography)
 ├── lecture/                                   # Lecture slides and demo notebooks
 │   ├── Lecture 1–12 PDFs                      # Course slide decks
 │   ├── ML_2_Training_Models.ipynb             # Demo: Gradient Descent & Linear Regression
@@ -310,10 +309,9 @@ cpe342-machine-learning-2026/
     * Comparative reliability analysis demonstrating strong monotonic concordance (Spearman $\rho = 0.8122$) between model-space $T^2$ and residual-space SPE/MAE.
 * **Deliverables:**
   * [`67_1003_1027_1042_1045_1067.ipynb`](./assignment/Assignment%209_Anomaly%20Detection/67_1003_1027_1042_1045_1067.ipynb) (Official Course Submission Notebook)
-  * [`67_1003_1027_1042_1045_1067.pdf`](./assignment/Assignment%209_Anomaly%20Detection/67_1003_1027_1042_1045_1067.pdf) (Exported Notebook PDF Report, 27 pages)
   * [`[Lab] Anomaly Detection.ipynb`](./assignment/Assignment%209_Anomaly%20Detection/[Lab]%20Anomaly%20Detection.ipynb) (Completed Assignment Template)
   * [`anomaly-detection.xlsx`](./assignment/Assignment%209_Anomaly%20Detection/anomaly-detection.xlsx) & [`BearingTest.csv`](./assignment/Assignment%209_Anomaly%20Detection/BearingTest.csv) (Course Datasets)
-  * [`CPE342_Assignment 9_main.pdf`](./assignment/Assignment%209_Anomaly%20Detection/CPE342_Assignment%209_main.pdf) (Publication-Grade Academic LaTeX Report, 45 pages)
+  * [`CPE342_Assignment 9_main.pdf`](./assignment/Assignment%209_Anomaly%20Detection/CPE342_Assignment%209_main.pdf) (Publication-Grade Academic LaTeX Report, 35 pages)
   * [`CPE342_Assignment 9_main.tex`](./assignment/Assignment%209_Anomaly%20Detection/CPE342_Assignment%209_main.tex) & [`notebook_appendix_9.tex`](./assignment/Assignment%209_Anomaly%20Detection/notebook_appendix_9.tex)
   * [`benchmark_results.csv`](./assignment/Assignment%209_Anomaly%20Detection/benchmark_results.csv) & [`benchmark_results.json`](./assignment/Assignment%209_Anomaly%20Detection/benchmark_results.json)
   * [`plot_1_diamond_distributions_skewness.pdf`](./assignment/Assignment%209_Anomaly%20Detection/plot_1_diamond_distributions_skewness.pdf) to [`plot_8_anomaly_detection_comparative_summary.pdf`](./assignment/Assignment%209_Anomaly%20Detection/plot_8_anomaly_detection_comparative_summary.pdf) (8 High-Resolution Vector Figures)

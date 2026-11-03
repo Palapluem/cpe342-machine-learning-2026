@@ -14,73 +14,58 @@ warnings.filterwarnings("ignore")
 warnings.simplefilter(action="ignore", category=UserWarning)
 warnings.simplefilter(action="ignore", category=FutureWarning)
 
+import os
+import numpy as np
+import pandas as pd
+from scipy import stats
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+from matplotlib.patches import Ellipse
+import matplotlib.transforms as transforms
+
 plt.style.use('seaborn-v0_8-muted')
 plt.rcParams['figure.figsize'] = (8, 8)
 plt.rcParams['grid.linestyle'] = ':'
 plt.rcParams['axes.grid'] = False
-
-import seaborn as sns
-sns.set_style("whitegrid", {'axes.grid': False})
-
-%config InlineBackend.figure_formats = {'png', 'retina'}
-
-from IPython.core.interactiveshell import InteractiveShell
-InteractiveShell.ast_node_interactivity = "all"
-
-import os
-from pathlib import Path
-import numpy as np
-import pandas as pd
-import scipy as sp
-from scipy import stats
-import statsmodels as sm
-import sklearn as sk
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
-
-print('Numpy version', np.__version__)
-print('Pandas version', pd.__version__)
-print('Seaborn version', sns.__version__)
-print('Scipy version', sp.__version__)
-print('Sklearn version', sk.__version__)
-\end{lstlisting}
-\vspace{0.2em}
-\noindent\textbf{\small [Out 1]:}
-\begin{lstlisting}[style=output]
-Numpy version 2.4.6
-Pandas version 2.3.3
-Seaborn version 0.13.2
-Scipy version 1.17.1
-Sklearn version 1.9.1
 \end{lstlisting}
 \vspace{0.4em}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 2]:}
 \begin{lstlisting}[style=pycode]
-import matplotlib.font_manager as fm
+# Configure Sarabun Typography and Vector Embedding
+font_candidates = [
+    '/Users/wisitsuwannao/Library/Fonts/Sarabun-Regular.ttf',
+    '/Library/Fonts/Sarabun-Regular.ttf',
+    '/System/Library/Fonts/Supplemental/Sarabun-Regular.ttf'
+]
+sarabun_loaded = False
+for font_path in font_candidates:
+    if os.path.exists(font_path):
+        fm.fontManager.addfont(font_path)
+        sarabun_loaded = True
+        break
 
-font_paths = ['/Users/wisitsuwannao/Library/Fonts/Sarabun-Regular.ttf',
-              '/Users/wisitsuwannao/Library/Fonts/Sarabun-Bold.ttf',
-              '/Users/wisitsuwannao/Library/Fonts/Sarabun-Italic.ttf',
-              '/Users/wisitsuwannao/Library/Fonts/Sarabun-BoldItalic.ttf']
-for p in font_paths:
-    if os.path.exists(p):
-        fm.fontManager.addfont(p)
+if sarabun_loaded:
+    plt.rcParams['font.family'] = 'Sarabun'
+else:
+    plt.rcParams['font.family'] = 'sans-serif'
 
-font_size = 13
-params = {'legend.fontsize': 'large',
-          'figure.figsize': (5, 4),
-          'axes.labelsize': font_size,
-          'axes.titlesize': font_size,
-          'xtick.labelsize': font_size * 0.8,
-          'ytick.labelsize': font_size * 0.8,
-          'axes.titlepad': 25,
-          'font.family': 'Sarabun',
-          'font.sans-serif': ['Sarabun', 'TH Sarabun New', 'DejaVu Sans'],
-          'pdf.fonttype': 42,
-          'ps.fonttype': 42}
-plt.rcParams.update(params)
+plt.rcParams['font.size'] = 11
+plt.rcParams['axes.labelsize'] = 12
+plt.rcParams['axes.titlesize'] = 13
+plt.rcParams['xtick.labelsize'] = 10
+plt.rcParams['ytick.labelsize'] = 10
+plt.rcParams['legend.fontsize'] = 10
+plt.rcParams['pdf.fonttype'] = 42
+plt.rcParams['ps.fonttype'] = 42
+print(f"Typography configured: Sarabun (Active: {sarabun_loaded}), PDF FontType: 42 (CID TrueType)")
+\end{lstlisting}
+\vspace{0.2em}
+\noindent\textbf{\small [Out 2]:}
+\begin{lstlisting}[style=output]
+Typography configured: Sarabun (Active: True), PDF FontType: 42 (CID TrueType)
 \end{lstlisting}
 \vspace{0.3em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
@@ -99,10 +84,20 @@ plt.rcParams.update(params)
 \noindent\textbf{\small [In 3]:}
 \begin{lstlisting}[style=pycode]
 def mahalanobis_distance(x, mean, cov):
-    diff = x - mean
-    inv_cov = np.linalg.inv(cov)
-    mhd_sq = np.sum(np.dot(diff, inv_cov) * diff, axis=1)
-    return mhd_sq, np.sqrt(mhd_sq)
+    """
+    Computes sample-wise squared and standard Mahalanobis distance.
+    Parameters:
+        x (np.ndarray): Data matrix of shape (N, p)
+        mean (np.ndarray): Centroid vector of shape (p,)
+        cov (np.ndarray): Covariance matrix of shape (p, p)
+    Returns:
+        tuple: (mhd_squared, mhd)
+    """
+    x_diff = x - mean
+    cov_inv = np.linalg.inv(cov)
+    left_term = np.dot(x_diff, cov_inv)
+    mhd_sq = np.sum(left_term * x_diff, axis=1)
+    return mhd_sq, np.sqrt(np.maximum(0.0, mhd_sq))
 \end{lstlisting}
 \vspace{0.3em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
@@ -113,28 +108,28 @@ def mahalanobis_distance(x, mean, cov):
 \noindent\textbf{\small [In 4]:}
 \begin{lstlisting}[style=pycode]
 candidates = [
-    Path('anomaly-detection.xlsx'),
-    Path('data/anomaly-detection.xlsx'),
-    Path('assignment/Assignment 9_Anomaly Detection/anomaly-detection.xlsx'),
-    Path('../anomaly-detection.xlsx'),
-    Path.cwd() / 'anomaly-detection.xlsx',
-    Path.cwd() / 'assignment/Assignment 9_Anomaly Detection/anomaly-detection.xlsx',
+    'anomaly-detection.xlsx',
+    'assignment/Assignment 9_Anomaly Detection/anomaly-detection.xlsx',
+    '../assignment/Assignment 9_Anomaly Detection/anomaly-detection.xlsx',
+    '/Users/wisitsuwannao/Documents/Workspace/cpe342-machine-learning-2026/assignment/Assignment 9_Anomaly Detection/anomaly-detection.xlsx'
 ]
-EXCEL_PATH = next((str(p) for p in candidates if p.is_file()), 'anomaly-detection.xlsx')
+diamond_path = next((p for p in candidates if os.path.exists(p)), None)
+if diamond_path is None:
+    raise FileNotFoundError("Could not find anomaly-detection.xlsx")
 
-xl = pd.ExcelFile(EXCEL_PATH)
-df_diamond = xl.parse('Diamond')
-
-print(f"Diamond Dataset Shape: {df_diamond.shape}")
+df_diamond = pd.read_excel(diamond_path, sheet_name='Diamond')
+print(f"Diamond Dataset successfully loaded from: {diamond_path}")
+print(f"Dataset Shape: {df_diamond.shape[0]:,} rows, {df_diamond.shape[1]} columns")
 print("\nFirst 5 records of Diamond Dataset:")
-print(df_diamond.head())
+display(df_diamond.head())
 print("\nSummary Statistics of Diamond Dataset:")
-print(df_diamond.describe().round(3))
+display(df_diamond.describe().round(3))
 \end{lstlisting}
 \vspace{0.2em}
 \noindent\textbf{\small [Out 4]:}
 \begin{lstlisting}[style=output]
-Diamond Dataset Shape: (53940, 10)
+Diamond Dataset successfully loaded from: anomaly-detection.xlsx
+Dataset Shape: 53,940 rows, 10 columns
 
 First 5 records of Diamond Dataset:
    carat      cut color clarity  depth  table  price     x     y     z
@@ -165,112 +160,101 @@ min        0.000
 75%        4.040  
 max       31.800
 \end{lstlisting}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.96\linewidth]{plot_1_diamond_distributions_skewness.pdf}
-\caption{การตรวจสอบการกระจายตัวของฟีเจอร์เพชรและการแปลงสเกลลอการิทึมเพื่อลดความเบ้ (N = 53,940)}
-\end{figure}
 \vspace{0.3em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
-{\small\bfseries Feature distribution and skewness analysis\par}
+{\small\bfseries Check feature distributions and inspect skewness\par}
 \end{tcolorbox}
 \vspace{0.4em}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 5]:}
 \begin{lstlisting}[style=pycode]
 num_cols = ['carat', 'depth', 'table', 'price', 'x', 'y', 'z']
-skew_series = df_diamond[num_cols].skew()
-print("Skewness Coefficients across Numerical Features:")
-print(skew_series.round(4))
+skew_table = []
+for c in num_cols:
+    val = df_diamond[c].dropna()
+    sk = stats.skew(val)
+    skew_table.append({'Feature': c, 'Skewness': round(sk, 4), 'Mean': round(val.mean(), 3), 'Std': round(val.std(), 3)})
+
+df_skew = pd.DataFrame(skew_table)
+print("Empirical Skewness Audit across Diamond Features:")
+display(df_skew)
 \end{lstlisting}
 \vspace{0.2em}
 \noindent\textbf{\small [Out 5]:}
 \begin{lstlisting}[style=output]
-Skewness Coefficients across Numerical Features:
-carat    1.1166
-depth   -0.0823
-table    0.7969
-price    1.6184
-x        0.3787
-y        2.4342
-z        1.5224
-dtype: float64
+Empirical Skewness Audit across Diamond Features:
+  Feature  Skewness      Mean       Std
+0   carat    1.1166     0.798     0.474
+1   depth   -0.0823    61.749     1.433
+2   table    0.7969    57.457     2.234
+3   price    1.6184  3932.800  3989.440
+4       x    0.3787     5.731     1.122
+5       y    2.4341     5.735     1.142
+6       z    1.5224     3.539     0.706
 \end{lstlisting}
 \vspace{0.3em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
-{\small\bfseries Log-transformation to rectify positive skewness\par}
+{\small\bfseries Apply log-transformation to rectify positive skewness\par}
 \end{tcolorbox}
 \vspace{0.4em}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 6]:}
 \begin{lstlisting}[style=pycode]
 features_d = ['carat', 'depth', 'price']
-df_d_sub = df_diamond[features_d].copy()
-
-df_d_log = df_d_sub.copy()
+df_d_log = df_diamond[features_d].copy()
 df_d_log['log_carat'] = np.log(df_d_log['carat'])
 df_d_log['log_price'] = np.log(df_d_log['price'])
 
-skew_comparison = pd.DataFrame({
-    'Feature': ['carat / log_carat', 'depth', 'price / log_price'],
-    'Original Skewness': [df_d_sub['carat'].skew(), df_d_sub['depth'].skew(), df_d_sub['price'].skew()],
-    'Transformed Skewness': [df_d_log['log_carat'].skew(), df_d_log['depth'].skew(), df_d_log['log_price'].skew()]
-})
-print("Skewness Comparison Before and After Log Transformation:")
-print(skew_comparison.round(4).to_string(index=False))
+print(f"Original Skewness: carat = {stats.skew(df_d_log['carat']):.4f}, price = {stats.skew(df_d_log['price']):.4f}, depth = {stats.skew(df_d_log['depth']):.4f}")
+print(f"Log-transformed Skewness: log_carat = {stats.skew(df_d_log['log_carat']):.4f}, log_price = {stats.skew(df_d_log['log_price']):.4f}")
 
-fig, axes = plt.subplots(2, 3, figsize=(13, 6.5))
-sns.histplot(df_d_sub['carat'], kde=True, ax=axes[0, 0], color='#2563EB', bins=35)
-axes[0, 0].set_title(f"Original Carat (Skew: {df_d_sub['carat'].skew():+.2f})", fontweight='bold')
-sns.histplot(df_d_sub['depth'], kde=True, ax=axes[0, 1], color='#1E3A8A', bins=35)
-axes[0, 1].set_title(f"Original Depth (Skew: {df_d_sub['depth'].skew():+.2f})", fontweight='bold')
-sns.histplot(df_d_sub['price'], kde=True, ax=axes[0, 2], color='#EA580C', bins=35)
-axes[0, 2].set_title(f"Original Price (Skew: {df_d_sub['price'].skew():+.2f})", fontweight='bold')
+fig, axes = plt.subplots(2, 2, figsize=(11, 7))
+axes[0, 0].hist(df_diamond['carat'], bins=50, color='#3B82F6', edgecolor='white', alpha=0.85)
+axes[0, 0].set_title(f"Raw Carat (Skewness: +{stats.skew(df_diamond['carat']):.3f})", fontweight='bold')
+axes[0, 0].set_xlabel("Carat")
+axes[0, 0].set_ylabel("Frequency")
 
-sns.histplot(df_d_log['log_carat'], kde=True, ax=axes[1, 0], color='#16A34A', bins=35)
-axes[1, 0].set_title(f"Log Carat ln(carat) (Skew: {df_d_log['log_carat'].skew():+.2f})", fontweight='bold')
-sns.histplot(df_d_log['depth'], kde=True, ax=axes[1, 1], color='#1E3A8A', bins=35)
-axes[1, 1].set_title(f"Original Depth (Symmetric, Skew: {df_d_log['depth'].skew():+.2f})", fontweight='bold')
-sns.histplot(df_d_log['log_price'], kde=True, ax=axes[1, 2], color='#16A34A', bins=35)
-axes[1, 2].set_title(f"Log Price ln(price) (Skew: {df_d_log['log_price'].skew():+.2f})", fontweight='bold')
+axes[0, 1].hist(df_d_log['log_carat'], bins=50, color='#10B981', edgecolor='white', alpha=0.85)
+axes[0, 1].set_title(f"Log Carat (Skewness: {stats.skew(df_d_log['log_carat']):+.3f})", fontweight='bold')
+axes[0, 1].set_xlabel(r"$\ln(\mathrm{Carat})$")
+axes[0, 1].set_ylabel("Frequency")
 
-for ax in axes.flat:
-    ax.grid(True, linestyle=':', alpha=0.4)
+axes[1, 0].hist(df_diamond['price'], bins=50, color='#EF4444', edgecolor='white', alpha=0.85)
+axes[1, 0].set_title(f"Raw Price (Skewness: +{stats.skew(df_diamond['price']):.3f})", fontweight='bold')
+axes[1, 0].set_xlabel("Price (USD)")
+axes[1, 0].set_ylabel("Frequency")
+
+axes[1, 1].hist(df_d_log['log_price'], bins=50, color='#8B5CF6', edgecolor='white', alpha=0.85)
+axes[1, 1].set_title(f"Log Price (Skewness: {stats.skew(df_d_log['log_price']):+.3f})", fontweight='bold')
+axes[1, 1].set_xlabel(r"$\ln(\mathrm{Price})$")
+axes[1, 1].set_ylabel("Frequency")
+
 plt.tight_layout()
+plt.savefig('plot_1_diamond_distributions_skewness.pdf', bbox_inches='tight', dpi=300)
 plt.show()
 \end{lstlisting}
 \vspace{0.2em}
 \noindent\textbf{\small [Out 6]:}
 \begin{lstlisting}[style=output]
-Skewness Comparison Before and After Log Transformation:
-          Feature  Original Skewness  Transformed Skewness
-carat / log_carat             1.1166                0.0961
-            depth            -0.0823               -0.0823
-price / log_price             1.6184                0.1153
-<Axes: xlabel='carat', ylabel='Count'>
-Text(0.5, 1.0, 'Original Carat (Skew: +1.12)')
-<Axes: xlabel='depth', ylabel='Count'>
-Text(0.5, 1.0, 'Original Depth (Skew: -0.08)')
-<Axes: xlabel='price', ylabel='Count'>
-Text(0.5, 1.0, 'Original Price (Skew: +1.62)')
-<Axes: xlabel='log_carat', ylabel='Count'>
-Text(0.5, 1.0, 'Log Carat ln(carat) (Skew: +0.10)')
-<Axes: xlabel='depth', ylabel='Count'>
-Text(0.5, 1.0, 'Original Depth (Symmetric, Skew: -0.08)')
-<Axes: xlabel='log_price', ylabel='Count'>
-Text(0.5, 1.0, 'Log Price ln(price) (Skew: +0.12)')
+Original Skewness: carat = 1.1166, price = 1.6184, depth = -0.0823
+Log-transformed Skewness: log_carat = 0.0961, log_price = 0.1153
 \end{lstlisting}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.96\linewidth]{plot_1_diamond_distributions_skewness.pdf}
+\caption{การตรวจสอบการกระจายตัวของฟีเจอร์เพชรและการแปลงสเกลลอการิทึมเพื่อลดความเบ้ ($N = 53,940$)}
+\end{figure}
 \vspace{0.3em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
-{\small\bfseries Question 1.1\par}
+{\small\bfseries Question 1.1: Feature Skewness, Log Transformation, and Covariance Conditioning\par}
 \end{tcolorbox}
 \vspace{0.3em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
-{\small\bfseries Answer to Question 1.1: Feature Skewness \& Log-Transformation Analysis \newline \normalfont\footnotesize \par}
+{\small\bfseries Answer to Question 1.1: Skewness Rectification, Log Transformation, and Covariance Conditioning\par}
 \end{tcolorbox}
 \vspace{0.3em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
-{\small\bfseries Compute the covariance matrix and inverted covariance matrix\par}
+{\small\bfseries Compute empirical mean and covariance matrix of transformed data\par}
 \end{tcolorbox}
 \vspace{0.4em}
 \needspace{3\baselineskip}
@@ -279,37 +263,30 @@ Text(0.5, 1.0, 'Log Price ln(price) (Skew: +0.12)')
 X_d = df_d_log[['log_carat', 'depth', 'log_price']].values
 mu_d = np.mean(X_d, axis=0)
 cov_d = np.cov(X_d, rowvar=False)
-inv_cov_d = np.linalg.inv(cov_d)
 cond_d = np.linalg.cond(cov_d)
 
-print("Centroid Vector mu [log_carat, depth, log_price]:")
-print(mu_d.round(4))
+print("Empirical Mean Vector mu (log_carat, depth, log_price):")
+print(np.round(mu_d, 4))
 print("\nSample Covariance Matrix Sigma:")
-print(pd.DataFrame(cov_d, index=['log_carat', 'depth', 'log_price'], columns=['log_carat', 'depth', 'log_price']).round(4))
+print(np.round(cov_d, 5))
 print(f"\nCondition Number: {cond_d:.2f} (Well-conditioned, non-singular)")
 \end{lstlisting}
 \vspace{0.2em}
 \noindent\textbf{\small [Out 7]:}
 \begin{lstlisting}[style=output]
-Centroid Vector mu [log_carat, depth, log_price]:
+Empirical Mean Vector mu (log_carat, depth, log_price):
 [-0.395  61.7494  7.7868]
 
 Sample Covariance Matrix Sigma:
-           log_carat   depth  log_price
-log_carat     0.3420  0.0255     0.5732
-depth         0.0255  2.0524     0.0013
-log_price     0.5732  0.0013     1.0295
+[[3.42020e-01 2.55000e-02 5.73170e-01]
+ [2.55000e-02 2.05240e+00 1.25000e-03]
+ [5.73170e-01 1.25000e-03 1.02951e+00]]
 
 Condition Number: 119.38 (Well-conditioned, non-singular)
 \end{lstlisting}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.96\linewidth]{plot_2_diamond_mhd_histogram_chi2.pdf}
-\caption{ฮิสโตแกรมของระยะทางมาฮาลาโนบิสยกกำลังสองเปรียบเทียบกับการแจกแจงไคสแควร์ตามทฤษฎี df = 3}
-\end{figure}
 \vspace{0.3em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
-{\small\bfseries Compute Mahalanobis Distance across all diamond observations\par}
+{\small\bfseries Compute Mahalanobis Distance for all diamond observations\par}
 \end{tcolorbox}
 \vspace{0.4em}
 \needspace{3\baselineskip}
@@ -319,26 +296,26 @@ mhd2_d, mhd_d = mahalanobis_distance(X_d, mu_d, cov_d)
 df_diamond['mhd2'] = mhd2_d
 df_diamond['mhd'] = mhd_d
 
-print("Squared Mahalanobis Distance (MHD^2) Summary:")
-print(pd.Series(mhd2_d).describe().round(3))
+print("Mahalanobis Distance Summary Statistics:")
+print(df_diamond[['mhd2', 'mhd']].describe().round(4))
 \end{lstlisting}
 \vspace{0.2em}
 \noindent\textbf{\small [Out 8]:}
 \begin{lstlisting}[style=output]
-Squared Mahalanobis Distance (MHD^2) Summary:
-count    53940.000
-mean         3.000
-std          3.563
-min          0.005
-25%          1.195
-50%          2.258
-75%          3.793
-max        178.268
-dtype: float64
+Mahalanobis Distance Summary Statistics:
+             mhd2         mhd
+count  53940.0000  53940.0000
+mean       2.9999      1.5741
+std        3.5631      0.7227
+min        0.0054      0.0735
+25%        1.1950      1.0931
+50%        2.2577      1.5026
+75%        3.7926      1.9475
+max      178.2684     13.3517
 \end{lstlisting}
 \vspace{0.3em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
-{\small\bfseries Chi-square ($\chi^2$) hypothesis testing and outlier gating\par}
+{\small\bfseries Establish Chi-Square thresholding at $\alpha = 0.01$ and $\alpha = 0.001$\par}
 \end{tcolorbox}
 \vspace{0.4em}
 \needspace{3\baselineskip}
@@ -350,171 +327,130 @@ crit_001_d = stats.chi2.ppf(0.999, df=3)
 df_diamond['outlier_01'] = df_diamond['mhd2'] > crit_01_d
 df_diamond['outlier_001'] = df_diamond['mhd2'] > crit_001_d
 
-n_01 = int(df_diamond['outlier_01'].sum())
-n_001 = int(df_diamond['outlier_001'].sum())
-pct_01 = (n_01 / len(df_diamond)) * 100
-pct_001 = (n_001 / len(df_diamond)) * 100
+n_total = len(df_diamond)
+n_out_01 = df_diamond['outlier_01'].sum()
+n_out_001 = df_diamond['outlier_001'].sum()
 
-print(f"Degrees of freedom: p = 3")
-print(f"1.0% Critical Threshold (chi2_0.01, df=3): {crit_01_d:.3f} --> {n_01} Outliers ({pct_01:.2f}%)")
-print(f"0.1% Critical Threshold (chi2_0.001, df=3): {crit_001_d:.3f} --> {n_001} Outliers ({pct_001:.2f}%)")
+print(f"Chi-Square Critical Value (df=3, alpha=0.01) : {crit_01_d:.3f} -> Outliers: {n_out_01:,} ({n_out_01/n_total*100:.2f}%)")
+print(f"Chi-Square Critical Value (df=3, alpha=0.001): {crit_001_d:.3f} -> Outliers: {n_out_001:,} ({n_out_001/n_total*100:.2f}%)")
 
 plt.figure(figsize=(9, 5))
-sub_mhd2 = mhd2_d[mhd2_d <= 30]
-sns.histplot(sub_mhd2, stat='density', bins=55, color='#2563EB', alpha=0.45, label='Empirical $D_M^2$ Distribution')
-x_chi = np.linspace(0.01, 30, 400)
-plt.plot(x_chi, stats.chi2.pdf(x_chi, df=3), color='#DC2626', lw=2.2, label='Theoretical $\chi^2(p=3)$ PDF')
-plt.axvline(crit_01_d, color='#EA580C', linestyle='--', lw=1.8, label=f'1% Threshold ({crit_01_d:.2f})')
-plt.axvline(crit_001_d, color='#DC2626', linestyle='-.', lw=2.0, label=f'0.1% Threshold ({crit_001_d:.2f})')
-plt.title('Diamond Squared Mahalanobis Distance vs. Theoretical $\chi^2(3)$ Distribution', fontweight='bold')
-plt.xlabel('Squared Mahalanobis Distance $D_M^2$')
+plt.hist(df_diamond['mhd2'], bins=100, density=True, alpha=0.65, color='#3B82F6', label='Empirical $D_M^2$ Distribution')
+x_chi = np.linspace(0, 35, 500)
+plt.plot(x_chi, stats.chi2.pdf(x_chi, df=3), color='#DC2626', lw=2.2, label=r'Theoretical $\chi^2(\mathrm{df}=3)$ PDF')
+plt.axvline(crit_01_d, color='#F59E0B', linestyle='--', lw=2, label=rf'Critical $\alpha=0.01$ ({crit_01_d:.2f})')
+plt.axvline(crit_001_d, color='#EF4444', linestyle=':', lw=2.2, label=rf'Critical $\alpha=0.001$ ({crit_001_d:.2f})')
+plt.title(r'Diamond Squared Mahalanobis Distance vs. Theoretical $\chi^2(3)$ Distribution', fontweight='bold')
+plt.xlabel(r'Squared Mahalanobis Distance ($D_M^2$)')
 plt.ylabel('Probability Density')
-plt.grid(True, linestyle=':', alpha=0.4)
+plt.xlim(0, 35)
 plt.legend(frameon=True)
 plt.tight_layout()
+plt.savefig('plot_2_diamond_mhd_histogram_chi2.pdf', bbox_inches='tight', dpi=300)
 plt.show()
 \end{lstlisting}
 \vspace{0.2em}
 \noindent\textbf{\small [Out 9]:}
 \begin{lstlisting}[style=output]
-Degrees of freedom: p = 3
-1.0% Critical Threshold (chi2_0.01, df=3): 11.345 --> 1079 Outliers (2.00%)
-0.1% Critical Threshold (chi2_0.001, df=3): 16.266 --> 446 Outliers (0.83%)
-<Figure size 900x500 with 0 Axes>
-<Axes: ylabel='Density'>
-[<matplotlib.lines.Line2D at 0x114eab990>]
-<matplotlib.lines.Line2D at 0x11379e790>
-<matplotlib.lines.Line2D at 0x114dd93d0>
-Text(0.5, 1.0, 'Diamond Squared Mahalanobis Distance vs. Theoretical $\\chi^2(3)$ Distribution')
-Text(0.5, 0, 'Squared Mahalanobis Distance $D_M^2$')
-Text(0, 0.5, 'Probability Density')
-<matplotlib.legend.Legend at 0x114740310>
+Chi-Square Critical Value (df=3, alpha=0.01) : 11.345 -> Outliers: 1,079 (2.00%)
+Chi-Square Critical Value (df=3, alpha=0.001): 16.266 -> Outliers: 446 (0.83%)
 \end{lstlisting}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.96\linewidth]{plot_3_diamond_bivariate_ellipses.pdf}
-\caption{ภาพฉาย 2 มิติและขอบเขตวงรีความเชื่อมั่น 99\% ของระยะทางมาฮาลาโนบิสจำแนก Inliers และ Outliers}
+\includegraphics[width=0.96\linewidth]{plot_2_diamond_mhd_histogram_chi2.pdf}
+\caption{ฮิสโตแกรมของระยะทางมาฮาลาโนบิสยกกำลังสองเปรียบเทียบกับการแจกแจงไคสแควร์ตามทฤษฎี $\mathrm{df} = 3$}
 \end{figure}
 \vspace{0.3em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
-{\small\bfseries Question 1.2\par}
+{\small\bfseries Question 1.2: Chi-Square Outlier Diagnostics and Outlier Profiling\par}
 \end{tcolorbox}
 \vspace{0.3em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
-{\small\bfseries Answer to Question 1.2: Chi-Square Outlier Diagnostics \& Anomaly Patterns \newline \normalfont\footnotesize \par}
+{\small\bfseries Answer to Question 1.2: Chi-Square Critical Gating, Degrees of Freedom, and Outlier Profiling\par}
 \end{tcolorbox}
 \vspace{0.3em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
-{\small\bfseries Examine top anomalous diamond observations\par}
+{\small\bfseries Profile the top most extreme multivariate outliers\par}
 \end{tcolorbox}
 \vspace{0.4em}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 10]:}
 \begin{lstlisting}[style=pycode]
 top_outliers = df_diamond.sort_values('mhd2', ascending=False).head(10)
-display_cols = ['carat', 'cut', 'color', 'clarity', 'depth', 'table', 'price', 'x', 'y', 'z', 'mhd2']
-print("Top 10 Extreme Outliers in Diamond Dataset (Ranked by MHD^2):")
-print(top_outliers[display_cols].to_string())
+print("Top 10 Most Extreme Multivariate Outliers (Ranked by MHD^2):")
+display(top_outliers[['carat', 'cut', 'color', 'clarity', 'depth', 'price', 'mhd2', 'mhd']].round(3))
 \end{lstlisting}
 \vspace{0.2em}
 \noindent\textbf{\small [Out 10]:}
 \begin{lstlisting}[style=output]
-Top 10 Extreme Outliers in Diamond Dataset (Ranked by MHD^2):
-       carat    cut color clarity  depth  table  price     x     y     z        mhd2
-4518    1.00   Fair     G     SI1   43.0   59.0   3634  6.32  6.27  3.97  178.268424
-10377   1.09  Ideal     J     VS2   43.0   54.0   4778  6.53  6.55  4.12  176.462202
-6341    1.00   Fair     G     VS2   44.0   53.0   4032  6.31  6.24  4.12  158.368766
-52861   0.50   Fair     E     VS2   79.0   73.0   2579  5.21  5.18  4.09  158.113582
-52860   0.50   Fair     E     VS2   79.0   73.0   2579  5.21  5.18  4.09  158.113582
-41918   1.03   Fair     E      I1   78.2   54.0   1262  5.72  5.59  4.42  147.432457
-46679   0.99   Fair     J      I1   73.6   60.0   1789  6.01  5.80  4.35   75.847890
-16857   1.43   Fair     I     VS1   50.8   60.0   6727  7.73  7.25  3.93   63.787356
-53540   0.90   Fair     G     SI1   72.9   54.0   2691  5.74  5.67  4.16   60.974408
-36503   0.30   Fair     E    VVS2   51.0   67.0    945  4.67  4.62  2.37   58.245109
+Top 10 Most Extreme Multivariate Outliers (Ranked by MHD^2):
+       carat    cut color clarity  depth  price     mhd2     mhd
+4518    1.00   Fair     G     SI1   43.0   3634  178.268  13.352
+10377   1.09  Ideal     J     VS2   43.0   4778  176.462  13.284
+6341    1.00   Fair     G     VS2   44.0   4032  158.369  12.584
+52861   0.50   Fair     E     VS2   79.0   2579  158.114  12.574
+52860   0.50   Fair     E     VS2   79.0   2579  158.114  12.574
+41918   1.03   Fair     E      I1   78.2   1262  147.432  12.142
+46679   0.99   Fair     J      I1   73.6   1789   75.848   8.709
+16857   1.43   Fair     I     VS1   50.8   6727   63.787   7.987
+53540   0.90   Fair     G     SI1   72.9   2691   60.974   7.809
+36503   0.30   Fair     E    VVS2   51.0    945   58.245   7.632
 \end{lstlisting}
 \vspace{0.3em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
-{\small\bfseries Visualize bivariate projections and 99\% confidence ellipses\par}
+{\small\bfseries Visualize bivariate scatter projections and 99\% confidence ellipses\par}
 \end{tcolorbox}
 \vspace{0.4em}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 11]:}
 \begin{lstlisting}[style=pycode]
 def plot_cov_ellipse(cov, pos, n_std=3.035, ax=None, **kwargs):
-    vals, vecs = np.linalg.eigh(cov)
-    order = vals.argsort()[::-1]
-    vals, vecs = vals[order], vecs[:, order]
-    theta = np.degrees(np.arctan2(vecs[1, 0], vecs[0, 0]))
-    w, h = 2 * n_std * np.sqrt(vals)
-    ell = plt.matplotlib.patches.Ellipse(xy=pos, width=w, height=h, angle=theta, **kwargs)
-    ax.add_patch(ell)
-    return ell
+    if ax is None:
+        ax = plt.gca()
+    val, vec = np.linalg.eigh(cov)
+    order = val.argsort()[::-1]
+    val, vec = val[order], vec[:, order]
+    theta = np.degrees(np.arctan2(*vec[:, 0][::-1]))
+    width, height = 2 * n_std * np.sqrt(np.maximum(0, val))
+    ellip = Ellipse(xy=pos, width=width, height=height, angle=theta, **kwargs)
+    ax.add_patch(ellip)
+    return ellip
 
-fig, axes = plt.subplots(1, 3, figsize=(14, 4.5))
-pairs = [
-    ('log_carat', 'log_price', 'ln(Carat)', 'ln(Price)', 0, 2),
-    ('depth', 'log_price', 'Depth (%)', 'ln(Price)', 1, 2),
-    ('log_carat', 'depth', 'ln(Carat)', 'Depth (%)', 0, 1)
-]
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 5.5))
 
-inliers = df_diamond[~df_diamond['outlier_01']]
-outliers = df_diamond[df_diamond['outlier_01']]
+inliers_d = df_diamond[~df_diamond['outlier_01']]
+outliers_d = df_diamond[df_diamond['outlier_01']]
 
-inlier_sample = inliers.sample(n=3500, random_state=42)
+# Subplot 1: log_carat vs log_price
+ax1.scatter(np.log(inliers_d['carat']), np.log(inliers_d['price']), c='#94A3B8', s=8, alpha=0.3, label='Inliers (98.0%)')
+ax1.scatter(np.log(outliers_d['carat']), np.log(outliers_d['price']), c='#EF4444', s=16, alpha=0.8, label=r'Outliers ($\alpha=0.01$, 2.0%)')
+cov_cp = np.cov(df_d_log['log_carat'], df_d_log['log_price'])
+pos_cp = (np.mean(df_d_log['log_carat']), np.mean(df_d_log['log_price']))
+plot_cov_ellipse(cov_cp, pos_cp, n_std=3.035, ax=ax1, edgecolor='#1E3A8A', lw=2.2, fill=False, linestyle='--', label=r'99% $\chi^2$ Boundary')
+ax1.set_title(r'Log Carat vs. Log Price Ellipse Boundary', fontweight='bold')
+ax1.set_xlabel(r'$\ln(\mathrm{Carat})$')
+ax1.set_ylabel(r'$\ln(\mathrm{Price})$')
+ax1.legend(frameon=True, loc='upper left')
 
-for idx, (col_x, col_y, lbl_x, lbl_y, ix, iy) in enumerate(pairs):
-    ax = axes[idx]
-    ax.scatter(df_d_log.loc[inlier_sample.index, col_x], df_d_log.loc[inlier_sample.index, col_y],
-               c='#2563EB', alpha=0.15, s=8, label='Inliers (Sampled)')
-    ax.scatter(df_d_log.loc[outliers.index, col_x], df_d_log.loc[outliers.index, col_y],
-               c='#DC2626', alpha=0.7, s=15, label=f'Outliers (n={n_01})')
-    
-    cov_2d = cov_d[np.ix_([ix, iy], [ix, iy])]
-    pos_2d = mu_d[[ix, iy]]
-    n_std_99 = np.sqrt(stats.chi2.ppf(0.99, df=2))
-    plot_cov_ellipse(cov_2d, pos_2d, n_std=n_std_99, ax=ax, edgecolor='black', linestyle='--', lw=2.0, facecolor='none', label='99% Ellipse')
-    ax.scatter([pos_2d[0]], [pos_2d[1]], c='gold', marker='*', s=140, edgecolors='black', label='Centroid', zorder=5)
-    
-    ax.set_title(f'({chr(97+idx)}) {lbl_y} vs {lbl_x}', fontweight='bold')
-    ax.set_xlabel(lbl_x)
-    ax.set_ylabel(lbl_y)
-    ax.grid(True, linestyle=':', alpha=0.4)
-    if idx == 0:
-        ax.legend(frameon=True, fontsize=8)
+# Subplot 2: depth vs log_price
+ax2.scatter(inliers_d['depth'], np.log(inliers_d['price']), c='#94A3B8', s=8, alpha=0.3, label='Inliers')
+ax2.scatter(outliers_d['depth'], np.log(outliers_d['price']), c='#EF4444', s=16, alpha=0.8, label='Outliers')
+cov_dp = np.cov(df_d_log['depth'], df_d_log['log_price'])
+pos_dp = (np.mean(df_d_log['depth']), np.mean(df_d_log['log_price']))
+plot_cov_ellipse(cov_dp, pos_dp, n_std=3.035, ax=ax2, edgecolor='#1E3A8A', lw=2.2, fill=False, linestyle='--', label=r'99% $\chi^2$ Boundary')
+ax2.set_title(r'Depth vs. Log Price Ellipse Boundary', fontweight='bold')
+ax2.set_xlabel('Depth (%)')
+ax2.set_ylabel(r'$\ln(\mathrm{Price})$')
+ax2.legend(frameon=True, loc='upper left')
 
 plt.tight_layout()
+plt.savefig('plot_3_diamond_bivariate_ellipses.pdf', bbox_inches='tight', dpi=300)
 plt.show()
-\end{lstlisting}
-\vspace{0.2em}
-\noindent\textbf{\small [Out 11]:}
-\begin{lstlisting}[style=output]
-<matplotlib.collections.PathCollection at 0x1147f1d50>
-<matplotlib.collections.PathCollection at 0x114dd8810>
-<matplotlib.patches.Ellipse at 0x114effe10>
-<matplotlib.collections.PathCollection at 0x114621750>
-Text(0.5, 1.0, '(a) ln(Price) vs ln(Carat)')
-Text(0.5, 0, 'ln(Carat)')
-Text(0, 0.5, 'ln(Price)')
-<matplotlib.legend.Legend at 0x11379d990>
-<matplotlib.collections.PathCollection at 0x114866b10>
-<matplotlib.collections.PathCollection at 0x1147e0b50>
-<matplotlib.patches.Ellipse at 0x1147bdfd0>
-<matplotlib.collections.PathCollection at 0x114847050>
-Text(0.5, 1.0, '(b) ln(Price) vs Depth (%)')
-Text(0.5, 0, 'Depth (%)')
-Text(0, 0.5, 'ln(Price)')
-<matplotlib.collections.PathCollection at 0x114830190>
-<matplotlib.collections.PathCollection at 0x114641e90>
-<matplotlib.patches.Ellipse at 0x114e19d50>
-<matplotlib.collections.PathCollection at 0x11484c910>
-Text(0.5, 1.0, '(c) Depth (%) vs ln(Carat)')
-Text(0.5, 0, 'ln(Carat)')
-Text(0, 0.5, 'Depth (%)')
 \end{lstlisting}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.96\linewidth]{plot_4_bearing_raw_sensor_timeseries.pdf}
-\caption{สัญญาณการสั่นสะเทือนแบบอนุกรมเวลาจากเซนเซอร์ความเร่ง 4 จุดตลอดช่วงทดสอบ Run-to-Failure}
+\includegraphics[width=0.96\linewidth]{plot_3_diamond_bivariate_ellipses.pdf}
+\caption{ภาพฉาย 2 มิติและขอบเขตวงรีความเชื่อมั่น 99\% ของระยะทางมาฮาลาโนบิสจำแนก Inliers และ Outliers}
 \end{figure}
 \vspace{0.3em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
@@ -528,40 +464,45 @@ Text(0, 0.5, 'Depth (%)')
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
 {\small\bfseries Data preprocessing and baseline partitioning\par}
 \end{tcolorbox}
+\vspace{0.3em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
+{\small\bfseries Load and explore the bearing vibration dataset\par}
+\end{tcolorbox}
 \vspace{0.4em}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 12]:}
 \begin{lstlisting}[style=pycode]
 bearing_candidates = [
-    Path('BearingTest.csv'),
-    Path('data/BearingTest.csv'),
-    Path('assignment/Assignment 9_Anomaly Detection/BearingTest.csv'),
-    Path('../BearingTest.csv'),
-    Path.cwd() / 'BearingTest.csv',
-    Path.cwd() / 'assignment/Assignment 9_Anomaly Detection/BearingTest.csv',
+    'BearingTest.csv',
+    'assignment/Assignment 9_Anomaly Detection/BearingTest.csv',
+    '../assignment/Assignment 9_Anomaly Detection/BearingTest.csv',
+    '/Users/wisitsuwannao/Documents/Workspace/cpe342-machine-learning-2026/assignment/Assignment 9_Anomaly Detection/BearingTest.csv'
 ]
-BEARING_PATH = next((str(p) for p in bearing_candidates if p.is_file()), 'BearingTest.csv')
+bearing_path = next((p for p in bearing_candidates if os.path.exists(p)), None)
+if bearing_path is None:
+    raise FileNotFoundError("Could not find BearingTest.csv")
 
-df_bearing = pd.read_csv(BEARING_PATH)
-df_bearing['datetime'] = pd.to_datetime(df_bearing['Unnamed: 0'])
-df_bearing.set_index('datetime', inplace=True)
-df_bearing.drop(columns=['Unnamed: 0'], inplace=True)
+df_bearing = pd.read_csv(bearing_path, index_col=0)
+df_bearing.index = pd.to_datetime(df_bearing.index)
 bearing_cols = ['Bearing 1', 'Bearing 2', 'Bearing 3', 'Bearing 4']
 
-print(f"Bearing Dataset Shape: {df_bearing.shape}")
+print(f"Bearing Dataset successfully loaded from: {bearing_path}")
+print(f"Total Telemetry Snapshots: {len(df_bearing):,} records")
+print(f"Time Range: {df_bearing.index[0]} to {df_bearing.index[-1]}")
 print("\nFirst 5 records of Bearing Dataset:")
-print(df_bearing.head())
+display(df_bearing.head())
 print("\nSummary Statistics of Bearing Telemetry:")
-print(df_bearing.describe().round(4))
+display(df_bearing.describe().round(4))
 \end{lstlisting}
 \vspace{0.2em}
 \noindent\textbf{\small [Out 12]:}
 \begin{lstlisting}[style=output]
-Bearing Dataset Shape: (984, 4)
+Bearing Dataset successfully loaded from: BearingTest.csv
+Total Telemetry Snapshots: 984 records
+Time Range: 2004-02-12 10:32:39 to 2004-02-19 06:22:39
 
 First 5 records of Bearing Dataset:
                      Bearing 1  Bearing 2  Bearing 3  Bearing 4
-datetime                                                       
 2004-02-12 10:32:39   0.058333   0.071832   0.083242   0.043067
 2004-02-12 10:42:39   0.058995   0.074006   0.084435   0.044541
 2004-02-12 10:52:39   0.060236   0.074227   0.083926   0.044443
@@ -584,49 +525,28 @@ max       0.4533     0.1610     0.1513     0.1190
 \noindent\textbf{\small [In 13]:}
 \begin{lstlisting}[style=pycode]
 fig, axes = plt.subplots(4, 1, figsize=(13, 8), sharex=True)
-colors_b = ['#2563EB', '#16A34A', '#EA580C', '#9333EA']
-split_dt = df_bearing.index[200]
+colors_b = ['#DC2626', '#2563EB', '#059669', '#D97706']
 
 for idx, col in enumerate(bearing_cols):
-    axes[idx].plot(df_bearing.index, df_bearing[col], color=colors_b[idx], lw=1.1, label=f'{col} (g)')
-    axes[idx].axvline(split_dt, color='#DC2626', linestyle='--', lw=1.6, label='Train / Test Partition')
-    axes[idx].axvspan(df_bearing.index.min(), split_dt, color='#E2E8F0', alpha=0.4, label='Nominal Baseline (N=200)')
+    axes[idx].plot(df_bearing.index, df_bearing[col], color=colors_b[idx], lw=1.2, label=col)
     axes[idx].set_ylabel(f'{col}\nAcc (g)', fontweight='bold')
-    axes[idx].grid(True, linestyle=':', alpha=0.4)
-    if idx == 0:
-        axes[idx].legend(loc='upper left', frameon=True, fontsize=8.5, ncol=3)
+    axes[idx].legend(loc='upper left', frameon=True)
+    axes[idx].grid(True, linestyle=':', alpha=0.6)
 
-axes[-1].set_xlabel('Timestamp (10-minute intervals)')
-plt.suptitle('NASA Bearing Run-to-Failure Accelerometer Telemetry Across 4 Channels', fontweight='bold', y=0.99)
+axes[0].set_title('NASA IMS Bearing Run-to-Failure Vibration Telemetry (4 Accelerometers)', fontweight='bold')
+axes[-1].set_xlabel('Timestamp')
 plt.tight_layout()
+plt.savefig('plot_4_bearing_raw_sensor_timeseries.pdf', bbox_inches='tight', dpi=300)
 plt.show()
 \end{lstlisting}
-\vspace{0.2em}
-\noindent\textbf{\small [Out 13]:}
-\begin{lstlisting}[style=output]
-[<matplotlib.lines.Line2D at 0x1138a5590>]
-<matplotlib.lines.Line2D at 0x114d72590>
-<matplotlib.patches.Rectangle at 0x114640250>
-Text(0, 0.5, 'Bearing 1\nAcc (g)')
-<matplotlib.legend.Legend at 0x114d89e90>
-[<matplotlib.lines.Line2D at 0x11464a810>]
-<matplotlib.lines.Line2D at 0x11484f790>
-<matplotlib.patches.Rectangle at 0x114cd3cd0>
-Text(0, 0.5, 'Bearing 2\nAcc (g)')
-[<matplotlib.lines.Line2D at 0x114cd5610>]
-<matplotlib.lines.Line2D at 0x1148654d0>
-<matplotlib.patches.Rectangle at 0x11484e410>
-Text(0, 0.5, 'Bearing 3\nAcc (g)')
-[<matplotlib.lines.Line2D at 0x114d89110>]
-<matplotlib.lines.Line2D at 0x1147b2590>
-<matplotlib.patches.Rectangle at 0x114d9a350>
-Text(0, 0.5, 'Bearing 4\nAcc (g)')
-Text(0.5, 0, 'Timestamp (10-minute intervals)')
-Text(0.5, 0.99, 'NASA Bearing Run-to-Failure Accelerometer Telemetry Across 4 Channels')
-\end{lstlisting}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.96\linewidth]{plot_4_bearing_raw_sensor_timeseries.pdf}
+\caption{สัญญาณการสั่นสะเทือนแบบอนุกรมเวลาจากเซนเซอร์ความเร่ง 4 จุดตลอดช่วงทดสอบ Run-to-Failure}
+\end{figure}
 \vspace{0.3em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
-{\small\bfseries Baseline definition and data standardization (Zero Data Leakage)\par}
+{\small\bfseries Partition nominal training baseline ($N=200$) and standardize features (Zero Data Leakage)\par}
 \end{tcolorbox}
 \vspace{0.4em}
 \needspace{3\baselineskip}
@@ -637,35 +557,33 @@ df_b_test = df_bearing.iloc[200:].copy()
 
 scaler_b = StandardScaler()
 X_b_train_scaled = scaler_b.fit_transform(df_b_train[bearing_cols])
-X_b_test_scaled = scaler_b.transform(df_b_test[bearing_cols])
 X_b_all_scaled = scaler_b.transform(df_bearing[bearing_cols])
 
-print(f"Train baseline shape: {df_b_train.shape} (Nominal operating hours 0-200)")
-print(f"Test operational shape: {df_b_test.shape} (Degradation phase to failure)")
+print(f"Training Baseline Size: {len(df_b_train)} snapshots ({df_b_train.index[0]} to {df_b_train.index[-1]})")
+print(f"Evaluation Test Size  : {len(df_b_test)} snapshots ({df_b_test.index[0]} to {df_b_test.index[-1]})")
 print("\nBaseline Standardized Means (must be ~0.0):")
-print(X_b_train_scaled.mean(axis=0).round(4))
+print(np.round(X_b_train_scaled.mean(axis=0), 4))
 print("Baseline Standardized Stds (must be 1.0):")
-print(X_b_train_scaled.std(axis=0).round(4))
+print(np.round(X_b_train_scaled.std(axis=0), 4))
 \end{lstlisting}
 \vspace{0.2em}
 \noindent\textbf{\small [Out 14]:}
 \begin{lstlisting}[style=output]
-Train baseline shape: (200, 4) (Nominal operating hours 0-200)
-Test operational shape: (784, 4) (Degradation phase to failure)
+Training Baseline Size: 200 snapshots (2004-02-12 10:32:39 to 2004-02-13 19:42:39)
+Evaluation Test Size  : 784 snapshots (2004-02-13 19:52:39 to 2004-02-19 06:22:39)
 
 Baseline Standardized Means (must be ~0.0):
-[ 0.  0.  0. -0.]
+[ 0. -0.  0. -0.]
 Baseline Standardized Stds (must be 1.0):
 [1. 1. 1. 1.]
 \end{lstlisting}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.96\linewidth]{plot_5_bearing_pca_variance_loadings.pdf}
-\caption{กราฟ Scree Plot และแผนภาพน้ำหนักตัวแปร (Loadings) ของ Principal Component 2 แกนหลัก}
-\end{figure}
 \vspace{0.3em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
 {\small\bfseries Reduce the data dimension using PCA\par}
+\end{tcolorbox}
+\vspace{0.3em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
+{\small\bfseries Fit 2-component PCA on the standardized training baseline\par}
 \end{tcolorbox}
 \vspace{0.4em}
 \needspace{3\baselineskip}
@@ -674,83 +592,188 @@ Baseline Standardized Stds (must be 1.0):
 pca_b = PCA(n_components=2)
 pca_b.fit(X_b_train_scaled)
 
-pve_b = pca_b.explained_variance_ratio_
-cum_pve_b = np.cumsum(pve_b)
+pve = pca_b.explained_variance_ratio_
+cum_pve = np.cumsum(pve)
+loadings = pca_b.components_.T
 
-print("PCA Eigenvalues on Normal Baseline:")
-print(pca_b.explained_variance_.round(4))
-print(f"\nProportion of Variance Explained (PVE):")
-print(f"PC1: {pve_b[0]*100:.2f}% | PC2: {pve_b[1]*100:.2f}% | Total (2 PCs): {cum_pve_b[1]*100:.2f}%")
+print("Baseline PCA Eigenvalues:")
+print(np.round(pca_b.explained_variance_, 4))
+print("\nProportion of Variance Explained (PVE):")
+for k, (p, cp) in enumerate(zip(pve, cum_pve), 1):
+    print(f"  PC{k}: PVE = {p*100:.2f}%, Cumulative = {cp*100:.2f}%")
 
-df_loadings_b = pd.DataFrame(pca_b.components_.T, index=bearing_cols, columns=['PC1 Loading', 'PC2 Loading'])
+df_loadings = pd.DataFrame(loadings, index=bearing_cols, columns=['PC1', 'PC2'])
 print("\nFactor Loadings Matrix W:")
-print(df_loadings_b.round(4))
+display(df_loadings.round(4))
 \end{lstlisting}
 \vspace{0.2em}
 \noindent\textbf{\small [Out 15]:}
 \begin{lstlisting}[style=output]
-PCA(n_components=2)
-PCA Eigenvalues on Normal Baseline:
+Baseline PCA Eigenvalues:
 [1.8834 0.9245]
 
 Proportion of Variance Explained (PVE):
-PC1: 46.85% | PC2: 23.00% | Total (2 PCs): 69.85%
+  PC1: PVE = 46.85%, Cumulative = 46.85%
+  PC2: PVE = 23.00%, Cumulative = 69.85%
 
 Factor Loadings Matrix W:
-           PC1 Loading  PC2 Loading
-Bearing 1       0.5881       0.0427
-Bearing 2       0.4597      -0.6604
-Bearing 3       0.4334       0.7446
-Bearing 4       0.5050      -0.0876
+              PC1     PC2
+Bearing 1  0.5881  0.0427
+Bearing 2  0.4597 -0.6604
+Bearing 3  0.4334  0.7446
+Bearing 4  0.5050 -0.0876
 \end{lstlisting}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.96\linewidth]{plot_6_bearing_mhd_latent_scores.pdf}
-\caption{เส้นทางเวลาของค่าสถิติระยะทางมาฮาลาโนบิสบนปริภูมิแฝง ($T^2$) เทียบกับเกณฑ์วิกฤตไคสแควร์}
-\end{figure}
 \vspace{0.4em}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 16]:}
 \begin{lstlisting}[style=pycode]
 fig, (ax_scree, ax_load) = plt.subplots(1, 2, figsize=(12, 4.5))
 
-full_pca_b = PCA().fit(X_b_train_scaled)
-all_pve = full_pca_b.explained_variance_ratio_ * 100
-all_cum = np.cumsum(all_pve)
-pcs_labels = ['PC 1', 'PC 2', 'PC 3', 'PC 4']
-
-bars = ax_scree.bar(pcs_labels, all_pve, color='#2563EB', width=0.5, alpha=0.8, edgecolor='#1E3A8A', label='Individual PVE (%)')
-ax_scree.plot(pcs_labels, all_cum, color='#DC2626', marker='o', lw=2.2, label='Cumulative PVE (%)')
-for b, val in zip(bars, all_pve):
-    ax_scree.text(b.get_x() + b.get_width()/2, b.get_height() + 1.2, f'{val:.1f}%', ha='center', va='bottom', fontweight='bold')
-ax_scree.axhline(all_cum[1], color='#64748B', linestyle=':', label=f'2-PC Retained: {all_cum[1]:.1f}%')
-ax_scree.set_title('(a) Scree Plot & Cumulative PVE on Baseline', fontweight='bold')
-ax_scree.set_ylabel('Variance Explained (%)')
+bars = ax_scree.bar(['PC1', 'PC2'], pve * 100, color='#2563EB', alpha=0.85, width=0.5, edgecolor='black')
+ax_scree.plot(['PC1', 'PC2'], cum_pve * 100, color='#DC2626', marker='o', lw=2.2, label='Cumulative PVE')
+for bar in bars:
+    yval = bar.get_height()
+    ax_scree.text(bar.get_x() + bar.get_width()/2.0, yval + 1.5, f'{yval:.1f}%', ha='center', va='bottom', fontweight='bold')
 ax_scree.set_ylim(0, 110)
-ax_scree.grid(True, linestyle=':', alpha=0.4)
-ax_scree.legend(frameon=True, loc='center right', fontsize=9)
+ax_scree.set_title('(a) Proportion of Variance Explained (Scree Plot)', fontweight='bold')
+ax_scree.set_ylabel('Variance Explained (%)')
+ax_scree.legend(frameon=True, loc='upper left')
 
-sns.heatmap(df_loadings_b, annot=True, fmt='.3f', cmap='Blues', ax=ax_load, cbar_kws={'label': 'Loading Coefficient'}, annot_kws={'fontsize': 11, 'fontweight': 'bold'})
-ax_load.set_title(r'(b) Factor Loadings Matrix ($\mathbf{W} \in \mathbb{R}^{4 	imes 2}$)', fontweight='bold')
+x_idx = np.arange(len(bearing_cols))
+w = 0.35
+ax_load.bar(x_idx - w/2, df_loadings['PC1'], width=w, label='PC1 Loading', color='#3B82F6', alpha=0.9, edgecolor='black')
+ax_load.bar(x_idx + w/2, df_loadings['PC2'], width=w, label='PC2 Loading', color='#F59E0B', alpha=0.9, edgecolor='black')
+ax_load.set_xticks(x_idx)
+ax_load.set_xticklabels(bearing_cols, fontweight='bold')
+ax_load.set_title(r'(b) Factor Loadings Matrix ($\mathbf{W} \in \mathbb{R}^{4 \times 2}$)', fontweight='bold')
+ax_load.set_ylabel('Loading Weight')
+ax_load.axhline(0, color='gray', lw=1.0)
+ax_load.legend(frameon=True, loc='lower left')
 
 plt.tight_layout()
+plt.savefig('plot_5_bearing_pca_variance_loadings.pdf', bbox_inches='tight', dpi=300)
+plt.show()
+\end{lstlisting}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.96\linewidth]{plot_5_bearing_pca_variance_loadings.pdf}
+\caption{กราฟ Scree Plot และแผนภาพน้ำหนักตัวแปร (Loadings) ของ Principal Component 2 แกนหลัก}
+\end{figure}
+\vspace{0.3em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
+{\small\bfseries Method A: Latent subspace anomaly detection via Hotelling's $T^2$ (MHD on PC scores)\par}
+\end{tcolorbox}
+\vspace{0.3em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
+{\small\bfseries Compute Hotelling's $T^2$ distance and track alarm onset\par}
+\end{tcolorbox}
+\vspace{0.4em}
+\needspace{3\baselineskip}
+\noindent\textbf{\small [In 17]:}
+\begin{lstlisting}[style=pycode]
+Z_b_train = pca_b.transform(X_b_train_scaled)
+Z_b_all = pca_b.transform(X_b_all_scaled)
+
+mu_z = np.mean(Z_b_train, axis=0)
+cov_z = np.cov(Z_b_train, rowvar=False)
+
+t2_all_sq, t2_all = mahalanobis_distance(Z_b_all, mu_z, cov_z)
+df_bearing['T2'] = t2_all_sq
+
+crit_001_t2 = stats.chi2.ppf(0.999, df=2)
+df_bearing['anomaly_T2'] = df_bearing['T2'] > crit_001_t2
+
+t2_alarms = df_bearing.iloc[200:][df_bearing.iloc[200:]['anomaly_T2']]
+first_t2_alarm = t2_alarms.index[0] if len(t2_alarms) > 0 else None
+
+print(f"Chi-Square Threshold (df=2, alpha=0.001): {crit_001_t2:.3f}")
+print(f"First T^2 Anomaly Timestamp: {first_t2_alarm}")
+
+plt.figure(figsize=(12, 5))
+plt.plot(df_bearing.index, df_bearing['T2'], color='#2563EB', lw=1.5, label=r"Latent Score $T^2$")
+plt.axhline(crit_001_t2, color='#DC2626', linestyle='--', lw=2.0, label=rf'Threshold $\chi^2_{{0.001}}(2) = {crit_001_t2:.2f}$')
+plt.axvline(df_bearing.index[200], color='gray', linestyle=':', lw=1.5, label='End of Training Baseline')
+if first_t2_alarm is not None:
+    plt.axvline(first_t2_alarm, color='#EF4444', linestyle='-', lw=1.8, label=f'Alarm Onset: {first_t2_alarm}')
+plt.title(r"Latent Subspace Anomaly Detection via Hotelling's $T^2$", fontweight='bold')
+plt.xlabel('Timestamp')
+plt.ylabel(r"Hotelling's $T^2$ Score")
+plt.yscale('log')
+plt.legend(frameon=True, loc='upper left')
+plt.tight_layout()
+plt.savefig('plot_6_bearing_mhd_latent_scores.pdf', bbox_inches='tight', dpi=300)
 plt.show()
 \end{lstlisting}
 \vspace{0.2em}
-\noindent\textbf{\small [Out 16]:}
+\noindent\textbf{\small [Out 17]:}
 \begin{lstlisting}[style=output]
-[<matplotlib.lines.Line2D at 0x114cc4bd0>]
-Text(0.0, 48.04932835751794, '46.8%')
-Text(1.0, 24.197219367695958, '23.0%')
-Text(2.0, 18.669826544224957, '17.5%')
-Text(3.0, 13.883625730561148, '12.7%')
-<matplotlib.lines.Line2D at 0x113e8c490>
-Text(0.5, 1.0, '(a) Scree Plot & Cumulative PVE on Baseline')
-Text(0, 0.5, 'Variance Explained (%)')
-(0.0, 110.0)
-<matplotlib.legend.Legend at 0x1146afed0>
-<Axes: >
-Text(0.5, 1.0, '(b) Factor Loadings Matrix ($\\mathbf{W} \\in \\mathbb{R}^{4 \times 2}$)')
+Chi-Square Threshold (df=2, alpha=0.001): 13.816
+First T^2 Anomaly Timestamp: 2004-02-15 05:42:39
+\end{lstlisting}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.96\linewidth]{plot_6_bearing_mhd_latent_scores.pdf}
+\caption{เส้นทางเวลาของค่าสถิติระยะทางมาฮาลาโนบิสบนปริภูมิแฝง ($T^2$) เทียบกับเกณฑ์วิกฤตไคสแควร์}
+\end{figure}
+\vspace{0.3em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
+{\small\bfseries Method B: Residual space anomaly detection via Reconstruction Error (MAE)\par}
+\end{tcolorbox}
+\vspace{0.3em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
+{\small\bfseries Compute sample-wise reconstruction error MAE and track threshold crossings\par}
+\end{tcolorbox}
+\vspace{0.4em}
+\needspace{3\baselineskip}
+\noindent\textbf{\small [In 18]:}
+\begin{lstlisting}[style=pycode]
+X_b_train_rec = pca_b.inverse_transform(Z_b_train)
+X_b_all_rec = pca_b.inverse_transform(Z_b_all)
+
+mae_train = np.mean(np.abs(X_b_train_scaled - X_b_train_rec), axis=1)
+mae_all = np.mean(np.abs(X_b_all_scaled - X_b_all_rec), axis=1)
+df_bearing['MAE'] = mae_all
+
+max_mae_train = np.max(mae_train)
+thresh_105 = 1.05 * max_mae_train
+thresh_110 = 1.10 * max_mae_train
+
+df_bearing['anomaly_mae_105'] = df_bearing['MAE'] > thresh_105
+df_bearing['anomaly_mae_110'] = df_bearing['MAE'] > thresh_110
+
+alarms_105 = df_bearing.iloc[200:][df_bearing.iloc[200:]['anomaly_mae_105']]
+alarms_110 = df_bearing.iloc[200:][df_bearing.iloc[200:]['anomaly_mae_110']]
+
+first_alarm_105 = alarms_105.index[0] if len(alarms_105) > 0 else None
+first_alarm_110 = alarms_110.index[0] if len(alarms_110) > 0 else None
+
+print(f"Nominal Baseline Max MAE: {max_mae_train:.4f}")
+print(f"Threshold 105% ({thresh_105:.4f}) -> First Alarm: {first_alarm_105}")
+print(f"Threshold 110% ({thresh_110:.4f}) -> First Alarm: {first_alarm_110}")
+
+plt.figure(figsize=(12, 5))
+plt.plot(df_bearing.index, df_bearing['MAE'], color='#059669', lw=1.5, label='Reconstruction MAE')
+plt.axhline(thresh_105, color='#F59E0B', linestyle='--', lw=2.0, label=f'105% Threshold ({thresh_105:.4f})')
+plt.axhline(thresh_110, color='#DC2626', linestyle=':', lw=2.2, label=f'110% Threshold ({thresh_110:.4f})')
+plt.axvline(df_bearing.index[200], color='gray', linestyle=':', lw=1.5, label='End of Training Baseline')
+if first_alarm_105 is not None:
+    plt.axvline(first_alarm_105, color='#F59E0B', alpha=0.7, linestyle='-', lw=1.5, label=f'105% Alarm: {first_alarm_105}')
+if first_alarm_110 is not None:
+    plt.axvline(first_alarm_110, color='#DC2626', linestyle='-', lw=1.8, label=f'110% Alarm: {first_alarm_110}')
+plt.title('Residual Subspace Anomaly Detection via PCA Reconstruction Error (MAE)', fontweight='bold')
+plt.xlabel('Timestamp')
+plt.ylabel('Reconstruction MAE')
+plt.legend(frameon=True, loc='upper left')
+plt.tight_layout()
+plt.savefig('plot_7_bearing_reconstruction_mae_timeseries.pdf', bbox_inches='tight', dpi=300)
+plt.show()
+\end{lstlisting}
+\vspace{0.2em}
+\noindent\textbf{\small [Out 18]:}
+\begin{lstlisting}[style=output]
+Nominal Baseline Max MAE: 1.1736
+Threshold 105% (1.2322) -> First Alarm: 2004-02-14 07:52:39
+Threshold 110% (1.2909) -> First Alarm: 2004-02-14 07:52:39
 \end{lstlisting}
 \begin{figure}[H]
 \centering
@@ -759,65 +782,59 @@ Text(0.5, 1.0, '(b) Factor Loadings Matrix ($\\mathbf{W} \\in \\mathbb{R}^{4 \ti
 \end{figure}
 \vspace{0.3em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
-{\small\bfseries Method A: Latent subspace anomaly detection via Hotelling's $T^2$ (MHD on PC scores)\par}
+{\small\bfseries Question 2.1: Latent Subspace Modeling, Loadings Matrix, and $T^2$ Alarm Onset\par}
+\end{tcolorbox}
+\vspace{0.3em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
+{\small\bfseries Answer to Question 2.1: Latent Subspace Modeling, Loadings Matrix, and $T^2$ Failure Onset\par}
+\end{tcolorbox}
+\vspace{0.3em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
+{\small\bfseries Question 2.2: Residual Reconstruction MAE and Failure Prognostics\par}
+\end{tcolorbox}
+\vspace{0.3em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
+{\small\bfseries Answer to Question 2.2: Residual Reconstruction MAE, Early Warning Lead Time, and Prognostics\par}
+\end{tcolorbox}
+\vspace{0.3em}
+\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
+{\small\bfseries Compare Latent Space ($T^2$) vs Residual Space (MAE) diagnostics\par}
 \end{tcolorbox}
 \vspace{0.4em}
 \needspace{3\baselineskip}
-\noindent\textbf{\small [In 17]:}
+\noindent\textbf{\small [In 19]:}
 \begin{lstlisting}[style=pycode]
-Z_b_train = pca_b.transform(X_b_train_scaled)
-Z_b_test = pca_b.transform(X_b_test_scaled)
-Z_b_all = pca_b.transform(X_b_all_scaled)
+fig, (ax_corr, ax_zoom) = plt.subplots(1, 2, figsize=(13, 5))
 
-cov_z = np.cov(Z_b_train, rowvar=False)
-mu_z = np.mean(Z_b_train, axis=0)
+# Subplot 1: Correlation between log(1+T^2) and log(1+MAE)
+log_t2 = np.log1p(df_bearing['T2'])
+log_mae = np.log1p(df_bearing['MAE'])
+rho, _ = stats.spearmanr(df_bearing['T2'], df_bearing['MAE'])
 
-mhd2_train_z, _ = mahalanobis_distance(Z_b_train, mu_z, cov_z)
-mhd2_test_z, _ = mahalanobis_distance(Z_b_test, mu_z, cov_z)
-mhd2_all_z, _ = mahalanobis_distance(Z_b_all, mu_z, cov_z)
+ax_corr.scatter(log_t2.iloc[:200], log_mae.iloc[:200], c='#3B82F6', alpha=0.5, s=20, label='Baseline (N=200)')
+ax_corr.scatter(log_t2.iloc[200:], log_mae.iloc[200:], c='#EF4444', alpha=0.6, s=20, label='Evaluation (N=784)')
+ax_corr.set_title(f'Diagnostic Concordance (Spearman Rank Corr = {rho:.4f})', fontweight='bold')
+ax_corr.set_xlabel(r'$\ln(1 + T^2)$ (Latent Space)')
+ax_corr.set_ylabel(r'$\ln(1 + \mathrm{MAE})$ (Residual Space)')
+ax_corr.legend(frameon=True, loc='upper left')
 
-crit_001_t2 = stats.chi2.ppf(0.999, df=2)
-test_t2_series = pd.Series(mhd2_test_z, index=df_b_test.index)
-train_t2_series = pd.Series(mhd2_train_z, index=df_b_train.index)
+# Subplot 2: Normalized Trajectories Zoom-In
+norm_t2 = (df_bearing['T2'] - df_bearing['T2'].min()) / (df_bearing['T2'].max() - df_bearing['T2'].min())
+norm_mae = (df_bearing['MAE'] - df_bearing['MAE'].min()) / (df_bearing['MAE'].max() - df_bearing['MAE'].min())
 
-anom_t2_idx = np.where(test_t2_series > crit_001_t2)[0]
-t2_first_ts = test_t2_series.index[anom_t2_idx[0]]
+ax_zoom.plot(norm_t2.index, norm_t2.values, color='#2563EB', lw=1.8, linestyle='--', label=r'Normalized $T^2$ (Latent)')
+ax_zoom.plot(norm_mae.index, norm_mae.values, color='#059669', lw=1.8, label='Normalized MAE (Residual)')
+ax_zoom.axvline(first_alarm_105, color='#F59E0B', linestyle=':', lw=1.8, label='MAE 105% Alarm')
+ax_zoom.axvline(first_t2_alarm, color='#DC2626', linestyle='-', lw=1.8, label=r'$T^2$ Alarm')
+ax_zoom.set_xlim(pd.to_datetime('2004-02-14'), pd.to_datetime('2004-02-19 12:00:00'))
+ax_zoom.set_title('Prognostic Alarm Progression (Degradation Phase)', fontweight='bold')
+ax_zoom.set_xlabel('Timestamp')
+ax_zoom.set_ylabel('Normalized Score [0, 1]')
+ax_zoom.legend(frameon=True, loc='upper left')
 
-print(f"Hotelling's T^2 Threshold (chi2_0.001, df=2): {crit_001_t2:.3f}")
-print(f"First Latent T^2 Anomaly Timestamp: {t2_first_ts} (Test index: {anom_t2_idx[0]}, Total index: {200+anom_t2_idx[0]})")
-print(f"Value at Detection: T^2 = {test_t2_series.loc[t2_first_ts]:.2f}")
-
-plt.figure(figsize=(12, 5))
-plt.plot(train_t2_series.index, train_t2_series.values, color='#2563EB', lw=1.2, label='Train $T^2$ (Baseline)')
-plt.plot(test_t2_series.index, test_t2_series.values, color='#1E3A8A', lw=1.4, label='Test $T^2$ (Operational)')
-plt.axhline(crit_001_t2, color='#DC2626', linestyle='--', lw=2.0, label=f'Threshold $\chi_{{0.001}}^2(2) = {crit_001_t2:.2f}$')
-plt.scatter([t2_first_ts], [test_t2_series.loc[t2_first_ts]], color='#DC2626', s=90, marker='X', zorder=5, label='First Alarm')
-plt.axvline(split_dt, color='#64748B', linestyle=':', lw=1.5, label='Train/Test Partition')
-plt.yscale('log')
-plt.title("Hotelling's $T^2$ Latent Mahalanobis Distance Timeline", fontweight='bold')
-plt.xlabel('Timestamp')
-plt.ylabel('Squared Distance $T^2$ (Log Scale)')
-plt.grid(True, linestyle=':', alpha=0.4)
-plt.legend(frameon=True, loc='upper left')
 plt.tight_layout()
+plt.savefig('plot_8_anomaly_detection_comparative_summary.pdf', bbox_inches='tight', dpi=300)
 plt.show()
-\end{lstlisting}
-\vspace{0.2em}
-\noindent\textbf{\small [Out 17]:}
-\begin{lstlisting}[style=output]
-Hotelling's T^2 Threshold (chi2_0.001, df=2): 13.816
-First Latent T^2 Anomaly Timestamp: 2004-02-15 05:42:39 (Test index: 203, Total index: 403)
-Value at Detection: T^2 = 16.79
-<Figure size 1200x500 with 0 Axes>
-[<matplotlib.lines.Line2D at 0x113deaa50>]
-[<matplotlib.lines.Line2D at 0x11501df50>]
-<matplotlib.lines.Line2D at 0x113f39290>
-<matplotlib.collections.PathCollection at 0x113f84250>
-<matplotlib.lines.Line2D at 0x113f47950>
-Text(0.5, 1.0, "Hotelling's $T^2$ Latent Mahalanobis Distance Timeline")
-Text(0.5, 0, 'Timestamp')
-Text(0, 0.5, 'Squared Distance $T^2$ (Log Scale)')
-<matplotlib.legend.Legend at 0x114648590>
 \end{lstlisting}
 \begin{figure}[H]
 \centering
@@ -826,182 +843,55 @@ Text(0, 0.5, 'Squared Distance $T^2$ (Log Scale)')
 \end{figure}
 \vspace{0.3em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
-{\small\bfseries Method B: Residual space anomaly detection via Reconstruction Error (MAE)\par}
+{\small\bfseries Summary benchmark of predictive maintenance metrics\par}
 \end{tcolorbox}
-\vspace{0.4em}
-\needspace{3\baselineskip}
-\noindent\textbf{\small [In 18]:}
-\begin{lstlisting}[style=pycode]
-X_b_train_rec = pca_b.inverse_transform(Z_b_train)
-X_b_test_rec = pca_b.inverse_transform(Z_b_test)
-X_b_all_rec = pca_b.inverse_transform(Z_b_all)
-
-mae_train = np.mean(np.abs(X_b_train_scaled - X_b_train_rec), axis=1)
-mae_test = np.mean(np.abs(X_b_test_scaled - X_b_test_rec), axis=1)
-mae_all = np.mean(np.abs(X_b_all_scaled - X_all_rec if 'X_all_rec' in locals() else X_b_all_rec), axis=1)
-
-max_train_mae = np.max(mae_train)
-thresh_105 = max_train_mae * 1.05
-thresh_110 = max_train_mae * 1.10
-
-test_mae_series = pd.Series(mae_test, index=df_b_test.index)
-train_mae_series = pd.Series(mae_train, index=df_b_train.index)
-
-idx_105 = np.where(test_mae_series > thresh_105)[0]
-idx_110 = np.where(test_mae_series > thresh_110)[0]
-
-ts_105 = test_mae_series.index[idx_105[0]]
-ts_110 = test_mae_series.index[idx_110[0]]
-
-print(f"Max Train Baseline MAE: {max_train_mae:.4f}")
-print(f"105% Threshold: {thresh_105:.4f} --> First Alarm: {ts_105} (Test index {idx_105[0]})")
-print(f"110% Threshold: {thresh_110:.4f} --> First Alarm: {ts_110} (Test index {idx_110[0]})")
-
-plt.figure(figsize=(12, 5))
-plt.plot(train_mae_series.index, train_mae_series.values, color='#16A34A', lw=1.2, label='Train Reconstruction MAE (Baseline)')
-plt.plot(test_mae_series.index, test_mae_series.values, color='#1E3A8A', lw=1.4, label='Test Reconstruction MAE')
-plt.axhline(thresh_105, color='#EA580C', linestyle='--', lw=1.8, label=f'105% Threshold: {thresh_105:.3f} (Onset: {ts_105})')
-plt.axhline(thresh_110, color='#DC2626', linestyle='-.', lw=2.0, label=f'110% Threshold: {thresh_110:.3f} (Onset: {ts_110})')
-plt.scatter([ts_105], [test_mae_series.loc[ts_105]], color='#EA580C', s=80, marker='o', zorder=5)
-plt.scatter([ts_110], [test_mae_series.loc[ts_110]], color='#DC2626', s=90, marker='s', zorder=5)
-plt.axvline(split_dt, color='#64748B', linestyle=':', lw=1.5, label='Train/Test Partition')
-plt.yscale('log')
-plt.title('Reconstruction Error (MAE) Timeline & Alarm Onset Tracking', fontweight='bold')
-plt.xlabel('Timestamp')
-plt.ylabel('Reconstruction Error MAE (Log Scale)')
-plt.grid(True, linestyle=':', alpha=0.4)
-plt.legend(frameon=True, loc='upper left')
-plt.tight_layout()
-plt.show()
-\end{lstlisting}
-\vspace{0.2em}
-\noindent\textbf{\small [Out 18]:}
-\begin{lstlisting}[style=output]
-Max Train Baseline MAE: 1.1736
-105% Threshold: 1.2322 --> First Alarm: 2004-02-14 07:52:39 (Test index 72)
-110% Threshold: 1.2909 --> First Alarm: 2004-02-14 07:52:39 (Test index 72)
-<Figure size 1200x500 with 0 Axes>
-[<matplotlib.lines.Line2D at 0x11509c890>]
-[<matplotlib.lines.Line2D at 0x113cc97d0>]
-<matplotlib.lines.Line2D at 0x113cc68d0>
-<matplotlib.lines.Line2D at 0x113cd6350>
-<matplotlib.collections.PathCollection at 0x113c15150>
-<matplotlib.collections.PathCollection at 0x113c14e10>
-<matplotlib.lines.Line2D at 0x113cca590>
-Text(0.5, 1.0, 'Reconstruction Error (MAE) Timeline & Alarm Onset Tracking')
-Text(0.5, 0, 'Timestamp')
-Text(0, 0.5, 'Reconstruction Error MAE (Log Scale)')
-<matplotlib.legend.Legend at 0x113cd7210>
-\end{lstlisting}
-\vspace{0.3em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
-{\small\bfseries Question 2.1\par}
-\end{tcolorbox}
-\vspace{0.3em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
-{\small\bfseries Answer to Question 2.1: PCA Subspace Dynamics \& Latent Distance Detection \newline \normalfont\footnotesize \par}
-\end{tcolorbox}
-\vspace{0.3em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
-{\small\bfseries Question 2.2\par}
-\end{tcolorbox}
-\vspace{0.3em}
-\begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
-{\small\bfseries Answer to Question 2.2: Residual Reconstruction MAE \& Failure Prognostics \newline \normalfont\footnotesize \par}
-\end{tcolorbox}
-\vspace{0.4em}
-\needspace{3\baselineskip}
-\noindent\textbf{\small [In 19]:}
-\begin{lstlisting}[style=pycode]
-fig, (ax_corr, ax_zoom) = plt.subplots(1, 2, figsize=(13, 5))
-
-ax_corr.scatter(np.log1p(test_t2_series.values), np.log1p(test_mae_series.values), color='#2563EB', alpha=0.6, s=16)
-rho, _ = stats.spearmanr(test_t2_series.values, test_mae_series.values)
-ax_corr.set_title(f"(a) Latent T^2 vs Residual MAE (Spearman rho = {rho:.4f})", fontweight="bold")
-ax_corr.set_xlabel('$\ln(1 + T^2)$ (Latent Space)')
-ax_corr.set_ylabel('$\ln(1 + \text{MAE})$ (Residual Space)')
-ax_corr.grid(True, linestyle=':', alpha=0.4)
-
-zoom_mask = (df_b_test.index >= '2004-02-14 00:00:00') & (df_b_test.index <= '2004-02-16 12:00:00')
-norm_mae = test_mae_series.loc[zoom_mask] / thresh_110
-norm_t2 = test_t2_series.loc[zoom_mask] / crit_001_t2
-
-ax_zoom.plot(norm_mae.index, norm_mae.values, color='#DC2626', lw=2.0, label='Normalized MAE / Threshold (110%)')
-ax_zoom.plot(norm_t2.index, norm_t2.values, color="#2563EB", lw=1.8, linestyle="--", label="Normalized T^2 / Threshold (Chi-Square 0.001)")
-ax_zoom.axhline(1.0, color='black', lw=1.4, linestyle=':', label='Alarm Threshold (= 1.0)')
-ax_zoom.axvline(ts_105, color='#EA580C', linestyle='-.', lw=1.2, label=f'MAE 105%: {ts_105.strftime("%m-%d %H:%M")}')
-ax_zoom.axvline(t2_first_ts, color='#2563EB', linestyle='-.', lw=1.2, label=f'T^2: {t2_first_ts.strftime("%m-%d %H:%M")}')
-ax_zoom.axvline(ts_110, color='#DC2626', linestyle='-.', lw=1.2, label=f'MAE 110%: {ts_110.strftime("%m-%d %H:%M")}')
-
-ax_zoom.set_title('(b) Incipient Degradation Phase (Normalized Frontiers)', fontweight='bold')
-ax_zoom.set_xlabel('Timestamp')
-ax_zoom.set_ylabel('Ratio to Anomaly Threshold')
-ax_zoom.grid(True, linestyle=':', alpha=0.4)
-ax_zoom.legend(frameon=True, fontsize=8, loc='upper left')
-
-plt.tight_layout()
-plt.show()
-\end{lstlisting}
-\vspace{0.2em}
-\noindent\textbf{\small [Out 19]:}
-\begin{lstlisting}[style=output]
-<matplotlib.collections.PathCollection at 0x1141a3750>
-Text(0.5, 1.0, '(a) Latent T^2 vs Residual MAE (Spearman rho = 0.8993)')
-Text(0.5, 0, '$\\ln(1 + T^2)$ (Latent Space)')
-Text(0, 0.5, '$\\ln(1 + \text{MAE})$ (Residual Space)')
-[<matplotlib.lines.Line2D at 0x113b9fa90>]
-[<matplotlib.lines.Line2D at 0x113cc4b10>]
-<matplotlib.lines.Line2D at 0x11418d050>
-<matplotlib.lines.Line2D at 0x1141aa590>
-<matplotlib.lines.Line2D at 0x11414e650>
-<matplotlib.lines.Line2D at 0x1141a3d10>
-Text(0.5, 1.0, '(b) Incipient Degradation Phase (Normalized Frontiers)')
-Text(0.5, 0, 'Timestamp')
-Text(0, 0.5, 'Ratio to Anomaly Threshold')
-<matplotlib.legend.Legend at 0x11418d650>
-\end{lstlisting}
 \vspace{0.4em}
 \needspace{3\baselineskip}
 \noindent\textbf{\small [In 20]:}
 \begin{lstlisting}[style=pycode]
+failure_time = df_bearing.index[-1]
 summary_df = pd.DataFrame([
     {
-        'Detection Method': 'Latent Hotelling $T^2$',
-        'Subspace': 'Latent PC ($k=2$)',
-        'Threshold Rule': f'chi2(df=2, 0.001) = {crit_001_t2:.3f}',
-        'First Alarm Timestamp': str(t2_first_ts),
-        'Lead Time to Failure (Hours)': 92.8,
-        'Train False Alarms': 0
+        'Metric': 'Reconstruction MAE (105% Threshold)',
+        'Alarm Timestamp': str(first_alarm_105),
+        'Threshold Value': f'{thresh_105:.4f}',
+        'Lead Time (Hours)': round((failure_time - first_alarm_105).total_seconds() / 3600, 2),
+        'Lead Time (Days)': round((failure_time - first_alarm_105).total_seconds() / 86400, 2),
+        'False Alarm Rate': '0.00%'
     },
     {
-        'Detection Method': 'Reconstruction Error MAE (105%)',
-        'Subspace': 'Residual Orthogonal Space',
-        'Threshold Rule': f'105% Max Baseline = {thresh_105:.4f}',
-        'First Alarm Timestamp': str(ts_105),
-        'Lead Time to Failure (Hours)': 109.2,
-        'Train False Alarms': 0
+        'Metric': "Hotelling's T^2 (Latent Chi-Square 0.001)",
+        'Alarm Timestamp': str(first_t2_alarm),
+        'Threshold Value': f'{crit_001_t2:.4f}',
+        'Lead Time (Hours)': round((failure_time - first_t2_alarm).total_seconds() / 3600, 2),
+        'Lead Time (Days)': round((failure_time - first_t2_alarm).total_seconds() / 86400, 2),
+        'False Alarm Rate': '0.00%'
     },
     {
-        'Detection Method': 'Reconstruction Error MAE (110%)',
-        'Subspace': 'Residual Orthogonal Space',
-        'Threshold Rule': f'110% Max Baseline = {thresh_110:.4f}',
-        'First Alarm Timestamp': str(ts_110),
-        'Lead Time to Failure (Hours)': 87.7,
-        'Train False Alarms': 0
+        'Metric': 'Reconstruction MAE (110% Threshold)',
+        'Alarm Timestamp': str(first_alarm_110),
+        'Threshold Value': f'{thresh_110:.4f}',
+        'Lead Time (Hours)': round((failure_time - first_alarm_110).total_seconds() / 3600, 2),
+        'Lead Time (Days)': round((failure_time - first_alarm_110).total_seconds() / 86400, 2),
+        'False Alarm Rate': '0.00%'
     }
 ])
-
-print("Comprehensive Benchmark & Prognostics Lead Time Summary:")
-print(summary_df.to_string(index=False))
+print("Comprehensive Predictive Maintenance Benchmark Summary:")
+display(summary_df)
 \end{lstlisting}
 \vspace{0.2em}
 \noindent\textbf{\small [Out 20]:}
 \begin{lstlisting}[style=output]
-Comprehensive Benchmark & Prognostics Lead Time Summary:
-               Detection Method                  Subspace             Threshold Rule First Alarm Timestamp  Lead Time to Failure (Hours)  Train False Alarms
-         Latent Hotelling $T^2$         Latent PC ($k=2$) chi2(df=2, 0.001) = 13.816   2004-02-15 05:42:39                          92.8                   0
-Reconstruction Error MAE (105%) Residual Orthogonal Space 105% Max Baseline = 1.2322   2004-02-14 07:52:39                         109.2                   0
-Reconstruction Error MAE (110%) Residual Orthogonal Space 110% Max Baseline = 1.2909   2004-02-14 07:52:39                          87.7                   0
+Comprehensive Predictive Maintenance Benchmark Summary:
+                                      Metric      Alarm Timestamp  \
+0        Reconstruction MAE (105% Threshold)  2004-02-14 07:52:39   
+1  Hotelling's T^2 (Latent Chi-Square 0.001)  2004-02-15 05:42:39   
+2        Reconstruction MAE (110% Threshold)  2004-02-14 07:52:39   
+
+  Threshold Value  Lead Time (Hours)  Lead Time (Days) False Alarm Rate  
+0          1.2322             118.50              4.94            0.00%  
+1         13.8155              96.67              4.03            0.00%  
+2          1.2909             118.50              4.94            0.00%
 \end{lstlisting}
 \vspace{0.3em}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
