@@ -25,6 +25,11 @@ import matplotlib.font_manager as fm
 from matplotlib.patches import Ellipse
 import matplotlib.transforms as transforms
 
+try:
+    from IPython.display import display
+except ImportError:
+    pass
+
 plt.style.use('seaborn-v0_8-muted')
 plt.rcParams['figure.figsize'] = (8, 8)
 plt.rcParams['grid.linestyle'] = ':'
@@ -121,9 +126,9 @@ df_diamond = pd.read_excel(diamond_path, sheet_name='Diamond')
 print(f"Diamond Dataset successfully loaded from: {diamond_path}")
 print(f"Dataset Shape: {df_diamond.shape[0]:,} rows, {df_diamond.shape[1]} columns")
 print("\nFirst 5 records of Diamond Dataset:")
-display(df_diamond.head())
+print(df_diamond.head())
 print("\nSummary Statistics of Diamond Dataset:")
-display(df_diamond.describe().round(3))
+print(df_diamond.describe().round(3))
 \end{lstlisting}
 \vspace{0.2em}
 \noindent\textbf{\small [Out 4]:}
@@ -177,7 +182,7 @@ for c in num_cols:
 
 df_skew = pd.DataFrame(skew_table)
 print("Empirical Skewness Audit across Diamond Features:")
-display(df_skew)
+df_skew
 \end{lstlisting}
 \vspace{0.2em}
 \noindent\textbf{\small [Out 5]:}
@@ -378,7 +383,7 @@ Chi-Square Critical Value (df=3, alpha=0.001): 16.266 -> Outliers: 446 (0.83%)
 \begin{lstlisting}[style=pycode]
 top_outliers = df_diamond.sort_values('mhd2', ascending=False).head(10)
 print("Top 10 Most Extreme Multivariate Outliers (Ranked by MHD^2):")
-display(top_outliers[['carat', 'cut', 'color', 'clarity', 'depth', 'price', 'mhd2', 'mhd']].round(3))
+top_outliers[['carat', 'cut', 'color', 'clarity', 'depth', 'price', 'mhd2', 'mhd']].round(3)
 \end{lstlisting}
 \vspace{0.2em}
 \noindent\textbf{\small [Out 10]:}
@@ -490,9 +495,9 @@ print(f"Bearing Dataset successfully loaded from: {bearing_path}")
 print(f"Total Telemetry Snapshots: {len(df_bearing):,} records")
 print(f"Time Range: {df_bearing.index[0]} to {df_bearing.index[-1]}")
 print("\nFirst 5 records of Bearing Dataset:")
-display(df_bearing.head())
+print(df_bearing.head())
 print("\nSummary Statistics of Bearing Telemetry:")
-display(df_bearing.describe().round(4))
+print(df_bearing.describe().round(4))
 \end{lstlisting}
 \vspace{0.2em}
 \noindent\textbf{\small [Out 12]:}
@@ -604,7 +609,7 @@ for k, (p, cp) in enumerate(zip(pve, cum_pve), 1):
 
 df_loadings = pd.DataFrame(loadings, index=bearing_cols, columns=['PC1', 'PC2'])
 print("\nFactor Loadings Matrix W:")
-display(df_loadings.round(4))
+df_loadings.round(4)
 \end{lstlisting}
 \vspace{0.2em}
 \noindent\textbf{\small [Out 15]:}
@@ -877,7 +882,7 @@ summary_df = pd.DataFrame([
     }
 ])
 print("Comprehensive Predictive Maintenance Benchmark Summary:")
-display(summary_df)
+summary_df
 \end{lstlisting}
 \vspace{0.2em}
 \noindent\textbf{\small [Out 20]:}
