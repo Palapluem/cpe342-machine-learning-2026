@@ -3,12 +3,13 @@
 \end{tcolorbox}
 \vspace{0.4em}
 \vspace{0.3em}
+\needspace{3\baselineskip}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=5pt,right=5pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
 {\small\bfseries Load necessary packages and apply custom configurations\par}
 \end{tcolorbox}
 \vspace{0.2em}
 \vspace{0.4em}
-\needspace{3\baselineskip}
+\needspace{4\baselineskip}
 \noindent\textbf{\small [In 1]:}
 \begin{lstlisting}[style=pycode]
 import warnings
@@ -38,7 +39,7 @@ plt.rcParams['grid.linestyle'] = ':'
 plt.rcParams['axes.grid'] = False
 \end{lstlisting}
 \vspace{0.4em}
-\needspace{3\baselineskip}
+\needspace{4\baselineskip}
 \noindent\textbf{\small [In 2]:}
 \begin{lstlisting}[style=pycode]
 # Configure Sarabun Typography and Vector Embedding
@@ -70,16 +71,19 @@ plt.rcParams['ps.fonttype'] = 42
 print(f"Typography configured: Sarabun (Active: {sarabun_loaded}), PDF FontType: 42 (CID TrueType)")
 \end{lstlisting}
 \vspace{0.2em}
+\needspace{3\baselineskip}
 \noindent\textbf{\small [Out 2]:}
 \begin{lstlisting}[style=output]
 Typography configured: Sarabun (Active: True), PDF FontType: 42 (CID TrueType)
 \end{lstlisting}
-\vspace{0.6em}
+\vspace{0.8em}
+\needspace{5\baselineskip}
 \begin{tcolorbox}[colback=partorange!10!white,colframe=partorange,boxrule=1pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,unbreakable]
 {\large\bfseries Part I: Multivariate Outlier Detection using Mahalanobis Distance (MHD)\par}
 \end{tcolorbox}
 \vspace{0.4em}
 \vspace{0.3em}
+\needspace{4\baselineskip}
 \begin{tcolorbox}[colback=codebg,colframe=codeframe,boxrule=0.6pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,unbreakable,before upper={\sloppy\raggedright}]
 \textbf{Mahalanobis distance} (MHD) measures the distance of a data point from a multivariate distribution centroid while accounting for the covariance and variance scale of features:
 
@@ -91,12 +95,13 @@ Under the assumption of multivariate normality \(\mathbf{x} \sim \mathcal{N}_p(\
 \end{tcolorbox}
 \vspace{0.3em}
 \vspace{0.3em}
+\needspace{3\baselineskip}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=5pt,right=5pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
 {\small\bfseries Define the MHD function\par}
 \end{tcolorbox}
 \vspace{0.2em}
 \vspace{0.4em}
-\needspace{3\baselineskip}
+\needspace{4\baselineskip}
 \noindent\textbf{\small [In 3]:}
 \begin{lstlisting}[style=pycode]
 def mahalanobis_distance(x, mean, cov):
@@ -116,12 +121,13 @@ def mahalanobis_distance(x, mean, cov):
     return mhd_sq, np.sqrt(np.maximum(0.0, mhd_sq))
 \end{lstlisting}
 \vspace{0.3em}
+\needspace{3\baselineskip}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=5pt,right=5pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
 {\small\bfseries Load and explore the dataset\par}
 \end{tcolorbox}
 \vspace{0.2em}
 \vspace{0.4em}
-\needspace{3\baselineskip}
+\needspace{4\baselineskip}
 \noindent\textbf{\small [In 4]:}
 \begin{lstlisting}[style=pycode]
 candidates = [
@@ -143,6 +149,7 @@ print("\nSummary Statistics of Diamond Dataset:")
 print(df_diamond.describe().round(3))
 \end{lstlisting}
 \vspace{0.2em}
+\needspace{3\baselineskip}
 \noindent\textbf{\small [Out 4]:}
 \begin{lstlisting}[style=output]
 Diamond Dataset successfully loaded from: anomaly-detection.xlsx
@@ -178,12 +185,13 @@ min        0.000
 max       31.800
 \end{lstlisting}
 \vspace{0.3em}
+\needspace{3\baselineskip}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=5pt,right=5pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
 {\small\bfseries Check feature distributions and inspect skewness\par}
 \end{tcolorbox}
 \vspace{0.2em}
 \vspace{0.4em}
-\needspace{3\baselineskip}
+\needspace{4\baselineskip}
 \noindent\textbf{\small [In 5]:}
 \begin{lstlisting}[style=pycode]
 num_cols = ['carat', 'depth', 'table', 'price', 'x', 'y', 'z']
@@ -198,6 +206,7 @@ print("Empirical Skewness Audit across Diamond Features:")
 df_skew
 \end{lstlisting}
 \vspace{0.2em}
+\needspace{3\baselineskip}
 \noindent\textbf{\small [Out 5]:}
 \begin{lstlisting}[style=output]
 Empirical Skewness Audit across Diamond Features:
@@ -211,12 +220,13 @@ Empirical Skewness Audit across Diamond Features:
 6       z    1.5224     3.539     0.706
 \end{lstlisting}
 \vspace{0.3em}
+\needspace{3\baselineskip}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=5pt,right=5pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
 {\small\bfseries Apply log-transformation to rectify positive skewness\par}
 \end{tcolorbox}
 \vspace{0.2em}
 \vspace{0.4em}
-\needspace{3\baselineskip}
+\needspace{4\baselineskip}
 \noindent\textbf{\small [In 6]:}
 \begin{lstlisting}[style=pycode]
 features_d = ['carat', 'depth', 'price']
@@ -253,22 +263,25 @@ plt.savefig('plot_1_diamond_distributions_skewness.pdf', bbox_inches='tight', dp
 plt.show()
 \end{lstlisting}
 \vspace{0.2em}
+\needspace{3\baselineskip}
 \noindent\textbf{\small [Out 6]:}
 \begin{lstlisting}[style=output]
 Original Skewness: carat = 1.1166, price = 1.6184, depth = -0.0823
 Log-transformed Skewness: log_carat = 0.0961, log_price = 0.1153
 \end{lstlisting}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.96\linewidth,height=0.42\textheight,keepaspectratio]{plot_1_diamond_distributions_skewness.pdf}
-\caption{Diamond feature distributions before and after logarithmic transformation for skewness rectification ($N = 53,940$).}
-\end{figure}
+\vspace{0.3em}
+\begin{center}
+\includegraphics[width=0.96\linewidth,height=0.36\textheight,keepaspectratio]{plot_1_diamond_distributions_skewness.pdf}
+\end{center}
+\vspace{0.2em}
 \vspace{0.4em}
+\needspace{6\baselineskip}
 \begin{tcolorbox}[colback=ansbg,colframe=ansborder,boxrule=0.8pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,unbreakable,before upper={\sloppy\raggedright},title=\textbf{\small Assignment Prompt: Question 1.1}]
 \textbf{Question 1.1} - (a) Which features in the Diamond dataset exhibit substantial right-skewness? - (b) Why is log transformation necessary prior to computing Mahalanobis Distance? - (c) What is the mathematical impact of extreme skewness on the sample covariance matrix \(\mathbf{\Sigma}\) and centroid \(\boldsymbol{\mu}\)?
 \end{tcolorbox}
 \vspace{0.3em}
 \vspace{0.4em}
+\needspace{5\baselineskip}
 \begin{tcolorbox}[colback=teal!3!white,colframe=teal!70!black,boxrule=0.7pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,breakable,before upper={\sloppy\raggedright},title=\textbf{\small Notebook Analytical Narrative: Answer to Question 1.1}]
 \subsubsection{\texorpdfstring{\textbf{Answer to Question 1.1: Skewness Rectification, Log Transformation, and Covariance Conditioning}}{Answer to Question 1.1: Skewness Rectification, Log Transformation, and Covariance Conditioning}}
 
@@ -308,12 +321,13 @@ Log-transformed Skewness: log_carat = 0.0961, log_price = 0.1153
 \end{tcolorbox}
 \vspace{0.3em}
 \vspace{0.3em}
+\needspace{3\baselineskip}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=5pt,right=5pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
 {\small\bfseries Compute empirical mean and covariance matrix of transformed data\par}
 \end{tcolorbox}
 \vspace{0.2em}
 \vspace{0.4em}
-\needspace{3\baselineskip}
+\needspace{4\baselineskip}
 \noindent\textbf{\small [In 7]:}
 \begin{lstlisting}[style=pycode]
 X_d = df_d_log[['log_carat', 'depth', 'log_price']].values
@@ -328,6 +342,7 @@ print(np.round(cov_d, 5))
 print(f"\nCondition Number: {cond_d:.2f} (Well-conditioned, non-singular)")
 \end{lstlisting}
 \vspace{0.2em}
+\needspace{3\baselineskip}
 \noindent\textbf{\small [Out 7]:}
 \begin{lstlisting}[style=output]
 Empirical Mean Vector mu (log_carat, depth, log_price):
@@ -341,12 +356,13 @@ Sample Covariance Matrix Sigma:
 Condition Number: 119.38 (Well-conditioned, non-singular)
 \end{lstlisting}
 \vspace{0.3em}
+\needspace{3\baselineskip}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=5pt,right=5pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
 {\small\bfseries Compute Mahalanobis Distance for all diamond observations\par}
 \end{tcolorbox}
 \vspace{0.2em}
 \vspace{0.4em}
-\needspace{3\baselineskip}
+\needspace{4\baselineskip}
 \noindent\textbf{\small [In 8]:}
 \begin{lstlisting}[style=pycode]
 mhd2_d, mhd_d = mahalanobis_distance(X_d, mu_d, cov_d)
@@ -357,6 +373,7 @@ print("Mahalanobis Distance Summary Statistics:")
 print(df_diamond[['mhd2', 'mhd']].describe().round(4))
 \end{lstlisting}
 \vspace{0.2em}
+\needspace{3\baselineskip}
 \noindent\textbf{\small [Out 8]:}
 \begin{lstlisting}[style=output]
 Mahalanobis Distance Summary Statistics:
@@ -371,12 +388,13 @@ min        0.0054      0.0735
 max      178.2684     13.3517
 \end{lstlisting}
 \vspace{0.3em}
+\needspace{3\baselineskip}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=5pt,right=5pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
 {\small\bfseries Establish Chi-Square thresholding at $\alpha = 0.01$ and $\alpha = 0.001$\par}
 \end{tcolorbox}
 \vspace{0.2em}
 \vspace{0.4em}
-\needspace{3\baselineskip}
+\needspace{4\baselineskip}
 \noindent\textbf{\small [In 9]:}
 \begin{lstlisting}[style=pycode]
 crit_01_d = stats.chi2.ppf(0.99, df=3)
@@ -408,22 +426,25 @@ plt.savefig('plot_2_diamond_mhd_histogram_chi2.pdf', bbox_inches='tight', dpi=30
 plt.show()
 \end{lstlisting}
 \vspace{0.2em}
+\needspace{3\baselineskip}
 \noindent\textbf{\small [Out 9]:}
 \begin{lstlisting}[style=output]
 Chi-Square Critical Value (df=3, alpha=0.01) : 11.345 -> Outliers: 1,079 (2.00%)
 Chi-Square Critical Value (df=3, alpha=0.001): 16.266 -> Outliers: 446 (0.83%)
 \end{lstlisting}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.96\linewidth,height=0.42\textheight,keepaspectratio]{plot_2_diamond_mhd_histogram_chi2.pdf}
-\caption{Empirical histogram of squared Mahalanobis distance ($D_M^2$) versus theoretical Chi-Square distribution ($\mathrm{df} = 3$).}
-\end{figure}
+\vspace{0.3em}
+\begin{center}
+\includegraphics[width=0.96\linewidth,height=0.36\textheight,keepaspectratio]{plot_2_diamond_mhd_histogram_chi2.pdf}
+\end{center}
+\vspace{0.2em}
 \vspace{0.4em}
+\needspace{6\baselineskip}
 \begin{tcolorbox}[colback=ansbg,colframe=ansborder,boxrule=0.8pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,unbreakable,before upper={\sloppy\raggedright},title=\textbf{\small Assignment Prompt: Question 1.2}]
 \textbf{Question 1.2} - (a) How many outliers are identified at \(\alpha = 0.01\) and \(\alpha = 0.001\)? - (b) What are the characteristic anomalies found among the top outliers? - (c) Explain why the empirical outlier rate (2.00\%) exceeds the theoretical \(\alpha\) level (1.00\%).
 \end{tcolorbox}
 \vspace{0.3em}
 \vspace{0.4em}
+\needspace{5\baselineskip}
 \begin{tcolorbox}[colback=teal!3!white,colframe=teal!70!black,boxrule=0.7pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,breakable,before upper={\sloppy\raggedright},title=\textbf{\small Notebook Analytical Narrative: Answer to Question 1.2}]
 \subsubsection{\texorpdfstring{\textbf{Answer to Question 1.2: Chi-Square Critical Gating, Degrees of Freedom, and Outlier Profiling}}{Answer to Question 1.2: Chi-Square Critical Gating, Degrees of Freedom, and Outlier Profiling}}
 
@@ -462,12 +483,13 @@ Chi-Square Critical Value (df=3, alpha=0.001): 16.266 -> Outliers: 446 (0.83%)
 \end{tcolorbox}
 \vspace{0.3em}
 \vspace{0.3em}
+\needspace{3\baselineskip}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=5pt,right=5pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
 {\small\bfseries Profile the top most extreme multivariate outliers\par}
 \end{tcolorbox}
 \vspace{0.2em}
 \vspace{0.4em}
-\needspace{3\baselineskip}
+\needspace{4\baselineskip}
 \noindent\textbf{\small [In 10]:}
 \begin{lstlisting}[style=pycode]
 top_outliers = df_diamond.sort_values('mhd2', ascending=False).head(10)
@@ -475,6 +497,7 @@ print("Top 10 Most Extreme Multivariate Outliers (Ranked by MHD^2):")
 top_outliers[['carat', 'cut', 'color', 'clarity', 'depth', 'price', 'mhd2', 'mhd']].round(3)
 \end{lstlisting}
 \vspace{0.2em}
+\needspace{3\baselineskip}
 \noindent\textbf{\small [Out 10]:}
 \begin{lstlisting}[style=output]
 Top 10 Most Extreme Multivariate Outliers (Ranked by MHD^2):
@@ -491,12 +514,13 @@ Top 10 Most Extreme Multivariate Outliers (Ranked by MHD^2):
 36503   0.30   Fair     E    VVS2   51.0    945   58.245   7.632
 \end{lstlisting}
 \vspace{0.3em}
+\needspace{3\baselineskip}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=5pt,right=5pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
 {\small\bfseries Visualize bivariate scatter projections and 99\% confidence ellipses\par}
 \end{tcolorbox}
 \vspace{0.2em}
 \vspace{0.4em}
-\needspace{3\baselineskip}
+\needspace{4\baselineskip}
 \noindent\textbf{\small [In 11]:}
 \begin{lstlisting}[style=pycode]
 def plot_cov_ellipse(cov, pos, n_std=3.035, ax=None, **kwargs):
@@ -542,33 +566,37 @@ plt.tight_layout()
 plt.savefig('plot_3_diamond_bivariate_ellipses.pdf', bbox_inches='tight', dpi=300)
 plt.show()
 \end{lstlisting}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.96\linewidth,height=0.42\textheight,keepaspectratio]{plot_3_diamond_bivariate_ellipses.pdf}
-\caption{Bivariate scatter projections and 99\% confidence ellipses distinguishing inliers and multivariate outliers.}
-\end{figure}
-\vspace{0.6em}
+\vspace{0.3em}
+\begin{center}
+\includegraphics[width=0.96\linewidth,height=0.36\textheight,keepaspectratio]{plot_3_diamond_bivariate_ellipses.pdf}
+\end{center}
+\vspace{0.2em}
+\vspace{0.8em}
+\needspace{5\baselineskip}
 \begin{tcolorbox}[colback=partorange!10!white,colframe=partorange,boxrule=1pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,unbreakable]
 {\large\bfseries Part II: Latent-Variable Based Anomaly Detection\par}
 \end{tcolorbox}
 \vspace{0.4em}
 \vspace{0.3em}
+\needspace{4\baselineskip}
 \begin{tcolorbox}[colback=codebg,colframe=codeframe,boxrule=0.6pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,unbreakable,before upper={\sloppy\raggedright}]
 In this section, we analyze 4-channel accelerometer vibration telemetry from the NASA IMS Bearing Run-to-Failure experiment (\(N=984\)). We employ Latent-Variable Principal Component Analysis (PCA) to learn the nominal operating manifold and detect early mechanical degradation via Hotelling's \(T^2\) (latent space) and Reconstruction Error MAE (residual space).
 \end{tcolorbox}
 \vspace{0.3em}
 \vspace{0.5em}
+\needspace{4\baselineskip}
 \begin{tcolorbox}[colback=accentblue!8!white,colframe=accentblue!80!black,boxrule=0.7pt,arc=2pt,left=5pt,right=5pt,top=3pt,bottom=3pt,unbreakable]
 {\bfseries\normalsize Data preprocessing and baseline partitioning\par}
 \end{tcolorbox}
 \vspace{0.2em}
 \vspace{0.3em}
+\needspace{3\baselineskip}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=5pt,right=5pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
 {\small\bfseries Load and explore the bearing vibration dataset\par}
 \end{tcolorbox}
 \vspace{0.2em}
 \vspace{0.4em}
-\needspace{3\baselineskip}
+\needspace{4\baselineskip}
 \noindent\textbf{\small [In 12]:}
 \begin{lstlisting}[style=pycode]
 bearing_candidates = [
@@ -594,6 +622,7 @@ print("\nSummary Statistics of Bearing Telemetry:")
 print(df_bearing.describe().round(4))
 \end{lstlisting}
 \vspace{0.2em}
+\needspace{3\baselineskip}
 \noindent\textbf{\small [Out 12]:}
 \begin{lstlisting}[style=output]
 Bearing Dataset successfully loaded from: BearingTest.csv
@@ -620,7 +649,7 @@ min       0.0012     0.0008     0.0007     0.0017
 max       0.4533     0.1610     0.1513     0.1190
 \end{lstlisting}
 \vspace{0.4em}
-\needspace{3\baselineskip}
+\needspace{4\baselineskip}
 \noindent\textbf{\small [In 13]:}
 \begin{lstlisting}[style=pycode]
 fig, axes = plt.subplots(4, 1, figsize=(13, 8), sharex=True)
@@ -638,18 +667,19 @@ plt.tight_layout()
 plt.savefig('plot_4_bearing_raw_sensor_timeseries.pdf', bbox_inches='tight', dpi=300)
 plt.show()
 \end{lstlisting}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.96\linewidth,height=0.42\textheight,keepaspectratio]{plot_4_bearing_raw_sensor_timeseries.pdf}
-\caption{Continuous 4-channel accelerometer vibration telemetry throughout the NASA IMS bearing run-to-failure lifecycle.}
-\end{figure}
 \vspace{0.3em}
+\begin{center}
+\includegraphics[width=0.96\linewidth,height=0.36\textheight,keepaspectratio]{plot_4_bearing_raw_sensor_timeseries.pdf}
+\end{center}
+\vspace{0.2em}
+\vspace{0.3em}
+\needspace{3\baselineskip}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=5pt,right=5pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
 {\small\bfseries Partition nominal training baseline ($N=200$) and standardize features (Zero Data Leakage)\par}
 \end{tcolorbox}
 \vspace{0.2em}
 \vspace{0.4em}
-\needspace{3\baselineskip}
+\needspace{4\baselineskip}
 \noindent\textbf{\small [In 14]:}
 \begin{lstlisting}[style=pycode]
 df_b_train = df_bearing.iloc[:200].copy()
@@ -667,6 +697,7 @@ print("Baseline Standardized Stds (must be 1.0):")
 print(np.round(X_b_train_scaled.std(axis=0), 4))
 \end{lstlisting}
 \vspace{0.2em}
+\needspace{3\baselineskip}
 \noindent\textbf{\small [Out 14]:}
 \begin{lstlisting}[style=output]
 Training Baseline Size: 200 snapshots (2004-02-12 10:32:39 to 2004-02-13 19:42:39)
@@ -678,17 +709,19 @@ Baseline Standardized Stds (must be 1.0):
 [1. 1. 1. 1.]
 \end{lstlisting}
 \vspace{0.5em}
+\needspace{4\baselineskip}
 \begin{tcolorbox}[colback=accentblue!8!white,colframe=accentblue!80!black,boxrule=0.7pt,arc=2pt,left=5pt,right=5pt,top=3pt,bottom=3pt,unbreakable]
 {\bfseries\normalsize Reduce the data dimension using PCA\par}
 \end{tcolorbox}
 \vspace{0.2em}
 \vspace{0.3em}
+\needspace{3\baselineskip}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=5pt,right=5pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
 {\small\bfseries Fit 2-component PCA on the standardized training baseline\par}
 \end{tcolorbox}
 \vspace{0.2em}
 \vspace{0.4em}
-\needspace{3\baselineskip}
+\needspace{4\baselineskip}
 \noindent\textbf{\small [In 15]:}
 \begin{lstlisting}[style=pycode]
 pca_b = PCA(n_components=2)
@@ -709,6 +742,7 @@ print("\nFactor Loadings Matrix W:")
 df_loadings.round(4)
 \end{lstlisting}
 \vspace{0.2em}
+\needspace{3\baselineskip}
 \noindent\textbf{\small [Out 15]:}
 \begin{lstlisting}[style=output]
 Baseline PCA Eigenvalues:
@@ -726,7 +760,7 @@ Bearing 3  0.4334  0.7446
 Bearing 4  0.5050 -0.0876
 \end{lstlisting}
 \vspace{0.4em}
-\needspace{3\baselineskip}
+\needspace{4\baselineskip}
 \noindent\textbf{\small [In 16]:}
 \begin{lstlisting}[style=pycode]
 fig, (ax_scree, ax_load) = plt.subplots(1, 2, figsize=(12, 4.5))
@@ -756,23 +790,25 @@ plt.tight_layout()
 plt.savefig('plot_5_bearing_pca_variance_loadings.pdf', bbox_inches='tight', dpi=300)
 plt.show()
 \end{lstlisting}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.96\linewidth,height=0.42\textheight,keepaspectratio]{plot_5_bearing_pca_variance_loadings.pdf}
-\caption{PCA scree plot (explained variance ratio) and factor loadings distribution across the 2 principal components.}
-\end{figure}
+\vspace{0.3em}
+\begin{center}
+\includegraphics[width=0.96\linewidth,height=0.36\textheight,keepaspectratio]{plot_5_bearing_pca_variance_loadings.pdf}
+\end{center}
+\vspace{0.2em}
 \vspace{0.5em}
+\needspace{4\baselineskip}
 \begin{tcolorbox}[colback=accentblue!8!white,colframe=accentblue!80!black,boxrule=0.7pt,arc=2pt,left=5pt,right=5pt,top=3pt,bottom=3pt,unbreakable]
 {\bfseries\normalsize Method A: Latent subspace anomaly detection via Hotelling's $T^2$ (MHD on PC scores)\par}
 \end{tcolorbox}
 \vspace{0.2em}
 \vspace{0.3em}
+\needspace{3\baselineskip}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=5pt,right=5pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
 {\small\bfseries Compute Hotelling's $T^2$ distance and track alarm onset\par}
 \end{tcolorbox}
 \vspace{0.2em}
 \vspace{0.4em}
-\needspace{3\baselineskip}
+\needspace{4\baselineskip}
 \noindent\textbf{\small [In 17]:}
 \begin{lstlisting}[style=pycode]
 Z_b_train = pca_b.transform(X_b_train_scaled)
@@ -809,28 +845,31 @@ plt.savefig('plot_6_bearing_mhd_latent_scores.pdf', bbox_inches='tight', dpi=300
 plt.show()
 \end{lstlisting}
 \vspace{0.2em}
+\needspace{3\baselineskip}
 \noindent\textbf{\small [Out 17]:}
 \begin{lstlisting}[style=output]
 Chi-Square Threshold (df=2, alpha=0.001): 13.816
 First T^2 Anomaly Timestamp: 2004-02-15 05:42:39
 \end{lstlisting}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.96\linewidth,height=0.42\textheight,keepaspectratio]{plot_6_bearing_mhd_latent_scores.pdf}
-\caption{Hotelling\'s $T^2$ latent-space Mahalanobis distance metric trajectory versus $\chi^2_{0.001}(2)$ critical threshold.}
-\end{figure}
+\vspace{0.3em}
+\begin{center}
+\includegraphics[width=0.96\linewidth,height=0.36\textheight,keepaspectratio]{plot_6_bearing_mhd_latent_scores.pdf}
+\end{center}
+\vspace{0.2em}
 \vspace{0.5em}
+\needspace{4\baselineskip}
 \begin{tcolorbox}[colback=accentblue!8!white,colframe=accentblue!80!black,boxrule=0.7pt,arc=2pt,left=5pt,right=5pt,top=3pt,bottom=3pt,unbreakable]
 {\bfseries\normalsize Method B: Residual space anomaly detection via Reconstruction Error (MAE)\par}
 \end{tcolorbox}
 \vspace{0.2em}
 \vspace{0.3em}
+\needspace{3\baselineskip}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=5pt,right=5pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
 {\small\bfseries Compute sample-wise reconstruction error MAE and track threshold crossings\par}
 \end{tcolorbox}
 \vspace{0.2em}
 \vspace{0.4em}
-\needspace{3\baselineskip}
+\needspace{4\baselineskip}
 \noindent\textbf{\small [In 18]:}
 \begin{lstlisting}[style=pycode]
 X_b_train_rec = pca_b.inverse_transform(Z_b_train)
@@ -875,23 +914,26 @@ plt.savefig('plot_7_bearing_reconstruction_mae_timeseries.pdf', bbox_inches='tig
 plt.show()
 \end{lstlisting}
 \vspace{0.2em}
+\needspace{3\baselineskip}
 \noindent\textbf{\small [Out 18]:}
 \begin{lstlisting}[style=output]
 Nominal Baseline Max MAE: 1.1736
 Threshold 105% (1.2322) -> First Alarm: 2004-02-14 07:52:39
 Threshold 110% (1.2909) -> First Alarm: 2004-02-14 07:52:39
 \end{lstlisting}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.96\linewidth,height=0.42\textheight,keepaspectratio]{plot_7_bearing_reconstruction_mae_timeseries.pdf}
-\caption{Residual-space reconstruction Mean Absolute Error (MAE) trajectory with 105\% and 110\% alarm thresholds.}
-\end{figure}
+\vspace{0.3em}
+\begin{center}
+\includegraphics[width=0.96\linewidth,height=0.36\textheight,keepaspectratio]{plot_7_bearing_reconstruction_mae_timeseries.pdf}
+\end{center}
+\vspace{0.2em}
 \vspace{0.4em}
+\needspace{6\baselineskip}
 \begin{tcolorbox}[colback=ansbg,colframe=ansborder,boxrule=0.8pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,unbreakable,before upper={\sloppy\raggedright},title=\textbf{\small Assignment Prompt: Question 2.1}]
 \textbf{Question 2.1} - (a) How much total variance is captured by \(k=2\) principal components in the training baseline? - (b) Which bearing features have the strongest loadings on PC1 and PC2? - (c) At what timestamp does Hotelling's \(T^2\) first signal an anomalous condition?
 \end{tcolorbox}
 \vspace{0.3em}
 \vspace{0.4em}
+\needspace{5\baselineskip}
 \begin{tcolorbox}[colback=teal!3!white,colframe=teal!70!black,boxrule=0.7pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,breakable,before upper={\sloppy\raggedright},title=\textbf{\small Notebook Analytical Narrative: Answer to Question 2.1}]
 \subsubsection{\texorpdfstring{\textbf{Answer to Question 2.1: Latent Subspace Modeling, Loadings Matrix, and \(T^2\) Failure Onset}}{Answer to Question 2.1: Latent Subspace Modeling, Loadings Matrix, and T\^{}2 Failure Onset}}
 
@@ -941,11 +983,13 @@ Threshold 110% (1.2909) -> First Alarm: 2004-02-14 07:52:39
 \end{tcolorbox}
 \vspace{0.3em}
 \vspace{0.4em}
+\needspace{6\baselineskip}
 \begin{tcolorbox}[colback=ansbg,colframe=ansborder,boxrule=0.8pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,unbreakable,before upper={\sloppy\raggedright},title=\textbf{\small Assignment Prompt: Question 2.2}]
 \textbf{Question 2.2} - (a) Compare the early warning lead times of Latent \(T^2\) versus Reconstruction MAE (105\% and 110\%). - (b) Which specific bearing experienced mechanical failure, and how does the vibration telemetry corroborate this? - (c) Explain the complementary physical roles of Latent Subspace (\(T^2\)) and Residual Subspace (MAE) in predictive maintenance.
 \end{tcolorbox}
 \vspace{0.3em}
 \vspace{0.4em}
+\needspace{5\baselineskip}
 \begin{tcolorbox}[colback=teal!3!white,colframe=teal!70!black,boxrule=0.7pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,breakable,before upper={\sloppy\raggedright},title=\textbf{\small Notebook Analytical Narrative: Answer to Question 2.2}]
 \subsubsection{\texorpdfstring{\textbf{Answer to Question 2.2: Residual Reconstruction MAE, Early Warning Lead Time, and Prognostics}}{Answer to Question 2.2: Residual Reconstruction MAE, Early Warning Lead Time, and Prognostics}}
 
@@ -987,12 +1031,13 @@ Ultimate mechanical failure occurred at \textbf{\texttt{2004-02-19\ 06:22:39}} (
 \end{tcolorbox}
 \vspace{0.3em}
 \vspace{0.3em}
+\needspace{3\baselineskip}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=5pt,right=5pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
 {\small\bfseries Compare Latent Space ($T^2$) vs Residual Space (MAE) diagnostics\par}
 \end{tcolorbox}
 \vspace{0.2em}
 \vspace{0.4em}
-\needspace{3\baselineskip}
+\needspace{4\baselineskip}
 \noindent\textbf{\small [In 19]:}
 \begin{lstlisting}[style=pycode]
 fig, (ax_corr, ax_zoom) = plt.subplots(1, 2, figsize=(13, 5))
@@ -1027,18 +1072,19 @@ plt.tight_layout()
 plt.savefig('plot_8_anomaly_detection_comparative_summary.pdf', bbox_inches='tight', dpi=300)
 plt.show()
 \end{lstlisting}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.96\linewidth,height=0.42\textheight,keepaspectratio]{plot_8_anomaly_detection_comparative_summary.pdf}
-\caption{Comparative diagnostic trajectory contrasting Latent-Space Hotelling\'s $T^2$ and Residual-Space Reconstruction MAE.}
-\end{figure}
 \vspace{0.3em}
+\begin{center}
+\includegraphics[width=0.96\linewidth,height=0.36\textheight,keepaspectratio]{plot_8_anomaly_detection_comparative_summary.pdf}
+\end{center}
+\vspace{0.2em}
+\vspace{0.3em}
+\needspace{3\baselineskip}
 \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,boxrule=0.5pt,arc=2pt,left=5pt,right=5pt,top=2pt,bottom=2pt,unbreakable,before upper={\sloppy\raggedright}]
 {\small\bfseries Summary benchmark of predictive maintenance metrics\par}
 \end{tcolorbox}
 \vspace{0.2em}
 \vspace{0.4em}
-\needspace{3\baselineskip}
+\needspace{4\baselineskip}
 \noindent\textbf{\small [In 20]:}
 \begin{lstlisting}[style=pycode]
 failure_time = df_bearing.index[-1]
@@ -1072,6 +1118,7 @@ print("Comprehensive Predictive Maintenance Benchmark Summary:")
 summary_df
 \end{lstlisting}
 \vspace{0.2em}
+\needspace{3\baselineskip}
 \noindent\textbf{\small [Out 20]:}
 \begin{lstlisting}[style=output]
 Comprehensive Predictive Maintenance Benchmark Summary:
@@ -1086,7 +1133,8 @@ Comprehensive Predictive Maintenance Benchmark Summary:
 2          1.2909             118.50              4.94            0.00%
 \end{lstlisting}
 \vspace{0.4em}
-\begin{tcolorbox}[colback=headerblue!5!white,colframe=headerblue!85!black,boxrule=0.8pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,breakable,before upper={\sloppy\raggedright},title=\textbf{\small Domain Synthesis \& Practical Maintenance Takeaways}]
+\needspace{5\baselineskip}
+\begin{tcolorbox}[colback=headerblue!5!white,colframe=headerblue,boxrule=0.8pt,arc=3pt,left=6pt,right=6pt,top=4pt,bottom=4pt,breakable,before upper={\sloppy\raggedright},title=\textbf{\small Domain Synthesis \& Practical Maintenance Takeaways}]
 \subsubsection{Domain Synthesis \& Practical Maintenance Takeaways}
 
 \begin{enumerate}
