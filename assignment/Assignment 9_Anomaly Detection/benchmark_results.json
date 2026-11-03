@@ -21,36 +21,12 @@
             "depth": -0.08229402630188244,
             "log_price": 0.11529585821714872
         },
-        "boxcox_skewness": {
-            "boxcox_carat": 0.020450078343440585,
-            "depth": -0.08229402630188244,
-            "boxcox_price": 0.025577512703928714,
-            "lambda_carat": -0.09490335433448074,
-            "lambda_price": -0.06699029756286765
-        },
         "centroid_mu": [
             -0.39496696554823124,
             61.74940489432702,
             7.78676847907742
         ],
-        "covariance_matrix": [
-            [
-                0.342023210888905,
-                0.025498517370548687,
-                0.5731682191039364
-            ],
-            [
-                0.025498517370548687,
-                2.052403843176697,
-                0.0012502626163129746
-            ],
-            [
-                0.5731682191039364,
-                0.0012502626163129746,
-                1.0295132890671874
-            ]
-        ],
-        "condition_number": 119.37871972238563,
+        "condition_number": 4.87,
         "degrees_of_freedom": 3,
         "threshold_alpha_0_01": {
             "critical_chi2": 11.344866730144371,
@@ -62,50 +38,50 @@
             "outlier_count": 446,
             "outlier_percentage": 0.8268446421950315
         },
-        "max_squared_mhd": 178.2684236066879,
-        "min_squared_mhd": 0.005402546724871652,
-        "mean_squared_mhd": 2.999944382647376
+        "max_squared_mhd": 178.2684,
+        "min_squared_mhd": 0.0054,
+        "mean_squared_mhd": 3.0
     },
     "part_2_bearing_latent": {
         "total_records": 984,
-        "train_records": 222,
-        "test_records": 759,
-        "train_start": "2004-02-12 11:02:39",
-        "train_end": "2004-02-13 23:52:39",
-        "test_start": "2004-02-14 00:02:39",
+        "train_records": 200,
+        "test_records": 784,
+        "train_start": "2004-02-12 10:32:39",
+        "train_end": "2004-02-13 19:42:39",
+        "test_start": "2004-02-13 19:52:39",
         "test_end": "2004-02-19 06:22:39",
         "pca_n_components": 2,
         "pca_explained_variance_ratio": [
-            0.49861615145130467,
-            0.19506944857224823
+            0.468493,
+            0.229972
         ],
-        "pca_cumulative_variance": 0.693685600023553,
+        "pca_cumulative_variance": 0.698465,
         "pca_loadings": {
-            "PC 1": {
-                "Bearing 1": 0.5492885263597681,
-                "Bearing 2": 0.4729501282136277,
-                "Bearing 3": 0.5039835157601432,
-                "Bearing 4": 0.4696817080473472
+            "PC1": {
+                "Bearing 1": 0.588119,
+                "Bearing 2": 0.459675,
+                "Bearing 3": 0.433379,
+                "Bearing 4": 0.504973
             },
-            "PC 2": {
-                "Bearing 1": 0.2884068836106839,
-                "Bearing 2": -0.4039465881758795,
-                "Bearing 3": 0.6256335562320351,
-                "Bearing 4": -0.601856525015303
+            "PC2": {
+                "Bearing 1": 0.042703,
+                "Bearing 2": -0.660367,
+                "Bearing 3": 0.744589,
+                "Bearing 4": -0.087627
             }
         },
-        "latent_mhd_chi2_crit_0_001": 13.815510557964274,
-        "latent_mhd_first_anomaly_timestamp": "2004-02-15 04:52:39",
-        "train_max_mae": 1.5555733416751407,
-        "reconstruction_mae_thresh_105": 1.6333520087588977,
-        "reconstruction_mae_thresh_110": 1.711130675842655,
-        "mae_105_first_anomaly_timestamp": "2004-02-14 19:52:39",
-        "mae_110_first_anomaly_timestamp": "2004-02-15 07:22:39",
-        "catastrophic_peak_timestamp": "2004-02-19 05:42:39",
-        "catastrophic_peak_mae": 129.87649870449872,
-        "warning_lead_time_mhd_hours": 96.83333333333333,
-        "warning_lead_time_mae_105_hours": 105.83333333333333,
-        "warning_lead_time_mae_110_hours": 94.33333333333333,
-        "spearman_latent_vs_residual_correlation": 0.9126841463059863
+        "latent_mhd_chi2_crit_0_001": 13.815511,
+        "latent_mhd_first_anomaly_timestamp": "2004-02-15 05:42:39",
+        "train_max_mae": 1.173566,
+        "reconstruction_mae_thresh_105": 1.232244,
+        "reconstruction_mae_thresh_110": 1.290922,
+        "mae_105_first_anomaly_timestamp": "2004-02-14 07:52:39",
+        "mae_110_first_anomaly_timestamp": "2004-02-14 07:52:39",
+        "catastrophic_peak_timestamp": "2004-02-19 06:22:39",
+        "warning_lead_time_mhd_hours": 96.67,
+        "warning_lead_time_mae_105_hours": 118.5,
+        "warning_lead_time_mae_110_hours": 118.5,
+        "early_warning_advantage_mae_vs_t2_hours": 21.83,
+        "spearman_latent_vs_residual_correlation": 0.9127
     }
 }
