@@ -33,10 +33,11 @@
 \usepackage{geometry}
 \geometry{
     a4paper,
-    top=2.2cm,
-    bottom=2.2cm,
+    top=2.0cm,
+    bottom=2.0cm,
     left=2.3cm,
-    right=2.3cm
+    right=2.3cm,
+    footskip=1.0cm
 }
 \usepackage{xcolor}
 \usepackage{float}
@@ -123,7 +124,6 @@
 \providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
 \begin{document}
-\enlargethispage{2\baselineskip}
 
 \begin{center}
     {\Large\textbf{CPE 342 Machine Learning}}\\[2pt]
@@ -168,7 +168,6 @@ D_M^2(\mathbf{x}) = (\mathbf{x} - \boldsymbol{\mu})^\top \mathbf{\Sigma}^{-1} (\
 คุณสมบัตินี้เปิดโอกาสให้สามารถกำหนดเกณฑ์ตัดสินใจทางสถิติ (Critical Decision Cutoff) ที่ระดับนัยสำคัญ $\alpha$ (เช่น $\alpha = 0.01$ หรือ $0.001$) ได้อย่างเป็นรูปธรรม
 
 \subsection*{1.2 การลดมิติข้อมูลแบบตัวแปรแฝงสำหรับการตรวจจับความผิดปกติ (Latent-Variable PCA Diagnostics)}
-\enlargethispage{3.5\baselineskip}
 \vspace{-4pt}
 
 ในระบบตรวจวัดทางอุตสาหกรรมที่มีมิติข้อมูลและอัตราการสุ่มสัญญาณสูง เช่น สัญญาณการสั่นสะเทือนจากเซนเซอร์ความเร่ง 4 ทิศทาง การคำนวณ Covariance Inversion บนข้อมูลดิบโดยตรงอาจประสบปัญหาภาวะเอกฐานหรือความคลาดเคลื่อนสะสม การสร้างแบบจำลองตัวแปรแฝงด้วยการวิเคราะห์องค์ประกอบหลัก (Principal Component Analysis: PCA) จะทำการสลายเมทริกซ์ความแปรปรวนร่วมของช่วงการทำงานปกติ (Healthy Baseline) ออกเป็น $k$ องค์ประกอบหลักที่ตั้งฉากกัน:
@@ -211,12 +210,10 @@ One-Class SVM & Kernel Hypersphere & ไม่จำกัดการแจก�
 \vspace{-2pt}
 ในการตรวจจับความผิดปกติแบบ Unsupervised การประเมินค่าพารามิเตอร์ของแบบจำลอง ($\boldsymbol{\mu}$, $\mathbf{\Sigma}$, ตัวแปรปรับมาตรฐาน $\text{Scaler}$, และเมทริกซ์แปลงมิติ $\mathbf{W}_k$) จะต้องกระทำบนช่วงเวลาที่ระบบทำงานอย่างปกติ (Healthy Baseline) เท่านั้น ห้ามนำข้อมูลในช่วงเวลาที่มีความเสียหายหรือช่วงทดสอบมาร่วมประเมินโดยเด็ดขาด เพื่อป้องกันไม่ให้แบบจำลองเรียนรู้และยอมรับสภาวะความผิดปกติเป็นส่วนหนึ่งของพฤติกรรมปกติ
 
-\clearpage
 % =========================================================================
 % SECTION 2
 % =========================================================================
 \section*{2. การทดลอง \textcolor{partorange}{Part I: MHD for multivariate outlier detection} — การวิเคราะห์บนชุดข้อมูลเพชร\newline \large(\textcolor{partorange}{Part I: Multivariate Outlier Detection on Diamond Dataset})}
-\enlargethispage{1.5\baselineskip}
 
 การทดลองส่วนแรกประยุกต์ใช้ระเบียบวิธีระยะทางมาฮาลาโนบิสและการทดสอบสมมติฐานไคสแควร์บนชุดข้อมูลเพชร ($N = 53,940$ รายการ) เพื่อจำแนกเพชรที่มีสัดส่วนทางกายภาพหรือโครงสร้างราคาผิดปกติอย่างเป็นระบบ
 
@@ -225,7 +222,7 @@ One-Class SVM & Kernel Hypersphere & ไม่จำกัดการแจก�
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.98\linewidth]{plot_1_diamond_distributions_skewness.pdf}
+\includegraphics[width=0.65\linewidth]{plot_1_diamond_distributions_skewness.pdf}
 \caption{การตรวจสอบการกระจายตัวของฟีเจอร์เพชรและการแปลงสเกลลอการิทึมเพื่อลดความเบ้ ($N = 53,940$)}
 \end{figure}
 
