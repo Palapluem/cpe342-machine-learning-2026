@@ -137,18 +137,18 @@ The final Kaggle submission requires a single consolidated file named `sample_su
 
 ```csv
 id,task1,task2,task3,task4,task5
-ANS00001,0,1,0.00,freefried,0
-ANS00002,1,0,10500.50,fiveN,0
-ANS00003,0,2,250.00,pube,1
+ANS00001,0,1,0.00,2,0
+ANS00002,1,0,10500.50,1,0
+ANS00003,0,2,250.00,3,1
 ...
-ANS25889,0,3,78900.00,roblock,0
+ANS25889,0,3,78900.00,4,0
 ```
 
-* `id`: String identifier ranging from `ANS00001` through `ANS25889`.
+* `id`: String identifier ranging from `ANS00001` through `ANS25889`, ordered strictly according to `test.csv` row order (`Row 0 -> ANS00001`).
 * `task1`: Integer binary indicator $\{0, 1\}$.
 * `task2`: Integer class label $\{0, 1, 2, 3\}$.
 * `task3`: Continuous float representing predicted 30-day spending in THB.
-* `task4`: String game title: `7-11K`, `fiveN`, `freefried`, `pube`, or `roblock`.
+* `task4`: Integer game title class label $\{0, 1, 2, 3, 4\}$ per `task4/data/datacard.txt` (`0` = 7-11 Knights, `1` = FiveN, `2` = Free Fried, `3` = PUBE, `4` = Roblock).
 * `task5`: Integer binary anomaly indicator $\{0, 1\}$.
 
 ### Grading Criteria & Score Conversion
