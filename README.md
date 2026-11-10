@@ -109,6 +109,8 @@ cpe342-machine-learning-2026/
 │   ├── ML_9_clustering-basics.xlsx            # Lecture Dataset: Clustering Basics (Week 9)
 │   ├── ML_9_Tutorial_Clustering_Basics.ipynb  # Tutorial: Clustering Basics & K-Means (Week 9)
 │   ├── ML_11_Tutorial_Anomaly_Detection.ipynb # Tutorial: Mahalanobis Distance & Outlier Detection (Week 11)
+│   ├── CPE342_Lecture_12_RL.mp4               # Lecture Recording: Reinforcement Learning (Week 12, 8.4 MB)
+│   ├── RL Exercise Walkthrough.html           # Interactive Visualization: RL Gridworld, Value Iteration & Q-Learning
 │   ├── CPE342_ML_Midterm_StudyNotes.pdf       # Comprehensive Midterm Study Book (Lectures 1–8, 140 pages)
 ├── project/                                   # CPE 342 Term Project (Karena Player Intelligence System — Team: ML004)
 │   ├── CPE342_Project_Instruction.pdf         # Official 2026 project specification (28 pages)

@@ -1,0 +1,477 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>RL Exercise Walkthrough</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600&family=Public+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: lecture-board split. Grid diagram + transport controls on the left, narration, worked equation and table on the right. */
+:root{
+  --paper:#F5F7F4; --card:#FFFFFF; --ink:#1D2733; --muted:#5D6A76; --rule:#D3DAD7; --faint:#E7ECE9;
+  --accent:#C2601C; --accent-soft:#FBE4D0; --pick:#1C7666; --pick-soft:#D5EEE8; --disk:#F6E7BF;
+  --f-display:"Instrument Serif", Georgia, "Times New Roman", serif;
+  --f-body:"Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#11161B; --card:#182027; --ink:#E3E8EA; --muted:#94A1AB; --rule:#2D3740; --faint:#1E272F;
+  --accent:#F08A45; --accent-soft:#4A2B15; --pick:#4FC4AE; --pick-soft:#173A34; --disk:#4A4128; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#11161B; --card:#182027; --ink:#E3E8EA; --muted:#94A1AB; --rule:#2D3740; --faint:#1E272F;
+  --accent:#F08A45; --accent-soft:#4A2B15; --pick:#4FC4AE; --pick-soft:#173A34; --disk:#4A4128; color-scheme:dark}
+
+body{background:var(--paper);color:var(--ink);font:15px/1.5 var(--f-body)}
+.wrap{max-width:1200px;margin:0 auto;padding-block:20px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;border-bottom:1px solid var(--rule);padding-bottom:14px}
+h1{font:400 clamp(28px,4vw,40px)/1.05 var(--f-display);margin:0;text-wrap:balance}
+h1 em{color:var(--accent)}
+.sub{color:var(--muted);margin:4px 0 0;font-size:14px}
+nav{display:flex;flex-wrap:wrap;gap:6px}
+nav button{font:500 14px var(--f-body);color:var(--muted);background:transparent;border:1px solid var(--rule);border-radius:999px;padding:7px 14px;cursor:pointer}
+nav button[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+nav button:focus-visible,.ctrl button:focus-visible,.dots button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.meta{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline;margin:18px 0 14px}
+.meta h2{font:400 26px/1.1 var(--f-display);margin:0}
+.chip{font:12px var(--f-mono);color:var(--muted);border:1px solid var(--rule);border-radius:4px;padding:2px 7px}
+
+.stage{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:20px;align-items:start}
+@media (max-width:880px){.stage{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:10px}
+.board{padding:14px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px)}
+@media (max-width:880px){.board{position:static}}
+.board svg{display:block;width:100%;height:auto;max-height:52vh}
+
+.ctrl{display:flex;align-items:center;gap:6px;margin-top:12px;flex-wrap:wrap}
+.ctrl button{font:600 13px var(--f-body);color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:7px 11px;cursor:pointer;min-width:40px}
+.ctrl button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.ctrl button:disabled{opacity:.4;cursor:default}
+.ctrl .count{margin-left:auto;font:13px var(--f-mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.ctrl label{font-size:12px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.ctrl select{font:12px var(--f-body);background:var(--paper);color:var(--ink);border:1px solid var(--rule);border-radius:5px;padding:3px}
+.dots{display:flex;flex-wrap:wrap;gap:3px;margin-top:10px}
+.dots button{width:14px;height:8px;border-radius:2px;border:0;padding:0;background:var(--faint);cursor:pointer}
+.dots button.seen{background:var(--rule)}
+.dots button.on{background:var(--accent)}
+.dots button.ep{margin-left:6px}
+
+.right{display:flex;flex-direction:column;gap:14px;min-width:0}
+.caption{font:400 21px/1.35 var(--f-display);margin:0;min-height:2.7em;text-wrap:pretty}
+.caption b{font-weight:400;color:var(--accent)}
+.eq{padding:14px 16px;font-size:14px;min-width:0;overflow-x:auto}
+.eq .head{font:italic 19px/1.4 var(--f-display);margin-bottom:8px;white-space:nowrap}
+.eq .line{font:13.5px/1.9 var(--f-mono);white-space:nowrap;font-variant-numeric:tabular-nums}
+.eq .line .tag{display:inline-block;min-width:64px;color:var(--muted)}
+.eq .line.pick{color:var(--pick);font-weight:600}
+.eq .line.pick::after{content:"  ← max";color:var(--pick);font-weight:400}
+.eq .line.res{border-top:1px dashed var(--rule);margin-top:6px;padding-top:4px;font-weight:600;color:var(--accent)}
+.eq .note{color:var(--muted);font-size:13px;margin-top:8px;white-space:normal}
+.m{font-family:var(--f-display);font-style:italic;font-size:1.12em}
+
+.tables{display:flex;flex-direction:column;gap:12px;min-width:0}
+.tblwrap{overflow-x:auto;padding:12px 14px}
+.tblwrap h3{font:600 12px var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+table{border-collapse:collapse;font:14px var(--f-mono);font-variant-numeric:tabular-nums;width:100%}
+th{font:500 13px var(--f-body);color:var(--muted);padding:5px 10px;text-align:center;border-bottom:1px solid var(--muted)}
+th.rl{text-align:left;border-right:1px solid var(--muted)}
+td{padding:6px 10px;text-align:center;border-bottom:1px dotted var(--rule);border-left:1px dotted var(--rule);transition:background .3s}
+td.rl{text-align:left;font-family:var(--f-display);font-style:italic;font-size:16px;color:var(--muted);border-left:0;border-right:1px solid var(--muted);white-space:nowrap}
+td.dim{color:var(--rule)}
+tr.hl td{background:var(--faint)}
+td.hit{background:var(--accent-soft);color:var(--accent);font-weight:600;animation:pulse .9s ease-out}
+td.pol{color:var(--pick);font-weight:600}
+@keyframes pulse{0%{box-shadow:inset 0 0 0 2px var(--accent)}100%{box-shadow:inset 0 0 0 0 transparent}}
+
+/* SVG */
+.cellrect{fill:var(--card);stroke:var(--ink);stroke-width:1.5}
+.disk{fill:var(--disk)}
+.slabel{font:500 17px var(--f-body);fill:var(--ink);text-anchor:middle;dominant-baseline:central}
+.gl{font:italic 30px var(--f-display);fill:var(--ink);text-anchor:middle;dominant-baseline:central}
+.vval{font:600 13px var(--f-mono);fill:var(--muted);text-anchor:middle}
+.edge{fill:none;stroke:var(--muted);stroke-width:1.3;opacity:.45}
+.elab{font:11px var(--f-mono);fill:var(--muted);text-anchor:middle;dominant-baseline:central}
+.dyn{fill:none;stroke-width:3;stroke-linecap:round}
+.dyn.cand{stroke:var(--muted);stroke-dasharray:5 5;stroke-width:2}
+.dyn.pick,.dyn.pol{stroke:var(--pick)}
+.dyn.move{stroke:var(--accent)}
+.dyn.draw{stroke-dasharray:400;stroke-dashoffset:400;animation:draw .7s ease-out forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.dlab{font:600 12px var(--f-mono);text-anchor:middle;dominant-baseline:central;paint-order:stroke;stroke:var(--card);stroke-width:5px;stroke-linejoin:round}
+.dlab.cand{fill:var(--muted)} .dlab.pick,.dlab.pol{fill:var(--pick)} .dlab.move{fill:var(--accent)}
+.mk-edge{fill:var(--muted)} .mk-cand{fill:var(--muted)} .mk-pick{fill:var(--pick)} .mk-move{fill:var(--accent)}
+#agent{transition:transform .6s cubic-bezier(.5,0,.2,1)}
+.agentring{fill:none;stroke:var(--accent);stroke-width:3.5}
+.agentglow{fill:var(--accent);opacity:.14}
+.hlcell{fill:var(--accent-soft)}
+@media (prefers-reduced-motion:reduce){#agent{transition:none}.dyn.draw{animation:none;stroke-dashoffset:0;stroke-dasharray:none}td.hit{animation:none}}
+
+.hist td{font-size:14px}
+.hist td.rl{font-family:var(--f-mono);font-style:normal;font-size:13px}
+.foot{color:var(--muted);font-size:13px;margin-top:28px;border-top:1px solid var(--rule);padding-top:10px}
+kbd{font:12px var(--f-mono);border:1px solid var(--rule);border-radius:3px;padding:0 4px}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>RL Exercise <em>Walkthrough</em></h1>
+      <p class="sub">Step-by-step animation of the in-class exercises: value iteration, Q-learning, MDPs, and TD Q-learning.</p>
+    </div>
+    <nav role="tablist" id="tabs"></nav>
+  </header>
+
+  <div class="meta"><h2 id="sTitle"></h2><span id="chips" style="display:flex;gap:6px;flex-wrap:wrap"></span></div>
+
+  <div class="stage">
+    <div class="card board">
+      <svg id="svg" role="img" aria-label="Grid world diagram"></svg>
+      <div class="ctrl">
+        <button id="bReset" title="Back to start">⏮</button>
+        <button id="bPrev" title="Previous step (←)">◀</button>
+        <button id="bPlay" class="primary" title="Play / pause (space)">▶ Play</button>
+        <button id="bNext" title="Next step (→)">▶</button>
+        <label for="speed">Speed <select id="speed"><option value="2600">Slow</option><option value="1700" selected>Normal</option><option value="900">Fast</option></select></label>
+        <span class="count" id="count"></span>
+      </div>
+      <div class="dots" id="dots"></div>
+    </div>
+    <div class="right">
+      <p class="caption" id="cap"></p>
+      <div class="card eq" id="eq"></div>
+      <div class="tables" id="tables"></div>
+    </div>
+  </div>
+  <p class="foot">Keys: <kbd>←</kbd> <kbd>→</kbd> step, <kbd>space</kbd> play or pause. Values are computed live from the update rules on the slides, so every number shown comes from the formula above it.</p>
+</div>
+
+<script>
+(function(){
+const GAMMA=0.9, ALPHA=0.2;
+const fmt=v=>{const n=parseFloat(Number(v).toFixed(4));return (n<0?'−':'')+Math.abs(n);};
+const sub=n=>String(n).split('').map(d=>'₀₁₂₃₄₅₆₇₈₉'[d]).join('');
+const VH='<span class="m">V̂</span>', QH='<span class="m">Q̂</span>';
+const ARW={Left:'←',Right:'→',Up:'↑',Down:'↓',Stay:'↺',UpC:'↑c'};
+
+/* ---------- Geometry ---------- */
+const SIX={kind:'six',cell:120,ox:20,oy:20,w:400,h:280,
+  pos:{'1':[0,0],'2':[1,0],'G':[2,0],'3':[0,1],'4':[1,1],'5':[2,1]},
+  edges:[['1','2',0],['2','1',0],['1','3',0],['3','1',0],['2','4',0],['4','2',0],['3','4',0],['4','3',0],['4','5',0],['5','4',0],['2','G',100],['5','G',100],['G','G',0]],
+  name:s=>s};
+const TDG={kind:'td',cell:110,ox:84,oy:16,w:356,h:362,
+  pos:{'0':[0,2],'1':[1,2],'2':[0,1],'3':[1,1],'4':[0,0],'5':[1,0]},
+  edges:[['0','2',-1],['2','4',-1],['1','3',-1],['3','5',-1],['0','1',0],['1','0',0],['2','3',0],['3','2',0],['4','5',0],['5','4',0],['4','0',10],['2','2',-100]],
+  name:s=>'s'+s};
+function C(g,s){const [c,r]=g.pos[s];return [g.ox+g.cell*c+g.cell/2,g.oy+g.cell*r+g.cell/2];}
+function path(g,a,b){
+  const [ax,ay]=C(g,a),[bx,by]=C(g,b);
+  if(a===b){
+    if(g.kind==='six'){return {d:`M${ax+20},${ay-24} C${ax+66},${ay-64} ${ax+66},${ay+40} ${ax+24},${ay+18}`,lx:ax+50,ly:ay-46};}
+    const rt=g.pos[a][0]===1,sg=rt?1:-1,x=ax+sg*22;
+    return {d:`M${x},${ay-14} C${x+sg*56},${ay-44} ${x+sg*56},${ay+44} ${x},${ay+14}`,lx:x+sg*50,ly:ay-34};
+  }
+  if(g.kind==='td'&&a==='4'&&b==='0'){
+    const x=g.ox-62;return {d:`M${ax-26},${ay-8} C${x},${ay-8} ${x},${by} ${bx-26},${by}`,lx:x+10,ly:(ay+by)/2-50};
+  }
+  const dx=bx-ax,dy=by-ay,L=Math.hypot(dx,dy),ux=dx/L,uy=dy/L,nx=-uy,ny=ux,o=8,cut=g.kind==='six'?32:30;
+  const sx=ax+ux*cut+nx*o,sy=ay+uy*cut+ny*o,ex=bx-ux*(cut+4)+nx*o,ey=by-uy*(cut+4)+ny*o;
+  return {d:`M${sx},${sy} L${ex},${ey}`,lx:(sx+ex)/2+nx*14,ly:(sy+ey)/2+ny*14};
+}
+
+/* ---------- Scenario 1: Value iteration ---------- */
+const SIX_A={'1':[['Right','2',0],['Down','3',0]],'2':[['Left','1',0],['Right','G',100],['Down','4',0]],
+  '3':[['Up','1',0],['Right','4',0]],'4':[['Left','3',0],['Up','2',0],['Right','5',0]],
+  '5':[['Left','4',0],['Up','G',100]],'G':[['Stay','G',0]]};
+function buildVI(){
+  const S=['1','2','3','4','5','G'],K=3,frames=[];
+  const V=[Object.fromEntries(S.map(s=>[s,0]))];
+  const rowLab=k=>'V̂'+sub(k);
+  const tbl=(hit,hl,extra)=>{
+    const rows=[];for(let k=0;k<=K;k++){rows.push({lab:rowLab(k),hl:hl===k,cells:S.map(s=>({v:V[k]&&V[k][s]!==undefined?fmt(V[k][s]):'',hit:hit&&hit[0]===k&&hit[1]===s}))});}
+    if(extra)rows.push(extra);
+    return [{title:'V̂(s) after each sweep',cols:S,rows}];
+  };
+  const vals=k=>Object.fromEntries(S.map(s=>[s,'V̂='+fmt(V[k][s])]));
+  frames.push({cap:'All estimates start at <b>V̂(s) = 0</b>. Each sweep updates every state from the previous row, with γ = 0.9.',
+    eq:`<div class="head">V̂(s) ← max<sub>a</sub> [ r(s,a) + γ V̂(δ(s,a)) ]</div><div class="note">Rewards come from the diagram: 100 for 2 → G and 5 → G, 0 for every other move. G is absorbing, so its only action loops back to G with reward 0.</div>`,
+    tables:tbl(null,0),cellVals:vals(0),agent:null,arrows:[]});
+  for(let k=1;k<=K;k++){
+    V[k]={};
+    for(const s of S){
+      const c=SIX_A[s].map(([a,to,r])=>({a,to,r,v:r+GAMMA*V[k-1][to]}));
+      const best=Math.max(...c.map(x=>x.v));V[k][s]=best;
+      const lines=c.map(x=>`<div class="line${x.v===best?' pick':''}"><span class="tag">${x.a}</span>→ ${x.to}:  ${x.r} + 0.9 × ${VH}${sub(k-1)}(${x.to}) = ${x.r} + 0.9 × ${fmt(V[k-1][x.to])} = ${fmt(x.v)}</div>`).join('');
+      frames.push({ep:s==='1',
+        cap:`Sweep ${k}, state <b>${s}</b>: try every action, keep the largest return.`,
+        eq:`<div class="head">V̂${sub(k)}(${s}) ← max<sub>a</sub> [ r(${s},a) + γ V̂${sub(k-1)}(δ(${s},a)) ]</div>${lines}<div class="line res">V̂${sub(k)}(${s}) = ${fmt(best)}</div>`,
+        tables:tbl([k,s],k),cellVals:vals(k-1),agent:s,
+        arrows:c.map(x=>({from:s,to:x.to,kind:x.v===best?'pick':'cand',label:fmt(x.v)}))});
+    }
+    const changed=S.filter(s=>V[k][s]!==V[k-1][s]);
+    frames.push({cap:k<K?`Sweep ${k} done. ${changed.length?'Changed: '+changed.join(', ')+'.':'Nothing changed.'} Value spreads one more step back from G on every sweep.`
+                   :`Sweep 3 done. State 3 picks up <b>81</b>. A fourth sweep changes nothing, so these are the optimal values V*.`,
+      eq:`<div class="head">V̂${sub(k)} = [ ${S.map(s=>fmt(V[k][s])).join(', ')} ]</div><div class="note">${k<K?'The next sweep reads only this row.':'Same values as slide 15: 90, 100, 0 on top; 81, 90, 100 below.'}</div>`,
+      tables:tbl(null,k),cellVals:vals(k),agent:null,arrows:[]});
+  }
+  // check convergence
+  const V4=Object.fromEntries(S.map(s=>[s,Math.max(...SIX_A[s].map(([a,to,r])=>r+GAMMA*V[K][to]))]));
+  const conv=S.every(s=>V4[s]===V[K][s]);
+  // policy
+  const pol={},polLines=[],arrows=[];
+  for(const s of S){
+    const c=SIX_A[s].map(([a,to,r])=>({a,to,r,v:r+GAMMA*V[K][to]}));const best=Math.max(...c.map(x=>x.v));
+    pol[s]=c.filter(x=>x.v===best);
+    pol[s].forEach(x=>arrows.push({from:s,to:x.to,kind:'pol',label:''}));
+    polLines.push(`<div class="line"><span class="tag">π*(${s})</span>${c.map(x=>`${x.a} ${fmt(x.v)}`).join('  ·  ')}  ⇒  <b style="color:var(--pick)">${pol[s].map(x=>x.a).join(' or ')}</b></div>`);
+  }
+  frames.push({ep:true,cap:'Read off the optimal policy: in each state take the action with the largest <b>r + γV*(s′)</b>. States 3 and 4 have ties, and both moves are optimal.',
+    eq:`<div class="head">π*(s) = argmax<sub>a</sub> [ r(s,a) + γ V*(δ(s,a)) ]</div>${polLines.join('')}<div class="note">${conv?'Convergence check: one more sweep returns exactly the same V̂, so V̂₃ = V*.':''}</div>`,
+    tables:tbl(null,-1,{lab:'π*(s)',pol:true,cells:S.map(s=>({v:pol[s].map(x=>ARW[x.a]).join(' / ')}))}),
+    cellVals:Object.fromEntries(S.map(s=>[s,'V*='+fmt(V[K][s])])),agent:null,arrows});
+  return frames;
+}
+
+/* ---------- Scenario 2: deterministic Q-learning ---------- */
+function buildQ(){
+  const S=['1','2','3','4','5','G'],AC=['Left','Right','Up','Down'];
+  const valid={};for(const s of S){valid[s]={};for(const [a,to,r] of SIX_A[s])if(a!=='Stay')valid[s][a]={to,r};}
+  const Q={};for(const s of S){Q[s]={};for(const a of AC)Q[s][a]=0;}
+  const tbl=(hit,hl,title)=>[{title,cols:AC,rows:S.map(s=>({lab:s,hl:hl===s,cells:AC.map(a=>{
+    const ok=s==='G'||valid[s][a];return {v:ok?fmt(Q[s][a]):'–',dim:!ok||s==='G',hit:hit&&hit[0]===s&&hit[1]===a};})}))}];
+  const frames=[];
+  frames.push({cap:'Now the agent does not know r or δ. It only sees the reward and next state of each move it makes. The Q-table starts at <b>0</b>.',
+    eq:`<div class="head">Q̂(s,a) ← r + γ max<sub>a′</sub> Q̂(s′,a′)       s ← s′</div><div class="note">γ = 0.9. Dashes mark moves the grid does not allow (walls). G is the goal: max Q̂(G,·) = 0 throughout.</div>`,
+    tables:tbl(null,null,'Q-table at the start of episode 1'),agent:null,arrows:[]});
+  const eps=[{st:'4',steps:[['4','Right'],['5','Up']]},{st:'4',steps:[['4','Right'],['5','Up']]},{st:'2',steps:[['2','Down'],['4','Right'],['5','Up']]}];
+  eps.forEach((E,ei)=>{
+    frames.push({ep:true,cap:`<b>Episode ${ei+1}</b> starts in state ${E.st}.`,
+      eq:`<div class="head">Episode ${ei+1}: ${[E.st,...E.steps.map(([s,a])=>valid[s][a].to)].join(' → ')}</div><div class="note">The update for each step reads the table as it stands at that moment.</div>`,
+      tables:tbl(null,null,`Q-table at the start of episode ${ei+1}`),agent:E.st,arrows:[]});
+    E.steps.forEach(([s,a],ti)=>{
+      const {to,r}=valid[s][a];
+      let mx=0,mxTxt;
+      if(to==='G'){mxTxt=`max Q̂(G,·) = 0  (goal)`;}
+      else{const opts=Object.keys(valid[to]).map(b=>({b,v:Q[to][b]}));mx=Math.max(...opts.map(o=>o.v));
+        mxTxt=`max( ${opts.map(o=>`${o.b} ${fmt(o.v)}`).join(', ')} ) = ${fmt(mx)}`;}
+      const old=Q[s][a],nv=r+GAMMA*mx;Q[s][a]=nv;
+      frames.push({cap:`t = ${ti}: in state ${s} take <b>${a}</b>, observe r = ${r} and s′ = ${to}.${nv!==old?` Q̂(${s},${a}) changes from ${fmt(old)} to <b>${fmt(nv)}</b>.`:` Q̂(${s},${a}) stays ${fmt(nv)}.`}`,
+        eq:`<div class="head">Q̂(${s},${a}) ← r + γ max<sub>a′</sub> Q̂(${to},a′)</div><div class="line"><span class="tag">look up</span>${mxTxt}</div><div class="line res">Q̂(${s},${a}) = ${r} + 0.9 × ${fmt(mx)} = ${fmt(nv)}</div>`,
+        tables:tbl([s,a],s,`Episode ${ei+1}, t = ${ti}: s = ${s}, a = ${a}, s′ = ${to}`),agent:to,arrows:[{from:s,to,kind:'move',label:`r=${r}`}]});
+    });
+  });
+  // greedy read-out
+  const lines=[],arrows=[];
+  for(const s of ['1','2','3','4','5']){
+    const opts=Object.keys(valid[s]).map(a=>({a,v:Q[s][a]}));const m=Math.max(...opts.map(o=>o.v));
+    const known=m>0;
+    if(known){const b=opts.filter(o=>o.v===m);b.forEach(o=>arrows.push({from:s,to:valid[s][o.a].to,kind:'pol',label:fmt(o.v)}));
+      lines.push(`<div class="line"><span class="tag">state ${s}</span>greedy → ${b.map(o=>o.a).join(' or ')} (${fmt(m)})</div>`);}
+    else lines.push(`<div class="line"><span class="tag">state ${s}</span>all zeros, no preference yet</div>`);
+  }
+  frames.push({ep:true,cap:'After three episodes, value has flowed back two steps from G. The greedy choice in state 2 is <b>Down (81)</b> only because Right has never been tried. That is why the agent must keep exploring.',
+    eq:`<div class="head">π(s) = argmax<sub>a</sub> Q̂(s,a)  (from the table so far)</div>${lines.join('')}<div class="note">Once 2 → Right is tried, Q̂(2,Right) becomes 100 and replaces Down. With enough episodes, max<sub>a</sub> Q̂(s,a) reaches the V* values from value iteration.</div>`,
+    tables:tbl(null,null,'Q-table after episode 3'),agent:null,arrows});
+  return frames;
+}
+
+/* ---------- Scenario 3: TD Q-learning ---------- */
+function buildTD(){
+  const S=['0','1','2','3','4','5'],AC=['UpC','Right','Left','Up'];
+  const Q={};for(const s of S){Q[s]={};for(const a of AC)Q[s][a]=0;}
+  const H=[['0','UpC',-1,'2'],['2','Up',0,'4'],['4','Left',10,'0'],['0','UpC',-1,'2']];
+  const hist=cur=>({title:'History of interaction',hist:true,cols:['s','a','r','s′'],rows:H.map((h,i)=>({lab:String(i+1),hl:i===cur,cells:[{v:'s'+h[0]},{v:h[1]},{v:fmt(h[2])},{v:'s'+h[3]}]}))});
+  const tbl=(hit,hl,title)=>({title,cols:AC,rows:S.map(s=>({lab:'S'+s,hl:hl===s,cells:AC.map(a=>({v:fmt(Q[s][a]),hit:hit&&hit[0]===s&&hit[1]===a}))}))});
+  const frames=[];
+  frames.push({cap:'A stochastic world: <b>up</b> moves up only 80% of the time. The agent learns from four recorded experiences ⟨s, a, r, s′⟩, nudging each Q-value by α of the TD error.',
+    eq:`<div class="head">Q̂(s,a) ← Q̂(s,a) + α [ r + γ max<sub>a′</sub> Q̂(s′,a′) − Q̂(s,a) ]</div><div class="note">α = 0.2, γ = 0.9. The bracket is the TD error: actual return (observed reward + discounted future) minus current estimate.</div>`,
+    tables:[hist(-1),tbl(null,null,'Initial Q-table')],agent:'0',arrows:[]});
+  H.forEach(([s,a,r,to],i)=>{
+    const opts=AC.map(b=>({b,v:Q[to][b]}));const mx=Math.max(...opts.map(o=>o.v));
+    const old=Q[s][a],target=r+GAMMA*mx,td=target-old,nv=old+ALPHA*td;Q[s][a]=nv;
+    const ord=['1st','2nd','3rd','4th'][i];
+    frames.push({ep:i===0,cap:`${ord} step: in s${s} take <b>${a}</b>, get r = ${fmt(r)}, land in s${to}.${i===3?' Same experience as step 1, but Q̂(s0,UpC) is no longer 0, so the result differs.':''}`,
+      eq:`<div class="head">Q̂(s${s},${a}) ← Q̂(s${s},${a}) + 0.2 [ r + 0.9 max<sub>a′</sub> Q̂(s${to},a′) − Q̂(s${s},${a}) ]</div>
+        <div class="line"><span class="tag">look up</span>max Q̂(s${to},·) = max( ${opts.map(o=>fmt(o.v)).join(', ')} ) = ${fmt(mx)}</div>
+        <div class="line"><span class="tag">TD error</span>${fmt(r)} + 0.9 × ${fmt(mx)} − (${fmt(old)}) = ${fmt(td)}</div>
+        <div class="line res">Q̂(s${s},${a}) = ${fmt(old)} + 0.2 × ${fmt(td)} = ${fmt(nv)}</div>`,
+      tables:[hist(i),tbl([s,a],s,`${ord} step`)],agent:to,arrows:[{from:s,to,kind:'move',label:`r=${fmt(r)}`}]});
+  });
+  const pol=[['0','2','up'],['1','3','up'],['2','4','upC'],['3','5','up'],['4','0','left'],['5','4','left']];
+  frames.push({ep:true,cap:'Four experiences only nudge the table. With enough exploration, argmax Q̂ settles on the policy from slide 37: climb to s4, then take <b>left</b> for the +10.',
+    eq:`<div class="head">π*(s) = argmax<sub>a</sub> Q(s,a)</div>${pol.map(([s,,a])=>`<div class="line"><span class="tag">π*(s${s})</span>${a}</div>`).join('')}<div class="note">s2 uses upC, not up: the 10% chance of acting as <i>left</i> in s2 costs −100. The values in the table above are still the 4-step estimates.</div>`,
+    tables:[hist(-1),tbl(null,null,'Q-table after 4 steps')],agent:null,
+    arrows:pol.map(([s,to,a])=>({from:s,to,kind:'pol',label:a}))});
+  return frames;
+}
+
+/* ---------- Scenario 4: MDP (stochastic value iteration) ---------- */
+function buildMDP(){
+  const S=['0','1','2','3','4','5'],AC=['UpC','Right','Left','Up'];
+  const f2=v=>{const n=Math.round(v*100)/100;return (n<0?'−':'')+Math.abs(n);};
+  const UPM={'0':'2','1':'3','2':'4','3':'5'};
+  const upC=s=>[{p:1,t:UPM[s]||s,r:-1}];
+  const right=s=>['0','2','4'].includes(s)?[{p:1,t:String(+s+1),r:0}]:[{p:1,t:s,r:-1}];
+  const left=s=>['1','3','5'].includes(s)?[{p:1,t:String(+s-1),r:0}]:({'0':[{p:1,t:'0',r:-1}],'2':[{p:1,t:'2',r:-100}],'4':[{p:1,t:'0',r:10}]})[s];
+  const up=s=>[...upC(s).map(b=>({p:.8,t:b.t,r:0})),...left(s).map(b=>({p:.1,t:b.t,r:b.r})),...right(s).map(b=>({p:.1,t:b.t,r:b.r}))];
+  const T={UpC:upC,Right:right,Left:left,Up:up};
+  const er=(s,a)=>T[a](s).reduce((x,b)=>x+b.p*b.r,0);
+  const branchArrows=(s,a,kind)=>{const m={};T[a](s).forEach(b=>{(m[b.t]=m[b.t]||[]).push(b);});
+    return Object.entries(m).map(([t,bs])=>({from:s,to:t,kind,label:bs.map(b=>`${b.p}, r=${fmt(b.r)}`).join(' / ')}));};
+  const probTbl=(s,upto,hitA)=>({title:`P(s′ | s${s}, a) and expected reward`,cols:[...S.map(x=>'s'+x),'E[r]'],rows:AC.map((a,i)=>{
+    const filled=i<upto;const pr=Object.fromEntries(S.map(x=>[x,0]));if(filled)T[a](s).forEach(b=>pr[b.t]+=b.p);
+    return {lab:a,hl:a===hitA,cells:[...S.map(x=>({v:filled?fmt(pr[x]):'',dim:filled&&pr[x]===0,hit:a===hitA&&pr[x]>0})),{v:filled?fmt(er(s,a)):'',hit:a===hitA}]};})});
+  const frames=[];
+  frames.push({cap:'An MDP adds randomness: the same action can lead to different next states. It has four parts: <b>S</b>, <b>A</b>, <b>P(s′ | s, a)</b> and the rewards.',
+    eq:`<div class="head">P(s′ | s, a) ≜ P{ s<sub>t+1</sub> = s′ | s<sub>t</sub> = s, a<sub>t</sub> = a }</div>
+      <div class="line"><span class="tag">S</span>{ s0, s1, s2, s3, s4, s5 }</div>
+      <div class="line"><span class="tag">A</span>{ upC, right, left, up }</div>
+      <div class="line"><span class="tag">upC</span>moves up, stays in s4/s5; reward −1</div>
+      <div class="line"><span class="tag">right</span>s0, s2, s4 move right (0); else stay (−1)</div>
+      <div class="line"><span class="tag">left</span>s1, s3, s5 move left (0); s0 stays (−1); s2 stays (−100); s4 → s0 (+10)</div>
+      <div class="line"><span class="tag">up</span>0.8 acts as upC with reward 0, 0.1 as left, 0.1 as right</div>`,
+    tables:[probTbl('4',0,null)],agent:'4',arrows:[]});
+  const notes={UpC:'Deterministic: s4 is on the top row, so upC stays put and pays −1.',Right:'Deterministic: s4 → s5 with reward 0.',
+    Left:'Deterministic: s4 → s0 and collects the +10.',Up:'Stochastic: three outcomes, as on slide 31. The probabilities in the row sum to 1.'};
+  AC.forEach((a,i)=>frames.push({ep:i===0,cap:`In s4, action <b>${a}</b>. ${notes[a]}`,
+    eq:`<div class="head">P(s′ | s4, ${a})</div>${T[a]('4').map(b=>`<div class="line"><span class="tag">→ s${b.t}</span>probability ${b.p}, reward ${fmt(b.r)}</div>`).join('')}<div class="line res">E[r | s4, ${a}] = ${T[a]('4').map(b=>`${b.p}×${fmt(b.r)}`).join(' + ')} = ${fmt(er('4',a))}</div>`,
+    tables:[probTbl('4',i+1,a)],agent:'4',arrows:branchArrows('4',a,'move')}));
+  frames.push({cap:'The same <b>up</b> in s2 is risky: 10% of the time it acts as left, which costs −100. That is why the optimal policy will avoid it there.',
+    eq:`<div class="head">P(s′ | s2, Up)</div>${up('2').map(b=>`<div class="line"><span class="tag">→ s${b.t}</span>probability ${b.p}, reward ${fmt(b.r)}</div>`).join('')}<div class="line res">E[r | s2, Up] = 0.8×0 + 0.1×(−100) + 0.1×0 = ${fmt(er('2','Up'))}</div>`,
+    tables:[probTbl('2',4,'Up')],agent:'2',arrows:branchArrows('2','Up','move')});
+
+  // value iteration with expectation
+  const V=[Object.fromEntries(S.map(s=>[s,0]))];
+  const q=(s,a,Vp)=>T[a](s).reduce((x,b)=>x+b.p*(b.r+GAMMA*Vp[b.t]),0);
+  let K=0;
+  for(let k=1;k<500;k++){V[k]=Object.fromEntries(S.map(s=>[s,Math.max(...AC.map(a=>q(s,a,V[k-1])))]));
+    if(Math.max(...S.map(s=>Math.abs(V[k][s]-V[k-1][s])))<1e-3){K=k;break;}}
+  const SHOW=[0,1,2,3,5,10,20,50,K];
+  const vt=(upto,partial,hit,hl,extra)=>{const rows=SHOW.filter(k=>k<=upto).map(k=>({lab:'V̂'+sub(k)+(k===K?' ≈ V*':''),hl:k===hl,
+      cells:S.map(s=>{const show=k<upto||!partial||partial.includes(s);return {v:show?f2(V[k][s]):'',hit:hit&&hit[0]===k&&hit[1]===s};})}));
+    if(extra)rows.push(extra);return [{title:'V̂(s) by sweep (selected sweeps)',cols:S.map(s=>'s'+s),rows}];};
+  const cv=k=>Object.fromEntries(S.map(s=>[s,'V='+f2(V[k][s])]));
+  frames.push({ep:true,cap:'To find the best policy, run value iteration again. The only change: average over the possible next states, weighted by <b>P(s′ | s, a)</b>.',
+    eq:`<div class="head">V̂(s) ← max<sub>a</sub> Σ<sub>s′</sub> P(s′ | s, a) [ r + γ V̂(s′) ]</div><div class="note">γ = 0.9 (the value used on slide 35; slide 30 does not set one). With P = 1 this is exactly the rule from slides 17–20.</div>`,
+    tables:vt(0),cellVals:cv(0),agent:null,arrows:[]});
+  for(const k of [1,2]){
+    S.forEach((s,i)=>{
+      const qs=AC.map(a=>({a,v:q(s,a,V[k-1])}));const best=Math.max(...qs.map(x=>x.v));const ba=qs.find(x=>x.v===best).a;
+      const lines=qs.map(x=>`<div class="line${x.v===best?' pick':''}"><span class="tag">${x.a}</span>${T[x.a](s).map(b=>`${b.p===1?'':b.p+'·'}[${fmt(b.r)} + 0.9·${f2(V[k-1][b.t])}]`).join(' + ')} = ${f2(x.v)}</div>`).join('');
+      frames.push({ep:i===0,cap:`Sweep ${k}, state <b>s${s}</b>: expected return of each action, using V̂${sub(k-1)}. Best is ${ba}.`,
+        eq:`<div class="head">V̂${sub(k)}(s${s}) ← max<sub>a</sub> Σ<sub>s′</sub> P(s′|s${s},a) [ r + 0.9 V̂${sub(k-1)}(s′) ]</div>${lines}<div class="line res">V̂${sub(k)}(s${s}) = ${f2(best)}</div>`,
+        tables:vt(k,S.slice(0,i+1),[k,s],k),cellVals:cv(k-1),agent:s,arrows:branchArrows(s,ba,'pick')});
+    });
+  }
+  const sumCap={3:'Sweep 3: s0 and s3 start to see reward two steps away.',5:'Sweep 5: the +10 loop (s4 → s0 → … → s4) begins to compound.',
+    10:'Sweep 10: values keep rising, but each sweep adds less.',20:'Sweep 20: the changes are now small.',50:'Sweep 50: almost settled.'};
+  for(const k of [3,5,10,20,50]){const d=Math.max(...S.map(s=>Math.abs(V[k][s]-V[k-1][s])));
+    frames.push({ep:k===3,cap:sumCap[k],eq:`<div class="head">V̂${sub(k)} = [ ${S.map(s=>f2(V[k][s])).join(', ')} ]</div><div class="note">Largest change from the previous sweep: ${f2(d)}. Sweeps in between are computed but not shown.</div>`,
+      tables:vt(k,null,null,k),cellVals:cv(k),agent:null,arrows:[]});}
+  frames.push({cap:`After <b>${K} sweeps</b> no value moves by more than 0.001. These are the optimal values V*.`,
+    eq:`<div class="head">V* ≈ [ ${S.map(s=>f2(V[K][s])).join(', ')} ]</div><div class="note">s4 is worth the most: it is one step from the +10.</div>`,
+    tables:vt(K,null,null,K),cellVals:cv(K),agent:null,arrows:[]});
+  // policy
+  const pol={},lines=[],arrows=[];
+  for(const s of S){const qs=AC.map(a=>({a,v:q(s,a,V[K])}));const best=Math.max(...qs.map(x=>x.v));const ba=qs.find(x=>x.v===best).a;pol[s]=ba;
+    lines.push(`<div class="line"><span class="tag">π*(s${s})</span>${qs.map(x=>x.a===ba?`<b style="color:var(--pick)">${x.a} ${f2(x.v)}</b>`:`${x.a} ${f2(x.v)}`).join('  ·  ')}</div>`);
+    const to=ba==='Left'?left(s)[0].t:ba==='Right'?right(s)[0].t:upC(s)[0].t;arrows.push({from:s,to,kind:'pol',label:ba});}
+  frames.push({ep:true,cap:'The optimal policy: climb to s4, then take <b>left</b> for the +10 and repeat. In s2, <b>upC</b> beats up because up risks the −100.',
+    eq:`<div class="head">π*(s) = argmax<sub>a</sub> Σ<sub>s′</sub> P(s′|s,a) [ r + γ V*(s′) ]</div>${lines.join('')}<div class="note">This is the same policy TD Q-learning reaches on slide 37, but computed from the known model instead of from experience.</div>`,
+    tables:vt(K,null,null,-1,{lab:'π*(s)',pol:true,cells:S.map(s=>({v:pol[s]}))}),cellVals:cv(K),agent:null,arrows});
+  return frames;
+}
+
+const SCEN=[
+  {id:'value-iteration',tab:'Value iteration',title:'Value iteration on the six-grid world',chips:['slides 17–20','γ = 0.9','3 sweeps + π*'],geo:SIX,frames:buildVI()},
+  {id:'q-learning',tab:'Q-learning',title:'Q-learning from three episodes',chips:['slides 23–26','γ = 0.9','deterministic'],geo:SIX,frames:buildQ()},
+  {id:'mdp',tab:'MDP',title:'Markov decision process: solving with the model',chips:['slides 29–31','γ = 0.9','stochastic'],geo:TDG,frames:buildMDP()},
+  {id:'td-learning',tab:'TD Q-learning',title:'TD Q-learning in a stochastic world',chips:['slides 33–37','α = 0.2','γ = 0.9'],geo:TDG,frames:buildTD()}
+];
+
+/* ---------- Rendering ---------- */
+const $=id=>document.getElementById(id);
+const svg=$('svg'),NS='http://www.w3.org/2000/svg';
+let cur=0,idx=[0,0,0],timer=null;
+
+function drawStatic(g){
+  let h=`<defs>${['edge','cand','pick','move'].map(k=>`<marker id="mk-${k}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="${k==='edge'?5:4.5}" markerHeight="${k==='edge'?5:4.5}" orient="auto-start-reverse"><path class="mk-${k}" d="M0,0 L10,5 L0,10 z"/></marker>`).join('')}</defs>`;
+  h+=`<g id="hl"></g>`;
+  for(const s in g.pos){const [c,r]=g.pos[s];h+=`<rect class="cellrect" x="${g.ox+g.cell*c}" y="${g.oy+g.cell*r}" width="${g.cell}" height="${g.cell}"/>`;}
+  for(const [a,b,rw] of g.edges){const p=path(g,a,b);h+=`<path class="edge" d="${p.d}" marker-end="url(#mk-edge)"/>`;
+    const show=g.kind==='six'?rw===100:(rw===10||rw===-100);
+    if(show)h+=`<text class="elab" x="${p.lx}" y="${p.ly}">${rw>0?(g.kind==='td'?'+':''):'−'}${Math.abs(rw)}</text>`;}
+  for(const s in g.pos){const [x,y]=C(g,s);
+    if(s==='G')h+=`<text class="gl" x="${x}" y="${y}">G</text>`;
+    else h+=`<circle class="disk" cx="${x}" cy="${y}" r="20"/><text class="slabel" x="${x}" y="${y}">${g.name(s)}</text>`;
+    h+=`<text class="vval" id="v-${s}" x="${x-g.cell/2+8}" y="${y+g.cell/2-9}" style="text-anchor:start"></text>`;}
+  h+=`<g id="dyn"></g><g id="agent" style="opacity:0"><circle class="agentglow" r="30"/><circle class="agentring" r="26"/></g>`;
+  if(g.kind==='td')h+=`<text class="elab" x="${g.ox+g.cell}" y="${g.oy+g.cell*3+14}">other moves: −1 for upC / blocked, 0 otherwise</text>`;
+  svg.setAttribute('viewBox',`0 0 ${g.w} ${g.h+(g.kind==='td'?6:0)}`);
+  svg.innerHTML=h;
+}
+
+function renderTables(list){
+  return list.map(t=>`<div class="card tblwrap"><h3>${t.title}</h3><table class="${t.hist?'hist':''}"><thead><tr><th class="rl">${t.hist?'#':''}</th>${t.cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${
+    t.rows.map(r=>`<tr class="${r.hl?'hl':''}"><td class="rl">${r.lab}</td>${r.cells.map(c=>`<td class="${[c.dim?'dim':'',c.hit?'hit':'',r.pol?'pol':''].join(' ')}">${c.v}</td>`).join('')}</tr>`).join('')
+  }</tbody></table></div>`).join('');
+}
+
+function render(){
+  const S=SCEN[cur],g=S.geo,F=S.frames,i=idx[cur],f=F[i];
+  $('cap').innerHTML=f.cap;$('eq').innerHTML=f.eq;
+  $('tables').innerHTML=renderTables(f.tables);
+  $('count').textContent=`${i+1} / ${F.length}`;
+  $('bPrev').disabled=i===0;$('bReset').disabled=i===0;$('bNext').disabled=i===F.length-1;
+  // values in cells
+  for(const s in g.pos){const el=document.getElementById('v-'+s);if(el)el.textContent=f.cellVals?f.cellVals[s]:'';}
+  // highlight cell
+  const hl=$('hl');hl.innerHTML='';
+  const focus=(S.id==='value-iteration'||S.id==='mdp')?f.agent:null;
+  if(focus){const [c,r]=g.pos[focus];hl.innerHTML=`<rect class="hlcell" x="${g.ox+g.cell*c}" y="${g.oy+g.cell*r}" width="${g.cell}" height="${g.cell}"/>`;}
+  // arrows
+  $('dyn').innerHTML=(f.arrows||[]).map(a=>{const p=path(g,a.from,a.to);const k=a.kind==='pol'?'pick':a.kind;
+    return `<path class="dyn ${a.kind} ${a.kind==='cand'?'':'draw'}" d="${p.d}" marker-end="url(#mk-${k})"/>${a.label?`<text class="dlab ${a.kind}" x="${p.lx}" y="${p.ly+(g.kind==='td'&&a.from==='4'&&a.to==='0'?80:0)}">${a.label}</text>`:''}`;}).join('');
+  // agent
+  const ag=$('agent');
+  if(f.agent!=null&&S.id!=='value-iteration'){const [x,y]=C(g,f.agent);ag.style.opacity=1;ag.style.transform=`translate(${x}px,${y}px)`;}
+  else if(f.agent!=null){const [x,y]=C(g,f.agent);ag.style.opacity=1;ag.style.transform=`translate(${x}px,${y}px)`;}
+  else ag.style.opacity=0;
+  // dots
+  $('dots').innerHTML=F.map((fr,j)=>`<button aria-label="Step ${j+1}" class="${j===i?'on':j<i?'seen':''}${fr.ep&&j>0?' ep':''}" data-j="${j}"></button>`).join('');
+}
+
+function setScen(n,fromHash){
+  stop();cur=n;const S=SCEN[n];
+  $('sTitle').textContent=S.title;$('chips').innerHTML=S.chips.map(c=>`<span class="chip">${c}</span>`).join('');
+  [...$('tabs').children].forEach((b,j)=>b.setAttribute('aria-selected',j===n?'true':'false'));
+  drawStatic(S.geo);
+  // place agent without animating
+  const ag=$('agent');ag.style.transition='none';render();ag.getBoundingClientRect();ag.style.transition='';
+  if(!fromHash){try{history.replaceState(null,'','#'+S.id);}catch(e){location.hash=S.id;}}
+}
+function go(j){const F=SCEN[cur].frames;idx[cur]=Math.max(0,Math.min(F.length-1,j));render();}
+function stop(){if(timer){clearInterval(timer);timer=null;}$('bPlay').textContent='▶ Play';}
+function play(){
+  if(timer){stop();return;}
+  const F=SCEN[cur].frames;if(idx[cur]>=F.length-1)go(0);
+  $('bPlay').textContent='❚❚ Pause';
+  timer=setInterval(()=>{if(idx[cur]>=SCEN[cur].frames.length-1){stop();return;}go(idx[cur]+1);},+$('speed').value);
+}
+
+$('tabs').innerHTML=SCEN.map((s,j)=>`<button role="tab" data-n="${j}">${s.tab}</button>`).join('');
+$('tabs').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setScen(+b.dataset.n);});
+$('bNext').onclick=()=>{stop();go(idx[cur]+1);};
+$('bPrev').onclick=()=>{stop();go(idx[cur]-1);};
+$('bReset').onclick=()=>{stop();go(0);};
+$('bPlay').onclick=play;
+$('speed').onchange=()=>{if(timer){stop();play();}};
+$('dots').addEventListener('click',e=>{const b=e.target.closest('button');if(b){stop();go(+b.dataset.j);}});
+document.addEventListener('keydown',e=>{if(e.target.closest('select'))return;
+  if(e.key==='ArrowRight'){stop();go(idx[cur]+1);}else if(e.key==='ArrowLeft'){stop();go(idx[cur]-1);}
+  else if(e.key===' '){e.preventDefault();play();}});
+const fromHash=()=>{const h=location.hash.slice(1);const n=SCEN.findIndex(s=>s.id===h);setScen(n<0?0:n,true);};
+window.addEventListener('hashchange',fromHash);
+fromHash();
+})();
+</script>
+
+</body></html>
