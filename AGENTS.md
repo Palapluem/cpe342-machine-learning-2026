@@ -53,7 +53,10 @@ This document serves as the authoritative, comprehensive Workspace Rules and Sys
     - Assignment 6: `67_1027_1042.ipynb`
     - Assignment 7: `67_1003_1027_1042_1045_1067.ipynb`
     - Assignment 8: `67_1003_1027_1042_1045_1067.ipynb`
-    - Term Project: Follows Kaggle submission format (`sample_submission.csv` / `submission.csv`) & `Team: ML004` convention.
+    - Term Project: Follows Kaggle submission format (`sample_submission.csv` / `submission.csv` with positional `ANS00001..ANS25889` row alignment and integer `0..4` labels for Task 4 per `datacard.txt`) & `Team: ML004` convention.
+- **Official Lecture Material Naming (`lecture/`):**
+  - Course slide decks keep `Lecture <N>_<Topic>.pdf` (e.g., `Lecture 12_RL.pdf`).
+  - Supplementary recordings, interactive HTML walkthroughs, tutorials, and datasets strictly use the `ML_<Week>_` prefix with underscores instead of spaces (e.g., `ML_8_Dimensionality_Reduction.mp4`, `ML_9_Clustering_Basics.mp4`, `ML_11_Tutorial_Anomaly_Detection.ipynb`, `ML_12_Reinforcement_Learning.mp4`, `ML_12_RL_Exercise_Walkthrough.html`).
 
 ---
 
@@ -226,4 +229,3 @@ This document serves as the authoritative, comprehensive Workspace Rules and Sys
 | **Assignment 8** | Clustering Basics & PCA Subspace | Synthetic 2D Geometries ($N=600\text{--}800$) \& Wine ($N=178, p=13$) | K-Means (Lloyd's Alg, Voronoi Tessellation, Inertia), PCA Subspace ($r=5$ PCs, $80.16\%$ PVE), Silhouette, CH, DB, Hopkins |
 | **Assignment 9** | Anomaly Detection (MHD & Latent PCA) | Diamond ($N=53,940$) \& Bearing Vibration ($N=984$) | Mahalanobis Distance, $\chi^2$ Distribution Gating, Latent PC Scores ($T^2$), Reconstruction Error (MAE / SPE / $Q$-statistic), Prognostics Early Warning |
 | **Term Project** | End-to-End Player Intelligence & LTV System | Karena Gaming Ecosystem (5 Tasks: Tabular Telemetry, Gameplay Screenshots, Multi-Period Logs) | Anti-Cheat Pre-Filter ($F_2$), Segment Classification ($F_1$), Monthly Spending (NMAE), Screenshot Classifier (Macro $F_1$), Account Anomaly Detector ($F_3$) |
-

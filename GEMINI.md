@@ -37,6 +37,15 @@ This document serves as the authoritative, comprehensive Workspace Rules and Sys
     - `67070501042` วิศิษฐ์ สุวรรณเนาว์ (Wisit Suwannao)
     - `67070501045` ศุภวิชญ์ มารยาท (Supawit Marayat)
     - `67070501067` พลวริษฐ์ วัฒนเหมรัตน์ (Polwarit Watthanahemmarat)
+  - **Assignment 9 (Anomaly Detection):** 5 Group Members
+    - `67070501003` กันต์ธีร์ ดวงมณี (Guntee Doungmanee)
+    - `67070501027` นัธทวัฒน์ ปริมสิริคุณาวุฒิ (Natthawat Primsirikunawut)
+    - `67070501042` วิศิษฐ์ สุวรรณเนาว์ (Wisit Suwannao)
+    - `67070501045` ศุภวิชญ์ มารยาท (Supawit Marayat)
+    - `67070501067` พลวริษฐ์ วัฒนเหมรัตน์ (Polwarit Watthanahemmarat)
+  - **Term Project (Karena Player Intelligence System):**
+    - **Team Identifier:** Strictly use **`Team: ML004`** across all Term Project notebooks (`project/task1..5/*.ipynb`, `project/merge_submission.ipynb`) and `project/README.md` (do not list individual student names/IDs in Term Project headers).
+    - **Primary Module Ownership:** **Task 3 (`project/task3/task3_monthly_spending.ipynb`)** is the primary focus module in this workspace, developed in parallel with the central team repository (`https://github.com/beambeambeam/ml00x` on branch `task3`).
 - **Official Submission Notebook File Naming:**
   - Course convention: `(First 2 digits of ID)_(Last 4 digits of Member 1)_(Last 4 digits of Member 2)[_Member 3...].ipynb`
   - Examples:
@@ -44,16 +53,21 @@ This document serves as the authoritative, comprehensive Workspace Rules and Sys
     - Assignment 6: `67_1027_1042.ipynb`
     - Assignment 7: `67_1003_1027_1042_1045_1067.ipynb`
     - Assignment 8: `67_1003_1027_1042_1045_1067.ipynb`
+    - Term Project: Follows Kaggle submission format (`sample_submission.csv` / `submission.csv` with positional `ANS00001..ANS25889` row alignment and integer `0..4` labels for Task 4 per `datacard.txt`) & `Team: ML004` convention.
+- **Official Lecture Material Naming (`lecture/`):**
+  - Course slide decks keep `Lecture <N>_<Topic>.pdf` (e.g., `Lecture 12_RL.pdf`).
+  - Supplementary recordings, interactive HTML walkthroughs, tutorials, and datasets strictly use the `ML_<Week>_` prefix with underscores instead of spaces (e.g., `ML_8_Dimensionality_Reduction.mp4`, `ML_9_Clustering_Basics.mp4`, `ML_11_Tutorial_Anomaly_Detection.ipynb`, `ML_12_Reinforcement_Learning.mp4`, `ML_12_RL_Exercise_Walkthrough.html`).
 
 ---
 
 ## 2. Directory Hygiene & File Management Rules
 
-### 2.1 The Zero-Script Rule for Python (`*.py`)
-- **STRICT PROHIBITION:** Never save any `.py` script files directly in the repository root or inside any assignment directory (`assignment/Assignment *`).
-- **Allowed Location for Scripts:** All helper scripts, migration tools, figure verification scripts, or LaTeX processors MUST be created and executed exclusively inside the assistant's temporary scratch directory:
+### 2.1 The Zero-Script Rule for Python (`*.py`) in Coursework Assignments & Term Project
+- **STRICT PROHIBITION (Root, Assignments & Project):** Never save standalone `.py` script files or combined multi-task runner notebooks directly in the repository root, inside any assignment directory (`assignment/Assignment *`), or inside `project/`.
+- **Term Project Structure (`project/task1..5/`):** Each `project/taskX/` folder must remain strictly self-contained with its own pure-English `.ipynb` notebook, `data/` directory, and `predictions/test_predictions.csv`. Parallel `uv` / branch development with the central team repository (`https://github.com/beambeambeam/ml00x`) lives in `/Users/wisitsuwannao/Documents/Workspace/ml00x` (branch `task3`).
+- **Allowed Location for Temporary Helper Scripts:** All one-off helper scripts, migration tools, figure verification scripts, or LaTeX processors MUST be created and executed exclusively inside the assistant's temporary scratch directory:
   `<appDataDir>/brain/<conversation-id>/scratch/`
-- **Pre-Commit Verification:** Verify zero `.py` files exist in the repository tree before staging (`git status`, `find . -name "*.py"` or `Get-ChildItem -Recurse -Filter *.py`). If any `.py` files exist in the repository tree, delete them immediately.
+- **Pre-Commit Verification:** Verify zero stray `.py` files exist in the repository root or `assignment/` tree before staging (`git status`, `find assignment -name "*.py"`).
 - **Strict Dataset / Artifact Cleanliness:** Never commit raw dataset folders (e.g. `Cat_Dog_data/`, `__MACOSX/`), uncompressed batches, or intermediate archive zip files to git.
 
 ### 2.2 Git Commit & Synchronization
@@ -213,3 +227,5 @@ This document serves as the authoritative, comprehensive Workspace Rules and Sys
 | **Assignment 6** | Convolutional Neural Networks | Dogs vs. Cats ($N=25,000$) | MobileNetV2, Inverted Residuals, Two-Phase Fine-Tuning, Real-Time Streaming |
 | **Assignment 7** | Dimensionality Reduction (PCA) | MTCARS ($N=32, p=11$) \& Synthetic 2D ($N=12$) | Linear PCA, Spectral Decomposition, Standardization vs Covariance, Scree / PVE ($\ge 90\%$), 2D Biplot |
 | **Assignment 8** | Clustering Basics & PCA Subspace | Synthetic 2D Geometries ($N=600\text{--}800$) \& Wine ($N=178, p=13$) | K-Means (Lloyd's Alg, Voronoi Tessellation, Inertia), PCA Subspace ($r=5$ PCs, $80.16\%$ PVE), Silhouette, CH, DB, Hopkins |
+| **Assignment 9** | Anomaly Detection (MHD & Latent PCA) | Diamond ($N=53,940$) \& Bearing Vibration ($N=984$) | Mahalanobis Distance, $\chi^2$ Distribution Gating, Latent PC Scores ($T^2$), Reconstruction Error (MAE / SPE / $Q$-statistic), Prognostics Early Warning |
+| **Term Project** | End-to-End Player Intelligence & LTV System | Karena Gaming Ecosystem (5 Tasks: Tabular Telemetry, Gameplay Screenshots, Multi-Period Logs) | Anti-Cheat Pre-Filter ($F_2$), Segment Classification ($F_1$), Monthly Spending (NMAE), Screenshot Classifier (Macro $F_1$), Account Anomaly Detector ($F_3$) |

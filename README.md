@@ -109,8 +109,8 @@ cpe342-machine-learning-2026/
 │   ├── ML_9_clustering-basics.xlsx            # Lecture Dataset: Clustering Basics (Week 9)
 │   ├── ML_9_Tutorial_Clustering_Basics.ipynb  # Tutorial: Clustering Basics & K-Means (Week 9)
 │   ├── ML_11_Tutorial_Anomaly_Detection.ipynb # Tutorial: Mahalanobis Distance & Outlier Detection (Week 11)
-│   ├── CPE342_Lecture_12_RL.mp4               # Lecture Recording: Reinforcement Learning (Week 12, 8.4 MB)
-│   ├── RL Exercise Walkthrough.html           # Interactive Visualization: RL Gridworld, Value Iteration & Q-Learning
+│   ├── ML_12_Reinforcement_Learning.mp4       # Lecture Recording: Reinforcement Learning (Week 12, 8.4 MB)
+│   ├── ML_12_RL_Exercise_Walkthrough.html     # Interactive Walkthrough: RL Gridworld, Value Iteration, MDP & TD Q-Learning (Week 12)
 │   ├── CPE342_ML_Midterm_StudyNotes.pdf       # Comprehensive Midterm Study Book (Lectures 1–8, 140 pages)
 ├── project/                                   # CPE 342 Term Project (Karena Player Intelligence System — Team: ML004)
 │   ├── CPE342_Project_Instruction.pdf         # Official 2026 project specification (28 pages)
@@ -328,8 +328,8 @@ cpe342-machine-learning-2026/
 * **The 5 Core Machine Learning Tasks:**
   1. **Task 1: Anti-Cheat Pre-Filter** (Binary Classification, Target: `is_cheater`, Metric: **$F_2$ Score** prioritizing recall, 31 tabular features).
   2. **Task 2: Player Segment Classification** (Multi-class Classification, Target: `segment` across Casual, Grinder, Social, Whale, Metric: **Macro $F_1$ Score**, 44 tabular features).
-  3. **Task 3: Player Monthly Spending Prediction (Primary Focus)** (Zero-Inflated Continuous Regression, Target: `spending_30d` in THB, Metric: **Normalized MAE** $\text{NMAE} = \frac{1}{1 + \sum \vert y-\hat{y} \vert / \sum y}$, 32 tabular features).
-  4. **Task 4: Game Title Detection** (Deep Multi-Class Image Classification, Target: 5 game titles from $230\times 120$ gameplay screenshots, Metric: **Macro $F_1$**, Pretrained CNN/ViT/Swin permitted).
+  3. **Task 3: Player Monthly Spending Prediction (Primary Focus)** (Zero-Inflated Continuous Regression, Target: `spending_30d` in THB, Metric: **Normalized MAE** $\text{NMAE} = \frac{1}{1 + \sum \vert y-\hat{y} \vert / \sum y}$, 32 tabular features, 5-Fold Nested OOF $\text{NMAE} = 0.7918$).
+  4. **Task 4: Game Title Detection** (Deep Multi-Class Image Classification, Target: 5 game titles $\in \{0, 1, 2, 3, 4\}$ from $230\times 120$ gameplay screenshots per `datacard.txt`, Metric: **Macro $F_1$**, 5-Fold OOF Macro $F_1 = 0.9470$).
   5. **Task 5: Account Security Monitoring** (Unsupervised Anomaly Detection, Target: `is_anomaly` across 4 time periods, Metric: **$F_3$ Score** heavily penalizing missed account takeovers/bot rings, 122 features).
 * **Grading & Competition Structure:**
   * **Kaggle Leaderboard:** 70% (Ground Baseline = $0.68$, Challenge Baseline = $0.75$, evaluated on consolidated 25,889-row `sample_submission.csv`).
