@@ -82,6 +82,12 @@
         "warning_lead_time_mae_105_hours": 118.5,
         "warning_lead_time_mae_110_hours": 118.5,
         "early_warning_advantage_mae_vs_t2_hours": 21.83,
-        "spearman_latent_vs_residual_correlation": 0.9127
+        "spearman_latent_vs_residual_correlation": 0.9127,
+        "train_pc_mhd2_mean": 1.99,
+        "train_pc_mhd2_theoretical_mean": 2.0,
+        "train_pc_mhd2_variance": 9.8579,
+        "train_pc_mhd2_theoretical_variance": 4.0,
+        "train_pc_mhd2_outliers_alpha_0_01": 4,
+        "train_pc_mhd2_outliers_alpha_0_001": 2
     }
 }

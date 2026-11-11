@@ -11,6 +11,11 @@ Part I: Diamond Outliers,Outliers at alpha=0.001 (0.1%),446 (0.83%)
 Part II: Bearing Vibration,Total Observations,984 timesteps (10-min cadence)
 Part II: Bearing Vibration,Train / Test Observations,"Train: 200 (Nominal), Test: 784 (Run-to-failure)"
 Part II: Bearing Vibration,PCA Retained Variance (2 PCs),"PC1: 46.85%, PC2: 23.00%, Total: 69.85%"
+Part II: Bearing Vibration,Train PC D_M^2 Mean (Theoretical: 2.0000),1.9900
+Part II: Bearing Vibration,"Train PC Chi2 Cutoff (alpha=0.01, df=2)",9.2103
+Part II: Bearing Vibration,Train PC Outliers at alpha=0.01 (1%),"4 (2.00%)"
+Part II: Bearing Vibration,"Train PC Chi2 Cutoff (alpha=0.001, df=2)",13.8155
+Part II: Bearing Vibration,Train PC Outliers at alpha=0.001 (0.1%),"2 (1.00%)"
 Part II: Bearing Vibration,"Latent MHD Threshold (df=2, a=0.001)",13.8155
 Part II: Bearing Vibration,Latent MHD Failure Onset,2004-02-15 05:42:39
 Part II: Bearing Vibration,Max Train MAE,1.17357
