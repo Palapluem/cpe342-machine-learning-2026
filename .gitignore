@@ -4,6 +4,14 @@
 *.out
 *.toc
 *.synctex.gz
+*.fls
+*.fdb_latexmk
+*.xdv
+*.nav
+*.snm
+*.vrb
+*.bbl
+*.blg
 texput.log
 __pycache__/
 *.py.bak
