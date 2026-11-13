@@ -1,0 +1,94 @@
+{
+  "task": "Task 4: Game Title Detection",
+  "n_train": 31546,
+  "n_test": 25889,
+  "feature_dim": 11565,
+  "backbones": [
+    "DINOv2 ViT-B/14 spatial (4608-d)",
+    "DINOv2 ViT-S/14 3-view orig+dark90+hflip (3840-d)",
+    "ResNet-34 ImageNet spatial pyramid (2560-d)",
+    "EfficientNet-B0 pooled (1280-d)",
+    "HUD RGB/HSV/Sobel/aspect telemetry (45-d)"
+  ],
+  "oof_macro_f1": 0.9567317407034075,
+  "oof_accuracy": 0.9629747036074304,
+  "head_oof_macro_f1": {
+    "M1_RichResMLP": 0.9552467050818466,
+    "M2_CosineMLP": 0.952647453691527,
+    "M3_BalResMLP": 0.9549190062892621,
+    "M4_LinearSoftmax": 0.9221942363816199,
+    "4Head_SWA_Ensemble": 0.9567317407034075
+  },
+  "head_oof_accuracy": {
+    "M1_RichResMLP": 0.9616116147847588,
+    "M2_CosineMLP": 0.9593926329804096,
+    "M3_BalResMLP": 0.9614848158245103,
+    "M4_LinearSoftmax": 0.9335890445698345,
+    "4Head_SWA_Ensemble": 0.9629747036074304
+  },
+  "per_class_f1": [
+    0.9819787276740919,
+    0.9541932543299909,
+    0.9510888968225634,
+    0.9492124989471911,
+    0.9471853257432005
+  ],
+  "per_class_precision": [
+    0.9797373057824764,
+    0.9583428702220188,
+    0.9500713266761769,
+    0.9475365730620481,
+    0.9550382653061225
+  ],
+  "per_class_recall": [
+    0.9842304288357873,
+    0.9500794191059678,
+    0.952108649035025,
+    0.9508943638204522,
+    0.9394604767879549
+  ],
+  "per_class_support": [
+    12429,
+    4407,
+    5596,
+    5926,
+    3188
+  ],
+  "confusion_matrix": [
+    [
+      12233,
+      44,
+      53,
+      59,
+      40
+    ],
+    [
+      67,
+      4187,
+      48,
+      62,
+      43
+    ],
+    [
+      72,
+      43,
+      5328,
+      134,
+      19
+    ],
+    [
+      57,
+      47,
+      148,
+      5635,
+      39
+    ],
+    [
+      57,
+      48,
+      31,
+      57,
+      2995
+    ]
+  ]
+}
