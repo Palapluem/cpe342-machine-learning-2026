@@ -262,7 +262,7 @@ project/
 │   └── predictions/                           # test_predictions.csv (25,889 rows: id, task4)
 │
 └── task5/                                     # Task 5: Account Security Monitoring (Unsupervised Anomaly, F3)
-    ├── task5_account_security.ipynb           # Portable Notebook (Haversine Geo-Velocity + iForest/ECOD/LOF/AE Ensemble)
+    ├── task5_account_security.ipynb           # Portable Notebook (Per-Feature Drift + 1D Density-Gap CBLOF + Tail Score)
     ├── data/                                  # test.csv (25,889×123), datacard.txt
     └── predictions/                           # test_predictions.csv (25,889 rows: id, task5)
 ```
