@@ -1,10 +1,10 @@
 {
   "assets/figure1-spending-eda.png": "91f0a0402559135659433d0fd2abd9354b0f84e5a6007d536731e41eeef95093",
-  "assets/figure2-hurdle-calibration-diagnostics.png": "575a375e1d67e62b742353cf82e4e7d4f7bcd7888cfe820bd8ae546e185c57ea",
-  "assets/figure3-residual-error-distribution.png": "128e2552b41238f1f7533865c41700d306523fbf03ff9eb3dced3c26e6d41541",
-  "assets/figure4-test-spending-prediction-density.png": "ce90993d82f2c6cf9a51eecef4740c2155dae6e9d6570d2fdf28697d3316e3d5",
-  "models/cv_metrics_summary.json": "e271c73f8d9c49bc850dd6073111ae62ad78535e8f14a555747a2e0613c42471",
-  "predictions/oof_predictions.csv": "3d9d7359a37684505b0480ec358cd7d2a6732b2335266c161a22d49cd2c6f938",
-  "predictions/test_predictions.csv": "2853bc0bcda04b2cf14a5123720499303ab8fc1d8e782635526aabdcefa71dba",
-  "submit/index.csv": "48584320cb1806eaf366f3c9cba0055ee0327364f1ba43c35d46b87d55e1eea0"
+  "assets/figure2-hurdle-calibration-diagnostics.png": "30c80c11af3b9477e41aea20762036d56b849c4e185b80d88fe0fcbc51a17320",
+  "assets/figure3-residual-error-distribution.png": "5657d65b6c918ef249668365b2edc298d5c1054691e2394b0a41f9908a16fd25",
+  "assets/figure4-test-spending-prediction-density.png": "51ef0c4a420f7ad1441a10e90ffbf427f5ee55318bc09d919ef31cee19259886",
+  "models/cv_metrics_summary.json": "02732ea295e5eb15cf6cd773a60862b635154a5cc929f4c582ff8aa44cd40a3b",
+  "predictions/oof_predictions.csv": "e1e5f60cdc555c8752dba9b1fb4e5f49f4eb7edd728c175bb197ca35efac2990",
+  "predictions/test_predictions.csv": "95f02c55beccd2c018ccc735fc6bc0ce6ce669f016765bd69d6617bdd2294bb8",
+  "submit/index.csv": "192b8145f303a0757ec632aaa9b0361a1bd05871aab3923868db978aaac12ede"
 }
