@@ -5,4 +5,4 @@ LightGBM Quantile (BayesQ Q_{1-0.5/p}),5-fold outer OOF,2716.77,0.794399,29.4362
 XGBoost MultiQuantile (BayesQ Q_{1-0.5/p}),5-fold outer OOF,2713.86,0.794574,29.4537
 CatBoost 9-Quantile (Q_V5 Depth-5),5-fold outer OOF,2702.42,0.795263,29.5226
 CatBoost 15-Quantile (Q_FINE Depth-5),5-fold outer OOF,2702.88,0.795235,29.5198
-Champion Dual-Grid + IsoBlend Nested Hurdle,5-fold nested outer OOF (Promoted),2702.44,0.795261,29.5224
+Champion Dual-Grid + IsoBlend Nested Hurdle,5-fold nested outer OOF (Promoted),2702.25,0.795273,29.5236
