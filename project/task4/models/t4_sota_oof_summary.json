@@ -3,10 +3,10 @@
   "n_train": 31546,
   "n_test": 25889,
   "models": [
-    "eva02_large_patch14_224.mim_m38m (Dual-T4 End-to-End 5-Fold)",
+    "vit_base_patch16_dinov3.lvd1689m (Dual-T4 End-to-End 5-Fold)",
     "vit_large_patch16_dinov3.lvd1689m (Dual-T4 End-to-End 5-Fold)",
     "eva02_base_patch14_224.mim_in22k (Dual-T4 End-to-End 5-Fold)",
-    "vit_base_patch16_dinov3.lvd1689m (Dual-T4 End-to-End 5-Fold)",
+    "eva02_large_patch14_224.mim_m38m (Dual-T4 End-to-End 5-Fold)",
     "6-Backbone V1+V2 SWA Multi-Head + 45-d HUD Telemetry (16,173-d)"
   ],
   "mean_weights": [
