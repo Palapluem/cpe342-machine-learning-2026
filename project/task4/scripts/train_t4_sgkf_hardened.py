@@ -134,17 +134,9 @@ def apply_nightmare_aug(pil_img: Image.Image, rng: np.random.Generator) -> np.nd
 
     arr = np.asarray(pil_img, dtype=np.float32) / 255.0
 
-    # Color tint, channel gain, or inversion/solarization
-    r_col = rng.random()
-    if r_col < 0.12:
-        # Color inversion or soft solarize seen in test corruption failures
-        if rng.random() < 0.55:
-            arr = 1.0 - arr
-        else:
-            th = float(rng.uniform(0.35, 0.75))
-            arr = np.where(arr > th, 1.0 - arr, arr)
-    elif r_col < 0.62:
-        gains = rng.uniform(0.28, 2.15, size=(1, 1, 3)).astype(np.float32)
+    # Neon channel gain / color tint (without destructive 1 - x color inversion)
+    if rng.random() < 0.55:
+        gains = rng.uniform(0.30, 2.20, size=(1, 1, 3)).astype(np.float32)
         gains /= float(gains.mean())
         arr = np.clip(arr * gains, 0.0, 1.0)
 
@@ -210,7 +202,7 @@ def make_deterministic_exthard(jpeg_bytes_list: List[bytes], indices: np.ndarray
             g /= float(g.max())
             arr = np.clip(np.power(arr, 0.85) * g * float(rng.uniform(0.8, 1.4)), 0.0, 1.0)
         else:
-            arr = 1.0 - arr if (k % 8 == 3) else np.clip(0.5 + (arr - 0.5) * 0.5 + rng.uniform(-0.15, 0.15), 0.0, 1.0)
+            arr = np.clip(0.5 + (arr - 0.5) * float(rng.uniform(0.4, 0.7)) + rng.uniform(-0.15, 0.15, (1, 1, 3)), 0.0, 1.0)
         arr = arr + rng.normal(0.0, float(rng.uniform(0.03, 0.07)), size=arr.shape).astype(np.float32)
         out.append(np.clip(arr * 255.0, 0.0, 255.0).astype(np.uint8))
     return out
