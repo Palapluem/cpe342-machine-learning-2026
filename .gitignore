@@ -34,4 +34,5 @@ Thumbs.db
 # Large dataset zips and extracted images
 project/task4/data/task4_image_classification/
 project/task4/data/*.zip
+project/task4/data/task4_colab_pack*
 catboost_info/

@@ -12,6 +12,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import gc
 import io
 import math
 import os
@@ -454,7 +455,9 @@ def train_one_model(
 
     bs, accum = pick_batch_and_accum(spec, device)
     epochs = epochs_override if epochs_override is not None else spec.epochs
+    eff_workers = min(num_workers, max(1, os.cpu_count() or num_workers)) if num_workers > 0 else 0
     views = ["orig", "flip", "gw", "gw_flip", "rot_p18_gw", "rot_m18_gw"]
+    print(f"[{spec.key}] Config: img_hw={spec.img_hw} | bs={bs} (accum={accum}) | epochs={epochs} | workers={eff_workers}")
 
     n_tr, n_te = len(tr_df), len(te_df)
     oof_orig2 = np.zeros((n_tr, 5), dtype=np.float32)
@@ -499,9 +502,9 @@ def train_one_model(
             batch_size=bs,
             shuffle=True,
             drop_last=len(tr_ds) >= bs,
-            num_workers=num_workers,
+            num_workers=eff_workers,
             pin_memory=(device.type == "cuda"),
-            persistent_workers=(num_workers > 0),
+            persistent_workers=(eff_workers > 0),
         )
 
         opt = torch.optim.AdamW(make_param_groups(model, spec.base_lr, spec.backbone_lr_mult))
@@ -556,16 +559,16 @@ def train_one_model(
                 n_seen += len(yb)
 
             # Quick orig2 clean check at epoch end
-            val_quick = predict_views(model, tr_bytes, va_idx, spec, mean_t, std_t, ["orig"], bs, device, amp_dtype, True, num_workers)["orig"]
+            val_quick = predict_views(model, tr_bytes, va_idx, spec, mean_t, std_t, ["orig"], bs, device, amp_dtype, True, eff_workers)["orig"]
             vf1 = f1_score(y[va_idx], val_quick.argmax(1), average="macro")
             print(f"[{spec.key}] Fold {k} Ep {ep+1}/{epochs} loss={ep_loss/max(1,n_seen):.4f} ValCleanF1={vf1:.5f} ({time.time()-t0:.1f}s)")
 
         # Load EMA shadow weights for final OOF, ExtHard, and Test inference
         model.load_state_dict(ema_state, strict=False)
-        va_views = predict_views(model, tr_bytes, va_idx, spec, mean_t, std_t, views, bs, device, amp_dtype, True, num_workers)
+        va_views = predict_views(model, tr_bytes, va_idx, spec, mean_t, std_t, views, bs, device, amp_dtype, True, eff_workers)
         ext_imgs = make_deterministic_exthard(tr_bytes, va_idx, seed=123 + k)
-        ext_views = predict_views(model, ext_imgs, None, spec, mean_t, std_t, views, bs, device, amp_dtype, False, num_workers)
-        te_views = predict_views(model, te_bytes, None, spec, mean_t, std_t, views, bs, device, amp_dtype, True, num_workers)
+        ext_views = predict_views(model, ext_imgs, None, spec, mean_t, std_t, views, bs, device, amp_dtype, False, eff_workers)
+        te_views = predict_views(model, te_bytes, None, spec, mean_t, std_t, views, bs, device, amp_dtype, True, eff_workers)
 
         va_o2 = combine_tta_views(va_views, "orig2")
         va_w6 = combine_tta_views(va_views, "weighted6")
@@ -584,6 +587,10 @@ def train_one_model(
         f_val = f1_score(y[va_idx], va_w6.argmax(1), average="macro")
         f_ext = f1_score(y[va_idx], ex_w6.argmax(1), average="macro")
         print(f"[{spec.key}] DONE Fold {k} in {time.time()-t0:.1f}s | Val6TTA F1={f_val:.5f} | ExtHard F1={f_ext:.5f}")
+        del model, opt, sched, scaler, ema_state, tr_dl, tr_ds
+        gc.collect()
+        if device.type == "cuda":
+            torch.cuda.empty_cache()
 
     if folds_done == 5:
         te_orig2 /= 5.0
