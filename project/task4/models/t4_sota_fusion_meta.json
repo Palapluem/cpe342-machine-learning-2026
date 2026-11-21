@@ -1,0 +1,63 @@
+{
+  "discovered_fullres_models": [
+    "cnxv3"
+  ],
+  "clean_pool_weights": {
+    "ConvNeXtV2-SGKF": 0.034,
+    "MLP-V3-SGKF": 0.0111,
+    "DINOv3-ViT-L": 0.1642,
+    "EVA02-Large": 0.2626,
+    "EVA02-Base": 0.0653,
+    "DINOv2-StageC-2TTA": 0.1117,
+    "CNXv3-Base-Orig2": 0.0809,
+    "CNXv3-Base-Hard6": 0.2702
+  },
+  "clean_pool_temps": {
+    "ConvNeXtV2-SGKF": 0.662,
+    "DINOv2-StageA": 0.6626,
+    "MLP-V3-SGKF": 0.7168,
+    "DINOv3-ViT-L": 0.7006,
+    "EVA02-Large": 0.69,
+    "EVA02-Base": 0.7319,
+    "DINOv3-ViT-B": 0.7464,
+    "DINOv2-StageC-2TTA": 0.7424,
+    "DINOv2-StageC-6TTA": 0.6974,
+    "CNXv3-Base-Orig2": 0.7349,
+    "CNXv3-Base-Hard6": 0.7203
+  },
+  "exthard_weights": {
+    "CNXv2-StageC-6TTA": 0.3957,
+    "DINOv2-StageC-6TTA": 0.2004,
+    "CNXv3-Base-Hard6": 0.4039
+  },
+  "shift_gate": {
+    "tau_js_99pct_iso": 0.016081,
+    "gamma": 0.0,
+    "test_rows_gated": 0
+  },
+  "prior_debias_alpha": 0.89,
+  "fold_alphas": [
+    0.9,
+    0.9,
+    0.9,
+    0.9,
+    0.85
+  ],
+  "metrics": {
+    "all_oof_f1": 0.992973,
+    "iso_oof_f1": 0.993576,
+    "corrupt_oof_f1": 0.988047,
+    "exthard6_oof_f1": 0.96383,
+    "oof_logloss": 0.022964,
+    "exthard6_logloss": 0.10651,
+    "run22_baseline_f1": 0.991174,
+    "paired_bootstrap_vs_r22": 1.0
+  },
+  "test_distribution": {
+    "0": 3715,
+    "1": 6679,
+    "2": 3869,
+    "3": 6481,
+    "4": 5145
+  }
+}
