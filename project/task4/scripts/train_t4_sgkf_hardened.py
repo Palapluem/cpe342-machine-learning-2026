@@ -6,17 +6,16 @@ Targets the four visual corruption regimes observed in Task 4:
 3. Neon RGB channel gain tints (without destructive inversion) & contrast compression
 4. Shot/Gaussian noise, Gaussian blur, and low-quality JPEG artifacts
 
-Includes Turing (Tesla T4, sm_75) safety & performance fixes:
+Includes Turing (Tesla T4, sm_75) safety, disconnect resilience, & speed upgrades:
 - Forces float16 + GradScaler on sm_75 GPUs even when torch.cuda.is_bf16_supported()
   returns True via emulated software support (avoids cuDNN FIND failures on depthwise 7x7).
-- Uses contiguous NCHW on T4 (avoids ConvNeXt NHWC depthwise cuDNN dispatch crashes)
-  and runs a 1-step forward+backward+eval preflight probe with automatic cuDNN fallback.
-- Single-decode 6-view TTA Dataset (~6x fewer JPEG decodes on 2-vCPU Colab hosts).
-- Smart ViT partial freeze that keeps patch_embed/cls/reg_token trainable so early RGB
-  layers adapt to neon/exposure shifts and gradient checkpointing preserves all grads.
+- Uses contiguous NCHW on T4 + 1-step forward/backward/eval preflight probe.
+- Vectorized GPU 6-view TTA (interior_gw_stretch_torch + uint8 raw loader) avoids 2-vCPU stalls.
+- Epoch-level atomic checkpoints (fold{k}_ckpt.pt) resume cleanly after Colab disconnects.
+- Smart ViT partial freeze keeps patch_embed/cls/reg_token trainable for RGB adaptation & grad_ckpt.
 
 Usage:
-    python train_t4_sgkf_hardened.py --data-dir /content/t4_data --out-dir /content/drive/MyDrive/t4_hard_outputs --models cnxv3 eva02l dinov3l
+    python train_t4_sgkf_hardened.py --data-dir /content/t4_data --out-dir /content/drive/MyDrive/t4_hard_outputs --models dinov3l eva02l
 """
 from __future__ import annotations
 
@@ -110,7 +109,7 @@ MODEL_SPECS: Dict[str, ModelSpec] = {
         key="eva02l",
         timm_name="eva02_large_patch14_448.mim_m38m_ft_in22k_in1k",
         img_hw=(196, 392),
-        epochs=5,
+        epochs=4,
         base_lr=2.0e-4,
         backbone_lr_mult=0.22,
         batch_a100=48,
@@ -226,6 +225,25 @@ def interior_gw_stretch_np(arr_u8: np.ndarray) -> np.ndarray:
     return np.clip(np.power(b_st, gamma), 0.0, 1.0).astype(np.float32)
 
 
+def interior_gw_stretch_torch(b: torch.Tensor) -> torch.Tensor:
+    """Vectorized GPU Gray-World + Percentile Contrast Stretch matching interior_gw_stretch_np."""
+    _, _, h, w = b.shape
+    h0, h1 = int(h * 0.2), int(h * 0.8)
+    w0, w1 = int(w * 0.2), int(w * 0.8)
+    patch = b[:, :, h0:h1:2, w0:w1:2]
+    ch_m = patch.mean(dim=(2, 3), keepdim=True).clamp(0.025, 1.0)
+    b_gw = (b * (ch_m.mean(dim=1, keepdim=True) / ch_m)).clamp(0.0, 1.0)
+    p_sub = b_gw[:, :, h0:h1:3, w0:w1:3].reshape(b.shape[0], -1)
+    q = torch.tensor([0.02, 0.98], device=b.device, dtype=b.dtype)
+    qs = torch.quantile(p_sub, q, dim=1)
+    lo = qs[0].view(-1, 1, 1, 1)
+    hi = qs[1].view(-1, 1, 1, 1)
+    b_st = ((b_gw - lo) / (hi - lo).clamp(min=0.10)).clamp(0.0, 1.0)
+    m_int = b_st[:, :, h0:h1:3, w0:w1:3].mean(dim=(1, 2, 3)).clamp(0.05, 0.95)
+    gamma = (math.log(0.45) / torch.log(m_int)).clamp(0.50, 1.80).view(-1, 1, 1, 1)
+    return b_st.pow(gamma).clamp(0.0, 1.0)
+
+
 def make_deterministic_exthard(jpeg_bytes_list: List[bytes], indices: np.ndarray, seed: int = 123) -> List[np.ndarray]:
     """Generate deterministic ExtremeHard validation images for clean fold-level stress testing."""
     rng = np.random.default_rng(seed)
@@ -301,21 +319,21 @@ class Task4TrainDataset(Dataset):
         return torch.from_numpy(arr_f).permute(2, 0, 1).contiguous(), torch.tensor(int(self.labels[idx]), dtype=torch.long)
 
 
-class Task4MultiViewDataset(Dataset):
-    """Single-decode deterministic TTA dataset returning (V, 3, H, W) per image."""
+class Task4RawViewsDataset(Dataset):
+    """Lightweight single-decode dataset yielding raw uint8 spatial images for GPU-side TTA/GW."""
 
     def __init__(
         self,
         source_items: List[bytes] | List[np.ndarray],
         indices: Optional[np.ndarray],
         img_hw: Tuple[int, int],
-        views: List[str],
+        need_rot: bool = True,
         is_bytes: bool = True,
     ) -> None:
         self.source_items = source_items
         self.indices = indices if indices is not None else np.arange(len(source_items))
         self.img_hw = img_hw
-        self.views = views
+        self.need_rot = need_rot
         self.is_bytes = is_bytes
 
     def __len__(self) -> int:
@@ -328,27 +346,12 @@ class Task4MultiViewDataset(Dataset):
         if pil.size != target_wh:
             pil = pil.resize(target_wh, resample=Image.BILINEAR)
 
-        arr_orig = np.asarray(pil, dtype=np.uint8)
-        view_arrays: List[np.ndarray] = []
-        for v in self.views:
-            if v == "orig":
-                view_arrays.append(arr_orig.astype(np.float32) * (1.0 / 255.0))
-            elif v == "flip":
-                view_arrays.append(arr_orig[:, ::-1, :].astype(np.float32) * (1.0 / 255.0))
-            elif v == "gw":
-                view_arrays.append(interior_gw_stretch_np(arr_orig))
-            elif v == "gw_flip":
-                view_arrays.append(interior_gw_stretch_np(arr_orig[:, ::-1, :]))
-            elif v == "rot_p18_gw":
-                rot = pil.rotate(18.0, resample=Image.BILINEAR, fillcolor=(0, 0, 0))
-                view_arrays.append(interior_gw_stretch_np(np.asarray(rot, dtype=np.uint8)))
-            elif v == "rot_m18_gw":
-                rot = pil.rotate(-18.0, resample=Image.BILINEAR, fillcolor=(0, 0, 0))
-                view_arrays.append(interior_gw_stretch_np(np.asarray(rot, dtype=np.uint8)))
-            else:
-                raise ValueError(f"Unknown TTA view: {v}")
+        frames = [np.asarray(pil, dtype=np.uint8)]
+        if self.need_rot:
+            frames.append(np.asarray(pil.rotate(18.0, resample=Image.BILINEAR, fillcolor=(0, 0, 0)), dtype=np.uint8))
+            frames.append(np.asarray(pil.rotate(-18.0, resample=Image.BILINEAR, fillcolor=(0, 0, 0)), dtype=np.uint8))
 
-        stacked = np.stack(view_arrays, axis=0)  # (V, H, W, 3) float32
+        stacked = np.stack(frames, axis=0)  # (R, H, W, 3) uint8
         return torch.from_numpy(stacked).permute(0, 3, 1, 2).contiguous()
 
 
@@ -459,7 +462,6 @@ def probe_runtime_engine(
         candidates.append((False, True, False, f"sm{cc_major}{cc_minor}-nchw-cudnn-safe"))
         candidates.append((False, False, False, f"sm{cc_major}{cc_minor}-nchw-nocudnn"))
     else:
-        # Turing (T4 sm_75) and earlier: NCHW + cudnn.benchmark=False avoids NHWC depthwise FIND errors
         candidates.append((False, True, False, f"sm{cc_major}{cc_minor}-nchw-cudnn-safe"))
         candidates.append((False, False, False, f"sm{cc_major}{cc_minor}-nchw-nocudnn"))
 
@@ -468,8 +470,7 @@ def probe_runtime_engine(
         try:
             torch.backends.cudnn.enabled = use_cudnn
             torch.backends.cudnn.benchmark = use_bench
-            mem_fmt = torch.channels_last if use_cl else torch.contiguous_format
-            model.to(memory_format=mem_fmt)
+            model.to(memory_format=(torch.channels_last if use_cl else torch.contiguous_format))
             model.zero_grad(set_to_none=True)
 
             probe_scaler = torch.amp.GradScaler("cuda", init_scale=1024.0, enabled=use_scaler)
@@ -491,7 +492,6 @@ def probe_runtime_engine(
             assert has_grad, "Gradients missing in preflight probe"
             model.zero_grad(set_to_none=True)
 
-            # Verify odd remainder batch size during eval too
             model.eval()
             xb_odd = torch.randn(3, 3, h, w, device=device)
             if use_cl:
@@ -506,6 +506,31 @@ def probe_runtime_engine(
             torch.cuda.empty_cache()
 
     raise RuntimeError(f"All runtime engine candidates failed for {spec.key}: {last_exc}") from last_exc
+
+
+def _build_gpu_tta_batch(raw_f: torch.Tensor, views: List[str]) -> torch.Tensor:
+    """Expand raw (B, R, 3, H, W) float32 [0,1] frames into (B, V, 3, H, W) on GPU."""
+    x_orig = raw_f[:, 0]
+    x_flip = torch.flip(x_orig, dims=[-1]) if any(v in ("flip", "gw_flip") for v in views) else None
+    built: List[torch.Tensor] = []
+    for v in views:
+        if v == "orig":
+            built.append(x_orig)
+        elif v == "flip":
+            assert x_flip is not None
+            built.append(x_flip)
+        elif v == "gw":
+            built.append(interior_gw_stretch_torch(x_orig))
+        elif v == "gw_flip":
+            assert x_flip is not None
+            built.append(interior_gw_stretch_torch(x_flip))
+        elif v == "rot_p18_gw":
+            built.append(interior_gw_stretch_torch(raw_f[:, 1]))
+        elif v == "rot_m18_gw":
+            built.append(interior_gw_stretch_torch(raw_f[:, 2]))
+        else:
+            raise ValueError(f"Unknown TTA view: {v}")
+    return torch.stack(built, dim=1)
 
 
 @torch.no_grad()
@@ -524,12 +549,13 @@ def predict_views(
     is_bytes: bool = True,
     num_workers: int = 2,
 ) -> Dict[str, np.ndarray]:
-    """Run single-decode multi-view inference cleanly with GPU autocast and bounded eval_bs chunks."""
+    """Run single-decode uint8 transfer + vectorized GPU TTA inference."""
     model.eval()
     n = len(indices) if indices is not None else len(source_items)
     v_cnt = len(views)
-    dl_bs = max(8, eval_bs // v_cnt) if v_cnt > 1 else eval_bs
-    ds = Task4MultiViewDataset(source_items, indices, spec.img_hw, views, is_bytes=is_bytes)
+    need_rot = any(v in ("rot_p18_gw", "rot_m18_gw") for v in views)
+    dl_bs = max(16, eval_bs) if v_cnt == 1 else max(8, min(32, eval_bs))
+    ds = Task4RawViewsDataset(source_items, indices, spec.img_hw, need_rot=need_rot, is_bytes=is_bytes)
     dl = DataLoader(
         ds,
         batch_size=dl_bs,
@@ -539,20 +565,21 @@ def predict_views(
     )
 
     all_probs: List[np.ndarray] = []
-    for batch_v in dl:
-        bsz, vc, ch, hh, ww = batch_v.shape
-        flat = batch_v.view(bsz * vc, ch, hh, ww)
+    for batch_u8 in dl:
+        bsz = batch_u8.shape[0]
+        raw_f = batch_u8.to(device, non_blocking=True).float() * (1.0 / 255.0)
+        views_t = _build_gpu_tta_batch(raw_f, views)
+        flat = views_t.view(bsz * v_cnt, 3, views_t.shape[3], views_t.shape[4])
         out_chunks: List[np.ndarray] = []
         for s in range(0, len(flat), eval_bs):
-            xb = flat[s : s + eval_bs].to(device, non_blocking=True)
+            xb = flat[s : s + eval_bs]
             if use_channels_last and device.type == "cuda":
                 xb = xb.to(memory_format=torch.channels_last)
             xb = (xb - mean_t) / std_t
             with torch.amp.autocast(device.type, dtype=amp_dtype) if amp_dtype is not None else torch.no_grad():
                 logits = model(xb)
             out_chunks.append(F.softmax(logits.float(), dim=1).cpu().numpy())
-        probs_flat = np.concatenate(out_chunks, axis=0)
-        all_probs.append(probs_flat.reshape(bsz, vc, 5))
+        all_probs.append(np.concatenate(out_chunks, axis=0).reshape(bsz, v_cnt, 5))
 
     merged = np.concatenate(all_probs, axis=0) if all_probs else np.zeros((0, v_cnt, 5), dtype=np.float32)
     assert len(merged) == n
@@ -612,6 +639,113 @@ def load_fold_npz(path: str) -> Optional[Dict[str, np.ndarray]]:
         return None
 
 
+def resolve_epoch_ckpt_paths(cache_dir: str, model_key: str, k: int) -> Tuple[str, str]:
+    """Return primary (Drive/out_dir) and local fallback checkpoint paths for mid-fold resume."""
+    drive_ckpt = os.path.join(cache_dir, f"fold{k}_ckpt.pt")
+    if os.path.isdir("/content"):
+        local_dir = os.path.join("/content/t4_hard_ckpt_tmp", f"folds_{model_key}")
+        os.makedirs(local_dir, exist_ok=True)
+        local_ckpt = os.path.join(local_dir, f"fold{k}_ckpt.pt")
+    else:
+        local_ckpt = drive_ckpt
+    return drive_ckpt, local_ckpt
+
+
+def save_epoch_ckpt(
+    cache_dir: str,
+    spec: ModelSpec,
+    k: int,
+    ep: int,
+    epochs: int,
+    freeze_vit_blocks: int,
+    model: nn.Module,
+    ema_state: Dict[str, torch.Tensor],
+    opt: torch.optim.Optimizer,
+    sched: torch.optim.lr_scheduler.LRScheduler,
+    scaler: torch.amp.GradScaler,
+) -> str:
+    """Save only trainable/buffer tensors + optimizer/scheduler state atomically for zero-loss resume."""
+    drive_ckpt, local_ckpt = resolve_epoch_ckpt_paths(cache_dir, spec.key, k)
+    trainable_keys = {n for n, p in model.named_parameters() if p.requires_grad}
+    buf_keys = {n for n, _ in model.named_buffers()}
+    keep_keys = trainable_keys | buf_keys
+
+    state_dict_cpu = {sk: sv.detach().cpu() for sk, sv in model.state_dict().items() if sk in keep_keys}
+    ema_cpu = {ek: ev.detach().cpu() for ek, ev in ema_state.items() if ek in keep_keys}
+    payload = {
+        "spec_key": spec.key,
+        "img_hw": tuple(spec.img_hw),
+        "epochs": int(epochs),
+        "freeze_vit_blocks": int(freeze_vit_blocks),
+        "epoch": int(ep),
+        "trainable_model": state_dict_cpu,
+        "ema_state": ema_cpu,
+        "opt": opt.state_dict(),
+        "sched": sched.state_dict(),
+        "scaler": scaler.state_dict(),
+    }
+
+    target = drive_ckpt
+    try:
+        if drive_ckpt != local_ckpt and shutil.disk_usage(cache_dir).free < 4_500_000_000:
+            target = local_ckpt
+    except OSError:
+        target = local_ckpt
+
+    tmp_path = f"{target}.tmp.{os.getpid()}"
+    try:
+        torch.save(payload, tmp_path)
+        os.replace(tmp_path, target)
+    except OSError:
+        if os.path.isfile(tmp_path):
+            os.remove(tmp_path)
+        if target != local_ckpt:
+            tmp_fb = f"{local_ckpt}.tmp.{os.getpid()}"
+            torch.save(payload, tmp_fb)
+            os.replace(tmp_fb, local_ckpt)
+            target = local_ckpt
+        else:
+            raise
+    return target
+
+
+def load_epoch_ckpt(
+    cache_dir: str,
+    spec: ModelSpec,
+    k: int,
+    epochs: int,
+    freeze_vit_blocks: int,
+) -> Optional[Dict]:
+    """Load the newest valid mid-fold epoch checkpoint matching current architecture config."""
+    drive_ckpt, local_ckpt = resolve_epoch_ckpt_paths(cache_dir, spec.key, k)
+    cands = [drive_ckpt] if drive_ckpt == local_ckpt else [drive_ckpt, local_ckpt]
+    best_payload = None
+    for cp in cands:
+        if not os.path.isfile(cp):
+            continue
+        try:
+            pl = torch.load(cp, map_location="cpu", weights_only=False)
+            if (
+                pl.get("spec_key") == spec.key
+                and tuple(pl.get("img_hw", ())) == tuple(spec.img_hw)
+                and int(pl.get("epochs", -1)) == int(epochs)
+                and int(pl.get("freeze_vit_blocks", -1)) == int(freeze_vit_blocks)
+            ):
+                if best_payload is None or int(pl.get("epoch", -1)) > int(best_payload.get("epoch", -1)):
+                    best_payload = pl
+        except Exception:
+            continue
+    return best_payload
+
+
+def remove_epoch_ckpt(cache_dir: str, model_key: str, k: int) -> None:
+    """Delete temporary mid-fold epoch checkpoints once final fold{k}.npz is saved."""
+    drive_ckpt, local_ckpt = resolve_epoch_ckpt_paths(cache_dir, model_key, k)
+    for cp in {drive_ckpt, local_ckpt}:
+        if os.path.isfile(cp):
+            os.remove(cp)
+
+
 def train_single_fold(
     k: int,
     spec: ModelSpec,
@@ -626,6 +760,8 @@ def train_single_fold(
     epochs: int,
     eff_workers: int,
     views: List[str],
+    cache_dir: str,
+    resume: bool,
     device: torch.device,
     amp_dtype: Optional[torch.dtype],
     use_scaler: bool,
@@ -635,7 +771,7 @@ def train_single_fold(
     p_norm_view: float,
     seed: int,
 ) -> Dict[str, np.ndarray]:
-    """Train one SGKF fold with preflight engine verification, EMA tracking, and 6-view OOF/ExtHard/Test TTA."""
+    """Train one SGKF fold with epoch checkpoints, EMA tracking, and GPU 6-view OOF/ExtHard/Test TTA."""
     t0 = time.time()
     seed_everything(seed + k * 101)
     model, mean_tup, std_tup, (n_train, n_tot) = build_model(
@@ -645,18 +781,11 @@ def train_single_fold(
     )
     model = model.to(device)
     use_cl, runtime_tag = probe_runtime_engine(model, spec, device, amp_dtype, use_scaler)
-    seed_everything(seed + k * 101)  # Reset RNG cleanly after preflight probe
-
-    print(
-        f"[{spec.key}] Fold {k} started | engine={runtime_tag} | amp={amp_dtype} | "
-        f"trainable={n_train/1e6:.1f}M/{n_tot/1e6:.1f}M",
-        flush=True,
-    )
+    seed_everything(seed + k * 101)
 
     mean_t = torch.tensor(mean_tup, device=device, dtype=torch.float32).view(1, 3, 1, 1)
     std_t = torch.tensor(std_tup, device=device, dtype=torch.float32).view(1, 3, 1, 1)
 
-    # Pure-train class prior for mild logit adjustment during training (tau=0.20)
     pi_tr = np.bincount(y[tr_idx], minlength=5) / max(1, len(tr_idx))
     logit_adj = torch.tensor(0.20 * np.log(np.clip(pi_tr, 1e-4, 1.0)), device=device, dtype=torch.float32)
 
@@ -694,7 +823,31 @@ def train_single_fold(
     scaler = torch.amp.GradScaler("cuda", enabled=use_scaler)
     ema_state: Dict[str, torch.Tensor] = {}
 
-    for ep in range(epochs):
+    start_ep = 0
+    ckpt = load_epoch_ckpt(cache_dir, spec, k, epochs, freeze_vit_blocks) if resume else None
+    if ckpt is not None:
+        model.load_state_dict(ckpt["trainable_model"], strict=False)
+        for ek, ev in ckpt["ema_state"].items():
+            ema_state[ek] = ev.to(device=device)
+        opt.load_state_dict(ckpt["opt"])
+        sched.load_state_dict(ckpt["sched"])
+        if ckpt.get("scaler"):
+            scaler.load_state_dict(ckpt["scaler"])
+        start_ep = int(ckpt["epoch"]) + 1
+        print(
+            f"[{spec.key}] Fold {k} resumed mid-fold at Ep {start_ep}/{epochs} | "
+            f"engine={runtime_tag} | amp={amp_dtype} | trainable={n_train/1e6:.1f}M/{n_tot/1e6:.1f}M",
+            flush=True,
+        )
+    else:
+        print(
+            f"[{spec.key}] Fold {k} started | engine={runtime_tag} | amp={amp_dtype} | "
+            f"trainable={n_train/1e6:.1f}M/{n_tot/1e6:.1f}M",
+            flush=True,
+        )
+
+    for ep in range(start_ep, epochs):
+        seed_everything(seed + k * 101 + ep * 17)
         model.train()
         opt.zero_grad(set_to_none=True)
         ep_loss, n_seen = 0.0, 0
@@ -720,12 +873,15 @@ def train_single_fold(
                     scaler.unscale_(opt)
                 nn.utils.clip_grad_norm_(model.parameters(), 2.0)
                 if use_scaler:
+                    prev_scale = scaler.get_scale()
                     scaler.step(opt)
                     scaler.update()
+                    if scaler.get_scale() >= prev_scale:
+                        sched.step()
                 else:
                     opt.step()
+                    sched.step()
                 opt.zero_grad(set_to_none=True)
-                sched.step()
                 update_ema(ema_state, model, decay=0.996 if ep >= 1 else 0.98)
 
             ep_loss += float(loss.item()) * len(yb)
@@ -735,13 +891,15 @@ def train_single_fold(
             model, tr_bytes, va_idx, spec, mean_t, std_t, ["orig"], eval_bs, device, amp_dtype, use_cl, True, eff_workers
         )["orig"]
         vf1 = f1_score(y[va_idx], val_q.argmax(1), average="macro")
+        ckpt_saved = save_epoch_ckpt(cache_dir, spec, k, ep, epochs, freeze_vit_blocks, model, ema_state, opt, sched, scaler)
         print(
             f"[{spec.key}] Fold {k} Ep {ep+1}/{epochs} loss={ep_loss/max(1, n_seen):.4f} "
-            f"ValCleanF1={vf1:.5f} ({time.time()-t0:.1f}s)",
+            f"ValCleanF1={vf1:.5f} | saved ckpt ({os.path.basename(ckpt_saved)}) ({time.time()-t0:.1f}s)",
             flush=True,
         )
 
     model.load_state_dict(ema_state, strict=False)
+    t_ev = time.time()
     va_views = predict_views(
         model, tr_bytes, va_idx, spec, mean_t, std_t, views, eval_bs, device, amp_dtype, use_cl, True, eff_workers
     )
@@ -762,7 +920,11 @@ def train_single_fold(
     }
     f_val = f1_score(y[va_idx], fold_out["va_w6"].argmax(1), average="macro")
     f_ext = f1_score(y[va_idx], fold_out["ext_w6"].argmax(1), average="macro")
-    print(f"[{spec.key}] DONE Fold {k} in {time.time()-t0:.1f}s | Val6TTA F1={f_val:.5f} | ExtHard F1={f_ext:.5f}", flush=True)
+    print(
+        f"[{spec.key}] DONE Fold {k} in {time.time()-t0:.1f}s (eval={time.time()-t_ev:.1f}s) | "
+        f"Val6TTA F1={f_val:.5f} | ExtHard F1={f_ext:.5f}",
+        flush=True,
+    )
 
     del model, opt, sched, scaler, ema_state, tr_dl, tr_ds, ext_imgs, va_views, ext_views, te_views
     gc.collect()
@@ -811,7 +973,7 @@ def train_one_model(
     p_norm_view: float = 0.25,
     seed: int = 42,
 ) -> None:
-    """Train all SGKF folds for one backbone with automatic checkpoint resume and dual-stream TTA."""
+    """Train all SGKF folds for one backbone with automatic fold & epoch checkpoint resume."""
     os.makedirs(out_dir, exist_ok=True)
     cache_dir = os.path.join(out_dir, f"folds_{spec.key}")
     os.makedirs(cache_dir, exist_ok=True)
@@ -842,6 +1004,7 @@ def train_one_model(
 
         cached = load_fold_npz(fold_npz) if resume else None
         if cached is not None:
+            remove_epoch_ckpt(cache_dir, spec.key, k)
             oof_orig2[va_idx] = cached["va_orig2"]
             oof_w6[va_idx] = cached["va_w6"]
             ext_w6[va_idx] = cached["ext_w6"]
@@ -867,6 +1030,8 @@ def train_one_model(
             epochs=epochs,
             eff_workers=eff_workers,
             views=views,
+            cache_dir=cache_dir,
+            resume=resume,
             device=device,
             amp_dtype=amp_dtype,
             use_scaler=use_scaler,
@@ -877,6 +1042,7 @@ def train_one_model(
             seed=seed,
         )
         atomic_savez_compressed(fold_npz, **fold_res)
+        remove_epoch_ckpt(cache_dir, spec.key, k)
         oof_orig2[va_idx] = fold_res["va_orig2"]
         oof_w6[va_idx] = fold_res["va_w6"]
         ext_w6[va_idx] = fold_res["ext_w6"]
@@ -917,7 +1083,7 @@ def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser(description="5-Fold SGKF Hardened Task 4 Trainer")
     ap.add_argument("--data-dir", required=True, help="Directory with train.csv, test.csv, folds_sgkf.npy, train/, test/")
     ap.add_argument("--out-dir", required=True, help="Output directory for fold checkpoints and CSV bundles")
-    ap.add_argument("--models", nargs="+", default=["cnxv3", "eva02l", "dinov3l"], choices=list(MODEL_SPECS.keys()))
+    ap.add_argument("--models", nargs="+", default=["dinov3l", "eva02l"], choices=list(MODEL_SPECS.keys()))
     ap.add_argument("--epochs", type=int, default=None, help="Override default epoch count")
     ap.add_argument("--max-folds", type=int, default=5, help="Train up to N folds (5 for full run)")
     ap.add_argument("--freeze-vit-blocks", type=int, default=None, help="Override frozen ViT lower block count")
