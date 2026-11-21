@@ -17,7 +17,9 @@ import io
 import math
 import os
 import random
+import shutil
 import time
+import zipfile
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple
 
@@ -496,7 +498,7 @@ def train_one_model(
         pi_tr = np.bincount(y[tr_idx], minlength=5) / max(1, len(tr_idx))
         logit_adj = torch.tensor(0.20 * np.log(np.clip(pi_tr, 1e-4, 1.0)), device=device, dtype=torch.float32)
 
-        tr_ds = Task4TrainDataset(tr_bytes, tr_idx, y, spec.img_hw, p_nightmare=0.65, p_norm_view=0.20)
+        tr_ds = Task4TrainDataset(tr_bytes, tr_idx, y, spec.img_hw, p_nightmare=0.50, p_norm_view=0.25)
         tr_dl = DataLoader(
             tr_ds,
             batch_size=bs,
@@ -533,7 +535,7 @@ def train_one_model(
 
                 with torch.amp.autocast(device.type, dtype=amp_dtype) if amp_dtype is not None else torch.enable_grad():
                     logits = model(xb)
-                    loss = F.cross_entropy(logits + logit_adj, yb, label_smoothing=0.03)
+                    loss = F.cross_entropy(logits.float() + logit_adj, yb, label_smoothing=0.03)
                     loss_scaled = loss / accum
 
                 if use_scaler:
@@ -604,8 +606,9 @@ def train_one_model(
         save_csv_preds(os.path.join(out_dir, f"task4-{spec.key}-hard6-test-predictions.csv"), te_df, te_w6)
         save_csv_preds(os.path.join(out_dir, f"task4-{spec.key}-orig2-oof.csv"), tr_df, oof_orig2, folds)
         save_csv_preds(os.path.join(out_dir, f"task4-{spec.key}-orig2-test-predictions.csv"), te_df, te_orig2)
+        bundle_path = os.path.join(out_dir, f"task4-{spec.key}-sgkf-hard-bundle.npz")
         np.savez_compressed(
-            os.path.join(out_dir, f"task4-{spec.key}-sgkf-hard-bundle.npz"),
+            bundle_path,
             folds=folds,
             oof_orig2=oof_orig2,
             oof_w6=oof_w6,
@@ -613,6 +616,23 @@ def train_one_model(
             te_orig2=te_orig2,
             te_w6=te_w6,
         )
+        # Immediately package per-model download zip in case session disconnects during later backbones
+        model_files = [
+            f"task4-{spec.key}-hard6-oof.csv",
+            f"task4-{spec.key}-hard6-test-predictions.csv",
+            f"task4-{spec.key}-orig2-oof.csv",
+            f"task4-{spec.key}-orig2-test-predictions.csv",
+            f"task4-{spec.key}-sgkf-hard-bundle.npz",
+        ]
+        mzip_out = os.path.join(out_dir, f"t4_hard_{spec.key}.zip")
+        with zipfile.ZipFile(mzip_out, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+            for fn in model_files:
+                fp = os.path.join(out_dir, fn)
+                if os.path.isfile(fp):
+                    zf.write(fp, fn)
+        if os.path.isdir("/content") and os.path.abspath(mzip_out) != f"/content/t4_hard_{spec.key}.zip":
+            shutil.copy2(mzip_out, f"/content/t4_hard_{spec.key}.zip")
+        print(f"[READY] Packaged 5-fold {spec.key} bundle -> {mzip_out}", flush=True)
 
 
 def parse_args() -> argparse.Namespace:
