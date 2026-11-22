@@ -1,16 +1,19 @@
 {
   "discovered_fullres_models": [
-    "cnxv3"
+    "cnxv3",
+    "dinov3l"
   ],
   "clean_pool_weights": {
-    "ConvNeXtV2-SGKF": 0.034,
-    "MLP-V3-SGKF": 0.0111,
-    "DINOv3-ViT-L": 0.1642,
-    "EVA02-Large": 0.2626,
-    "EVA02-Base": 0.0653,
-    "DINOv2-StageC-2TTA": 0.1117,
-    "CNXv3-Base-Orig2": 0.0809,
-    "CNXv3-Base-Hard6": 0.2702
+    "ConvNeXtV2-SGKF": 0.0091,
+    "MLP-V3-SGKF": 0.0241,
+    "DINOv3-ViT-L": 0.0864,
+    "EVA02-Large": 0.225,
+    "EVA02-Base": 0.0468,
+    "DINOv2-StageC-2TTA": 0.0446,
+    "CNXv3-Base-Orig2": 0.0621,
+    "CNXv3-Base-Hard6": 0.2045,
+    "DINOv3L-Hard-Orig2": 0.178,
+    "DINOv3L-Hard-Hard6": 0.1192
   },
   "clean_pool_temps": {
     "ConvNeXtV2-SGKF": 0.662,
@@ -23,41 +26,44 @@
     "DINOv2-StageC-2TTA": 0.7424,
     "DINOv2-StageC-6TTA": 0.6974,
     "CNXv3-Base-Orig2": 0.7349,
-    "CNXv3-Base-Hard6": 0.7203
+    "CNXv3-Base-Hard6": 0.7203,
+    "DINOv3L-Hard-Orig2": 0.7065,
+    "DINOv3L-Hard-Hard6": 0.6916
   },
   "exthard_weights": {
-    "CNXv2-StageC-6TTA": 0.3957,
-    "DINOv2-StageC-6TTA": 0.2004,
-    "CNXv3-Base-Hard6": 0.4039
+    "CNXv2-StageC-6TTA": 0.3483,
+    "DINOv2-StageC-6TTA": 0.0767,
+    "CNXv3-Base-Hard6": 0.1605,
+    "DINOv3L-Hard-Hard6": 0.4145
   },
   "shift_gate": {
     "tau_js_99pct_iso": 0.016081,
     "gamma": 0.0,
     "test_rows_gated": 0
   },
-  "prior_debias_alpha": 0.89,
+  "prior_debias_alpha": 0.69,
   "fold_alphas": [
-    0.9,
-    0.9,
-    0.9,
-    0.9,
-    0.85
+    0.7,
+    0.7,
+    0.7,
+    0.7,
+    0.65
   ],
   "metrics": {
-    "all_oof_f1": 0.992973,
-    "iso_oof_f1": 0.993576,
-    "corrupt_oof_f1": 0.988047,
-    "exthard6_oof_f1": 0.96383,
-    "oof_logloss": 0.022964,
-    "exthard6_logloss": 0.10651,
+    "all_oof_f1": 0.993723,
+    "iso_oof_f1": 0.993871,
+    "corrupt_oof_f1": 0.988965,
+    "exthard6_oof_f1": 0.968777,
+    "oof_logloss": 0.020969,
+    "exthard6_logloss": 0.091773,
     "run22_baseline_f1": 0.991174,
     "paired_bootstrap_vs_r22": 1.0
   },
   "test_distribution": {
-    "0": 3715,
-    "1": 6679,
-    "2": 3869,
-    "3": 6481,
-    "4": 5145
+    "0": 3686,
+    "1": 6753,
+    "2": 3911,
+    "3": 6349,
+    "4": 5190
   }
 }
