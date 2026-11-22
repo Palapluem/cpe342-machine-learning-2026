@@ -35,12 +35,25 @@ CLASS_MAP: Dict[str, int] = {
     "pube": 3,
     "roblock": 4,
 }
-DEFAULT_FULLRES_KEYS = ("cnxv3", "dinov3l", "eva02l", "cnxv2b")
+DEFAULT_FULLRES_KEYS = (
+    "cnxv3",
+    "dinov3l",
+    "eva02l",
+    "cnxv2b",
+    "siglip_l16",
+    "siglip_so400m",
+    "dinov3l_v4",
+    "eva02l_v4",
+)
 HARDENED_LABELS = {
     "cnxv3": "CNXv3-Base",
     "dinov3l": "DINOv3L-Hard",
     "eva02l": "EVA02L-Hard",
     "cnxv2b": "CNXv2B-Hard",
+    "siglip_l16": "SigLIP-L16-V4",
+    "siglip_so400m": "SigLIP-SO400M-V4",
+    "dinov3l_v4": "DINOv3L-V4",
+    "eva02l_v4": "EVA02L-V4",
 }
 
 
