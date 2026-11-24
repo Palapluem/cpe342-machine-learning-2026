@@ -35,4 +35,5 @@ Thumbs.db
 project/task4/data/task4_image_classification/
 project/task4/data/*.zip
 project/task4/data/task4_colab_pack*
+project/task4/emb_v4_*.npz
 catboost_info/
