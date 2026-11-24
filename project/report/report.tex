@@ -1,0 +1,497 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{english}
+\setotherlanguage{thai}
+\setmainfont{Sarabun}[
+    BoldFont       = Sarabun-Bold,
+    ItalicFont     = Sarabun-Italic,
+    BoldItalicFont = Sarabun-BoldItalic,
+]
+\setsansfont{Sarabun}
+\newfontfamily\thaifont[Script=Thai]{Sarabun}
+\setmonofont{Consolas}[Scale=0.92]
+\newfontfamily\thaifonttt{Consolas}[Scale=0.92]
+\usepackage[top=2.4cm,bottom=2.35cm,left=2.5cm,right=2.5cm,headheight=16pt]{geometry}
+\usepackage{graphicx,longtable,array,booktabs,xcolor,colortbl,float,enumitem,needspace,caption}
+\usepackage{amsmath,amssymb}
+\usepackage{fancyhdr,titlesec,listings,xurl,hyperref}
+
+\definecolor{KeyGreen}{HTML}{087A46}
+\definecolor{SoftGreen}{HTML}{EAF4EE}
+\definecolor{CodeTint}{HTML}{F8FAFC}
+\definecolor{RuleGray}{HTML}{C8C8C8}
+\definecolor{CaptionBlue}{HTML}{0000EE}
+\definecolor{CodeAccent}{HTML}{0969DA}
+
+\hypersetup{
+    unicode=true,
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=KeyGreen,
+    citecolor=KeyGreen,
+    pdftitle={CPE 342 Term Project: Karena Player Intelligence System},
+    pdfauthor={Team ML004},
+    hypertexnames=false
+}
+\urlstyle{same}
+\setlength{\emergencystretch}{3em}
+\widowpenalty=10000
+\clubpenalty=10000
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5.5pt}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.24}
+
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{3}
+\titleformat{\section}{\color{black}\fontsize{16}{19.2}\selectfont\bfseries}{\thesection\quad}{0pt}{}
+\titleformat{\subsection}{\color{black}\fontsize{13.5}{16.8}\selectfont\bfseries}{\thesubsection\quad}{0pt}{}
+\titleformat{\subsubsection}{\color{black}\fontsize{12}{15.6}\selectfont\bfseries}{\thesubsubsection\quad}{0pt}{}
+\titlespacing*{\section}{0pt}{15pt}{6pt}
+\titlespacing*{\subsection}{0pt}{10pt}{3pt}
+\titlespacing*{\subsubsection}{0pt}{7pt}{2.5pt}
+
+\DeclareCaptionFont{capfont}{\color{CaptionBlue}\itshape\fontsize{11.5}{15}\selectfont}
+\captionsetup{font=capfont,labelfont=bf,skip=6pt}
+
+\newcommand{\keyterm}[1]{\textcolor{KeyGreen}{\textbf{#1}}}
+\newcommand{\codevar}[1]{\textcolor{CodeAccent}{\textbf{\texttt{\detokenize{#1}}}}}
+\DeclareRobustCommand{\code}[1]{\leavevmode{\fontspec{Consolas}\fontsize{9.5}{12}\selectfont\color{KeyGreen!85!black}\let\codeunderscore\_\def\_{\codeunderscore\allowbreak}#1}}
+
+\lstset{
+    basicstyle=\fontspec{Consolas}\fontsize{9}{11.5}\selectfont,
+    columns=fullflexible,
+    keepspaces=true,
+    breaklines=true,
+    breakatwhitespace=false,
+    showstringspaces=false,
+    backgroundcolor=\color{CodeTint},
+    frame=single,
+    rulecolor=\color{RuleGray},
+    framesep=5pt,
+    aboveskip=6pt,
+    belowskip=7pt,
+    xleftmargin=.1cm,
+    tabsize=4,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{gray}\itshape,
+    stringstyle=\color{magenta}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\fontsize{9}{11}\selectfont\color{gray}CPE 342 Machine Learning --- Team ML004}
+\fancyhead[R]{\fontsize{9}{11}\selectfont\color{gray}Karena Player Intelligence System}
+\fancyfoot[C]{\fontsize{10}{12}\selectfont\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\AtBeginDocument{\fontsize{12}{15.6}\selectfont\sloppy}
+
+\begin{document}
+\newgeometry{top=1.7cm,bottom=2.35cm,left=2.5cm,right=2.5cm,headheight=16pt}
+\InputIfFileExists{frontpage/frontpage.tex}{}{\typeout{frontpage/frontpage.tex not found}}
+\restoregeometry
+\clearpage\pagenumbering{roman}
+\tableofcontents
+\clearpage\pagenumbering{arabic}
+
+% ==============================================================================
+\Needspace{6\baselineskip}
+\section{Executive Summary}
+
+This technical report documents the end-to-end design, validation protocol, experimental progression, error analysis, and business interpretation of \keyterm{Karena Player Intelligence System}, developed by \keyterm{Team ML004} for the CPE 342 Machine Learning Term Project (Semester 1/2026, KMUTT). Across five coupled operational tasks---anti-cheat pre-filtering, player behavioral segmentation, 30-day spending forecasting, gameplay screenshot identification, and unsupervised account security monitoring---each model transforms raw platform telemetry or visual tickets into calibrated, decision-ready outputs feeding a unified Player Lifetime Value (LTV) and trust-and-safety pipeline.
+
+All five modules adhere strictly to course and Kaggle competition constraints: zero external datasets, zero AutoML frameworks, zero test-set parameter fitting or supervised pseudo-labeling on test data, training strictly from scratch for Tasks~1, 2, 3, and 5, and permitted pretrained vision backbones for Task~4. On the Kaggle public leaderboard prior to the 24~November~2026 competition freeze, Team ML004 exceeded both the Ground Baseline (\code{0.68}) and Challenge Baseline (\code{0.75}), reaching a best public weighted score of \keyterm{0.86680} (Run~27, merged \code{d5ce58837641}) and a private-hardened final submission of \keyterm{0.86678} (Run~30 / P4a, merged \code{7fceeedc7d15}). Both Run~27 and Run~30 were auto-selected as Final Submissions on Kaggle; Private Leaderboard scores remain pending official release as of 24~November~2026.
+
+\begin{table}[H]\centering
+{\fontsize{10.5}{13.5}\selectfont\arrayrulecolor{RuleGray}
+\caption{Summary of Team ML004 final verified models, local validation, and submission checksums}
+\begin{tabular}{|>{\raggedright\arraybackslash}p{2.2cm}|>{\raggedright\arraybackslash}p{4.0cm}|>{\raggedright\arraybackslash}p{2.2cm}|>{\raggedright\arraybackslash}p{3.4cm}|>{\raggedright\arraybackslash}p{2.3cm}|}
+\hline
+\rowcolor{SoftGreen} \textbf{Task} & \textbf{Final Promoted Architecture} & \textbf{Metric} & \textbf{Observed Local CV} & \textbf{Index \code{sha12}} \\ \hline
+Task 1: Anti-Cheat & 5-Stream Nested SLSQP + Analytical 8-Cohort LR + 5-Profile Tobit-MVN5 & Binary $F_2$ & \textbf{0.841552} OOF $F_2$ (AUC 0.89676, 5-Fold SKF) & \code{db458dfc73b4} \\ \hline
+Task 2: Segment & \code{0.90 ExactParamEM + 0.10 CB\_Clean28} + 4-Class Logit Bias + Affine Rule & Macro $F_1$ & \textbf{0.759799} cross-fitted Macro-$F_1$ (LogLoss 0.59576) & \code{9adab5d3de0d} \\ \hline
+Task 3: Spending & \code{ExactBayesL1V2} Generative Marginalization + 32-Cell Stage-1 & NMAE Score & \textbf{0.796377} strict outer OOF NMAE (MAE 2,683.96 THB) & \code{3646bdd6dda1} \\ \hline
+Task 4: Game Title & 4-Family Dual-Regime Log-Odds Fusion + \code{FoundVLM-v3-Joint12Blk} + Shift Gate & Macro $F_1$ & \textbf{0.994636} Clean Unif-Prior $F_1$ (\code{0.969820} ExtHard6) & \code{8f0b9db4d663} \\ \hline
+Task 5: Security & 8 Exact Empty-Gap / 12D Box Archetype Rules + \code{ExactBayesUB} & $F_3$ Score & \textbf{0.998363} Expected $F_3$ (2,077 flags; Masked AUC 0.9940) & \code{a5005a73a89d} \\ \hline
+\end{tabular}}
+\end{table}
+
+% ==============================================================================
+\Needspace{6\baselineskip}
+\section{Business Context, Project Objectives, and Data Constraints}
+
+\subsection{Industrial Setting: Karena Thailand}
+
+\keyterm{Karena Thailand} (modeled on Southeast Asian digital entertainment publishers such as Garena) operates five flagship online titles across mobile and desktop platforms: \textit{7-11 Knights} (tactical RPG), \textit{FiveN} (roleplay simulation), \textit{Free Fried} (competitive survival shooter), \textit{PUBE Mobile} (tactical battle royale), and \textit{Roblock} (sandbox multiplayer). According to the official project specification (\code{CPE342\_Project\_Instruction.pdf}, pp.~10--23), platform growth created five interdependent operational bottlenecks:
+
+\begin{enumerate}[leftmargin=1.4em,itemsep=2pt]
+\item \textbf{Anti-Cheat Backlog (Task 1):} Over 10,000 daily cheat reports overwhelm a manual moderation capacity of 500 cases/day (45,000+ backlog). Existing automated rules suffer a 70\% false-positive rate while missing subtle aimbots and wallhacks, contributing to a 15\% competitive retention drop and roughly 15M~THB daily revenue impact.
+\item \textbf{Untargeted Marketing (Task 2):} Generic campaigns achieve only 2--5\% conversion, even though the top 5\% of players (Whales) generate 60\% of platform revenue. Distinguishing Casual, Grinder/Core, Social/Hardcore, and Whale personas is critical for targeted retention.
+\item \textbf{Revenue Forecasting Variance (Task 3):} Quarterly financial projections deviate by 35--40\% because player spending is zero-inflated and heavy-tailed, causing VIP support to misallocate high-touch resources.
+\item \textbf{Support Ticket Routing (Task 4):} Around 2,000 daily support tickets attach unlabelled gameplay screenshots, requiring 10+ minutes of manual game identification per ticket alongside 100,000+ weekly community images.
+\item \textbf{Account Theft \& Economic Abuse (Task 5):} Over 5,000 confirmed monthly account thefts, 24/7 bot farms, boosting rings, and VPN regional-pricing arbitrage (70\% discounts) consume 60\% of support capacity while existing static rules trigger 60\% false alarms.
+\end{enumerate}
+
+\subsection{Competition Rules and Source Discrepancies}
+
+All experiments followed the official rules in \code{CPE342\_Project\_Instruction.pdf} (p.~13) and \code{project/README.md}: exclusive use of provided datasets, strict prohibition of AutoML frameworks (such as AutoGluon, PyCaret, H2O AutoML, FLAML, TPOT, or Auto-sklearn), from-scratch training for Tasks~1, 2, 3, and~5, and permitted pretrained backbones for Task~4.
+
+During pre-writing verification, four discrepancies or undisclosed items across project documents were identified and recorded transparently rather than smoothed over:
+
+\begin{table}[H]\centering
+{\fontsize{10}{13}\selectfont\arrayrulecolor{RuleGray}
+\caption{Verified discrepancies and undisclosed specifications across project sources}
+\begin{tabular}{|>{\raggedright\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}p{5.5cm}|>{\raggedright\arraybackslash}p{6.0cm}|}
+\hline
+\rowcolor{SoftGreen} \textbf{Item} & \textbf{Observed Conflict / Gap} & \textbf{Authoritative Resolution Used} \\ \hline
+Task 4 Label Encoding & \code{CPE342\_Project\_Instruction.pdf} (p.~24) shows string slugs (\code{freefried}, \code{fiveN}), whereas \code{task4/data/datacard.txt} and \code{sample\_submission.csv} specify integers \code{0..4}. & Used integer IDs \code{0..4} (\code{0=7-11k}, \code{1=fiveN}, \code{2=freefried}, \code{3=pube}, \code{4=roblock}), verified by \code{merge\_submission.ipynb}. \\ \hline
+Leaderboard Task Weights $w_i$ & \code{CPE342\_Project\_Instruction.pdf} (p.~26) defines $\sum w_i S_i / \sum w_i$, but exact numeric weights $w_1 \dots w_5$ are not published. & Marked $w_1 \dots w_5$ as undisclosed; each task was optimized directly against its own official local metric. \\ \hline
+\code{project/submit.md} vs. \code{submission.csv} & \code{project/submit.md} lists Run~27 (\code{d5ce58837641}, Public \code{0.86680}), whereas \code{project/submission.csv} (\code{7fceeedc7d15}) matches Run~30 (\code{P4a}, Public \code{0.86678}) in \code{ml00x/submit.md}. & Report documents both final auto-selected Kaggle runs (\code{0.86680} Run~27 and \code{0.86678} Run~30 / \code{7fceeedc7d15}); Private LB is pending. \\ \hline
+ML004 Member Task Ownership & \code{AGENTS.md} lists 5 course members (\code{003, 027, 042, 045, 067}) for Assignments~7--9, while \code{ml00x} git handles (\code{beambeambeam}, \code{microhum}, \code{madmax16\_}) lack an ID mapping. & Verified Wisit Suwannao (\code{67070501042}) as Task~3 lead and cross-task final integrator; unverified member task roles marked \textbf{Unknown}. \\ \hline
+\end{tabular}}
+\end{table}
+
+% ==============================================================================
+\Needspace{6\baselineskip}
+\section{Shared Evaluation Protocol, Leakage Prevention, and Validation Splits}
+
+\subsection{Evaluation Metric Formulations}
+
+The five tasks span four distinct statistical scoring families verified from \code{CPE342\_Project\_Instruction.pdf} (p.~25) and \code{project/README.md}:
+
+\begin{itemize}[leftmargin=1.4em,itemsep=3pt]
+\item \textbf{Task 1 ($F_2$ Score, $\beta=2$):} Recall is weighted $4\times$ heavier than precision in the $F_\beta$ denominator so missed cheaters ($\text{FN}$) carry high penalty:
+$$F_2 = \frac{5 \cdot \text{Precision} \cdot \text{Recall}}{4 \cdot \text{Precision} + \text{Recall}} = \frac{5\,\text{TP}}{5\,\text{TP} + 4\,\text{FN} + \text{FP}}.$$
+\item \textbf{Tasks 2 and 4 (Unweighted Macro $F_1$):} Equal weight per class across $C=4$ player segments (Task~2) and $C=5$ game titles (Task~4), preventing majority classes from masking minority-class errors:
+$$\text{Macro } F_1 = \frac{1}{C} \sum_{c=0}^{C-1} \frac{2 \cdot \text{Precision}_c \cdot \text{Recall}_c}{\text{Precision}_c + \text{Recall}_c}.$$
+\item \textbf{Task 3 (Normalized Mean Absolute Error Score):} Maps relative total monetary error into $[0, 1]$, where $1.0$ denotes zero error:
+$$\text{NMAE Score} = \frac{1}{1 + \dfrac{\sum_{i=1}^{N} |y_i - \hat{y}_i|}{\sum_{i=1}^{N} y_i}} \in [0, 1].$$
+\item \textbf{Task 5 ($F_3$ Score, $\beta=3$):} Recall is weighted $9\times$ heavier than precision so missed account takeovers and bot rings dominate the utility calculation:
+$$F_3 = \frac{10 \cdot \text{Precision} \cdot \text{Recall}}{9 \cdot \text{Precision} + \text{Recall}} = \frac{10\,\text{TP}}{10\,\text{TP} + 9\,\text{FN} + \text{FP}}.$$
+\item \textbf{Combined Kaggle Score:} $\text{Weighted Score} = \left(\sum_{i=1}^{5} w_i S_i\right) / \sum_{i=1}^{5} w_i \in [0, 1]$, converted to course grade via normalized $T$-score above the \code{0.68} Ground Baseline.
+\end{itemize}
+
+\subsection{Data Leakage Prevention and Promotion Gating}
+
+Early leaderboard volatility prompted Team ML004 to enforce two strict invariants across every pipeline starting from Run~18/19-C:
+\begin{enumerate}[leftmargin=1.4em,itemsep=2pt]
+\item \textbf{Pure-Train Invariant:} Every imputer, quantile transformer, Z-score scaler, semi-supervised EM density (Task~1's 13,184 unlabeled \code{train.csv} rows), temperature parameter, stacking weight, and decision threshold is fitted strictly inside training partitions. No \code{test.csv} row is used for supervised pseudo-labeling, parameter estimation, or prior estimation in Tasks~1--4. (Task~5 is purely unsupervised on \code{test.csv} only, per official task design.)
+\item \textbf{Paired Bootstrap Promotion Gate:} Candidate upgrades were accepted into \code{submit/index.csv} only when nested outer validation demonstrated improvement across folds and a positive 95\% paired-row bootstrap confidence interval against the prior champion.
+\end{enumerate}
+
+% ==============================================================================
+\Needspace{6\baselineskip}
+\section{Task-by-Task Methodology, Experiments, and Business Impact}
+
+% ------------------------------------------------------------------------------
+\subsection{Task 1: Anti-Cheat Pre-Filter}
+
+\subsubsection{Objective, Metric, and Dataset EDA}
+Task~1 classifies player sessions into legitimate (\code{is\_cheater = 0}) or cheater (\code{1}) under \keyterm{Binary $F_2$} ($4\times$ recall preference). The dataset comprises \code{train.csv} (\code{104,000} rows $\times$ \code{33} columns) and \code{test.csv} (\code{25,889} rows $\times$ \code{32} columns) across \code{31} float telemetry features. Within \code{train.csv}, \code{90,816} rows (\code{87.32\%}) carry ground-truth labels (\code{59,091} clean = \code{65.07\%}; \code{31,725} cheaters = \code{34.93\%}), while \code{13,184} rows (\code{12.68\%}) have \code{NaN} targets and remain eligible for leak-free semi-supervised density estimation. Key EDA signals include bimodal right-skewed \code{headshot\_percentage} tails, elevated \code{kill\_death\_ratio} relative to tactical sense, and systematic missingness patterns across account-age and progression fields.
+
+\subsubsection{Preprocessing and Feature Engineering}
+Three domain-driven feature layers were constructed inside a 5-fold Stratified K-Fold split (\code{SEED=42}):
+\begin{itemize}[leftmargin=1.4em,itemsep=2pt]
+\item \textbf{Row-Wise Physical Invariants:} Account age imputation via \code{0.615 * level / level\_progression\_speed}, alongside \code{friends\_per\_day}, \code{reports\_per\_day}, \code{kd\_x\_acc}, and \code{aim\_comp}.
+\item \textbf{Fold-Safe Aim-vs-Tactics Z-Gaps:} Standardizing 11 mechanical-aim and tactical-sense metrics strictly inside each training fold (preserving native \code{NaN}s) to expose aimbots whose raw aim far exceeds map knowledge (\code{aim\_minus\_tactics\_z}, \code{hs\_minus\_gs\_z}, \code{xhair\_minus\_map\_z}).
+\item \textbf{Analytical 8-Cohort Support \& Tobit-MVN5 Representation:} Account metadata (\code{account\_age\_days}, \code{level}, \code{level\_progression\_speed}, \code{friend\_network\_size}, \code{reports\_received}, \code{crosshair\_placement}) maps rows into 8 bounded cohorts (4 clean, 4 cheater) sharing 5 underlying skill profiles. Missing progression covariates are marginalized analytically via 12-point Gauss-Legendre quadrature, while right-censored \code{game\_sense\_score} values at \code{1.0} are modeled with a 1D Tobit EM likelihood paired with Yeo-Johnson shrunk-covariance Multivariate Normal EM over the remaining 13 skill features.
+\end{itemize}
+
+\subsubsection{Model Selection, Validation Results, and Error Analysis}
+Simple threshold rules and standard Logistic Regression (\code{OOF ROC-AUC = 0.76782}, \code{Nested F2 = 0.76637}) fail to capture non-linear combinations of reaction time, spray control, and progression speed. High-bin-resolution GBDTs (\code{LGBM max\_bin=2047}, \code{XGBoost hist max\_bin=4096}, \code{CatBoost border\_count=1024}) with Pure-Train deterministic support clamping (\code{det\_y0=25,977} with 1 error; \code{det\_y1=9,922} with 0 errors) lifted 5-stream nested SLSQP stacking to \code{0.89477} AUC and \code{0.83920} $F_2$. Integrating analytical cohort logistic regression (\code{exp005}) and semi-supervised 5-profile Tobit-MVN5 conditioned on observation completeness (\code{(0.70, 0.10, 0.20)} complete; \code{(0.45, 0.40, 0.15)} incomplete) produced the final promoted champion: \keyterm{OOF $F_2 = 0.841552$}, \keyterm{ROC-AUC $= 0.896762$}, and \keyterm{LogLoss $= 0.350709$} (\code{tau* = 0.199023}), improving every fold (\code{5/5}) over \code{exp005} with a 95\% paired bootstrap gain CI of \code{[+0.000158, +0.001005]}.
+
+\begin{table}[H]\centering
+{\fontsize{9.5}{12.5}\selectfont\arrayrulecolor{RuleGray}
+\caption{Task 1 observed 5-fold OOF progression from \code{task1/assets/ablation\_benchmark.csv}}
+\begin{tabular}{|>{\raggedright\arraybackslash}p{6.5cm}|c|c|c|c|c|}
+\hline
+\rowcolor{SoftGreen} \textbf{Model / Stage} & \textbf{ROC-AUC} & \textbf{Def $F_2$} & \textbf{Nested $F_2$} & \textbf{LogLoss} & \textbf{$\tau^*$} \\ \hline
+1. Logistic Regression Baseline (Fold-Safe) & 0.76782 & 0.48595 & 0.76637 & 0.53577 & 0.1394 \\ \hline
+2. Full CleanDGP LGBM + HardSupport Clamp & 0.89448 & 0.63491 & 0.83919 & 0.35504 & 0.1681 \\ \hline
+7. 5-Stream Pure-Train Nested SLSQP Stack & 0.89477 & 0.63342 & 0.83920 & 0.35466 & 0.1750 \\ \hline
+8. Analytical Cohort Support + GBDT (\code{exp004}) & 0.89526 & 0.63240 & 0.84043 & 0.35257 & 0.1829 \\ \hline
+9. Cohort LR Account Likelihood Blend (\code{exp005}) & 0.89646 & 0.63199 & 0.84097 & 0.35110 & 0.1935 \\ \hline
+10. Semi-Sup 5-Profile Tobit-MVN (Standalone) & 0.89664 & 0.63497 & 0.84058 & 0.35052 & 0.1834 \\ \hline
+\rowcolor{SoftGreen} \textbf{11. Cohort LR + Tobit-MVN5 Hybrid (Final)} & \textbf{0.89676} & \textbf{0.63281} & \textbf{0.84155} & \textbf{0.35071} & \textbf{0.1990} \\ \hline
+\end{tabular}}
+\end{table}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.95\linewidth]{assets/task1_diagnostics.png}
+\caption{Task 1 ROC progression, 5/5 per-fold $F_2$ uplift, final OOF confusion matrix, and top-15 LGBM features (\code{task1\_anti\_cheat.ipynb}, 5-fold SKF)}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.88\linewidth]{assets/task1_test_alignment.png}
+\caption{Task 1 final test probability distribution around $\tau^* = 0.1990$ and positive flag rate (\code{15,270 / 25,889 = 58.98\%})}
+\end{figure}
+
+\textbf{Error Analysis \& Business Impact:} Early tree-only models (\code{exp003}, Public \code{0.59631}) suffered when \code{account\_age\_days} or \code{game\_sense\_score} was missing or right-censored at \code{1.0}. Explicit Tobit censoring and completeness-conditioned blending raised incomplete-row $F_2$ from \code{0.82599} (\code{exp004}) to \code{0.82776} (\code{exp006}). Operationally, setting $\tau^*=0.1990$ prioritizes high cheater recall for human moderator triage queues while deterministic clean-cohort clamping keeps false bans near zero on unambiguous legitimate profiles.
+
+% ------------------------------------------------------------------------------
+\Needspace{6\baselineskip}
+\subsection{Task 2: Player Segment Classification}
+
+\subsubsection{Objective, Metric, and Dataset EDA}
+Task~2 assigns players into four mutually exclusive behavioral segments (\code{0=Casual} \code{39.38\%}, \code{1=Core} \code{25.03\%}, \code{2=Hardcore} \code{20.22\%}, \code{3=Whale} \code{15.37\%}) evaluated under \keyterm{Unweighted Macro $F_1$}. Both \code{train.csv} (\code{104,000} $\times$ \code{46}) and \code{test.csv} (\code{25,889} $\times$ \code{45}) contain 31 valid numeric telemetry signals, 3 explicit uniform/normal noise columns (\code{random\_metric\_1..3}), and 10 categorical attributes. Because Class~0 outnumbers Class~3 by $2.56\times$, naive maximum-probability inference (\code{argmax}) systematically under-predicts Whales and Hardcore players.
+
+\subsubsection{Preprocessing, Architecture, and Decision Calibration}
+We pruned the three explicit noise columns and irrelevant IDs, built \code{Clean28} features augmented with fold-safe out-of-fold Logistic Regression log-probabilities (\code{Clean28+ZLR}) and orthogonal Spend, Engagement, Social, and Competitive persona axes (\code{56} columns), and evaluated seven diverse base families across 5-fold SKF: \code{ExactParamEM} (parametric Expectation-Maximization density, \code{LogLoss = 0.59563}), \code{XGB\_Clean28}, \code{LGB\_Clean28}, \code{CB\_Clean28}, \code{CleanTabM\_SWA3}, \code{Fact\_Clean28}, and \code{Oven\_Rev}.
+
+A critical bug discovered during development (\#79) occurred when global log-loss SLSQP pushed \code{CB\_Clean28} weight to zero in three folds and an executable export cell omitted the offset $\beta$ in the affine rule $\arg\max_c(\alpha_c p_c - \beta_c)$, depressing Macro-$F_1$ to \code{0.753158}. Restoring the exact fixed-point affine Bayes Macro-$F_1$ rule and blending \keyterm{0.90 ExactParamEM + 0.10 CB\_Clean28} followed by cross-fitted 4-parameter zero-mean logit-bias calibration (\code{bias = [+0.002124, +0.002960, -0.006227, +0.001143]}) lifted cross-fitted Macro-$F_1$ to \keyterm{0.759799} (\code{5/5} folds above \code{ExactParamEM} alone at \code{0.759201}, 95\% paired bootstrap CI \code{[+0.000159, +0.000805]} vs. \#79). Note that this calibration operates on frozen base OOF probabilities rather than nested retraining from scratch.
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.95\linewidth]{assets/task2_diagnostics.png}
+\caption{Task 2 Clean28+ZLR feature gains, OOF LogLoss comparison, normalized confusion matrix, and 5-fold Macro-$F_1$ consistency (\code{0.75980})}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.88\linewidth]{assets/task2_test_alignment.png}
+\caption{Task 2 Train vs. OOF vs. Test segment alignment (\code{N=25,889}) and calibrated decision margin distribution}
+\end{figure}
+
+\textbf{Domain Interpretation \& Business Impact:} Final test predictions (\code{0: 40.89\%}, \code{1: 25.42\%}, \code{2: 19.36\%}, \code{3: 14.32\%}) align closely with ground-truth priors while preserving minority-class recall for high-value Whales (\code{3,708} accounts) and Social/Hardcore cohorts (\code{5,012} accounts), enabling targeted VIP retention and discount-free monetization.
+
+% ------------------------------------------------------------------------------
+\Needspace{6\baselineskip}
+\subsection{Task 3: Monthly Spending Prediction (Primary Workspace Module)}
+
+\subsubsection{Objective, Metric, and Dataset EDA}
+Task~3 predicts continuous 30-day forward spending (\code{spending\_30d} in THB, bounded $[0, 300{,}000]$) under \keyterm{NMAE Score}. Across \code{train.csv} (\code{104,000} $\times$ \code{34}) and \code{test.csv} (\code{25,889} $\times$ \code{33}), \code{193,731} training entries and \code{48,266} test entries are missing. Critically, \code{48.12\%} (\code{50,049} rows) have \code{spending\_30d = 0}, while active spenders (\code{53,951} rows) span five orders of magnitude (\code{median = 2,314.05 THB}, \code{mean = 20,234.88 THB}, \code{99th pct = 184,398.64 THB}, \code{max = 300,000 THB}), causing MSE-trained regressors to over-predict zero-spenders and incur severe $L_1$ penalties.
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.93\linewidth]{assets/figure1-spending-eda.png}
+\caption{Task 3 exploratory analysis: 48.12\% zero-inflation, log10 spender bimodality, segment spend boxplots, and historical spend correlation}
+\end{figure}
+
+\subsubsection{Preprocessing, Two-Stage Hurdle vs. ExactBayesL1V2, and Results}
+We first implemented exact algebraic identity reconstruction (\code{historical\_spending = total\_transactions * avg\_transaction\_value}, \code{purchases\_on\_discount = total\_transactions * discount\_rate\_used}, and \code{is\_premium\_member = (vip\_status >= 3)}), expanding clean features to 44 columns. Under a 5-fold split stratified on \code{y > 0}, a fold-median baseline yields \code{NMAE = 0.500037} (\code{MAE = 10,495.48 THB}) and a 5-fold Log-Linear Ridge Hurdle yields \code{NMAE = 0.646699} (\code{MAE = 5,734.68 THB}).
+
+Our first advanced pipeline, \code{Quantile Hurdle V3} (6-model Stage-1 active-spender stack + 5-family quantile residual Stage-2 aligned to the $L_1$-optimal conditional quantile $q^* = 1 - \frac{1}{2p}$), reached \code{NMAE = 0.795996}. To push closer to the Bayes-$L_1$ optimum, we derived \keyterm{ExactBayesL1V2}: a generative marginalization model combining Smooth-KDE missing-segment recovery, a 32-cell Stage-1 activation table (\code{OOF AUC = 0.94695}, \code{LogLoss = 0.25874}), the exact multiplicative spending law, and the Segment-3 $\text{Uniform}[50\text{k}, 300\text{k}]$ spike mixture, solved via 28-step bisection for the exact conditional median. \keyterm{ExactBayesL1V2} achieved strict 5-fold outer \keyterm{OOF NMAE $= 0.796377$} (\keyterm{MAE $= 2,683.96$ THB}, \code{5/5} folds beating Quantile Hurdle V3, \code{P = 1.0000} over 1,000 paired bootstrap resamples, 95\% CI \code{[+0.000253, +0.000511]}).
+
+\begin{table}[H]\centering
+{\fontsize{10}{13}\selectfont\arrayrulecolor{RuleGray}
+\caption{Task 3 5-fold outer OOF ablation from \code{task3/assets/ablation\_benchmark.csv}}
+\begin{tabular}{|>{\raggedright\arraybackslash}p{6.6cm}|c|c|c|}
+\hline
+\rowcolor{SoftGreen} \textbf{Paradigm} & \textbf{OOF MAE (THB)} & \textbf{OOF NMAE} & \textbf{$\Delta$ vs. Median (pp)} \\ \hline
+Fold-training median baseline & 10,495.48 & 0.500037 & 0.0000 \\ \hline
+5-Fold Log-Linear Ridge Hurdle Baseline & 5,734.68 & 0.646699 & +14.6662 \\ \hline
+Quantile Hurdle V3 (6-Stage-1 + 5-Family Q\_FINE) & 2,690.26 & 0.795996 & +29.5959 \\ \hline
+90\% ExactBayesL1V2 + 10\% Quantile Hurdle V3 Blend & 2,684.15 & 0.796365 & +29.6328 \\ \hline
+\rowcolor{SoftGreen} \textbf{ExactBayesL1V2 Generative Marginalization (Final)} & \textbf{2,683.96} & \textbf{0.796377} & \textbf{+29.6340} \\ \hline
+\end{tabular}}
+\end{table}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.95\linewidth]{assets/figure2-hurdle-calibration-diagnostics.png}
+\caption{Task 3 Stage-1 calibration and ROC curves (LR, LightGBM, ExactBayesL1V2 32-Cell), log-spending parity, and segment absolute errors}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.92\linewidth]{assets/figure3-residual-error-distribution.png}
+\caption{Task 3 OOF residual error distribution and 1,000-bootstrap paired NMAE gain over Quantile Hurdle V3}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.88\linewidth]{assets/figure4-test-spending-prediction-density.png}
+\caption{Task 3 test prediction distribution (\code{49.6\%} exact zeros, median \code{78.76 THB}, max \code{300,000 THB})}
+\end{figure}
+
+\textbf{Error Analysis \& Business Impact:} Residual errors concentrate in Segment~3 (Whales), where stochastic $\text{Uniform}[50\text{k}, 300\text{k}]$ bursts cannot be predicted deterministically beyond the Bayes median. Crucially, outputting exact zeros for \code{49.6\%} of test accounts prevents finance from overestimating baseline revenue and focuses VIP support strictly on high-expected-spend players.
+
+% ------------------------------------------------------------------------------
+\Needspace{6\baselineskip}
+\subsection{Task 4: Game Title Screenshot Detection}
+
+\subsubsection{Objective, Metric, and Dataset EDA}
+Task~4 classifies gameplay screenshots into five titles (\code{0: 7-11 Knights} \code{39.40\%}, \code{1: FiveN} \code{13.97\%}, \code{2: Free Fried} \code{17.74\%}, \code{3: PUBE} \code{18.79\%}, \code{4: Roblock} \code{10.11\%}) evaluated under \keyterm{Macro $F_1$}. \code{train.csv} contains \code{31,546} images and \code{test.csv} contains \code{25,889} images (typical \code{230x120} px RGB JPEGs per \code{datacard.txt}). Perceptual dHash clustering (\code{64}-bit Hamming distance $\le 10$) revealed near-duplicate frames across screenshots, forming \code{28,088} distinct scene groups (\code{7,931} isolated scenes; \code{10,229} naturally corrupted/degraded training frames). Grouping folds by scene eliminated duplicate-frame CV leakage.
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.92\linewidth]{assets/figure1-screenshot-eda.png}
+\caption{Task 4 training class distribution (\code{31,546} screenshots) and representative gameplay thumbnails (\code{task4\_game\_title\_detection.ipynb})}
+\end{figure}
+
+\subsubsection{Multi-Family Architecture, Dual-Regime Fusion, and Validation}
+Pretrained vision backbones are explicitly permitted in Task~4. We trained two complementary families strictly inside 5-fold Scene-Grouped K-Fold (SGKF):
+\begin{enumerate}[leftmargin=1.4em,itemsep=2pt]
+\item \textbf{Scene-Hardened End-to-End Backbones:} Full-resolution ($192 \times 384$) fine-tuned \code{CNXv3-Base}, \code{DINOv3L-Hard}, and \code{EVA02L-Hard}, evaluated under clean 2-view (\code{Orig2}) and corruption-restored 6-view TTA (\code{Hard6} / \code{ExtHard6}), alongside 224\,px ViTs (\code{EVA02-Large}, \code{EVA02-Base}, \code{DINOv3-ViT-L}, \code{DINOv3-ViT-B}) and lower-resolution \code{ConvNeXtV2-Tiny} / \code{DINOv2-StageA/C}.
+\item \textbf{True Joint 12-Block 6-Backbone \code{FoundVLM-v3-Joint12Blk}:} Extracts 4-view (\code{raw}, \code{raw+hflip}, \code{decorrupt\_v4}, \code{decorrupt\_v4+hflip}) L2-normalized embeddings from six foundation encoders (\code{SigLIP2-SO400M}, \code{DINOv3-ViT-L}, \code{DINOv2-ViT-G/14}, \code{CLIP-ConvNeXt-Large}, \code{CLIP-ViT-H/14}, \code{DINOv3-ConvNeXt-Base}), concatenating all 12 blocks (\code{13,568d}) with PowerNorm ($p=0.75$) into a Dual-Condition \code{CosineResMLP} with Symmetric-KL consistency (\code{Orig2 Unif-Prior F1 = 0.96810}, \code{Hard6 = 0.96831}, \code{ExtHard6 = 0.92534}).
+\end{enumerate}
+
+A Nested 5-Fold SGKF temperature-calibrated log-odds stack pairs an 11-active-stream Clean Pool with an unconstrained \code{ExtHard6} Stress-Test Pool (\code{min\_bound = 0.00}, automatically zeroing noisy low-res \code{DINOv2-StageC-6TTA}). A Consensus Restoration Shift Gate ($\text{JS}(\text{Orig2}, \text{Hard6}) > \tau_{98\%}=0.004910$ with lower Hard6 entropy, $\gamma=0.04$, routing \code{795} test rows) and entropy-gated prior debiasing ($\alpha_{\text{lo}}=0.69 \to \alpha_{\text{hi}}=1.35$) complete Run~30 (\code{P4a}): \keyterm{Clean Unif-Prior $F_1 = 0.994636$}, \keyterm{All OOF $F_1 = 0.994054$}, \keyterm{Corrupt $F_1 = 0.989205$}, \keyterm{ExtHard6 Unif-Prior $F_1 = 0.969820$}, and \keyterm{OOF LogLoss $= 0.019164$}.
+
+\begin{table}[H]\centering
+{\fontsize{9.5}{12.5}\selectfont\arrayrulecolor{RuleGray}
+\caption{Task 4 ablation progression from \code{task4/assets/ablation-benchmark.csv} (5-Fold SGKF)}
+\begin{tabular}{|>{\raggedright\arraybackslash}p{6.5cm}|c|c|c|}
+\hline
+\rowcolor{SoftGreen} \textbf{Model / Stage} & \textbf{Clean Unif $F_1$} & \textbf{ExtHard6 $F_1$} & \textbf{OOF LogLoss} \\ \hline
+Individual: Base ViT EVA02-Large (224px) & 0.989078 & --- & 0.069633 \\ \hline
+Individual: Full-Res CNXv3-Base (192$\times$384 Hard6) & 0.988908 & 0.950293 & 0.053564 \\ \hline
+Individual: Full-Res DINOv3L-Hard (192$\times$384 Hard6) & 0.991634 & 0.959898 & 0.048022 \\ \hline
+Individual: Full-Res EVA02L-Hard (192$\times$384 Hard6) & 0.991497 & 0.959546 & 0.048044 \\ \hline
+Individual: FoundVLM-v3-Joint12Blk (6-BB 13,568d) & 0.968200 & 0.925210 & 0.101140 \\ \hline
+Stage 1: 9-Stream Base (E2E + ViTs + DINOv2) & 0.991313 & --- & 0.026300 \\ \hline
+Stage 2: Hardened Trio + Restoration Shift Gate & 0.994412 & 0.968800 & 0.019381 \\ \hline
+Stage 4: + Dual-Condition SymKL FoundVLM-v2 (Run 27) & 0.994573 & 0.969549 & 0.019192 \\ \hline
+\rowcolor{SoftGreen} \textbf{Stage 5 (Final): + Joint-12Blk \& Unconstrained ExtHard6} & \textbf{0.994636} & \textbf{0.969820} & \textbf{0.019164} \\ \hline
+\end{tabular}}
+\end{table}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.95\linewidth]{assets/figure2-validation-diagnostics.png}
+\caption{Task 4 SGKF confusion matrix and Clean vs. ExtHard6 per-class $F_1$ (\code{7-11k: 0.9966}, \code{fiveN: 0.9945}, \code{freefried: 0.9954}, \code{pube: 0.9950}, \code{roblock: 0.9888})}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.95\linewidth]{assets/figure3-regime-error-analysis.png}
+\caption{Task 4 Stage 1--5 progression and Consensus Shift-Gate divergence routing (\code{795} test screenshots routed at $\gamma=0.04$)}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.88\linewidth]{assets/figure4-test-class-distribution.png}
+\caption{Task 4 Train vs. Final Fusion Test class shares across \code{25,889} test images}
+\end{figure}
+
+\textbf{Error Analysis \& Failed Experiments:} Two late experiments lowered public LB and were caught cleanly: Run~23 (\code{ConvNeXtV2-StageC} alone) dipped from \code{0.86362} to \code{0.86310}, and Run~29 (aggressive specialist pooling at $\gamma=0.08$, 53 rows changed) dipped from \code{0.86680} to \code{0.86672} by over-routing clean UI frames. Locking $\gamma=0.04$ and removing the \code{0.05} floor on \code{ExtHard6} in Run~30 (\code{P4a}) improved every proper scoring rule over Run~27 while shifting only 10 test rows (\code{0.04\%}).
+
+% ------------------------------------------------------------------------------
+\Needspace{6\baselineskip}
+\subsection{Task 5: Account Security Monitoring}
+
+\subsubsection{Objective, Metric, and Dataset EDA}
+Task~5 flags anomalous accounts (\code{is\_anomaly = 1}) under \keyterm{$F_3$ Score} ($9\times$ recall weight) in a strictly unsupervised regime: only \code{test.csv} (\code{25,889} accounts $\times$ \code{123} columns) is provided, containing 29 longitudinal metrics across 4 time periods (\code{\_1..\_4}), \code{account\_age\_days}, \code{behavior\_stability}, and 4 binary security flags (\code{password\_changed}, \code{vpn\_usage}, \code{suspicious\_login\_time}, \code{mass\_item\_sale}) withheld from fitting as an independent post-hoc sanity check.
+
+\subsubsection{Longitudinal Geometry, Empty-Gap Archetypes, and ExactBayesUB}
+Full-space detectors (Isolation Forest, dense Autoencoders) dilute anomalies that deviate sharply on only 1--4 features out of 75+. We engineered \code{86} personal-drift (\code{\_\_drift4}), 4-period level/spread (\code{\_\_level}, \code{\_\_spread} requiring $\ge 3$ observed periods), and antimeridian-safe home coordinate displacement (\code{geo\_\_disp4}) features. Per-feature 1D Density-Gap CBLOF ($\ge 100\times$ core spacing, \code{24} separated clusters) and Soft-Max Robust Tail scoring (natural break $\tau > 18.35$, \code{826} tail Consensus) isolated 7 single-feature cohorts, while a joint 12D hyper-rectangle isolated \code{erratic\_combat} (\code{kda\_std} $\in [0.7,1.0]$, \code{accuracy\_std} $\in [9,12]$, \code{performance\_stability} $\in [0.85,0.95]$, \code{244} accounts), yielding \code{2,052} deterministic flags.
+
+To recover \code{unstable\_behavior} accounts whose \code{behavior\_stability} is \code{NaN} ($\sim 5\%$ missingness), we replaced an earlier LightGBM+CatBoost heuristic with \keyterm{ExactBayesUB}: a zero-parameter closed-form Bayesian posterior integrating Normal vs. Unstable longitudinal densities over \code{purchase\_frequency\_1..4}, \code{login\_count\_1..4} (200-point Gauss-Legendre quadrature), and \code{account\_age\_days}. Evaluated on \code{22,926} known-label clean accounts, \code{ExactBayesUB} achieved \keyterm{Masked ROC-AUC $= 0.9940$} (\code{0.93656} inside the 2,393-row hard filter) and \keyterm{PR-AUC $= 0.7992$}. Maximizing Expected $F_3$ selected cut \code{0.11513}, recovering \code{+25} hidden accounts to reach \keyterm{2,077 / 25,889 flags (8.02\%)} and \keyterm{Expected $F_3 = 0.998363$}.
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.95\linewidth]{assets/task5_anomaly_detection_diagnostics.png}
+\caption{Task 5 Soft-Max Tail break, 9-cohort counts (\code{2,077} total flags), held-out security flag validation, and \code{behavior\_stability} gap separation}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.92\linewidth]{assets/erratic-combat-box.png}
+\caption{Task 5 joint 12D \code{erratic\_combat} uniform box (\code{244} accounts) cleanly separated from normal players}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.92\linewidth]{assets/task5_bayes_calibration.png}
+\caption{Task 5 \code{ExactBayesUB} Expected-$F_3$ cut optimization (\code{+25} recovered at cut \code{0.11513}) and known-label calibration curve}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.62\linewidth]{assets/task5_test_alignment.png}
+\caption{Task 5 final test class distribution (\code{23,812} Normal vs. \code{2,077} Anomalous)}
+\end{figure}
+
+\textbf{Error Analysis \& Business Impact:} An early Gaussian-tail audit detected \code{51} false positives in \code{session\_duration\_std\_\_drift4} (\code{[10.51, 11.16]}) matching a symmetric $\pm 3.2\sigma$ Gaussian tail; removing them eliminated traveler/playtime false alarms. Held-out security indicators corroborate the discovered cohorts (\code{61.49\%} password changes in \code{account\_takeover} vs. \code{4.90\%} in \code{normal}), directly supporting fraud response prioritization.
+
+% ==============================================================================
+\Needspace{6\baselineskip}
+\section{Submission Integration and Quality Assurance Pipeline}
+
+All five independent task pipelines export canonical index files (\code{task\{1..5\}/submit/index.csv}) containing two columns: positional \code{id} (\code{ANS00001..ANS25889}) and task prediction (\code{task1..task5}). Both \code{project/merge\_submission.ipynb} and \code{ml00x/submission/merge.py} enforce deterministic validation gates before producing \code{project/submission.csv}:
+\begin{enumerate}[leftmargin=1.4em,itemsep=2pt]
+\item \textbf{Row \& ID Integrity:} Exactly \code{25,889} rows matching \code{sample\_submission.csv} positional order with zero missing (\code{NaN}) or infinite values.
+\item \textbf{Domain \& Type Enforcement:} Binary integers $\{0, 1\}$ for Tasks~1 and~5; class integers $\{0, 1, 2, 3\}$ for Task~2; continuous non-negative floats in $[0, 300{,}000]$ THB for Task~3; integer game IDs $\{0, 1, 2, 3, 4\}$ for Task~4.
+\item \textbf{Cryptographic Parity:} Verified SHA-256 \code{sha12} hashes across every standalone notebook execution (\code{task1=db458dfc73b4}, \code{task2=9adab5d3de0d}, \code{task3=3646bdd6dda1}, \code{task4=8f0b9db4d663}, \code{task5=a5005a73a89d}, merged \code{submission.csv = 7fceeedc7d15}).
+\end{enumerate}
+
+% ==============================================================================
+\Needspace{6\baselineskip}
+\vspace{-10pt}
+\section{Team Roles, Collaboration Workflow, and Lessons Learned}
+
+Team ML004 coordinated development through the shared repository \code{beambeambeam/ml00x} (task-branched PR workflow with automated \code{submission/merge.py} CI checks and \code{submit.md} changelogs) and synchronized standalone self-contained Jupyter Notebooks (zero \code{.py} scripts in \code{project/}) into \code{Palapluem/cpe342-machine-learning-2026}.
+
+\begin{table}[H]\centering
+{\fontsize{10}{12.5}\selectfont\renewcommand{\arraystretch}{1.12}\arrayrulecolor{RuleGray}
+\caption{Team ML004 roster and verified repository contributions}
+\begin{tabular}{|>{\raggedright\arraybackslash}p{4.0cm}|c|>{\raggedright\arraybackslash}p{8.1cm}|}
+\hline
+\rowcolor{SoftGreen} \textbf{Member} & \textbf{Student ID} & \textbf{Verified Role / Evidence Status} \\ \hline
+Wisit Suwannao & 67070501042 & \textbf{Verified:} Task~3 primary lead (\code{AGENTS.md} \S1.2, \code{project/README.md}); final integration \& validation across Tasks~1, 2, 4, 5 (\code{ml00x} PRs \#57--\#104, \code{cpe342} \code{project/}). \\ \hline
+Guntee Doungmanee & 67070501003 & Course group member (\code{AGENTS.md}); \textbf{Unknown} official Term Project task allocation (3 commits in \code{ml00x} git log). \\ \hline
+Natthawat Primsirikunawut & 67070501027 & Course group member (\code{AGENTS.md}); \textbf{Unknown} official Term Project task allocation (4 commits in \code{ml00x} git log). \\ \hline
+Supawit Marayat & 67070501045 & Course group member (\code{AGENTS.md}); \textbf{Unknown} official Term Project task allocation. \\ \hline
+Polwarit Watthanahemmarat & 67070501067 & Course group member (\code{AGENTS.md}); \textbf{Unknown} official Term Project task allocation. \\ \hline
+\end{tabular}}
+\end{table}
+
+\textbf{Key Engineering Lessons:} (1)~Modeling data-generating mechanisms (Tobit censoring in Task~1, multiplicative hurdle + Segment-3 uniform spikes in Task~3, 12D uniform boxes + closed-form Gauss-Legendre integration in Task~5) consistently outperformed blind hyperparameter sweeps. (2)~Deduplicating near-identical screenshots via perceptual dHash SGKF prevented optimistic CV drift in Task~4. (3)~Synchronizing validation and export code paths (fixing Task~2's missing $\beta$ offset) yielded immediate, zero-cost generalization gains.
+
+% ==============================================================================
+\Needspace{6\baselineskip}
+\vspace{-12pt}
+\section{Limitations, Conclusion, and Future Work}
+
+\textbf{Limitations:} (1)~Private Leaderboard scores are not yet released as of 24~November~2026, so final Private LB ranking remains unverified. (2)~Task~2's logit-bias and affine calibration are cross-fitted on frozen base OOF probabilities rather than nested inside base-model retraining. (3)~Task~5 operates strictly without ground-truth labels; \code{Expected F3 = 0.998363} relies on generative-model assumptions and held-out security flag enrichment rather than supervised test labels. (4)~Task~4 inference depends on pre-extracted foundation bundles unless re-run on cloud T4 GPUs using \code{task4/notebooks/}.
+
+\textbf{Conclusion \& Future Work:} Team ML004 delivered a reproducible, rule-compliant 5-task Player Intelligence System achieving \code{0.86680} (Run~27) and \code{0.86678} (Run~30) on the Kaggle Public Leaderboard. Future iterations should unify Task~2 under full nested retraining, connect real-time streaming inference across all five tasks into a live LTV scoring service, and calibrate drift monitors for post-deployment game patches.
+
+% ==============================================================================
+\clearpage
+\begin{thebibliography}{9}
+\bibitem{cpe342spec} B.~Changaival, ``CPE 342 Machine Learning (1/2026): Project Instruction --- Karena Player Intelligence System,'' King Mongkut's University of Technology Thonburi, Nov.~2026.
+\bibitem{datacards} CPE 342 Course Staff, ``Official Task 1--5 Dataset Cards (\code{datacard.txt}),'' KMUTT / Kaggle Competition \code{player-intelligence-system-cpe-342-ml}, Nov.~2026.
+\bibitem{guo2017} C.~Guo, G.~Pleiss, Y.~Sun, and K.~Q.~Weinberger, ``On Calibration of Modern Neural Networks,'' in \textit{Proc. ICML}, 2017, pp.~1321--1330.
+\bibitem{tobin1958} J.~Tobin, ``Estimation of Relationships for Limited Dependent Variables,'' \textit{Econometrica}, vol.~26, no.~1, pp.~24--36, 1958.
+\bibitem{ke2017} G.~Ke et al., ``LightGBM: A Highly Efficient Gradient Boosting Decision Tree,'' in \textit{Proc. NeurIPS}, 2017.
+\bibitem{chen2016} T.~Chen and C.~Guestrin, ``XGBoost: A Scalable Tree Boosting System,'' in \textit{Proc. ACM SIGKDD}, 2016.
+\bibitem{prokhorenkova2018} L.~Prokhorenkova et al., ``CatBoost: Unbiased Boosting with Categorical Features,'' in \textit{Proc. NeurIPS}, 2018.
+\bibitem{oquab2024} M.~Oquab et al., ``DINOv2: Learning Robust Visual Features without Supervision,'' \textit{TMLR}, 2024.
+\bibitem{fang2023} Y.~Fang et al., ``EVA-02: A Visual Representation for Neon Genesis,'' \textit{Image and Vision Computing}, 2024.
+\end{thebibliography}
+
+% ==============================================================================
+\clearpage
+\appendix
+\section{Artifact Traceability, Checksums, and Key Code Excerpts}
+
+Per the project reproducibility policy, each task directory in \code{project/task1..5/} contains a standalone, zero-\code{.py} Jupyter Notebook whose execution reproduces all tables, 300-dpi charts, and submission indices. Full verbatim notebook listings span all five tasks (~100+ pages) and remain archived in Git; selected core verification excerpts follow.
+
+\subsection{Standalone Execution Checksum Manifest}
+\begin{lstlisting}[language=bash,caption={Verified SHA-256 index checksums matching project/submission.csv}]
+db458dfc73b49fb35b288ce6cbda4a4b84a9f184ccddf2faecef9761f32f5903  task1/submit/index.csv
+9adab5d3de0d3c0d876ca67e705d3720ec9006422b22ad50461ff284261445a0  task2/submit/index.csv
+3646bdd6dda1d6f7572c9e53addaed8e55f7aafcc2c1387aa9eb06c095c7647b  task3/submit/index.csv
+8f0b9db4d663e81cb97f3d3959d55682a345a0630a974fbc634c1a0f9bea14a2  task4/submit/index.csv
+a5005a73a89d763ad5b36e5cb1513347321e628348fac04106b334018a490bce  task5/submit/index.csv
+7fceeedc7d155fc2d2eb968952ae9cb9faef91e20228f19033f842f6a5ac995b  submission.csv
+\end{lstlisting}
+
+\subsection{Key Excerpt --- Task 2 Affine Bayes Macro-$F_1$ Decision Rule}
+\begin{lstlisting}[language=Python,caption={Excerpt from task2/task2\_player\_segment.ipynb (Cell 15): aligned validation and export rule}]
+def predict_segments(probabilities: np.ndarray, alpha: np.ndarray, beta: np.ndarray):
+    probabilities = validate_probabilities(probabilities)
+    alpha, beta = np.asarray(alpha, dtype=float), np.asarray(beta, dtype=float)
+    if alpha.shape != (4,) or beta.shape != (4,):
+        raise ValueError("alpha and beta must each contain four class parameters")
+    if not np.isfinite(alpha).all() or not np.isfinite(beta).all() or (alpha <= 0).any():
+        raise ValueError("Decision parameters must be finite and alpha must be positive")
+    return (probabilities * alpha - beta).argmax(axis=1)
+\end{lstlisting}
+
+\subsection{Key Excerpt --- Task 5 Closed-Form \code{ExactBayesUB} Posterior Cut}
+\begin{lstlisting}[language=Python,caption={Excerpt from task5/task5\_account\_security.ipynb (Cell 11): Expected-F3 break-even selection}]
+n_sure = int(sure_mask.sum())
+cand_pos = p_ub_nan[p_ub_nan > 0].sort_values(ascending=False)
+exp_total_tp = n_sure + cand_pos.sum()
+cut_rows = []
+for c_val in sorted(cand_pos.unique(), reverse=True):
+    taken = cand_pos[cand_pos >= c_val]
+    tp_exp, n_flagged = n_sure + taken.sum(), n_sure + len(taken)
+    cut_rows.append({
+        "cut": float(c_val),
+        "extra_flags": len(taken),
+        "expected_f3": float(10 * tp_exp / (9 * exp_total_tp + n_flagged)),
+    })
+\end{lstlisting}
+
+\end{document}
