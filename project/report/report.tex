@@ -2,6 +2,7 @@
 
 \usepackage[no-math]{fontspec}
 \usepackage{polyglossia}
+\usepackage{indentfirst}
 \setdefaultlanguage{thai}
 \setotherlanguage{english}
 
@@ -21,30 +22,37 @@
     ItalicFont     = Sarabun-Italic,
     BoldItalicFont = Sarabun-BoldItalic,
 ]{Sarabun}
-\setmonofont{Consolas}[Scale=0.88, AutoFakeBold=1.4, AutoFakeSlant=0.2]
-\newfontfamily\thaifonttt{Consolas}[Scale=0.88, AutoFakeBold=1.4, AutoFakeSlant=0.2]
+\setmonofont{Consolas}[Scale=MatchLowercase, AutoFakeBold=1.4, AutoFakeSlant=0.2]
+\newfontfamily\thaifonttt{Consolas}[Scale=MatchLowercase, AutoFakeBold=1.4, AutoFakeSlant=0.2]
 
-\usepackage[top=2.3cm,bottom=2.3cm,left=2.5cm,right=2.3cm,footskip=1.0cm]{geometry}
+\usepackage[top=2.0cm,bottom=2.1cm,left=2.2cm,right=2.0cm,footskip=1.0cm]{geometry}
 \usepackage{graphicx,longtable,array,booktabs,xcolor,colortbl,float,enumitem,needspace,caption}
 \usepackage{amsmath,amssymb,mathtools}
+\usepackage{unicode-math}
+\setmathfont{latinmodern-math.otf}
+\setmathfont{Sarabun}[range=up/{num,Latin,latin}]
+\setmathfont{Sarabun-Italic}[range=it/{Latin,latin}]
+\setmathfont{Sarabun-Bold}[range=bfup/{num,Latin,latin}]
 \usepackage{fancyhdr,titlesec,titletoc,listings,xurl,hyperref}
 
 \XeTeXlinebreaklocale "th"
 \XeTeXlinebreakskip = 0pt plus 0.08pt
 
-% โทนสีสุภาพสะอาดตามมาตรฐานเอกสารวิชาการ CPE ภาควิชาวิศวกรรมคอมพิวเตอร์
+% โทนสีเอกสารวิชาการ CPE: ตารางสีฟ้าอ่อน ศัพท์โค้ดสีเขียว และคำบรรยายภาพ/ตารางตัวเอียงสีฟ้า 11pt
 \definecolor{TableHead}{HTML}{E6EEF6}
 \definecolor{TableStripe}{HTML}{F8FAFC}
 \definecolor{RuleGray}{HTML}{C6CDD5}
 \definecolor{DarkBorder}{HTML}{64748B}
 \definecolor{CodeTint}{HTML}{F8FAFC}
+\definecolor{KeyGreen}{HTML}{087A46}
+\definecolor{CaptionBlue}{HTML}{0000EE}
 \definecolor{LinkNavy}{HTML}{1E3A8A}
 
 \hypersetup{
     unicode=true,
     colorlinks=true,
     linkcolor=black,
-    urlcolor=LinkNavy,
+    urlcolor=KeyGreen,
     citecolor=black,
     pdftitle={CPE342 Term Project: Karena Player Intelligence System},
     pdfauthor={Group ML004},
@@ -77,13 +85,14 @@
 \titlecontents{subsection}[2.2em]{\raggedright\addvspace{1.5pt}}{\thecontentslabel\quad}{}{\hfill\contentspage}
 \titlecontents{subsubsection}[4.2em]{\raggedright\addvspace{0.5pt}\fontsize{11}{14}\selectfont}{\thecontentslabel\quad}{}{\hfill\contentspage}
 
-% คำอธิบายรูปและตารางสีดำสุภาพ อ่านง่ายชัดเจน
-\DeclareCaptionFont{captext}{\color{black}\fontsize{11}{14.5}\selectfont}
+% คำบรรยายภาพและตารางขนาด 11pt ตัวเอียงสีฟ้า ชัดเจนอ่านง่าย
+\DeclareCaptionFont{captext}{\color{CaptionBlue}\itshape\fontsize{11}{14.5}\selectfont}
 \captionsetup[figure]{font=captext,labelfont=bf,justification=centering,labelsep=space,skip=6pt}
 \captionsetup[table]{font=captext,labelfont=bf,justification=raggedright,singlelinecheck=false,labelsep=space,skip=6pt}
 
-% คำสั่งแสดงชื่อฟีเจอร์/ไฟล์/พารามิเตอร์แบบกลมกลืน ไม่ฉูดฉาด
-\DeclareRobustCommand{\code}[1]{\leavevmode{\ttfamily\let\codeunderscore\_\def\_{\codeunderscore\allowbreak}#1}}
+% คำสั่งแสดงชื่อฟีเจอร์/ไฟล์/พารามิเตอร์ด้วยอักษรโค้ดสีเขียวและขนาดเท่าข้อความรอบข้าง
+\DeclareRobustCommand{\code}[1]{\leavevmode{\ttfamily\color{KeyGreen!85!black}\let\codeunderscore\_\def\_{\codeunderscore\allowbreak}#1}}
+\newcommand{\wideimg}[2][1.06\textwidth]{\makebox[\textwidth][c]{\includegraphics[width=#1]{#2}}}
 
 \lstset{
     basicstyle=\fontspec{Consolas}\fontsize{8.8}{11.5}\selectfont,
@@ -157,7 +166,7 @@
 
 ในปัจจุบัน อุตสาหกรรมเกมออนไลน์และแพลตฟอร์มความบันเทิงดิจิทัลมีการแข่งขันสูงขึ้นอย่างต่อเนื่อง ผู้ให้บริการมิได้แข่งขันกันเฉพาะคุณภาพของตัวเกมเท่านั้น แต่ยังต้องอาศัยการวิเคราะห์ข้อมูลขนาดใหญ่และเทคโนโลยี Machine Learning เพื่อยกระดับประสบการณ์ของผู้เล่น รักษาความยุติธรรมในการแข่งขัน และบริหารจัดการรายได้ตลอดอายุการใช้งานของผู้เล่น (Player Lifetime Value: LTV) อย่างมีประสิทธิภาพ
 
-โครงงาน \textbf{Karena Player Intelligence System} จำลองบทบาททีมวิศวกร Machine Learning ของบริษัท \textbf{Karena Thailand} ซึ่งเป็นผู้พัฒนาและให้บริการแพลตฟอร์มเกมออนไลน์ขนาดใหญ่ที่ดูแลเกมหลัก 5 เกม ได้แก่ \textit{PUBE Mobile}, \textit{Free Fried}, \textit{7-11 Knights}, \textit{Roblock} และ \textit{FiveN} จากการขยายตัวของฐานผู้เล่นอย่างรวดเร็ว บริษัทประสบปัญหาเชิงปฏิบัติการสำคัญ 5 ด้านที่ส่งผลกระทบโดยตรงต่อความน่าเชื่อถือและผลประกอบการขององค์กร ดังนี้
+การแข่งขัน \textbf{Karena Player Intelligence System} จำลองบทบาททีมวิศวกร Machine Learning ของบริษัท \textbf{Karena Thailand} ซึ่งเป็นผู้พัฒนาและให้บริการแพลตฟอร์มเกมออนไลน์ขนาดใหญ่ที่ดูแลเกมหลัก 5 เกม ได้แก่ \textit{PUBE Mobile}, \textit{Free Fried}, \textit{7-11 Knights}, \textit{Roblock} และ \textit{FiveN} จากการขยายตัวของฐานผู้เล่นอย่างรวดเร็ว บริษัทประสบปัญหาเชิงปฏิบัติการสำคัญ 5 ด้านที่ส่งผลกระทบโดยตรงต่อความน่าเชื่อถือและผลประกอบการขององค์กร ดังนี้
 
 \begin{enumerate}[leftmargin=1.8em,itemsep=3pt]
     \item \textbf{ปัญหาภาระงานคัดกรองการโกง (Task 1 — Anti-Cheat Pre-Filter):} ระบบได้รับรายงานการโกงมากกว่า 10,000 กรณีต่อวัน แต่ทีมผู้ตรวจสอบสามารถพิจารณาด้วยตนเองได้เพียง 500 กรณีต่อวัน ทำให้เกิดงานค้างสะสมกว่า 45,000 กรณี ระบบอัตโนมัติแบบเดิมมีอัตรา False Positive สูงถึง 70\% ส่งผลให้ผู้เล่นสุจริตถูกระงับบัญชีโดยผิดพลาด ขณะที่ผู้โกงที่ใช้ Subtle Aimbot และ Wallhack สามารถหลบเลี่ยงการตรวจจับ ทำให้อัตราการรักษาผู้เล่นในโหมดแข่งขันลดลง 15\% และสร้างผลกระทบต่อรายได้ราว 15 ล้านบาทต่อวัน
@@ -169,7 +178,7 @@
 
 \subsection{วัตถุประสงค์ของโครงงาน}
 
-โครงงานนี้มีวัตถุประสงค์เพื่อสร้างระบบ \textbf{Karena Player Intelligence System} ที่ประกอบด้วยโมเดล Machine Learning จำนวน 5 งานเชื่อมโยงกันอย่างเป็นระบบ โดยมีเป้าหมายเฉพาะดังต่อไปนี้
+โครงงานนี้มีวัตถุประสงค์เพื่อพัฒนาระบบสำหรับโจทย์การแข่งขัน \textbf{Karena Player Intelligence System} ที่ประกอบด้วยโมเดล Machine Learning จำนวน 5 งานเชื่อมโยงกันอย่างเป็นระบบ โดยมีเป้าหมายเฉพาะดังต่อไปนี้
 
 \begin{enumerate}[leftmargin=1.8em,itemsep=2pt]
     \item เพื่อวิเคราะห์โครงสร้างข้อมูลเชิงสำรวจ (Exploratory Data Analysis: EDA) และกลไกการกำเนิดข้อมูล (Data-Generating Process) ของชุดข้อมูลทั้ง 5 งาน ทั้งในรูปแบบตารางพฤติกรรม ข้อมูลอนุกรมเวลาหลายช่วง และภาพหน้าจอการเล่นเกม
@@ -180,9 +189,9 @@
 
 \subsection{ขอบเขตและข้อกำหนดการพัฒนาโมเดล}
 
-การพัฒนาโมเดลทั้งหมดดำเนินการภายใต้ข้อกำหนดของรายวิชา CPE 342 อย่างเคร่งครัด ได้แก่ (1) ใช้เฉพาะชุดข้อมูลที่จัดเตรียมให้สำหรับโครงงาน ห้ามใช้ข้อมูลภายนอกหรือการดึงข้อมูลจากแหล่งอื่น (2) ห้ามนำข้อมูลชุดทดสอบ (\code{test.csv}) เข้าสู่กระบวนการฝึกสอน ปรับแต่งค่าพารามิเตอร์ หรือทำ Supervised Pseudo-Labeling ใน Tasks 1--4 ยกเว้น Task 5 ที่ออกแบบให้เป็น Unsupervised Anomaly Detection บนชุดทดสอบโดยเฉพาะ (3) Tasks 1, 2, 3 และ 5 ต้องฝึกสอนโมเดลจากศูนย์ (Train from Scratch) ส่วน Task 4 อนุญาตให้ใช้ Pre-trained Models ด้าน Computer Vision ได้ และ (4) ห้ามใช้ AutoML Frameworks (เช่น AutoGluon, PyCaret, H2O AutoML, FLAML, TPOT, Auto-sklearn) แต่อนุญาตให้ใช้เครื่องมือปรับหา Hyperparameter เช่น Optuna และ Scikit-learn Search ได้
+การพัฒนาโมเดลทั้งหมดดำเนินการภายใต้ข้อกำหนดของการแข่งขันและรายวิชา CPE 342 อย่างเคร่งครัด ได้แก่ (1) ใช้เฉพาะชุดข้อมูลที่จัดเตรียมให้สำหรับการแข่งขัน ห้ามใช้ข้อมูลภายนอกหรือการดึงข้อมูลจากแหล่งอื่น (2) ห้ามนำข้อมูลชุดทดสอบ (\code{test.csv}) เข้าสู่กระบวนการฝึกสอน ปรับแต่งค่าพารามิเตอร์ หรือทำ Supervised Pseudo-Labeling ใน Tasks 1--4 ยกเว้น Task 5 ที่ออกแบบให้เป็น Unsupervised Anomaly Detection บนชุดทดสอบโดยเฉพาะ (3) Tasks 1, 2, 3 และ 5 ต้องฝึกสอนโมเดลจากศูนย์ (Train from Scratch) ส่วน Task 4 อนุญาตให้ใช้ Pre-trained Models ด้าน Computer Vision ได้ และ (4) ห้ามใช้ AutoML Frameworks (เช่น AutoGluon, PyCaret, H2O AutoML, FLAML, TPOT, Auto-sklearn) แต่อนุญาตให้ใช้เครื่องมือปรับหา Hyperparameter เช่น Optuna และ Scikit-learn Search ได้
 
-นอกจากนี้ ในการตรวจสอบไฟล์ข้อมูลของโครงงานก่อนเริ่มพัฒนา พบรายละเอียดสำคัญ 2 ประการที่ทีมผู้จัดทำบันทึกรูปแบบมาตรฐานไว้ชัดเจนเพื่อป้องกันความสับสน ได้แก่ (ก) ใน Task 4 ตัวอย่างเอกสารสไลด์แสดงป้ายกำกับเป็นข้อความ แต่ชุดข้อมูลฝึกสอนและรูปแบบส่งผลบังคับใช้รหัสตัวเลขจำนวนเต็ม \code{0..4} (\code{0 = 7-11k}, \code{1 = fiveN}, \code{2 = freefried}, \code{3 = pube}, \code{4 = roblock}) ทีมงานจึงยึดรหัส \code{0..4} เป็นมาตรฐานเดียวตลอดท่อประมวลผล และ (ข) ค่าน้ำหนัก $w_1 \dots w_5$ สำหรับคำนวณคะแนนรวมไม่ได้เปิดเผยเป็นตัวเลข จึงออกแบบให้ปรับปรุงแต่ละ Task เพื่อเพิ่มคะแนนสูงสุดตามตัวชี้วัดทางการของงานนั้นโดยตรง
+นอกจากนี้ ในการตรวจสอบไฟล์ข้อมูลของการแข่งขันก่อนเริ่มพัฒนา พบรายละเอียดสำคัญ 2 ประการที่ทีมผู้จัดทำบันทึกรูปแบบมาตรฐานไว้ชัดเจนเพื่อป้องกันความสับสน ได้แก่ (ก) ใน Task 4 ตัวอย่างเอกสารสไลด์แสดงป้ายกำกับเป็นข้อความ แต่ชุดข้อมูลฝึกสอนและรูปแบบส่งผลบังคับใช้รหัสตัวเลขจำนวนเต็ม \code{0..4} (\code{0 = 7-11k}, \code{1 = fiveN}, \code{2 = freefried}, \code{3 = pube}, \code{4 = roblock}) ทีมงานจึงยึดรหัส \code{0..4} เป็นมาตรฐานเดียวตลอดท่อประมวลผล และ (ข) ค่าน้ำหนัก $w_1 \dots w_5$ สำหรับคำนวณคะแนนรวมไม่ได้เปิดเผยเป็นตัวเลข จึงออกแบบให้ปรับปรุงแต่ละ Task เพื่อเพิ่มคะแนนสูงสุดตามตัวชี้วัดทางการของงานนั้นโดยตรง
 
 \subsection{เครื่องมือและเทคโนโลยีที่ใช้ในการพัฒนา}
 
@@ -248,13 +257,13 @@ Task 1 เป็นปัญหาจำแนกประเภทแบบท�
 \end{enumerate}
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.92\linewidth]{assets/task1_feature_distributions.png}
+\makebox[\textwidth][c]{\includegraphics[width=1.08\textwidth,height=0.84\textheight,keepaspectratio]{assets/task1_feature_distributions.png}}
 \caption{การแจกแจงของฟีเจอร์ทั้ง 31 ตัวแปรใน Task 1 แยกตามกลุ่มสุจริตและผู้โกง แสดงภาวะอั้นที่ขอบบนและขอบเขตช่วงข้อมูลบัญชี}
 \label{fig:t1_dist}
 \end{figure}
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.86\linewidth]{assets/task1_missing_rate_train_test.png}
+\wideimg[1.00\textwidth]{assets/task1_missing_rate_train_test.png}
 \caption{การเปรียบเทียบอัตราข้อมูลขาดหาย (Missing Rate) ระหว่าง Train Set และ Test Set ใน Task 1}
 \label{fig:t1_miss}
 \end{figure}
@@ -314,13 +323,13 @@ Task 1 เป็นปัญหาจำแนกประเภทแบบท�
 \end{table}
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.95\linewidth]{assets/task1_diagnostics.png}
+\wideimg[1.07\textwidth]{assets/task1_diagnostics.png}
 \caption{การวิเคราะห์ผลของ Task 1: เส้นโค้ง ROC ข้ามขั้นตอน การยกระดับ $F_2$ ทั้ง 5 Folds เมทริกซ์ความสับสน OOF และตัวแปรสำคัญ 15 อันดับแรกจาก LightGBM}
 \label{fig:t1_diag}
 \end{figure}
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.88\linewidth]{assets/task1_test_alignment.png}
+\wideimg[1.06\textwidth]{assets/task1_test_alignment.png}
 \caption{การกระจายตัวของความน่าจะเป็นบน Test Set เทียบจุดตัด $\tau^* = 0.1990$ และสัดส่วนการตรวจพบบัญชีโกง (15,270 จาก 25,889 บัญชี = 58.98\%)}
 \label{fig:t1_align}
 \end{figure}
@@ -393,13 +402,13 @@ ExactParamEM (Cross-Fitted Affine Macro-$F_1$ Rule) & 0.59563 & 0.75920 & 1.00 \
 \end{table}
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.95\linewidth]{assets/task2_diagnostics.png}
+\wideimg[1.07\textwidth]{assets/task2_diagnostics.png}
 \caption{การวิเคราะห์ผลของ Task 2: ฟีเจอร์สำคัญของ Clean28+ZLR ค่า OOF LogLoss ของโมเดลทั้ง 7 ตระกูล เมทริกซ์ความสับสน และเสถียรภาพราย Fold}
 \label{fig:t2_diag}
 \end{figure}
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.88\linewidth]{assets/task2_test_alignment.png}
+\wideimg[1.06\textwidth]{assets/task2_test_alignment.png}
 \caption{ความสอดคล้องของสัดส่วนกลุ่มผู้เล่นระหว่าง Train, OOF และ Test Set (25,889 แถว) พร้อม\mbox{การกระจายตัว}ของ Decision Margin}
 \label{fig:t2_align}
 \end{figure}
@@ -426,7 +435,7 @@ Task 3 มุ่งพยากรณ์ยอดการใช้จ่าย�
 $$\hat{y}_i^* = \begin{cases} 0 & \text{ถ้า } p_i \le 0.5 \\ Q_{q^*(p_i)}(Y_i \mid Y_i > 0, X_i), \quad q^*(p_i) = 1 - \dfrac{1}{2 p_i} & \text{ถ้า } p_i > 0.5 \end{cases}$$
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.92\linewidth]{assets/figure1-spending-eda.png}
+\wideimg[1.07\textwidth]{assets/figure1-spending-eda.png}
 \caption{การสำรวจข้อมูล Task 3: สัดส่วนผู้ไม่ใช้จ่าย 48.12\% การแจกแจงแบบสองยอดของยอดจ่ายในสเกล $\log_{10}$ ยอดจ่ายราย Segment และความสัมพันธ์กับยอดใช้จ่ายในอดีต}
 \label{fig:t3_eda}
 \end{figure}
@@ -465,19 +474,19 @@ Quantile Hurdle V3 (6-Stage-1 + 5-Family $Q_{\text{FINE}}$) & 2,690.26 & 0.79599
 \end{table}
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.95\linewidth]{assets/figure2-hurdle-calibration-diagnostics.png}
+\wideimg[1.07\textwidth]{assets/figure2-hurdle-calibration-diagnostics.png}
 \caption{การวิเคราะห์ผล Stage-1 และ Stage-2 ของ Task 3: Reliability Calibration, Stage-1 ROC (ExactBayesL1V2 32-Cell AUC = 0.78535), Log Parity Plot และ Absolute Error ราย Segment}
 \label{fig:t3_diag}
 \end{figure}
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.92\linewidth]{assets/figure3-residual-error-distribution.png}
+\wideimg[1.06\textwidth]{assets/figure3-residual-error-distribution.png}
 \caption{การกระจายตัวของค่าคลาดเคลื่อน OOF ($\pm 15\text{k}$ THB) และฮิสโตแกรม 1,000-Bootstrap Gain เหนือ Quantile Hurdle V3}
 \label{fig:t3_res}
 \end{figure}
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.88\linewidth]{assets/figure4-test-spending-prediction-density.png}
+\wideimg[1.00\textwidth]{assets/figure4-test-spending-prediction-density.png}
 \caption{เปรียบเทียบความหนาแน่นของยอดทำนาย Test Set กับ Train Ground Truth ในสเกล Log (ทำนายศูนย์ 49.6\%, มัธยฐาน 78.76 บาท, สูงสุด 300,000 บาท)}
 \label{fig:t3_test}
 \end{figure}
@@ -496,7 +505,7 @@ Task 4 จำแนกภาพหน้าจอการเล่นเกม�
 จากการทำ EDA พบอุปสรรคสำคัญ 2 ประการ (1) การแบ่งข้อมูลแบบสุ่มปกติทำให้ภาพจากฉากเดียวกันหรือเฟรมต่อเนื่องอยู่ในทั้ง Train และ Validation ดังนั้นทีมงานจึงจัดกลุ่มภาพด้วย \textbf{Perceptual 64-bit dHash Clustering} (Hamming distance $\le 10$) แบ่งเป็น \textbf{28,088 กลุ่มฉากอิสระ} และใช้ \textbf{5-Fold StratifiedGroupKFold (SGKF)} เพื่อให้การวัดผลซื่อสัตย์ต่อภาพที่ไม่เคยเห็นจริง และ (2) พบภาพเสื่อมสภาพตามธรรมชาติ (สีเพี้ยน เอียง สัญญาณรบกวน) จำนวน $10{,}229$ ภาพ ควบคู่กับฉากเดี่ยว $7{,}931$ ภาพ จึงต้องออกแบบทั้งระบบฟื้นฟูภาพ (\code{decorrupt\_v4}) และชุดทดสอบความทนทานต่อความเสียหายขั้นรุนแรง (\code{ExtHard6})
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.92\linewidth]{assets/figure1-screenshot-eda.png}
+\wideimg[1.07\textwidth]{assets/figure1-screenshot-eda.png}
 \caption{สัดส่วนคลาสทั้ง 5 เกมในชุดฝึกสอน Task 4 (31,546 ภาพ, อัตราส่วนไม่สมดุล 2.04 เท่า) ค่าเฉลี่ยสี RGB และภาพตัวอย่างขนาด $230 \times 120$ พิกเซล}
 \label{fig:t4_eda}
 \end{figure}
@@ -551,19 +560,20 @@ Stage 4: + Dual-Condition SymKL FoundVLM-v2 & 0.994573 & 0.969549 & 0.019192 \\
 \end{table}
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.95\linewidth]{assets/figure2-validation-diagnostics.png}
-\caption{ผลการประเมิน 5-Fold SGKF ของ Task 4: เมทริกซ์ความสับสน (Accuracy 99.50\%) ค่า $F_1$ รายเกมในโหมดปกติกับ ExtHard6 และน้ำหนัก SLSQP ในกลุ่ม ExtHard6}
+\makebox[\textwidth][c]{\includegraphics[trim=0 0 486.96bp 0,clip,width=1.02\textwidth]{assets/figure2-validation-diagnostics.png}}\\[0.2cm]
+\makebox[\textwidth][c]{\includegraphics[trim=828.24bp 0 0 0,clip,width=0.60\textwidth]{assets/figure2-validation-diagnostics.png}}
+\caption{ผลการประเมิน 5-Fold SGKF ของ Task 4: (บน) เมทริกซ์ความสับสน (Accuracy 99.50\%) และค่า $F_1$ รายเกมในโหมดปกติกับ ExtHard6 (ล่าง) น้ำหนัก SLSQP ในกลุ่ม ExtHard6}
 \label{fig:t4_diag}
 \end{figure}
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.94\linewidth]{assets/figure3-regime-error-analysis.png}
+\wideimg[1.06\textwidth]{assets/figure3-regime-error-analysis.png}
 \caption{พัฒนาการความแม่นยำ Stage 1--5 ของ Task 4 และการกระจายตัวของ JS Divergence ใน Shift Gate ($\gamma = 0.04$, คัดส่ง 795 ภาพ)}
 \label{fig:t4_regime}
 \end{figure}
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.86\linewidth]{assets/figure4-test-class-distribution.png}
+\wideimg[0.94\textwidth]{assets/figure4-test-class-distribution.png}
 \caption{เปรียบเทียบสัดส่วนคลาสทั้ง 5 เกมระหว่าง Train Set กับผลการทำนายบน Test Set (25,889 ภาพ)}
 \label{fig:t4_test}
 \end{figure}
@@ -599,7 +609,7 @@ Task 5 เป็นงานตรวจจับบัญชีผิดปก�
 {\fontsize{9.6}{12.5}\selectfont\arrayrulecolor{RuleGray}
 \caption{สรุปจำนวนบัญชีแต่ละ Archetype และผลทวนสอบบน Security Flags ที่ซ่อนไว้ของ Task 5}
 \label{tab:t5_summary}
-\begin{tabular}{L{4.8cm}ccccc}
+\begin{tabular}{L{5.3cm}ccccc}
 \toprule
 \rowcolor{TableHead} \textbf{กลุ่มพฤติกรรม (Archetype)} & \textbf{บัญชี} & \textbf{สัดส่วน} & \textbf{เปลี่ยนรหัสผ่าน} & \textbf{ใช้ VPN} & \textbf{ขายไอเทมมาก} \\
 \midrule
@@ -620,25 +630,25 @@ Task 5 เป็นงานตรวจจับบัญชีผิดปก�
 \textit{หมายเหตุ:} กฎ \code{vpn\_pricing\_abuse} (\code{purchase\_frequency\_4 > 7.5}) มีบัญชีที่เข้าเงื่อนไขรวม $189$ บัญชี แต่ $180$ บัญชีซ้อนทับกับ \code{account\_takeover} จึงคงเหลือในตารางลำดับชั้นอิสระไม่ซ้ำซ้อนจำนวน $9$ บัญชี
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.95\linewidth]{assets/task5_anomaly_detection_diagnostics.png}
+\wideimg[1.07\textwidth]{assets/task5_anomaly_detection_diagnostics.png}
 \caption{การวิเคราะห์ผลของ Task 5: เกณฑ์แยก Tail Score ที่ $\tau=18.35$ จำนวนบัญชีใน 9 Archetypes การยืนยันผลบน Security Flags และช่องว่าง Empty-Gap ของ \code{behavior\_stability}}
 \label{fig:t5_diag}
 \end{figure}
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.92\linewidth]{assets/erratic-combat-box.png}
+\wideimg[1.07\textwidth]{assets/erratic-combat-box.png}
 \caption{การแยกกลุ่ม \code{erratic\_combat} (244 บัญชี) ภายในกล่อง Uniform 12 มิติ ออกจากประชากรปกติอย่างชัดเจน}
 \label{fig:t5_box}
 \end{figure}
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.92\linewidth]{assets/task5_bayes_calibration.png}
+\wideimg[1.08\textwidth]{assets/task5_bayes_calibration.png}
 \caption{เส้นโค้งเลือกจุดตัด Expected-$F_3$ ของ ExactBayesUB (+25 บัญชี ณ จุดตัด 0.11513) และกราฟ Calibration เทียบประชากรควบคุม 22,926 บัญชี}
 \label{fig:t5_cal}
 \end{figure}
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.58\linewidth]{assets/task5_test_alignment.png}
+\wideimg[0.84\textwidth]{assets/task5_test_alignment.png}
 \caption{สัดส่วนผลลัพธ์การตรวจจับความผิดปกติขั้นสุดท้ายของ Task 5 (ปกติ 23,812 บัญชี = 91.98\%, ผิดปกติ 2,077 บัญชี = 8.02\%)}
 \label{fig:t5_align}
 \end{figure}
@@ -659,7 +669,7 @@ Task 5 เป็นงานตรวจจับบัญชีผิดปก�
 {\fontsize{9.6}{12.5}\selectfont\arrayrulecolor{RuleGray}
 \caption{สรุปสถาปัตยกรรมและผลลัพธ์ Out-of-Fold Cross-Validation ของทั้ง 5 งาน}
 \label{tab:overall_results}
-\begin{tabular}{L{2.5cm}L{5.1cm}cL{4.5cm}}
+\begin{tabular}{L{2.7cm}L{5.4cm}cL{4.6cm}}
 \toprule
 \rowcolor{TableHead} \textbf{Task} & \textbf{โมเดลขั้นสุดท้ายที่เลือกใช้} & \textbf{ตัวชี้วัด} & \textbf{ผลตรวจสอบภายใน (Local CV)} \\
 \midrule
@@ -676,7 +686,7 @@ Task 5: Security & 8 Exact Empty-Gap / 12D Box Archetype Rules + ExactBayesUB An
 
 กลุ่ม \textbf{ML004} แบ่งโครงสร้างการพัฒนาซอร์สโค้ดออกเป็นโมดูลอิสระแยกตามโฟลเดอร์งาน (\code{task1}--\code{task5}) ผ่านระบบควบคุมเวอร์ชัน GitHub เพื่อให้แต่ละส่วนสามารถทดสอบ พัฒนา Feature Engineering และเปรียบเทียบผล Validation ได้โดยไม่กระทบกัน พร้อมใช้มาตรฐาน Pure-Train Invariant และการตรวจนัยสำคัญทางสถิติร่วมกันทั้งกลุ่ม โดยมี \textit{วิศิษฐ์ สุวรรณเนาว์} (\code{67070501042}) เป็นผู้พัฒนาหลักใน Task 3 และประสานการบูรณาการระบบรวมของกลุ่ม ส่วนสมาชิกท่านอื่นในกลุ่มได้แก่ \textit{กันต์ธีร์ ดวงมณี} (\code{67070501003}), \textit{นัธทวัฒน์ ปริมสิริคุณาวุฒิ} (\code{67070501027}), \textit{ศุภวิชญ์ มารยาท} (\code{67070501045}) และ \textit{พลวริษฐ์ วัฒนเหมรัตน์} (\code{67070501067}) ร่วมดำเนินงานและพัฒนาภายใต้คลังรหัสของกลุ่ม (โดยบทบาทการแบ่ง Task ย่อยอย่างเป็นทางการไม่ได้จำแนกเป็นลายลักษณ์อักษรแยกต่างหาก)
 
-\textbf{บทเรียนสำคัญด้านวิศวกรรม Machine Learning ที่ได้จากโครงงาน:}
+\textbf{บทเรียนสำคัญด้านวิศวกรรม Machine Learning ที่ได้จากการแข่งขัน:}
 \begin{enumerate}[leftmargin=1.8em,itemsep=2pt]
     \item \textbf{ความเข้าใจ Data-Generating Process ให้ผลลัพธ์สูงกว่าการค้นหาพารามิเตอร์แบบสุ่ม:} การจำลองภาวะ Right-Censoring ด้วย Tobit (Task 1), สมการการคูณร่วมกับกฎ Bayes-$L_1$ สำหรับยอดใช้จ่าย (Task 3) และโครงสร้าง Empty-Gap บนอนุกรมเวลา 4 ช่วง (Task 5) ยกระดับคะแนนอย่างสม่ำเสมอข้ามทุก Fold สูงกว่าการปรับจูน Tree Hyperparameters เพียงอย่างเดียว
     \item \textbf{การออกแบบ Validation Split ต้องเคารพความซ้ำซ้อนของข้อมูล:} การใช้ Perceptual dHash จัดกลุ่มฉากก่อนแบ่ง Fold ใน Task 4 และกฎ Pure-Train Invariant ช่วยป้องกันภาพลวงตาของค่า CV ที่ดีเกินจริง
@@ -687,7 +697,7 @@ Task 5: Security & 8 Exact Empty-Gap / 12D Box Archetype Rules + ExactBayesUB An
 
 \textbf{ข้อจำกัดของงานปัจจุบัน:} (1) ใน Task 2 ขั้นตอนปรับเทียบ Zero-Mean Logit Bias และ Affine Bayes Rule เป็นการทำงานแบบ Cross-Fitted บนความน่าจะเป็น OOF ของโมเดลฐานที่แช่แข็งไว้ แทนการฝึกโมเดลฐานทั้ง 7 ตระกูลซ้ำภายใน Nested Loop ส่วน (2) ใน Task 5 ทำงานในสภาวะไร้ป้ายกำกับโดยสมบูรณ์ ค่า Expected-$F_3$ จึงอ้างอิงจากแบบจำลองความน่าจะเป็นเชิงวิเคราะห์และกลุ่มควบคุมที่ทราบค่า \code{behavior\_stability} ร่วมกับตัวแปร Security Flags อิสระ และ (3) การฝึก Deep Vision Backbones ใหม่ตั้งแต่ต้นใน Task 4 ต้องอาศัยหน่วยประมวลผลกราฟิก (GPU)
 
-\textbf{สรุปผลและแนวทางพัฒนาในอนาคต:} โครงงาน \textbf{Karena Player Intelligence System} ของกลุ่ม ML004 บรรลุเป้าหมายทั้ง 5 งานครบถ้วนตามข้อกำหนดของรายวิชา CPE 342 ในระยะต่อไปเพื่อนำไปใช้งานจริงในระดับ Production ควรพัฒนาต่อยอด 3 ด้าน ได้แก่ (1) รวมขั้นตอนปรับเทียบของ Task 2 เข้าสู่ Nested End-to-End Pipeline, (2) พัฒนาระบบ Scoring Service แบบ Streaming/API เพื่อนำความเสี่ยงการโกง (Task 1), กลุ่มพฤติกรรม (Task 2), การคาดการณ์รายได้ 30 วัน (Task 3) และคะแนนความปลอดภัย (Task 5) มาคำนวณ \textbf{Risk-Adjusted Player LTV} แบบเรียลไทม์ และ (3) เพิ่มระบบเฝ้าระวัง Data Drift และ Concept Drift เพื่อรองรับการอัปเดตแพตช์เกมใหม่ในอนาคต
+\textbf{สรุปผลและแนวทางพัฒนาในอนาคต:} ระบบที่พัฒนาขึ้นสำหรับการแข่งขัน \textbf{Karena Player Intelligence System} ของกลุ่ม ML004 บรรลุเป้าหมายทั้ง 5 งานครบถ้วนตามข้อกำหนดของรายวิชา CPE 342 ในระยะต่อไปเพื่อนำไปใช้งานจริงในระดับ Production ควรพัฒนาต่อยอด 3 ด้าน ได้แก่ (1) รวมขั้นตอนปรับเทียบของ Task 2 เข้าสู่ Nested End-to-End Pipeline, (2) พัฒนาระบบ Scoring Service แบบ Streaming/API เพื่อนำความเสี่ยงการโกง (Task 1), กลุ่มพฤติกรรม (Task 2), การคาดการณ์รายได้ 30 วัน (Task 3) และคะแนนความปลอดภัย (Task 5) มาคำนวณ \textbf{Risk-Adjusted Player LTV} แบบเรียลไทม์ และ (3) เพิ่มระบบเฝ้าระวัง Data Drift และ Concept Drift เพื่อรองรับการอัปเดตแพตช์เกมใหม่ในอนาคต
 
 % ==============================================================================
 \clearpage
