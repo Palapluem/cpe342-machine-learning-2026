@@ -234,6 +234,13 @@
     \item \textbf{ค่าน้ำหนักคะแนนรวม:} ค่าน้ำหนัก $w_1 \dots w_5$ สำหรับคำนวณคะแนนรวมบน Kaggle ไม่ได้เปิดเผยเป็นตัวเลข จึงมุ่งยกระดับประสิทธิภาพของแต่ละ Task ตามตัวชี้วัดทางการของงานนั้นโดยตรง
 \end{itemize}
 
+ช่องทางอ้างอิงการแข่งขันและคลังซอร์สโค้ดหลักของกลุ่ม \textbf{ML004} ที่เผยแพร่ร่วมกันมี 3 แหล่งหลัก ได้แก่
+\begin{itemize}[leftmargin=1.9em,itemsep=1pt,topsep=0pt]
+    \item \textbf{Kaggle:} \url{https://www.kaggle.com/competitions/player-intelligence-system-cpe-342-ml/}
+    \item \textbf{คลังหลักของกลุ่ม:} \url{https://github.com/beambeambeam/ml00x} (โค้ดรวม, \code{submission/merge.py}, \code{submit.md})
+    \item \textbf{คลังส่งงานรายวิชา:} \url{https://github.com/Palapluem/cpe342-machine-learning-2026/tree/main/project} (Notebooks \& Report)
+\end{itemize}
+
 \subsection{เครื่องมือและเทคโนโลยีที่ใช้ในการพัฒนา}
 
 ทุกขั้นตอนของการวิเคราะห์ การทดลอง และการสร้างผลลัพธ์พัฒนาด้วยภาษา Python บน Jupyter Notebook ที่สามารถประมวลผลซ้ำ (Reproduce) ได้ครบถ้วน โดยมีเครื่องมือและไลบรารีหลักดังนี้
@@ -831,6 +838,8 @@ Task 5: Security & 8 Exact Empty-Gap / 12D Box Archetype Rules + ExactBayesUB An
 \end{tabular}}
 \end{table}
 
+เมื่อรวมผลทำนายทั้ง 5 งาน กลุ่ม \textbf{ML004} ได้คะแนน Kaggle Public สูงสุด \textbf{0.86680} (Run~27, \code{dc410ae}) และ \textbf{0.86678} ในรุ่นล่าสุด (Run~30 PR~\#99, \code{1e248d1}) สูงกว่าเกณฑ์ Ground (\textbf{0.68}) และ Challenge (\textbf{0.75}) อย่างชัดเจน โดยมีผลตรวจรับดัง \textbf{ตารางที่~\ref{tab:submission_audit}}
+
 \begin{table}[H]\centering
 {\tblfont\renewcommand{\arraystretch}{1.08}\setlength{\tabcolsep}{4pt}
 \caption{ผลตรวจสอบความสมบูรณ์และสถิติเชิงพรรณนาของไฟล์ส่งคำตอบ \code{submission.csv} ($25{,}889 \times 6$)}
@@ -849,9 +858,9 @@ Task 5: Security & 8 Exact Empty-Gap / 12D Box Archetype Rules + ExactBayesUB An
 \end{tabular}}
 \end{table}
 
-\subsection{การทำงานร่วมกันในทีม ข้อผิดพลาดที่พบบ่อย และบทเรียนสำคัญ}
+\subsection{การทำงานร่วมกันในทีม โครงสร้างคลังซอร์สโค้ด และบทเรียนสำคัญ}
 
-กลุ่ม \textbf{ML004} แบ่งโครงสร้างการพัฒนาซอร์สโค้ดออกเป็นโมดูลอิสระแยกตามโฟลเดอร์งาน (\code{task1}--\code{task5}) ภายใต้ระบบควบคุมเวอร์ชัน GitHub เพื่อให้แต่ละส่วนสามารถพัฒนา Feature Engineering ทดสอบสมมติฐาน และตรวจสอบคะแนน Validation ได้โดยไม่ขัดแย้งกัน พร้อมบังคับใช้มาตรฐาน Pure-Train Invariant, กฎความบริสุทธิ์ของชุดทดสอบ และการตรวจนัยสำคัญทางสถิติร่วมกันทั้งกลุ่ม โดยมี \textit{\mbox{วิศิษฐ์ สุวรรณเนาว์}} (\code{67070501042}) เป็นผู้พัฒนาหลักใน Task 3 และประสานงานรวมชุดส่งคำตอบ (\code{merge\_submission.ipynb}) ขณะที่สมาชิกท่านอื่น ได้แก่ \textit{\mbox{กันต์ธีร์ ดวงมณี}} (\code{67070501003}), \textit{\mbox{นัธทวัฒน์ ปริมสิริคุณาวุฒิ}} (\code{67070501027}), \textit{\mbox{ศุภวิชญ์ มารยาท}} (\code{67070501045}) และ \textit{\mbox{พลวริษฐ์ วัฒนเหมรัตน์}} (\code{67070501067}) ร่วมออกแบบและพัฒนาข้ามโมดูลภายใน Repository ของกลุ่ม ดังสังเคราะห์ข้อค้นพบสำคัญและข้อผิดพลาดที่พบบ่อยตลอดทั้ง 5 งานใน \textbf{ตารางที่~\ref{tab:insights_mistakes}}
+กลุ่ม \textbf{ML004} แบ่งโครงสร้างการพัฒนาซอร์สโค้ดออกเป็นโมดูลอิสระแยกตามโฟลเดอร์งาน (\code{task1}--\code{task5}) ภายใต้ระบบควบคุมเวอร์ชัน GitHub บนคลังหลักของทีม (\url{https://github.com/beambeambeam/ml00x}) ควบคู่กับการรวบรวม Jupyter Notebooks ฉบับส่งงานรายวิชาใน \url{https://github.com/Palapluem/cpe342-machine-learning-2026/tree/main/project} เพื่อให้แต่ละส่วนสามารถพัฒนา Feature Engineering ทดสอบสมมติฐาน และตรวจสอบคะแนน Validation ผ่าน Pull Request ได้โดยไม่ขัดแย้งกัน พร้อมบังคับใช้มาตรฐาน Pure-Train Invariant, กฎความบริสุทธิ์ของชุดทดสอบ และการตรวจนัยสำคัญทางสถิติร่วมกันทั้งกลุ่ม โดยมี \textit{\mbox{วิศิษฐ์ สุวรรณเนาว์}} (\code{67070501042}) เป็นผู้พัฒนาหลักใน Task 3 และประสานงานรวมชุดส่งคำตอบ (\code{merge\_submission.ipynb}) ขณะที่สมาชิกท่านอื่น ได้แก่ \textit{\mbox{กันต์ธีร์ ดวงมณี}} (\code{67070501003}), \textit{\mbox{นัธทวัฒน์ ปริมสิริคุณาวุฒิ}} (\code{67070501027}), \textit{\mbox{ศุภวิชญ์ มารยาท}} (\code{67070501045}) และ \textit{\mbox{พลวริษฐ์ วัฒนเหมรัตน์}} (\code{67070501067}) ร่วมออกแบบและพัฒนาข้ามโมดูลภายในคลังซอร์สโค้ดของกลุ่ม ดังสรุปข้อค้นพบใน \textbf{ตารางที่~\ref{tab:insights_mistakes}} และแผนผังไฟล์สำคัญของทั้งสองคลังใน \textbf{ตารางที่~\ref{tab:repo_structure}}
 
 \begin{table}[H]\centering
 {\tblfont\renewcommand{\arraystretch}{1.04}\setlength{\tabcolsep}{4pt}
@@ -877,7 +886,24 @@ Task 5 & ใช้ Isolation Forest/AE บนทุกมิติจนเก�
     \item \textbf{Single Source of Truth ระหว่าง Validation และ Inference:} ข้อผิดพลาดจากพจน์ $-\beta_c$ ที่ตกหล่นใน Task 2 เป็นบทเรียนสำคัญว่าโค้ดคำนวณกฎตัดสินใจในขั้นตอนประเมินผลและขั้นตอนสร้างผลลัพธ์จริงต้องใช้ฟังก์ชันเดียวกันเสมอ
 \end{enumerate}
 
-\clearpage
+\begin{table}[H]\centering
+{\tblfont\renewcommand{\arraystretch}{1.04}\setlength{\tabcolsep}{4pt}
+\caption{แผนผังไฟล์ซอร์สโค้ดหลักของกลุ่ม ML004 ในคลัง \code{beambeambeam/ml00x} และ \code{cpe342-machine-learning-2026}}
+\label{tab:repo_structure}
+\begin{tabular}{L{1.45cm}L{7.55cm}L{6.05cm}}
+\toprule
+\rowcolor{TableHead} \textbf{งาน} & \textbf{คลังหลักของทีม (\code{beambeambeam/ml00x})} & \textbf{คลังส่งงานรายวิชา (\code{project/})} \\
+\midrule
+Task 1 & \code{task1/run\_account\_cohorts.py}, \code{run\_gpu\_task1.py} & \code{task1/task1\_anti\_cheat.ipynb} \\
+Task 2 & \code{task2/run\_bayes\_export.py}, \code{bayes\_decision.py} & \code{task2/task2\_player\_segment.ipynb} \\
+Task 3 & \code{task3/task3\_monthly\_spending.ipynb}, \code{run\_upgraded\_task3.py} & \code{task3/task3\_monthly\_spending.ipynb} \\
+Task 4 & \code{task4/scripts/fuse\_t4\_sota\_trio.py}, \code{train\_m5\_foundvlm\_v3\_joint12blk.py} & \code{task4/task4\_game\_title\_detection.ipynb} \\
+Task 5 & \code{task5/archetype\_rules.py}, \code{run\_ensemble\_task5.py} & \code{task5/task5\_account\_security.ipynb} \\
+Merge & \code{submission/merge.py}, \code{submit.md}, \code{report/report.tex} & \code{merge\_submission.ipynb}, \code{report/report.tex} \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
 \subsection{ข้อจำกัด บทสรุป และแนวทางการพัฒนาต่อยอด}
 
 จากการพัฒนาระบบต้นแบบ คณะผู้จัดทำสรุปข้อจำกัดทางเทคนิคในเวอร์ชันปัจจุบัน 3 ประการ ดังนี้
@@ -897,7 +923,7 @@ Task 5 & ใช้ Isolation Forest/AE บนทุกมิติจนเก�
 % ==============================================================================
 \clearpage
 \renewcommand{\refname}{บรรณานุกรม}
-\begin{thebibliography}{12}
+\begin{thebibliography}{14}
 \addcontentsline{toc}{section}{บรรณานุกรม}
 
 \bibitem{cpe342spec} B.~Changaival, ``CPE 342 Machine Learning: Project Instruction --- Karena Player Intelligence System,'' Department of Computer Engineering, King Mongkut's University of Technology Thonburi, 2026.
@@ -923,6 +949,10 @@ Task 5 & ใช้ Isolation Forest/AE บนทุกมิติจนเก�
 \bibitem{dinov2} M.~Oquab \textit{et al.}, ``DINOv2: Learning Robust Visual Features without Supervision,'' \textit{Transactions on Machine Learning Research (TMLR)}, 2024.
 
 \bibitem{eva02} Y.~Fang \textit{et al.}, ``EVA-02: A Visual Representation for Neon Genesis,'' \textit{Image and Vision Computing}, 2024.
+
+\bibitem{karenakaggle} B.~Changaival, ``Player Intelligence System -- CPE 342 ML Competition,'' Kaggle, Nov. 2026. [Online]. Available: \url{https://www.kaggle.com/competitions/player-intelligence-system-cpe-342-ml/}
+
+\bibitem{ml00xrepo} Group ML004, ``ml00x: CPE 342 Karena Player Intelligence System Source Repository,'' GitHub, 2026. [Online]. Available: \url{https://github.com/beambeambeam/ml00x} and \url{https://github.com/Palapluem/cpe342-machine-learning-2026/tree/main/project}
 
 \end{thebibliography}
 

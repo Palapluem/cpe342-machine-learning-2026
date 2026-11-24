@@ -1,6 +1,6 @@
 # CPE 342 Term Project — Technical Report (`project/report/`)
 
-แพ็กเกจรายงานทางวิชาการสำหรับโครงงาน **CPE342 Term Project: Karena Player Intelligence System** ของกลุ่ม **ML004** (ภาคเรียนที่ 1 ปีการศึกษา 2569) จัดทำด้วย XeLaTeX (ฟอนต์ `Sarabun` + `Consolas`) ปราศจากหัวกระดาษ (Clean Headerless Academic Layout) ตามรูปแบบเอกสารอ้างอิงรายวิชาของภาควิชาวิศวกรรมคอมพิวเตอร์ มจธ.
+แพ็กเกจรายงานทางวิชาการสำหรับโครงงาน **CPE342 Term Project: Karena Player Intelligence System** ของกลุ่ม **ML004** (ภาคเรียนที่ 1 ปีการศึกษา 2569) จัดทำด้วย XeLaTeX (ฟอนต์ `TH Sarabun New` `Scale=1.46` + `Consolas`) ปราศจากหัวกระดาษ (Clean Headerless Academic Layout) ตามรูปแบบเอกสารอ้างอิงรายวิชาของภาควิชาวิศวกรรมคอมพิวเตอร์ มจธ.
 
 ## โครงสร้างไฟล์
 
