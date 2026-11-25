@@ -1,6 +1,6 @@
 # CPE 342 Machine Learning
 
-This repository contains coursework, assignments, lecture materials, and reference textbooks for the **CPE 342: Machine Learning** course (Semester 1/2024), Department of Computer Engineering, Faculty of Engineering, King Mongkut's University of Technology Thonburi (KMUTT).
+This repository contains coursework, assignments, lecture materials, and reference textbooks for the **CPE 342: Machine Learning** course (Semester 1/2026), Department of Computer Engineering, Faculty of Engineering, King Mongkut's University of Technology Thonburi (KMUTT).
 
 ---
 
@@ -119,6 +119,7 @@ cpe342-machine-learning-2026/
 │   ├── sample_submission.csv                  # Official Kaggle submission template (25,889 rows × 6 cols)
 │   ├── submission.csv                         # Consolidated 5-task validated predictions (25,889 rows × 6 cols)
 │   ├── merge_submission.ipynb                 # Master Submission Merger & Quality Gate Notebook
+│   ├── report/                                # Complete XeLaTeX Technical Report (37+ pages A4) & 300-dpi assets
 │   └── task1/ to task5/                       # 5 self-contained task modules (Portable Colab/Kaggle Notebooks, data/ & predictions/)
 │
 └── textbook/                                  # Reference textbooks (ISLR / O'Reilly)
@@ -324,22 +325,21 @@ cpe342-machine-learning-2026/
 
 * **Industrial Setting:** Karena Thailand online gaming platform (publisher of *PUBE Mobile*, *Free Fried*, *7-11 Knights*, *Roblock*, *FiveN*).
 * **System Mission:** Build an integrated end-to-end Machine Learning pipeline across 5 core operational tasks that feed into a central Player Lifetime Value (LTV) Prediction System.
-* **Team & Responsibility:** **Team: ML004** (Primary Lead Module: **Task 3 — Player Monthly Spending Prediction**, developed in parallel with the central team repository [`beambeambeam/ml00x`](https://github.com/beambeambeam/ml00x) on branch `task3`).
-* **The 5 Core Machine Learning Tasks:**
-  1. **Task 1: Anti-Cheat Pre-Filter** (Binary Classification, Target: `is_cheater`, Metric: **$F_2$ Score** prioritizing recall, 31 tabular features).
-  2. **Task 2: Player Segment Classification** (Multi-class Classification, Target: `segment` across Casual, Grinder, Social, Whale, Metric: **Macro $F_1$ Score**, 44 tabular features).
-  3. **Task 3: Player Monthly Spending Prediction (Primary Focus)** (Zero-Inflated Continuous Regression, Target: `spending_30d` in THB, Metric: **Normalized MAE** $\text{NMAE} = \frac{1}{1 + \sum \vert y-\hat{y} \vert / \sum y}$, 32 tabular features, 5-Fold Nested OOF $\text{NMAE} = 0.7918$).
-  4. **Task 4: Game Title Detection** (Deep Multi-Class Image Classification, Target: 5 game titles $\in \{0, 1, 2, 3, 4\}$ from $230\times 120$ gameplay screenshots per `datacard.txt`, Metric: **Macro $F_1$**, 5-Fold OOF Macro $F_1 = 0.9470$).
-  5. **Task 5: Account Security Monitoring** (Unsupervised Anomaly Detection, Target: `is_anomaly` across 4 time periods, Metric: **$F_3$ Score** heavily penalizing missed account takeovers/bot rings, 122 features).
-* **Grading & Competition Structure:**
-  * **Kaggle Leaderboard:** 70% (Ground Baseline = $0.68$, Challenge Baseline = $0.75$, evaluated on consolidated 25,889-row `sample_submission.csv`).
-  * **Technical Academic Report:** 20% (Methodology, EDA, Error Analysis, Business Impact).
-  * **Source Code & Reproduction Quality:** 10% (LEB2 & GitHub repository).
+* **Team & Task Ownership (Team ML004):** Developed alongside the central team repository [`beambeambeam/ml00x`](https://github.com/beambeambeam/ml00x):
+  1. **Task 1: Anti-Cheat Pre-Filter** (**Suphawit Marayat — `67070501045`**; Binary Classification, `is_cheater`, $F_2$ Score, 31 features, 5-Fold OOF $F_2 = 0.841552$, ROC-AUC $= 0.896762$).
+  2. **Task 2: Player Segment Classification** (**Kantee Doungmanee — `67070501003`**; Multi-class Classification, `segment`, Macro $F_1$, 44 features, Cross-Fitted Macro $F_1 = 0.759799$).
+  3. **Task 3: Monthly Spending Prediction** (**Wisit Suwannao — `67070501042`** + Submission Merger `merge_submission.ipynb`; Zero-Inflated Regression, `spending_30d`, NMAE, 32 features, Strict Outer OOF NMAE $= 0.796377$).
+  4. **Task 4: Game Title Detection** (**Pholwarit Wattanahemarat — `67070501067`**; Deep Image Classification, 5 game titles $\in \{0..4\}$, Macro $F_1$, Clean Unif-Prior $F_1 = 0.994636$, ExtHard6 $F_1 = 0.969820$).
+  5. **Task 5: Account Security Monitoring** (**Natthawat Primsirikunawut — `67070501027`**; Unsupervised Anomaly Detection, `is_anomaly`, $F_3$ Score, 122 features, Expected-$F_3 = 0.998363$).
+* **Grading & Leaderboard Standing:**
+  * **Kaggle Leaderboard:** 70% — **Team ML004 achieved `0.86680` (Rank #4 / 22 teams)** on the latest Public Scoreboard (vs. `kaggle-baseline = 0.72601`, Ground Baseline $= 0.68$, Challenge Baseline $= 0.75$, cohort mean $= 0.84289$; Private Leaderboard pending official release).
+  * **Technical Academic Report:** 20% — [`CPE342_TermProject_Report.pdf`](./project/report/output/pdf/CPE342_TermProject_Report.pdf) ([XeLaTeX source](./project/report/report.tex)).
+  * **Source Code & Reproduction Quality:** 10% — LEB2, GitHub (`beambeambeam/ml00x`), & standalone notebooks.
 * **Deliverables, Links & Documentation:**
   * [Kaggle Competition Page (`player-intelligence-system-cpe-342-ml`)](https://www.kaggle.com/competitions/player-intelligence-system-cpe-342-ml/)
   * [Central Team GitHub Repository (`beambeambeam/ml00x`)](https://github.com/beambeambeam/ml00x)
+  * [`CPE342_TermProject_Report.pdf`](./project/report/output/pdf/CPE342_TermProject_Report.pdf) (Complete Thai Technical Report with 300-dpi Diagnostics & Ablations)
   * [`project/README.md`](./project/README.md) (Complete technical specifications, metric derivations & workflow architecture)
-  * [`project/task3/task3_monthly_spending.ipynb`](./project/task3/task3_monthly_spending.ipynb) (Primary Task 3 Zero-Inflated Hurdle Regression Notebook)
   * [`project/merge_submission.ipynb`](./project/merge_submission.ipynb) (Master 5-Task Submission Merger & Quality Gate)
   * [`CPE342_Project_Instruction.pdf`](./project/CPE342_Project_Instruction.pdf) (Official 2026 project specification, 28 pages)
   * [`CPE342_Project_Instruction (Ver. 2025).pdf`](./project/CPE342_Project_Instruction%20(Ver.%202025).pdf) (Reference 2025 project challenge slide deck, 40 pages)

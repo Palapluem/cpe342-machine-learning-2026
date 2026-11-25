@@ -16,7 +16,7 @@ project/report/
 │   └── assets/
 │       ├── KMUTT_Logo.png
 │       └── KMUTT_Logo.svg
-├── assets/                          # กราฟการวิเคราะห์ความละเอียด 300 dpi (18 ภาพจาก Tasks 1–5)
+├── assets/                          # กราฟการวิเคราะห์ความละเอียด 300 dpi (19 ภาพจาก Tasks 1–5 และ Leaderboard)
 ├── past-reference/                  # เอกสารอ้างอิงรูปแบบรายงานและสำนวนวิชาการภาษาไทย
 ├── report.tex                       # ต้นฉบับรายงาน XeLaTeX ฉบับสมบูรณ์ (สารบัญ, บทที่ 1–8, บรรณานุกรม)
 └── output/
