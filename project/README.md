@@ -242,7 +242,7 @@ project/
 ├── submission.csv                             # Validated 5-task consolidated submission (25,889 rows × 6 cols)
 ├── merge_submission.ipynb                     # Master Submission Merger & Quality Gate Notebook
 ├── report/                                    # Complete XeLaTeX Technical Report (37 pages A4, 19 300-dpi plots)
-│   ├── report.tex                             # XeLaTeX source (TH Sarabun New Scale=1.46 + Consolas)
+│   ├── CPE342_TermProject_Report.tex          # XeLaTeX source (TH Sarabun New Scale=1.46 + Consolas)
 │   ├── assets/                                # 19 diagnostic & scoreboard figures (300 dpi)
 │   └── output/pdf/CPE342_TermProject_Report.pdf
 │

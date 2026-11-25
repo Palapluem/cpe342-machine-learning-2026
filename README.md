@@ -341,7 +341,7 @@ cpe342-machine-learning-2026/
   5. **Task 5: Account Security Monitoring** (**Natthawat Primsirikunawut — `67070501027`**; Unsupervised Anomaly Detection, `is_anomaly`, $F_3$ Score, 122 features, Expected-$F_3 = 0.998363$).
 * **Grading & Leaderboard Standing:**
   * **Kaggle Leaderboard:** 70% — **Team ML004 achieved `0.86680` (Rank #4 / 22 teams)** on the latest Public Scoreboard (vs. `kaggle-baseline = 0.72601`, Ground Baseline $= 0.68$, Challenge Baseline $= 0.75$, cohort mean $= 0.84289$; Private Leaderboard pending official release).
-  * **Technical Academic Report:** 20% — [`CPE342_TermProject_Report.pdf`](./project/report/output/pdf/CPE342_TermProject_Report.pdf) ([XeLaTeX source](./project/report/report.tex)).
+  * **Technical Academic Report:** 20% — [`CPE342_TermProject_Report.pdf`](./project/report/output/pdf/CPE342_TermProject_Report.pdf) ([XeLaTeX source](./project/report/CPE342_TermProject_Report.tex)).
   * **Source Code & Reproduction Quality:** 10% — LEB2, GitHub (`beambeambeam/ml00x`), & standalone notebooks.
 * **Deliverables, Links & Documentation:**
   * [Kaggle Competition Page (`player-intelligence-system-cpe-342-ml`)](https://www.kaggle.com/competitions/player-intelligence-system-cpe-342-ml/)
