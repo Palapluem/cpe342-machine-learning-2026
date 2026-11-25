@@ -160,11 +160,8 @@ Final Project Grade (100%)
 └── 10%: Git Repository Source Code & Reproduction Quality
 ```
 
-#### Leaderboard Scoring Benchmarks:
-* **Ground Baseline (Classroom Models):** Weighted Score (Public) = **0.68**  
-  *Models: Logistic Regression, Random Forest, Vanilla CNN, Basic Isolation Forest.*
-* **Challenge Baseline (Advanced Techniques):** Weighted Score (Public) = **0.75**  
-  *Models: LightGBM / XGBoost / CatBoost Stacking, Hurdle Two-Stage Regression, Pretrained Transfer Learning (ViT / Swin / EfficientNet), Multi-model Voting Ensembles.*
+#### Official Leaderboard Benchmark:
+* **Kaggle Competition Baseline (`Baseline`):** Weighted Score = **`0.72601`** (the single official competition benchmark submission on Kaggle used as the threshold in the T-Score grading formula below).
 
 #### T-Score Grade Conversion Formula:
 
@@ -278,7 +275,7 @@ project/
 
 * **Official Team Identifier:** **ML004**
 * **Central Team GitHub Repository:** [`https://github.com/beambeambeam/ml00x`](https://github.com/beambeambeam/ml00x)
-* **Final Kaggle Private Leaderboard Standing:** **`0.86680` — Final Rank #4 out of 22 teams** (`+0.14079` over `kaggle-baseline = 0.72601`, beating Ground `0.68`, Challenge `0.75`, and final cohort mean `0.84321`, SD `0.02744`, $t = +0.8598$; competition completed with Private Leaderboard scored on the same evaluation rows as Public).
+* **Final Kaggle Private Leaderboard Standing:** **`0.86680` — Final Rank #4 out of 22 teams** (`+0.14079` over the official **`Kaggle Baseline = 0.72601`**, and above final cohort mean `0.84321`, SD `0.02744`, $t = +0.8598$; competition completed with Private Leaderboard scored on the same evaluation rows as Public).
 * **Primary Task Ownership Across Team ML004:**
   * **Task 1 (`task1` — Anti-Cheat Pre-Filter):** **Suphawit Marayat (`67070501045`)** — 5-Fold OOF $F_2 = 0.841552$ (ROC-AUC $= 0.896762$).
   * **Task 2 (`task2` — Player Segment Classification):** **Kantee Doungmanee (`67070501003`)** — Cross-Fitted Macro-$F_1 = 0.759799$ (LogLoss $= 0.595756$).
