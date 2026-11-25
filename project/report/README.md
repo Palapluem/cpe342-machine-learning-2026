@@ -28,6 +28,7 @@ latexmk CPE342_TermProject_Report.tex
 
 ไฟล์ `.latexmkrc` จะรัน `xelatex` และแยกไฟล์ชั่วคราว (`.aux`, `.log`, `.out`, `.toc`, `.xdv`) ไปยัง `$TMPDIR/cpe342-report-aux` โดยอัตโนมัติ พร้อมบันทึกไฟล์ผลลัพธ์ลงที่ `output/pdf/CPE342_TermProject_Report.pdf`
 
-## การแยกจัดเก็บซอร์สโค้ดและรายงาน
-- **รายงานฉบับ PDF (`CPE342_TermProject_Report.pdf`):** จัดส่งผ่านระบบ LEB2 และเก็บต้นฉบับ LaTeX ไว้ใน `cpe342-machine-learning-2026/project/report/` (และซิงก์ใน `beambeambeam/ml00x/report/`)
-- **ซอร์สโค้ด (`10%`):** จัดส่งผ่าน GitHub Repository แยกตามโฟลเดอร์งาน (`task1/` ถึง `task5/`)
+## คลังจัดเก็บไฟล์กลางของกลุ่ม (Source Code & Report Archive)
+- **คลังจัดเก็บรายงานฉบับสมบูรณ์และซอร์สโค้ดกลาง:** [`https://github.com/beambeambeam/ml00x/tree/main/report`](https://github.com/beambeambeam/ml00x/tree/main/report)
+- **โมดูลซอร์สโค้ดหลัก (`10%`) และผลการรวมคำตอบ:** [`beambeambeam/ml00x`](https://github.com/beambeambeam/ml00x) (`task1/`–`task5/`, `submission/merge.py`, `submit.md`)
+- **เอกสารจัดส่งฉบับ PDF:** `output/pdf/CPE342_TermProject_Report.pdf` (ซิงก์ตรงกับคลังกลางของกลุ่มสำหรับจัดส่งบน LEB2)
