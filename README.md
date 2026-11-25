@@ -43,7 +43,11 @@ cpe342-machine-learning-2026/
 │   ├── Assignment 5_Neural Network/
 │   │   ├── Assignment_5_Deep_Neural_Network.ipynb # Fully executed reference notebook
 │   │   ├── 1027_1042_1067.ipynb               # Official course submission notebook
-│   │   └── CPE342_Assignment 5_main.pdf      # Publication-grade academic report
+│   │   ├── CPE342_Assignment 5_main.tex       # LaTeX source report
+│   │   ├── CPE342_Assignment 5_main.pdf       # Publication-grade academic report
+│   │   ├── notebook_appendix_5.tex            # LaTeX appendix with executed notebook cells
+│   │   ├── benchmark_results.csv & .json      # Learning rate, optimizer & architecture ablations
+│   │   └── plot_1_*.pdf to plot_7_*.pdf       # Publication-grade vector figures
 │   │
 │   ├── Assignment 6_CNN/
 │   │   ├── 67_1027_1042.ipynb                 # Official course submission notebook
@@ -78,6 +82,7 @@ cpe342-machine-learning-2026/
 │   │
 │   └── Assignment 9_Anomaly Detection/
 │       ├── 67_1003_1027_1042_1045_1067.ipynb # Official course submission notebook (MHD & Latent PCA)
+│       ├── 67_1003_1027_1042_1045_1067.pdf   # Exported notebook deliverable PDF
 │       ├── [Lab] Anomaly Detection.ipynb      # Original assignment template
 │       ├── anomaly-detection.xlsx             # Course dataset (Diamond sheet, N=53,940)
 │       ├── BearingTest.csv                    # NASA IMS Bearing vibration telemetry (N=984)
@@ -88,6 +93,7 @@ cpe342-machine-learning-2026/
 │       └── plot_1_*.pdf to plot_8_*.pdf       # Publication-grade vector figures (Sarabun typography)
 ├── lecture/                                   # Lecture slides and demo notebooks
 │   ├── Lecture 1–12 PDFs                      # Course slide decks
+│   ├── ML_2_GD_Equation.pdf                   # Gradient Descent analytical derivation notes
 │   ├── ML_2_Training_Models.ipynb             # Demo: Gradient Descent & Linear Regression
 │   ├── ML_3_SVM.ipynb                         # Demo: Support Vector Machines
 │   ├── ML_4_Regression.ipynb                  # Demo: Regression Analysis
@@ -112,15 +118,17 @@ cpe342-machine-learning-2026/
 │   ├── ML_12_Reinforcement_Learning.mp4       # Lecture Recording: Reinforcement Learning (Week 12, 8.4 MB)
 │   ├── ML_12_RL_Exercise_Walkthrough.html     # Interactive Walkthrough: RL Gridworld, Value Iteration, MDP & TD Q-Learning (Week 12)
 │   ├── CPE342_ML_Midterm_StudyNotes.pdf       # Comprehensive Midterm Study Book (Lectures 1–8, 140 pages)
+│   └── tree.png                               # Reference diagram asset
 ├── project/                                   # CPE 342 Term Project (Karena Player Intelligence System — Team: ML004)
 │   ├── CPE342_Project_Instruction.pdf         # Official 2026 project specification (28 pages)
 │   ├── CPE342_Project_Instruction (Ver. 2025).pdf # Reference 2025 project challenge slide deck (40 pages)
 │   ├── README.md                              # Term project overview, 5 tasks & system specifications
+│   ├── submit.md                              # Submission tracking & baseline audit notes
 │   ├── sample_submission.csv                  # Official Kaggle submission template (25,889 rows × 6 cols)
 │   ├── submission.csv                         # Consolidated 5-task validated predictions (25,889 rows × 6 cols)
 │   ├── merge_submission.ipynb                 # Master Submission Merger & Quality Gate Notebook
-│   ├── report/                                # Complete XeLaTeX Technical Report (37+ pages A4) & 300-dpi assets
-│   └── task1/ to task5/                       # 5 self-contained task modules (Portable Colab/Kaggle Notebooks, data/ & predictions/)
+│   ├── report/                                # XeLaTeX Technical Report (37 pages A4, output/pdf/CPE342_TermProject_Report.pdf) & 19 300-dpi assets
+│   └── task1/ to task5/                       # 5 self-contained task modules (Notebooks, data/ & predictions/)
 │
 └── textbook/                                  # Reference textbooks (ISLR / O'Reilly)
 ```
@@ -338,9 +346,9 @@ cpe342-machine-learning-2026/
 * **Deliverables, Links & Documentation:**
   * [Kaggle Competition Page (`player-intelligence-system-cpe-342-ml`)](https://www.kaggle.com/competitions/player-intelligence-system-cpe-342-ml/)
   * [Central Team GitHub Repository (`beambeambeam/ml00x`)](https://github.com/beambeambeam/ml00x)
-  * [`CPE342_TermProject_Report.pdf`](./project/report/output/pdf/CPE342_TermProject_Report.pdf) (Complete Thai Technical Report with 300-dpi Diagnostics & Ablations)
+  * [`CPE342_TermProject_Report.pdf`](./project/report/output/pdf/CPE342_TermProject_Report.pdf) (37-page Thai Technical Report with 19 300-dpi Diagnostics & Ablations; [compile guide](./project/report/README.md))
   * [`project/README.md`](./project/README.md) (Complete technical specifications, metric derivations & workflow architecture)
-  * [`project/merge_submission.ipynb`](./project/merge_submission.ipynb) (Master 5-Task Submission Merger & Quality Gate)
+  * Task Notebooks: [`task1`](./project/task1/task1_anti_cheat.ipynb) · [`task2`](./project/task2/task2_player_segment.ipynb) · [`task3`](./project/task3/task3_monthly_spending.ipynb) · [`task4`](./project/task4/task4_game_title_detection.ipynb) · [`task5`](./project/task5/task5_account_security.ipynb) · [`merge_submission.ipynb`](./project/merge_submission.ipynb)
   * [`CPE342_Project_Instruction.pdf`](./project/CPE342_Project_Instruction.pdf) (Official 2026 project specification, 28 pages)
   * [`CPE342_Project_Instruction (Ver. 2025).pdf`](./project/CPE342_Project_Instruction%20(Ver.%202025).pdf) (Reference 2025 project challenge slide deck, 40 pages)
 * **Official Timeline:**
@@ -353,11 +361,11 @@ cpe342-machine-learning-2026/
 ## 🛠️ Environment & Prerequisites
 
 * **Python:** 3.10+
-* **Deep Learning Frameworks:** `tensorflow` (2.21+), `keras` (3.15+), `torch`, `torchvision`, `timm`
+* **Deep Learning & Vision Frameworks:** `tensorflow` (2.21+), `keras` (3.15+), `torch`, `torchvision`, `timm`, `transformers`
 * **Core Machine Learning & GBDT:** `numpy`, `pandas`, `scikit-learn`, `xgboost`, `lightgbm`, `catboost`, `scipy`, `lifelines`, `statsmodels`, `optuna`
 * **Visualization & Data Exploration:** `matplotlib`, `seaborn`, `jupyter`, `nbclient`, `nbformat`
-* **Typography:** TH Sarabun New / Sarabun font support for Matplotlib charts
-* **Report Compilation:** XeLaTeX / TeX Live / MiKTeX (Polyglossia + Sarabun font)
+* **Typography:** `TH Sarabun New` / `Sarabun` + `Consolas` font support
+* **Report Compilation:** XeLaTeX / TeX Live / MiKTeX (`polyglossia` + `TH Sarabun New` `Scale=1.46`)
 
 ---
 
