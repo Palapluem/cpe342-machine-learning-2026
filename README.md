@@ -350,7 +350,7 @@ cpe342-machine-learning-2026/
   * [`project/README.md`](./project/README.md) (Complete technical specifications, metric derivations & workflow architecture)
   * Task Notebooks: [`task1`](./project/task1/task1_anti_cheat.ipynb) · [`task2`](./project/task2/task2_player_segment.ipynb) · [`task3`](./project/task3/task3_monthly_spending.ipynb) · [`task4`](./project/task4/task4_game_title_detection.ipynb) · [`task5`](./project/task5/task5_account_security.ipynb) · [`merge_submission.ipynb`](./project/merge_submission.ipynb)
   * [`CPE342_Project_Instruction.pdf`](./project/CPE342_Project_Instruction.pdf) (Official 2026 project specification, 28 pages)
-  * [`CPE342_Project_Instruction (Ver. 2025).pdf`](./project/CPE342_Project_Instruction%20(Ver.%202025).pdf) (Reference 2025 project challenge slide deck, 40 pages)
+  * [`CPE342_Project_Instruction (Ver. 2025).pdf`](./project/CPE342_Project_Instruction%20%28Ver.%202025%29.pdf) (Reference 2025 project challenge slide deck, 40 pages)
 * **Official Timeline:**
   * **Kaggle Opens:** November 2, 2026
   * **Kaggle Closes:** November 24, 2026
